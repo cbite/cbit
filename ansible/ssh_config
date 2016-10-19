@@ -1,0 +1,11 @@
+# SSH configuration file for UMaastricht cBiT project
+# Written by Patrick Varilly, 19 Oct 2016
+
+# t2.micro instance, flushed every weekend
+# Rebuild from scratch using Ansible playbook
+Host cbit
+  HostName ec2-52-28-234-7.eu-central-1.compute.amazonaws.com
+  User ubuntu
+  IdentityFile ~/Work/VarillySciences/2016_UMaastricht/umaastricht-cbit.pem
+  LocalForward 5432 localhost:5432
+  Compression Yes

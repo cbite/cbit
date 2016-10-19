@@ -1,0 +1,5 @@
+---
+
+- hosts: cbit
+  roles:
+  - system-setup
