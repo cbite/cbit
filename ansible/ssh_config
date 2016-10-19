@@ -1,10 +1,11 @@
 # SSH configuration file for UMaastricht cBiT project
 # Written by Patrick Varilly, 19 Oct 2016
 
-# t2.micro instance, flushed every weekend
+# t2.micro instance in eu-central-1 AWS region, flushed every weekend
+# Running Ubuntu Server 14.04 LTS (HVM), SSD Volume Type - ami-26c43149
 # Rebuild from scratch using Ansible playbook
 Host cbit
-  HostName ec2-52-28-234-7.eu-central-1.compute.amazonaws.com
+  HostName ec2-52-57-61-70.eu-central-1.compute.amazonaws.com
   User ubuntu
   IdentityFile ~/Work/VarillySciences/2016_UMaastricht/umaastricht-cbit.pem
   LocalForward 5432 localhost:5432

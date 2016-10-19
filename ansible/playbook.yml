@@ -1,5 +1,9 @@
 ---
 
 - hosts: cbit
+  vars_files:
+    - vars.yml
+
   roles:
-  - system-setup
+  - { role: system-setup, become: yes }
+  - { role: ANXS.postgresql, become: yes }
