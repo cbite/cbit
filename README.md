@@ -11,9 +11,9 @@ Installing
 
 Developing
 ----------
-1. Set up a Python 3.5 `virtualenv` by running
+1. Set up a Python 2.7 `virtualenv` by running
 ```
-virtualenv -p python3.5 vence
+virtualenv -p python2.7 vence
 ```
 2. Activate the `virtualenv` by running
 ```
