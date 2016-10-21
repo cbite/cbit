@@ -258,21 +258,21 @@ def import_archive(archive_filename):
                 sample_ids = [id for (id,) in cur.fetchall()]
                 study_sample['sample_id'] = sample_ids
 
-                # cur.execute(
-                #     """
-                #     UPDATE dim_sample AS child
-                #     SET child.control_sample_id = parent.id
-                #     FROM dim_sample AS parent
-                #     WHERE parent.study_id = %s AND
-                #           child.study_id = %s AND
-                #           parent.name = child.extra_info->'Characteristics[Sample Match]'
-                #     RETURNING child.id
-                #     """,
-                #     [study_id, study_id]
-                # )
-                # updated_ids = [id for (id,) in cur.fetchall()]
-                # print("Updated sample ids {0}".format(updated_ids))
-                # assert set(updated_ids) == set(study_sample[-study_sample['Characteristics[Sample Match]'].isnull()]['id'])
+                cur.execute(
+                    """
+                    UPDATE dim_sample AS child
+                    SET child.control_sample_id = parent.id
+                    FROM dim_sample AS parent
+                    WHERE parent.study_id = %s AND
+                          child.study_id = %s AND
+                          parent.name = child.extra_info->>'Characteristics[Sample Match]'
+                    RETURNING child.id
+                    """,
+                    [study_id, study_id]
+                )
+                updated_ids = [id for (id,) in cur.fetchall()]
+                print("Updated sample ids {0}".format(updated_ids))
+                assert set(updated_ids) == set(study_sample[-study_sample['Characteristics[Sample Match]'].isnull()]['id'])
 
                 # Assays
                 sample_ids_with_name = study_sample[['sample_id', 'Sample Name']]
