@@ -16,6 +16,7 @@ DB_USER = "cbit"
 DB_PASS = "2076a675b6d813b582977189c13a3279cc9cf02a9aeab01389798d9167cf259c8b247aee9a2be149"
 DB_NAME = "cbit"
 
+FILE_ENCODING = "cp1252"   # All files are coming from Windows and ISAcreator uses this encoding for output (!)
 
 def connect_to_postgres():
     return psycopg2.connect(host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASS, database=DB_NAME)
@@ -34,7 +35,7 @@ def read_investigation(f):
     #
     # TODO: No idea how double quotes are themselves quoted in this format
 
-    s = f.read().decode('latin-1')
+    s = f.read().decode(FILE_ENCODING)
 
     # Token generator
     # Yields either '\t', '\n', or a string (with quotes removed)
@@ -111,14 +112,14 @@ def read_study_sample(f):
     #
     # It describes each sample used in a study (material properties,
     # cell types, reference to control sample, etc.)
-    df = pd.read_table(f)
+    df = pd.read_table(f, encoding=FILE_ENCODING)
     return df
 
 
 def read_assay(f):
     # A transcription_micro file describes the technology used to measure
     # gene expression levels in each sample
-    df = pd.read_table(f)
+    df = pd.read_table(f, encoding=FILE_ENCODING)
     return df
 
 
@@ -126,7 +127,7 @@ def read_processed_data(f):
     # A processed data file is a flat table of expression strength numbers
     # (in some arbitrary units).  Rows are genes (more precisely, individual
     # probes in the gene chip), columns are samples
-    df = pd.read_table(f, index_col=0)
+    df = pd.read_table(f, index_col=0, encoding=FILE_ENCODING)
     return df
 
 
@@ -136,7 +137,7 @@ def read_annotations(f):
     #
     # Starts with a bunch of comment lines with descriptions of each column
     # (ignore for now)
-    df = pd.read_table(f, comment='#')
+    df = pd.read_table(f, comment='#', encoding=FILE_ENCODING)
     return df
 
 
