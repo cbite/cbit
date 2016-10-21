@@ -7,3 +7,4 @@
   roles:
   - { role: system-setup, become: yes }
   - { role: ANXS.postgresql, become: yes }
+  - { role: gpstathis.elasticsearch, become: yes }
