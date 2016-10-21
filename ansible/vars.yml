@@ -1,5 +1,6 @@
 ---
 apt_cache_valid_time: 300    # Time between calls to `apt-get update`
+timezone: "Europe/Brussels"
 
 db_name: cbit
 db_user: cbit
@@ -19,6 +20,5 @@ postgresql_user_privileges:
   - name: "{{db_user}}"
     db: "{{db_name}}"
 
+
 elasticsearch_cluster_name: cbit.elasticsearch.cluster
-elasticsearch_timezone: "Europe/Brussels"
-elasticsearch_service_startonboot: yes

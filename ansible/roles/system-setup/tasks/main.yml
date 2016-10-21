@@ -14,3 +14,26 @@
    - build-essential
    - python-dev
    - python-pip
+
+- name: Install repo for Java 8 in Ubuntu
+  apt_repository:
+    repo: 'ppa:openjdk-r/ppa'
+
+
+- name: timezone | check current timezone
+  shell: cat /etc/timezone
+  changed_when: 0
+  register: current_zone
+
+- name: timezone | Set timezone variables
+  copy:
+    content={{timezone}}
+    dest=/etc/timezone
+    owner=root
+    group=root
+    mode=0644
+  when: current_zone.stdout != timezone
+
+- name: timezone | Run dpkg-reconfigure to configure timezone
+  shell: dpkg-reconfigure --frontend noninteractive tzdata
+  when: current_zone.stdout != timezone
