@@ -31,6 +31,7 @@ pip install -r backend/requirements.txt
 ```
 cd frontend
 npm install
+npm install --save-dev @types/core-js
 npm start    # Go to http://localhost:8080
 ```
 

@@ -1,10 +1,16 @@
 import { Component } from '@angular/core';
-
-import '../../public/css/styles.css';
+import {StudyService} from "./services/study.service";
+import {Study} from "./common/study.model";
 
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  providers: [StudyService]
 })
-export class AppComponent { }
+export class AppComponent {
+  selectedStudy: Study;
+
+  selectStudy(study: Study): void {
+    this.selectedStudy = study;
+  }
+}
