@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {StudyService} from "./services/study.service";
 import {Study} from "./common/study.model";
 import {Router} from "@angular/router";
@@ -9,6 +9,8 @@ import {Router} from "@angular/router";
   providers: [StudyService]
 })
 export class BrowserComponent {
+  searchText: string;
+
   constructor(
     private _router: Router
   ) {}

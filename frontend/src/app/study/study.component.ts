@@ -1,22 +1,17 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { Study } from '../common/study.model';
+import {Study, Sample} from '../common/study.model';
 import {StudyService} from "../services/study.service";
 import {ActivatedRoute, Params} from "@angular/router";
 import { Location } from '@angular/common';
 
 @Component({
   selector: 'study',
-  template: `
-  <div *ngIf="study">
-    <h1>Study ID {{ study.id }}</h1>
-    <h2>Name: {{ study.name }}</h2>
-    <h3>Author: {{ study.author }}</h3>
-    <button (click)="goBack()">Back</button>
-  </div>
-  `
+  templateUrl: 'study.component.html'
 })
 export class StudyComponent implements OnInit {
   study: Study;
+  samples: Sample[];
+  sampleKeys: string[];
 
   constructor(
     private _studyService: StudyService,
@@ -27,8 +22,19 @@ export class StudyComponent implements OnInit {
   ngOnInit(): void {
     this._route.params.forEach((params: Params) => {
       let id = +params['id'];
-      this._studyService.getStudy(id)
-        .then(study => this.study = study);
+      //this._studyService.getStudy(id)
+      //  .then(study => this.study = study);
+      this.study = this._studyService.getStudy(id);
+      this.samples = (
+        this.study.sampleIds
+          .map(sampleId => this._studyService.getSample(sampleId))
+          .sort((a, b) => a._source['Sample Name'].localeCompare(b._source['Sample Name']))
+      );
+
+      let keys = new Set<string>();
+      this.samples.forEach(sample => Object.keys(sample._source).forEach(key => keys.add(key)));
+      keys.delete('Sample Name');
+      this.sampleKeys = Array.from(keys);
     });
   }
 

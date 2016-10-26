@@ -1,0 +1,23 @@
+<div *ngIf="study">
+  <h1>Study ID {{ study.id }}</h1>
+  <h2>Name: {{ study._source['STUDY']['Study Title'] }}</h2>
+  <h3>Author: {{ study._source['STUDY PUBLICATIONS']['Study Publication Author List'] }}</h3>
+
+  <h3>Samples</h3>
+  <ol>
+    <li *ngFor="let sample of samples">
+      <div><b>{{ sample._source['Sample Name'] }}</b></div>
+      <div *ngFor="let propName of sampleKeys">
+
+        <div *ngIf="sample._source[propName] && propName !== '_assay'">
+          <b>{{ propName }}</b>: {{ sample._source[propName] }}
+        </div>
+
+        <div *ngIf="sample._source[propName] && propName === '_assay'">
+          <b>Assay Properties</b>: <pre>{{ sample._source[propName] | json }}</pre>
+        </div>
+      </div>
+    </li>
+  </ol>
+  <button (click)="goBack()">Back</button>
+</div>

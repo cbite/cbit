@@ -1,5 +1,12 @@
 <div>
-  <h1>Study Browser</h1>
+  <form type="inline">
+    <label for="searchText">Search for:</label>
+    <input id="searchText" type="text" name='searchText' [(ngModel)]="searchText"/>
+  </form>
 
-  <studies (selectedStudyEmitter)="selectStudy($event)"></studies>
+  <h1>Study Browser</h1>
+  <studies [searchText]="searchText" (selectedStudyEmitter)="selectStudy($event)"></studies>
+
+  <h1>Sample Browser</h1>
+  <samples [searchText]="searchText"></samples>
 </div>

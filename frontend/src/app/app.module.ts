@@ -9,6 +9,7 @@ import {StudyComponent} from "./study/study.component";
 import {WelcomeComponent} from "./welcome.component";
 import {BrowserComponent} from "./browser.component";
 import {AppRoutingModule} from "./app-routing.module";
+import {SamplesComponent} from "./study/samples.component";
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import {AppRoutingModule} from "./app-routing.module";
     AppComponent,
     WelcomeComponent,
     BrowserComponent,
+    SamplesComponent,
     StudyComponent,
     StudiesComponent
   ],
