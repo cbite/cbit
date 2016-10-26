@@ -1,6 +1,7 @@
-import {Component, Output, EventEmitter, OnInit, Input, OnChanges} from '@angular/core';
+import {Component, Output, EventEmitter, OnInit} from '@angular/core';
 import { StudyService } from "../services/study.service";
 import { Study } from "../common/study.model";
+import {FiltersService, FiltersState} from "../services/filters.service";
 
 @Component({
   selector: 'studies',
@@ -13,29 +14,27 @@ import { Study } from "../common/study.model";
   </ul>
   `
 })
-export class StudiesComponent implements OnInit, OnChanges {
-  @Input() searchText: string;
+export class StudiesComponent implements OnInit {
   studies: Study[];
   @Output() selectedStudyEmitter: EventEmitter<Study> = new EventEmitter<Study>()
 
-  constructor(private _studyService: StudyService) { }
+  constructor(
+    private _studyService: StudyService,
+    private _filtersService: FiltersService
+  ) { }
 
   ngOnInit(): void {
     //this._studyService.getStudies().then(studies => this.studies = studies);
-    this.updateStudies();
+    this._filtersService.filters.subscribe(filters => this.updateStudies(filters));
   }
 
   onClick(study: Study): void {
     this.selectedStudyEmitter.emit(study);
   }
 
-  ngOnChanges(): void {
-    this.updateStudies();
-  }
-
-  updateStudies(): void {
+  updateStudies(filters: FiltersState): void {
     this.studies = this._studyService.getStudies();
-    let rawSamples = !this.searchText ? this._studyService.getStudies() : this._studyService.getStudiesMatching(this.searchText);
+    let rawSamples = !filters.searchText ? this._studyService.getStudies() : this._studyService.getStudiesMatching(filters.searchText);
     this.studies = rawSamples.sort((a, b) => a._source['STUDY PUBLICATIONS']['Study Publication Author List'].localeCompare(b._source['STUDY PUBLICATIONS']['Study Publication Author List']));
   }
 }

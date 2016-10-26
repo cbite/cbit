@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import {StudyService} from "./services/study.service";
 import {Study} from "./common/study.model";
+import {FiltersService} from "./services/filters.service";
 
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
-  providers: [StudyService]
+  providers: [StudyService, FiltersService]
 })
 export class AppComponent {
   selectedStudy: Study;

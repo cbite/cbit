@@ -1,6 +1,7 @@
-import {Component, Output, EventEmitter, OnInit, Input, OnChanges} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { StudyService } from "../services/study.service";
-import {Study, Sample} from "../common/study.model";
+import {Sample} from "../common/study.model";
+import {FiltersService, FiltersState} from "../services/filters.service";
 
 @Component({
   selector: 'samples',
@@ -47,24 +48,23 @@ import {Study, Sample} from "../common/study.model";
   }
   `]
 })
-export class SamplesComponent implements OnInit, OnChanges {
-  @Input() searchText: string = '';
+export class SamplesComponent implements OnInit {
   samples: Sample[];
   sampleKeys: string[];
 
-  constructor(private _studyService: StudyService) { }
+  constructor(
+    private _studyService: StudyService,
+    private _filtersService: FiltersService
+  ) {
+  }
 
   ngOnInit(): void {
     //this._studyService.getStudies().then(studies => this.studies = studies);
-    this.updateSamples();
+    this._filtersService.filters.subscribe(filters => this.updateSamples(filters));
   }
 
-  ngOnChanges(): void {
-    this.updateSamples();
-  }
-
-  updateSamples(): void {
-    let rawSamples = !this.searchText ? this._studyService.getSamples() : this._studyService.getSamplesMatching(this.searchText);
+  updateSamples(filters: FiltersState): void {
+    let rawSamples = !filters.searchText ? this._studyService.getSamples() : this._studyService.getSamplesMatching(filters.searchText);
     this.samples = rawSamples.sort((a, b) => a._source['Sample Name'].localeCompare(b._source['Sample Name']));
 
     let keys = new Set<string>();
