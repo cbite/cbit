@@ -1,7 +1,7 @@
 <div *ngIf="study">
   <h1>Study ID {{ study.id }}</h1>
   <h2>Name: {{ study._source['STUDY']['Study Title'] }}</h2>
-  <h3>Author: {{ study._source['STUDY PUBLICATIONS']['Study Publication Author List'] }}</h3>
+  <h3>Author: {{ study._source['STUDY PUBLICATIONS'][0]['Study Publication Author List'] }}</h3>
 
   <h3>Samples</h3>
   <ol>

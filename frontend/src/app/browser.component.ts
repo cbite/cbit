@@ -12,19 +12,10 @@ import {FormControl, Form} from "@angular/forms";
 })
 export class BrowserComponent {
 
-  // For inspiration, see: http://blog.thoughtram.io/angular/2016/01/06/taking-advantage-of-observables-in-angular2.html
-  searchTextInForm: FormControl;
-
   constructor(
     private _router: Router,
     private _filtersService: FiltersService
-  ) {
-    this.searchTextInForm = new FormControl(this._filtersService.getFilters().searchText);
-    this.searchTextInForm.valueChanges
-      .debounceTime(200)       // Don't propagate changes until this many ms have elapsed without change
-      .distinctUntilChanged()  // Don't emit the same value twice
-      .subscribe(newSearchText => _filtersService.setSearchText(newSearchText));
-  }
+  ) { }
 
   selectStudy(study: Study): void {
     let link = ['/study', study.id];

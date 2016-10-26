@@ -10,6 +10,9 @@ import {WelcomeComponent} from "./welcome.component";
 import {BrowserComponent} from "./browser.component";
 import {AppRoutingModule} from "./app-routing.module";
 import {SamplesComponent} from "./study/samples.component";
+import {FilterSidebarComponent} from "./filters/filter-sidebar.component";
+import {MapToIterablePipe} from "./common/mapToIterable.pipe";
+import {StudyFiltersComponent} from "./filters/study-filters.component";
 
 
 @NgModule({
@@ -23,9 +26,12 @@ import {SamplesComponent} from "./study/samples.component";
     AppComponent,
     WelcomeComponent,
     BrowserComponent,
+    FilterSidebarComponent,
+    StudyFiltersComponent,
+    StudiesComponent,
     SamplesComponent,
     StudyComponent,
-    StudiesComponent
+    MapToIterablePipe
   ],
   bootstrap: [ AppComponent ]
 })

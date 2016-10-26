@@ -126,15 +126,17 @@ export const STUDIES: Study[] = [
           "Study Protocol Type": "sample treatment"
         }
       ],
-      "STUDY PUBLICATIONS": {
-        "Study PubMed ID": "22646480",
-        "Study Publication Author List": "Doorn J, Leusink M, Groen N, van de Peppel J, van Leeuwen JP, van Blitterswijk CA, de Boer J",
-        "Study Publication DOI": "10.1089/ten.TEA.2011.0484",
-        "Study Publication Status": "published",
-        "Study Publication Status Term Accession Number": "http://www.ebi.ac.uk/efo/EFO_0001796",
-        "Study Publication Status Term Source REF": "EFO",
-        "Study Publication Title": "Diverse effects of cyclic AMP variants on osteogenic and adipogenic differentiation of human mesenchymal stromal cells"
-      }
+      "STUDY PUBLICATIONS": [
+        {
+          "Study PubMed ID": "22646480",
+          "Study Publication Author List": "Doorn J, Leusink M, Groen N, van de Peppel J, van Leeuwen JP, van Blitterswijk CA, de Boer J",
+          "Study Publication DOI": "10.1089/ten.TEA.2011.0484",
+          "Study Publication Status": "published",
+          "Study Publication Status Term Accession Number": "http://www.ebi.ac.uk/efo/EFO_0001796",
+          "Study Publication Status Term Source REF": "EFO",
+          "Study Publication Title": "Diverse effects of cyclic AMP variants on osteogenic and adipogenic differentiation of human mesenchymal stromal cells"
+        }
+      ]
     }
   },
 
@@ -260,15 +262,17 @@ export const STUDIES: Study[] = [
           "Study Protocol Type": "data transformation"
         }
       ],
-      "STUDY PUBLICATIONS": {
-        "Study PubMed ID": "23632322",
-        "Study Publication Author List": "Groen N, van de Peppel J, Yuan H, van Leeuwen JP, van Blitterswijk CA, de Boer J",
-        "Study Publication DOI": "10.1016/j.biomaterials.2013.04.001",
-        "Study Publication Status": "published",
-        "Study Publication Status Term Accession Number": "http://www.ebi.ac.uk/efo/EFO_0001796",
-        "Study Publication Status Term Source REF": "EFO",
-        "Study Publication Title": "Bioinformatics-based selection of a model cell type for in vitro biomaterial testing"
-      }
+      "STUDY PUBLICATIONS": [
+        {
+          "Study PubMed ID": "23632322",
+          "Study Publication Author List": "Groen N, van de Peppel J, Yuan H, van Leeuwen JP, van Blitterswijk CA, de Boer J",
+          "Study Publication DOI": "10.1016/j.biomaterials.2013.04.001",
+          "Study Publication Status": "published",
+          "Study Publication Status Term Accession Number": "http://www.ebi.ac.uk/efo/EFO_0001796",
+          "Study Publication Status Term Source REF": "EFO",
+          "Study Publication Title": "Bioinformatics-based selection of a model cell type for in vitro biomaterial testing"
+        }
+      ]
     }
   }
 ]

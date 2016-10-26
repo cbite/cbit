@@ -1,6 +1,9 @@
 import {Study, Sample} from '../common/study.model';
 import {Injectable} from "@angular/core";
 import {STUDIES, SAMPLES} from '../common/mock-studies';
+import * as _ from 'lodash';
+import {FiltersState, EMPTY_FILTERS} from "./filters.service";
+import {isUndefined} from "util";
 
 @Injectable()
 export class StudyService {
@@ -16,6 +19,9 @@ export class StudyService {
       .then(studies => studies.find(study => study.id === id));
   }*/
 
+  private _lastFilters: FiltersState;
+  private _lastStudyMatches: Study[];
+
   getStudies(): Study[] {
     return STUDIES;
   }
@@ -24,8 +30,77 @@ export class StudyService {
     return this.getStudies().find(study => study.id === id);
   }
 
-  getStudiesMatching(searchText: string): Study[] {
-    return STUDIES.filter(study => this.deepFind(study, searchText.toLocaleLowerCase()));
+  getStudiesMatching(filters: FiltersState): Study[] {
+    if (!isUndefined(this._lastFilters) && _.isEqual(this._lastFilters, filters)) {
+      return this._lastStudyMatches;
+    }
+
+    this._lastFilters = _.cloneDeep(filters);
+
+    let result = STUDIES;
+    if (filters.searchText) {
+      result = result.filter(study => this.deepFind(study, filters.searchText.toLocaleLowerCase()));
+    }
+
+    _.forOwn(filters.studyFilters, (d, category) => {
+      _.forOwn(d, (dd, subcategory) => {
+        _.forOwn(dd, (included, valueName) => {
+          let excluded = !included;
+          if (excluded) {
+            result = result.filter(study =>
+              isUndefined(study._source[category]) || isUndefined(study._source[category][subcategory]) || (study._source[category][subcategory] !== valueName)
+            );
+          }
+        });
+      });
+    });
+
+    this._lastStudyMatches = result;
+
+    return result;
+  }
+
+  forceIncludeInStudyFilters(filters: FiltersState, category: string, subcategory: string) {
+    if (isUndefined(filters.studyFilters[category]) ||
+        isUndefined(filters.studyFilters[category][subcategory])) {
+
+      return filters;
+    } else {
+      let tweakedFilters = _.cloneDeep(filters);
+      delete tweakedFilters.studyFilters[category][subcategory];
+      return tweakedFilters;
+    }
+  }
+
+  getStudyCounts(filters: FiltersState, category: string, subcategory: string) {
+    // Apply all filters *except* the one being queried (so we get a count of all studies that would be included
+    // if we allow a particular value for this category-subcategory pair)
+    var tweakedFilters = this.forceIncludeInStudyFilters(filters, category, subcategory);
+    var matchingStudies = this.getStudiesMatching(tweakedFilters);
+
+    // Simulate ElasticSearch-like aggregation
+    let result = {};
+    for (let study of matchingStudies) {
+      if (!isUndefined(study._source[category])) {
+        let toSearch = study._source[category];
+        if (!Array.isArray(toSearch)) {
+          toSearch = [toSearch];   // Avoid duplicating code below
+        }
+
+        // Avoid double counting studies where multiple entries have the same value
+        let matches = new Set<string>();
+        for (let entry of toSearch) {
+          if (!isUndefined(entry[subcategory])) {
+            matches.add(entry[subcategory]);
+          }
+        }
+        matches.forEach(match => {
+          result[match] = (result[match] || 0) + 1;
+        })
+      }
+    }
+
+    return result;
   }
 
   getSamples(): Sample[] {

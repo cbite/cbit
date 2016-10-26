@@ -1,12 +1,18 @@
 <div>
-  <form type="inline">
-    <label for="searchText">Search for:</label>
-    <input id="searchText" type="text" name='searchText' [formControl]="searchTextInForm"/>
-  </form>
+  <!-- Ultra-ghetto 1990s-style table formatting for now -->
+  <table width="100%">
+    <tr>
+      <td width="300px" style="vertical-align:top">
+        <filter-sidebar></filter-sidebar>
+      </td>
 
-  <h1>Study Browser</h1>
-  <studies (selectedStudyEmitter)="selectStudy($event)"></studies>
+      <td style="vertical-align:top">
+        <h1>Study Browser</h1>
+        <studies (selectedStudyEmitter)="selectStudy($event)"></studies>
 
-  <h1>Sample Browser</h1>
-  <samples></samples>
+        <h1>Sample Browser</h1>
+        <samples></samples>
+      </td>
+    </tr>
+  </table>
 </div>

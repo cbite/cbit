@@ -75,7 +75,7 @@ export interface RawStudy {
   "STUDY DESIGN DESCRIPTORS"?:  RawStudyDesignDescriptor,
   "STUDY FACTORS":              Array<RawStudyFactor>,
   "STUDY PROTOCOLS":            Array<RawStudyProtocol>,
-  "STUDY PUBLICATIONS":         RawStudyPublication,  // 1 publication per study?
+  "STUDY PUBLICATIONS":         Array<RawStudyPublication>,  // TODO: Enforce array in back-end
   [propName: string]: any    // Allow anything else as well
 }
 
