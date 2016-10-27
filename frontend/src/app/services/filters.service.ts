@@ -19,12 +19,14 @@ interface SampleFilters {
 
 export interface FiltersState {
   searchText: string,
+  includeControls: boolean,
   studyFilters: StudyFilters,
   sampleFilters: SampleFilters
 }
 
 export const EMPTY_FILTERS: FiltersState = {
   searchText: '',
+  includeControls: true,
   studyFilters: {},
   sampleFilters: {}
 }
@@ -52,6 +54,12 @@ export class FiltersService {
     // See https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
     this._filters.next(Object.assign({}, this._filters.getValue(), {
       searchText: newSearchText
+    }));
+  }
+
+  setIncludeControls(newIncludeControls: boolean): void {
+    this._filters.next(Object.assign({}, this._filters.getValue(), {
+      includeControls: newIncludeControls
     }));
   }
 

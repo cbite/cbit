@@ -285,21 +285,23 @@ export class StudyService {
     this.debugUnifiedMatches('After 4:', result);
 
     // 5. Further match control samples of "matching" samples
-    result.forEach(studyMatch => {
-      var extraControlSampleNames = new Set<string>();
-      studyMatch.sampleMatches.forEach(sampleMatch => {
-        if (sampleMatch.isMatch && ('Sample Match' in sampleMatch.sample._source)) {
-          extraControlSampleNames.add(sampleMatch.sample._source['Sample Match']);
-        }
-      });
+    if (filters.includeControls) {
+      result.forEach(studyMatch => {
+        var extraControlSampleNames = new Set<string>();
+        studyMatch.sampleMatches.forEach(sampleMatch => {
+          if (sampleMatch.isMatch && ('Sample Match' in sampleMatch.sample._source)) {
+            extraControlSampleNames.add(sampleMatch.sample._source['Sample Match']);
+          }
+        });
 
-      studyMatch.sampleMatches.forEach(sampleMatch => {
-        if (extraControlSampleNames.has(sampleMatch.sample._source['Sample Name'])) {
-          sampleMatch.isMatch = true;
-        }
+        studyMatch.sampleMatches.forEach(sampleMatch => {
+          if (extraControlSampleNames.has(sampleMatch.sample._source['Sample Name'])) {
+            sampleMatch.isMatch = true;
+          }
+        });
       });
-    });
-    this.debugUnifiedMatches('After 5:', result);
+      this.debugUnifiedMatches('After 5:', result);
+    }
 
     // 6. Mark studies as matches if they pass study metadata filters and either have a full-text search match
     // or have a matching sample

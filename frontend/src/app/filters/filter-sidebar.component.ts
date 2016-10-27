@@ -32,6 +32,9 @@ const HIDDEN_SAMPLE_FILTER_LABELS = {
   <form type="inline">
     <label for="searchText">Search for:</label>
     <input id="searchText" type="text" name='searchText' [formControl]="searchTextInForm"/>
+    <br/>
+    <input id="includeControls" type="checkbox" name="includeControls" [formControl]="includeControlsInForm"/>
+    Include controls
   </form>
   
   <h2>Study Filters <button (click)="toggleStudyFilters();">Show/Hide</button></h2>
@@ -54,6 +57,7 @@ export class FilterSidebarComponent implements OnInit {
 
   // For inspiration, see: http://blog.thoughtram.io/angular/2016/01/06/taking-advantage-of-observables-in-angular2.html
   searchTextInForm = new FormControl();
+  includeControlsInForm = new FormControl();
   studyFiltersHidden: boolean = false;
   sampleFiltersHidden: boolean = false;
 
@@ -77,6 +81,10 @@ export class FilterSidebarComponent implements OnInit {
       .debounceTime(200)       // Don't propagate changes until this many ms have elapsed without change
       .distinctUntilChanged()  // Don't emit the same value twice
       .subscribe(newSearchText => _filtersService.setSearchText(newSearchText));
+    this.includeControlsInForm.valueChanges
+      .distinctUntilChanged()  // Don't emit the same value twice
+      .subscribe(newIncludeControls => _filtersService.setIncludeControls(newIncludeControls))
+
     this._filtersService.filters.subscribe(filters => this.updateFilters(filters));
   }
 
@@ -84,6 +92,11 @@ export class FilterSidebarComponent implements OnInit {
     if (filters.searchText !== this.searchTextInForm.value) {
       // emitEvent: false => Avoid event loops
       this.searchTextInForm.setValue(filters.searchText, {emitEvent: false});
+    }
+
+    if (filters.includeControls !== this.includeControlsInForm.value) {
+      // emitEvent: false => Avoid event loops
+      this.includeControlsInForm.setValue(filters.includeControls, {emitEvent: false});
     }
   }
 
