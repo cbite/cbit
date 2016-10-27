@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
-import {isUndefined} from "util";
 
 interface StudyFilters {
   [category: string]: {
@@ -65,7 +64,7 @@ export class FiltersService {
 
     // If theseFilters is empty, stop filtering on this subcategory / category
     if (_.isEmpty(theseFilters)) {
-      if (!isUndefined(curFilters[category])) {
+      if (category in curFilters) {
         delete curFilters[category][subcategory];
 
         // And delete the category if necessary
@@ -74,7 +73,7 @@ export class FiltersService {
         }
       }
     } else {
-      if (isUndefined(curFilters[category])) {
+      if (!(category in curFilters)) {
         curFilters[category] = {};
       }
       curFilters[category][subcategory] = theseFilters;

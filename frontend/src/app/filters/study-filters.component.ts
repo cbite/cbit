@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {FiltersState, FiltersService} from "../services/filters.service";
 import {StudyService} from "../services/study.service";
-import {isUndefined} from "util";
 import * as _ from 'lodash';
 
 @Component({
@@ -42,11 +41,11 @@ export class StudyFiltersComponent implements OnInit {
   isValIncluded(valueName: string): boolean {
     console.log(`Checking ${valueName} for inclusion`);
     let curFilters = this._filtersService.getFilters().studyFilters;
-    if (isUndefined(curFilters[this.category]) || isUndefined(curFilters[this.category][this.subcategory])) {
-      return true;   // If no filters specified, default to all values
-    } else {
+    if ((this.category in curFilters) && (this.subcategory in curFilters[this.category])) {
       // Checked if true or absent, unchecked if false
       return (curFilters[this.category][this.subcategory][valueName] !== false);
+    } else {
+      return true;   // If no filters specified, default to all values
     }
   }
 

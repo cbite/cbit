@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {FiltersService, FiltersState} from "../services/filters.service";
 import {StudyService} from "../services/study.service";
-import {isUndefined} from "util";
 import * as _ from 'lodash';
 
 @Component({
@@ -51,7 +50,7 @@ export class FilterSidebarComponent implements OnInit {
       for (let category in study._source) {
         let underLabel = study._source[category];
 
-        if (isUndefined(allStudyFilterLabels[category])) {
+        if (!(category in allStudyFilterLabels)) {
           allStudyFilterLabels[category] = []
         }
 

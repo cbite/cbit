@@ -48,7 +48,9 @@ export class StudyService {
           let excluded = !included;
           if (excluded) {
             result = result.filter(study =>
-              isUndefined(study._source[category]) || isUndefined(study._source[category][subcategory]) || (study._source[category][subcategory] !== valueName)
+              !((category in study._source) &&
+                (subcategory in study._source[category]) &&
+                (study._source[category][subcategory] === valueName))
             );
           }
         });
@@ -61,14 +63,14 @@ export class StudyService {
   }
 
   forceIncludeInStudyFilters(filters: FiltersState, category: string, subcategory: string) {
-    if (isUndefined(filters.studyFilters[category]) ||
-        isUndefined(filters.studyFilters[category][subcategory])) {
+    if ((category in filters.studyFilters) &&
+        (subcategory in filters.studyFilters[category])) {
 
-      return filters;
-    } else {
       let tweakedFilters = _.cloneDeep(filters);
       delete tweakedFilters.studyFilters[category][subcategory];
       return tweakedFilters;
+    } else {
+      return filters;
     }
   }
 
@@ -81,7 +83,7 @@ export class StudyService {
     // Simulate ElasticSearch-like aggregation
     let result = {};
     for (let study of matchingStudies) {
-      if (!isUndefined(study._source[category])) {
+      if (category in study._source) {
         let toSearch = study._source[category];
         if (!Array.isArray(toSearch)) {
           toSearch = [toSearch];   // Avoid duplicating code below
@@ -90,7 +92,7 @@ export class StudyService {
         // Avoid double counting studies where multiple entries have the same value
         let matches = new Set<string>();
         for (let entry of toSearch) {
-          if (!isUndefined(entry[subcategory])) {
+          if (subcategory in entry[subcategory]) {
             matches.add(entry[subcategory]);
           }
         }
