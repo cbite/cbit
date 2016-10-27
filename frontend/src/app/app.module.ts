@@ -13,6 +13,7 @@ import {SamplesComponent} from "./study/samples.component";
 import {FilterSidebarComponent} from "./filters/filter-sidebar.component";
 import {MapToIterablePipe} from "./common/mapToIterable.pipe";
 import {StudyFiltersComponent} from "./filters/study-filters.component";
+import {SampleFiltersComponent} from "./filters/sample-filters.component";
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import {StudyFiltersComponent} from "./filters/study-filters.component";
     BrowserComponent,
     FilterSidebarComponent,
     StudyFiltersComponent,
+    SampleFiltersComponent,
     StudiesComponent,
     SamplesComponent,
     StudyComponent,

@@ -10,14 +10,23 @@ interface StudyFilters {
   }
 }
 
+interface SampleFilters {
+  [category: string]: {
+    [includeValueName: string]: boolean
+    // assume true if absent
+  }
+}
+
 export interface FiltersState {
   searchText: string,
-  studyFilters: StudyFilters
+  studyFilters: StudyFilters,
+  sampleFilters: SampleFilters
 }
 
 export const EMPTY_FILTERS: FiltersState = {
   searchText: '',
-  studyFilters: {}
+  studyFilters: {},
+  sampleFilters: {}
 }
 
 // For inspiration, see: http://blog.angular-university.io/how-to-build-angular2-apps-using-rxjs-observable-data-services-pitfalls-to-avoid/
@@ -32,6 +41,10 @@ export class FiltersService {
 
   getFilters(): FiltersState {
     return this._filters.getValue();
+  }
+
+  clearFilters(): void {
+    this._filters.next(EMPTY_FILTERS);
   }
 
   setSearchText(newSearchText: string): void {
@@ -49,8 +62,6 @@ export class FiltersService {
   }
 
   setStudyFilter(category: string, subcategory: string, valueName: string, include: boolean): void {
-    console.log(`Filters before: ${JSON.stringify(this.getFilters())}`);
-
     // Copy out relevant filters section, if any
     let curFilters = _.cloneDeep(this.getFilters().studyFilters);
     let theseFilters = Object.assign({}, (curFilters[category] || {})[subcategory] || {})
@@ -68,7 +79,7 @@ export class FiltersService {
         delete curFilters[category][subcategory];
 
         // And delete the category if necessary
-        if (!curFilters[category]) {
+        if (_.isEmpty(curFilters[category])) {
           delete curFilters[category];
         }
       }
@@ -80,7 +91,35 @@ export class FiltersService {
     }
 
     // Update filters
-    console.log(`Filters after: ${JSON.stringify(curFilters)}`);
     this.setStudyFilters(curFilters);
+  }
+
+  setSampleFilters(newSampleFilters: SampleFilters): void {
+    this._filters.next(Object.assign({}, this._filters.getValue(), {
+      sampleFilters: newSampleFilters
+    }))
+  }
+
+  setSampleFilter(category: string, valueName: string, include: boolean): void {
+    // Copy out relevant filters section, if any
+    let curFilters = _.cloneDeep(this.getFilters().sampleFilters);
+    let theseFilters = Object.assign({}, curFilters[category] || {})
+
+    if(include) {
+      // Filter values default to "true" if absent from filters dictionary, so remove this item
+      delete theseFilters[valueName];
+    } else {
+      theseFilters[valueName] = false;
+    }
+
+    // If theseFilters is empty, stop filtering on this category
+    if (_.isEmpty(theseFilters)) {
+      delete curFilters[category];
+    } else {
+      curFilters[category] = theseFilters;
+    }
+
+    // Update filters
+    this.setSampleFilters(curFilters);
   }
 }

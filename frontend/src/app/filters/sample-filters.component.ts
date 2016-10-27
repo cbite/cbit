@@ -4,13 +4,13 @@ import {StudyService} from "../services/study.service";
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'study-filters',
+  selector: 'sample-filters',
   template: `
   <div [class.hidden]="isTrivial()">
-    <h3>{{ category }}: {{ subcategory }} <button (click)="isHidden = !isHidden;">Show/Hide</button></h3>
+    <h3>{{ category }} <button (click)="isHidden = !isHidden;">Show/Hide</button></h3>
     <ul [class.hidden]="isHidden">
       <div *ngFor="let possibleValue of counts | mapToIterable">
-        <input type="checkbox" [name]="category + ': ' + subcategory" [value]="possibleValue.key"
+        <input type="checkbox" [name]="category" [value]="possibleValue.key"
           [checked]="isValIncluded(possibleValue.key)"
           (change)="updateFilters($event, possibleValue.key)">
           {{possibleValue.key}} ({{possibleValue.val}})
@@ -19,9 +19,8 @@ import * as _ from 'lodash';
   </div>
   `
 })
-export class StudyFiltersComponent implements OnInit {
+export class SampleFiltersComponent implements OnInit {
   @Input() category: string;
-  @Input() subcategory: string;
   isHidden = false;
   counts: {
     [value: string]: number   // Free-form mapping of values to counts
@@ -41,20 +40,20 @@ export class StudyFiltersComponent implements OnInit {
   }
 
   update(filters: FiltersState): void {
-    this.counts = this._studyService.getStudyCounts(filters, this.category, this.subcategory);
+    this.counts = this._studyService.getSampleCounts(filters, this.category);
   }
 
   isValIncluded(valueName: string): boolean {
-    let curFilters = this._filtersService.getFilters().studyFilters;
-    if ((this.category in curFilters) && (this.subcategory in curFilters[this.category])) {
+    let curFilters = this._filtersService.getFilters().sampleFilters;
+    if (this.category in curFilters) {
       // Checked if true or absent, unchecked if false
-      return (curFilters[this.category][this.subcategory][valueName] !== false);
+      return (curFilters[this.category][valueName] !== false);
     } else {
       return true;   // If no filters specified, default to all values
     }
   }
 
   updateFilters(e: any, valueName: string): void {
-    this._filtersService.setStudyFilter(this.category, this.subcategory, valueName, e.target.checked);
+    this._filtersService.setSampleFilter(this.category, valueName, e.target.checked);
   }
 }

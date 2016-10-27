@@ -7,6 +7,9 @@
       </td>
 
       <td style="vertical-align:top">
+        <h1>Applied Filters (DEBUG)</h1>
+        <pre>{{ _filtersService.getFilters() | json }}</pre>
+
         <h1>Study Browser</h1>
         <studies (selectedStudyEmitter)="selectStudy($event)"></studies>
 

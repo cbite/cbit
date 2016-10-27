@@ -11,6 +11,6 @@ export class MapToIterablePipe implements PipeTransform {
         a.push({key: key, val: dict[key]});
       }
     }
-    return a;
+    return a.sort((x, y) => x.key.trim().localeCompare(y.key.trim()));  // Prevent leading spaces from jumbling up items
   }
 }

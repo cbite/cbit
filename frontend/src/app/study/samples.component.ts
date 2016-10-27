@@ -6,7 +6,7 @@ import {FiltersService, FiltersState} from "../services/filters.service";
 @Component({
   selector: 'samples',
   template: `
-  <b>{{ samples.length }} matching samples (search Text: {{searchText}})</b>
+  <b>{{ samples.length }} matching samples</b>
   <ul>
     <li *ngFor="let sample of samples">
       <div class="showonhover">Study {{ sample.studyId }} - <b>{{ sample._source['Sample Name'] }}</b> (internal id: {{ sample.id }})
@@ -64,7 +64,7 @@ export class SamplesComponent implements OnInit {
   }
 
   updateSamples(filters: FiltersState): void {
-    let rawSamples = !filters.searchText ? this._studyService.getSamples() : this._studyService.getSamplesMatching(filters.searchText);
+    let rawSamples = this._studyService.getSamplesMatching(filters);
     this.samples = rawSamples.sort((a, b) => a._source['Sample Name'].localeCompare(b._source['Sample Name']));
 
     let keys = new Set<string>();
