@@ -7,14 +7,49 @@
       </td>
 
       <td style="vertical-align:top">
-        <h1>Applied Filters (DEBUG)</h1>
-        <pre>{{ _filtersService.getFilters() | json }}</pre>
+        <h1>Results</h1>
+        <ul>
+          <li *ngFor='let studyMatch of matches'>
+            <a (click)="selectStudy(studyMatch.study)">{{studyMatch.study.id}}.</a>
+            <b>{{ studyMatch.study._source['STUDY']['Study Title'] }}</b>
+            <i>by {{ studyMatch.study._source['STUDY PUBLICATIONS'][0]['Study Publication Author List'] }}</i>
+            <br/>
+            <b>{{ studyMatch.sampleMatches.length }} matching samples</b>
+            <button (click)="areSamplesHidden[studyMatch.studyId] = !areSamplesHidden[studyMatch.studyId]">Show/Hide</button>
+            <ul *ngIf="!areSamplesHidden[studyMatch.studyId]">
+              <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
+                <div class="showonhover">
+                  <b>{{ sampleMatch.sample._source['Sample Name'] }}</b><br/>
+                  <span *ngFor="let key of distinctKeys(studyMatch.studyId, sampleMatch.sample)">
+                    - <i>{{ key }}</i>: {{ sampleMatch.sample._source[key] }}
+                  </span>
 
+
+                  <div class="hovertext">
+                    <div *ngFor="let propName of sampleKeys">
+
+                      <div *ngIf="sampleMatch.sample._source[propName] && propName !== '_assay'">
+                        <b>{{ propName }}</b>: {{ sampleMatch.sample._source[propName] }}
+                      </div>
+
+                      <div *ngIf="sampleMatch.sample._source[propName] && propName === '_assay'">
+                        <b>Assay Properties</b>: <pre>{{ sampleMatch.sample._source[propName] | json }}</pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <!--
         <h1>Study Browser</h1>
         <studies (selectedStudyEmitter)="selectStudy($event)"></studies>
 
         <h1>Sample Browser</h1>
         <samples></samples>
+        -->
       </td>
     </tr>
   </table>

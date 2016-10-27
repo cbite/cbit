@@ -4,6 +4,26 @@ import {FiltersService, FiltersState} from "../services/filters.service";
 import {StudyService} from "../services/study.service";
 import * as _ from 'lodash';
 
+const HIDDEN_STUDY_FILTER_LABELS = {
+  'INVESTIGATION: Investigation Identifier': true,
+  'STUDY: Study Description': true,
+  'STUDY: Study Identifier': true,
+  'STUDY: Study Title': true,
+  'STUDY PROTOCOLS: Study Protocol Description': true,
+  'STUDY PUBLICATIONS: Study Publication Author List': true,
+  'STUDY PUBLICATIONS: Study Publication DOI': true,
+  'STUDY PUBLICATIONS: Study PubMed ID': true,
+  'STUDY PUBLICATIONS: Study Publication Title': true
+};
+
+const HIDDEN_SAMPLE_FILTER_LABELS = {
+  'Barcode': true,
+  'Sample ID': true,
+  'Sample Name': true,
+  'Source Name': true,
+  'Study ID': true
+};
+
 @Component({
   selector: 'filter-sidebar',
   template: `
@@ -17,14 +37,17 @@ import * as _ from 'lodash';
   <h2>Study Filters <button (click)="toggleStudyFilters();">Show/Hide</button></h2>
   <div [class.hidden]="studyFiltersHidden" *ngFor="let categoryKV of allStudyFilterLabels | mapToIterable">
     <div *ngFor="let subcategory of categoryKV.val">
-      <study-filters [category]="categoryKV.key" [subcategory]="subcategory"></study-filters>
+      <study-filters *ngIf='showStudyFilter(categoryKV.key, subcategory)' [category]="categoryKV.key" [subcategory]="subcategory"></study-filters>
     </div>
   </div>
   
   <h2>Sample Filters <button (click)="toggleSampleFilters();">Show/Hide</button></h2>
   <div [class.hidden]="sampleFiltersHidden" *ngFor="let category of allSampleFilterLabels">
-    <sample-filters [category]="category"></sample-filters>
+    <sample-filters *ngIf='showSampleFilter(category)' [category]="category"></sample-filters>
   </div>
+  
+  <h1>Applied Filters (DEBUG)</h1>
+  <pre>{{ _filtersService.getFilters() | json }}</pre>
   `
 })
 export class FilterSidebarComponent implements OnInit {
@@ -36,6 +59,14 @@ export class FilterSidebarComponent implements OnInit {
 
   allStudyFilterLabels = {};
   allSampleFilterLabels = {};
+
+  showStudyFilter(category: string, subcategory: string): boolean {
+    return !(`${category}: ${subcategory}` in HIDDEN_STUDY_FILTER_LABELS);
+  }
+
+  showSampleFilter(category: string): boolean {
+    return !(category in HIDDEN_SAMPLE_FILTER_LABELS);
+  }
 
   constructor(
     private _studyService: StudyService,

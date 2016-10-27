@@ -83,27 +83,6 @@ export class StudyService {
   };
 
   getStudiesMatching(filters: FiltersState): Study[] {
-    /*if (!isUndefined(this._lastFilters) && _.isEqual(this._lastFilters, filters)) {
-      return this._lastStudyMatches;
-    }
-
-    this._lastFilters = _.cloneDeep(filters);
-
-    let result = STUDIES;
-    if (filters.searchText) {
-      result = result.filter(study => this.deepFind(study, filters.searchText.toLocaleLowerCase()));
-    }
-
-    _.forOwn(filters.studyFilters, (d, category) => {
-      _.forOwn(d, (dd, subcategory) => {
-        result = result.filter(study => !this.shouldStudyBeExcluded(category, subcategory, dd, study));
-      });
-    });
-
-    this._lastStudyMatches = result;
-
-    return result;*/
-
     return this.getUnifiedMatches(filters).map(studyMatch => studyMatch.study);
   }
 
@@ -123,11 +102,12 @@ export class StudyService {
     // Apply all filters *except* the one being queried (so we get a count of all studies that would be included
     // if we allow a particular value for this category-subcategory pair)
     var tweakedFilters = this.forceIncludeInStudyFilters(filters, category, subcategory);
-    var matchingStudies = this.getStudiesMatching(tweakedFilters);
+    var matches = this.getUnifiedMatches(tweakedFilters);
 
     // Simulate ElasticSearch-like aggregation
     let result = {};
-    for (let study of matchingStudies) {
+    for (let studyMatch of matches) {
+      let study = studyMatch.study;
       if (category in study._source) {
         let toSearch = study._source[category];
         if (!Array.isArray(toSearch)) {
@@ -170,66 +150,6 @@ export class StudyService {
   }
 
   getSamplesMatching(filters: FiltersState): Sample[] {
-
-    /*// Return all samples that have 'searchText' somewhere in their metadata,
-    // as well as all associated control samples (referenced via the field 'Sample Name')
-
-    interface Match {
-      studyId: number,
-      name: string
-    }
-
-    let result = SAMPLES;
-
-    // First, text search
-    if (filters.searchText) {
-      result = result.filter(sample => this.deepFind(sample, filters.searchText.toLocaleLowerCase()));
-    }
-
-    // Then additional filters
-    _.forOwn(filters.sampleFilters, (d, category) => {
-      _.forOwn(d, (included, valueName) => {
-        let excluded = !included;
-        if (excluded) {
-          result = result.filter(sample =>
-            !(((category in sample._source) &&
-               (('' + sample._source[category]) === valueName))  // Force string comparison, yuck!
-              ||
-              (!(category in sample._source) && (NULL_CATEGORY_NAME === valueName))
-            )
-          );
-        }
-      });
-    });
-
-    // Now fetch associated controls
-    var
-      resultIds = new Set<number>(),
-      sampleMatches: Array<Match> = [],
-      sample: Sample
-      ;
-
-    for (sample of result) {
-      resultIds.add(sample.id);
-      if (sample._source['Sample Match']) {
-        sampleMatches.push({
-          studyId: sample.studyId,
-          name: sample._source['Sample Match']
-        })
-      }
-    }
-
-    // Next, controls (horrible O(N^2) crap here, but this will all be replaced by ElasticSearch later
-    (SAMPLES
-      .filter(sample => sampleMatches.some(maybeMatch => sample.studyId == maybeMatch.studyId && sample._source['Sample Name'] == maybeMatch.name))
-      .forEach(sample => {
-        resultIds.add(sample.id)
-      })
-    )
-
-    // Now fetch all the relevant samples from list of matching ids
-    return SAMPLES.filter(sample => resultIds.has(sample.id));*/
-
     // See http://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
     var flatten = function(nestedLists: any[][]): any[] {
       return Array.prototype.concat.apply([], nestedLists);
@@ -258,13 +178,16 @@ export class StudyService {
     // Apply all filters *except* the one being queried (so we get a count of all studies that would be included
     // if we allow a particular value for this category-subcategory pair)
     var tweakedFilters = this.forceIncludeInSampleFilters(filters, category);
-    var matchingSamples = this.getSamplesMatching(tweakedFilters);
+    var matches = this.getUnifiedMatches(tweakedFilters);
 
     // Simulate ElasticSearch-like aggregation
     let result = {};
-    for (let sample of matchingSamples) {
-      var value = '' + (sample._source[category] || NULL_CATEGORY_NAME);
-      result[value] = (result[value] || 0) + 1;
+    for (let studyMatch of matches) {
+      for (let sampleMatch of studyMatch.sampleMatches) {
+        let sample = sampleMatch.sample;
+        var value = '' + (sample._source[category] || NULL_CATEGORY_NAME);
+        result[value] = (result[value] || 0) + 1;
+      }
     }
 
     return result;
