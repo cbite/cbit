@@ -7,11 +7,12 @@
       </td>
 
       <td style="vertical-align:top">
-        <h1>Results</h1>
+        <h1>Results ({{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples)</h1>
         <ul>
           <li *ngFor='let studyMatch of matches'>
-            <a (click)="selectStudy(studyMatch.study)">{{studyMatch.study.id}}.</a>
-            <b>{{ studyMatch.study._source['STUDY']['Study Title'] }}</b>
+            <a (click)="selectStudy(studyMatch.study)" href="javascript:void(0)">
+              {{studyMatch.study.id}}. <b>{{ studyMatch.study._source['STUDY']['Study Title'] }}</b>
+            </a>
             <i>by {{ studyMatch.study._source['STUDY PUBLICATIONS'][0]['Study Publication Author List'] }}</i>
             <br/>
             <b>{{ studyMatch.sampleMatches.length }} matching samples</b>
@@ -19,7 +20,10 @@
             <ul *ngIf="!areSamplesHidden[studyMatch.studyId]">
               <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
                 <div class="showonhover">
-                  <b>{{ sampleMatch.sample._source['Sample Name'] }}</b><br/>
+                  <a (click)="selectSample(sampleMatch.sample)" href="javascript:void(0)">
+                    <b>{{ sampleMatch.sample._source['Sample Name'] }}</b>
+                  </a>
+                  <br/>
                   <span *ngFor="let key of distinctKeys(studyMatch.studyId, sampleMatch.sample)">
                     - <i>{{ key }}</i>: {{ sampleMatch.sample._source[key] }}
                   </span>

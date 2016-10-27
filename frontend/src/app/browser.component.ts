@@ -37,6 +37,8 @@ export class BrowserComponent {
   sampleKeys: string[];
   commonKeys: { [studyId: number]: { [key: string]: any } };
   areSamplesHidden: { [studyId: number]: boolean } = {};
+  numMatchingStudies: number = 0;
+  numMatchingSamples: number = 0;
 
   constructor(
     private _router: Router,
@@ -46,6 +48,11 @@ export class BrowserComponent {
 
   selectStudy(study: Study): void {
     let link = ['/study', study.id];
+    this._router.navigate(link);
+  }
+
+  selectSample(sample: Sample): void {
+    let link = ['/sample', sample.id];
     this._router.navigate(link);
   }
 
@@ -95,6 +102,9 @@ export class BrowserComponent {
 
       this.commonKeys[studyMatch.studyId] = studyCommonKeys;
     }
+
+    this.numMatchingStudies = this.matches.length;
+    this.numMatchingSamples = this.matches.reduce((soFar, studyMatch) => soFar + studyMatch.sampleMatches.length, 0);
   }
 
   distinctKeys(studyId: number, sample: Sample): string[] {

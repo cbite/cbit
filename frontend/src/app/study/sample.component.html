@@ -1,0 +1,15 @@
+<div *ngIf="sample">
+  <h1>Sample {{ sample._source['Sample Name'] }} from <a (click)="selectStudy(sample.studyId)" href="javascript:void(0)">Study {{ sample.studyId }}</a></h1>
+  <div *ngFor="let kv of sample._source | mapToIterable">
+
+    <div *ngIf="kv.key !== '_assay'">
+      <b>{{ kv.key }}</b>: {{ kv.val }}
+    </div>
+
+    <div *ngIf="kv.key === '_assay'">
+      <b>Assay Properties</b>: <pre>{{ kv.val | json }}</pre>
+    </div>
+  </div>
+
+  <button (click)="goBack()">Back</button>
+</div>

@@ -14,6 +14,7 @@ import {FilterSidebarComponent} from "./filters/filter-sidebar.component";
 import {MapToIterablePipe} from "./common/mapToIterable.pipe";
 import {StudyFiltersComponent} from "./filters/study-filters.component";
 import {SampleFiltersComponent} from "./filters/sample-filters.component";
+import {SampleComponent} from "./study/sample.component";
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import {SampleFiltersComponent} from "./filters/sample-filters.component";
     StudiesComponent,
     SamplesComponent,
     StudyComponent,
+    SampleComponent,
     MapToIterablePipe
   ],
   bootstrap: [ AppComponent ]

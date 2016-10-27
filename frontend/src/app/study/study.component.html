@@ -3,20 +3,53 @@
   <h2>Name: {{ study._source['STUDY']['Study Title'] }}</h2>
   <h3>Author: {{ study._source['STUDY PUBLICATIONS'][0]['Study Publication Author List'] }}</h3>
 
+  <h3>Extra Info</h3>
+  <ul>
+    <li *ngFor="let categoryKV of study._source | mapToIterable">
+      <b>{{ categoryKV.key }}:</b>
+
+      <div *ngIf="isCategoryIsMultiValued(categoryKV.key)">
+        <ol>
+          <li *ngFor="let item of study._source[categoryKV.key]">
+            <ul>
+              <li *ngFor="let subcategoryKV of item | mapToIterable">
+                <i>{{ subcategoryKV.key }}</i>: {{ subcategoryKV.val }}
+              </li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <div *ngIf="!isCategoryIsMultiValued(categoryKV.key)">
+        <ul>
+          <li *ngFor="let subcategoryKV of study._source[categoryKV.key] | mapToIterable">
+            <i>{{ subcategoryKV.key }}</i>: {{ subcategoryKV.val }}
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+
   <h3>Samples</h3>
+  <h4>Common Properties:</h4>
+  <ul>
+    <li *ngFor="let kv of commonKeys | mapToIterable">
+      <i>{{ kv.key }}</i>: {{ kv.val }}
+    </li>
+  </ul>
+  <h4>Distinguishing properties:</h4>
   <ol>
     <li *ngFor="let sample of samples">
-      <div><b>{{ sample._source['Sample Name'] }}</b></div>
-      <div *ngFor="let propName of sampleKeys">
-
-        <div *ngIf="sample._source[propName] && propName !== '_assay'">
-          <b>{{ propName }}</b>: {{ sample._source[propName] }}
-        </div>
+      <div><b><a (click)="selectSample(sample)" href="javascript:void(0)">{{ sample._source['Sample Name'] }}</a></b></div>
+      <span *ngFor="let propName of distinctKeys(sample)">
+        <span *ngIf="sample._source[propName] && propName !== '_assay'">
+          <i>{{ propName }}</i>: {{ sample._source[propName] }} -
+        </span>
 
         <div *ngIf="sample._source[propName] && propName === '_assay'">
           <b>Assay Properties</b>: <pre>{{ sample._source[propName] | json }}</pre>
         </div>
-      </div>
+      </span>
     </li>
   </ol>
   <button (click)="goBack()">Back</button>
