@@ -1,12 +1,51 @@
 import { Study, Sample } from './study.model';
 
+/*
+ In backend folder:
+
+ import reader, config, json
+ cfg = config.Config()
+
+ i = reader.read_investigation(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/i_Investigation.txt', 'r'))
+ result = {
+   'id': 1,
+   'sampleIds': [k for k in range(0, 17+1)],
+   '_source': reader.conform_investigation_to_schema(
+                reader.remove_isa_name_prefixes(
+                  reader.remove_empty_values_in_dict(
+                    reader.flatten_investigation(
+                      i
+                    )
+                  )
+                )
+              )
+ }
+ print(json.dumps(result, indent=2, sort_keys=True))
+
+ i = reader.read_investigation(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/i_Investigation.txt', 'r'))
+ result = {
+   'id': 2,
+   'sampleIds': [k for k in range(100, 153+1)],
+   '_source': reader.conform_investigation_to_schema(
+                reader.remove_isa_name_prefixes(
+                  reader.remove_empty_values_in_dict(
+                    reader.flatten_investigation(
+                      i
+                    )
+                  )
+                )
+              )
+ }
+ print(json.dumps(result, indent=2, sort_keys=True))
+
+ */
 export const STUDIES: Study[] = [
   {
-    id: 8,
+    id: 1,
     sampleIds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
     _source: {
       "INVESTIGATION": {
-        "Investigation Identifier": "1474982334465",
+        "Investigation Identifier": "1478015927860",
         "Investigation Title": "Investigation"
       },
       "ONTOLOGY SOURCE REFERENCE": {
@@ -16,10 +55,11 @@ export const STUDIES: Study[] = [
         "Term Source Version": "149"
       },
       "STUDY": {
-        "Study Description": "Osteogenic differentiation of human mesenchymal stromal cells (hMSCs) may potentially be used in cell-based bone tissue-engineering applications to enhance the bone-forming potential of these cells. Osteogenic differentiation and adipogenic differentiation are thought to be mutually exclusive, and although several signaling pathways and cues that induce osteogenic or adipogenic differentiation, respectively, have been identified, there is no general consensus on how to optimally differentiate hMSCs into the osteogenic lineage. Some pathways have also been reported to be involved in both adipogenic and osteogenic differentiation, as for example, the protein kinase A (PKA) pathway, and the aim of this study was to investigate the role of cAMP/PKA signaling in differentiation of hMSCs in more detail. We show that activation of this pathway with dibutyryl-cAMP results in enhanced alkaline phosphatase expression, whereas another cAMP analog induces adipogenesis in long-term mineralization cultures. Adipogenic differentiation, induced by 8-bromo-cAMP, was accompanied by stronger PKA activity and higher expression of cAMP-responsive genes, suggesting that stronger activation correlates with adipogenic differentiation. In addition, a whole-genome expression analysis showed an increase in expression of adipogenic genes in 8-br-cAMP-treated cells. Furthermore, by means of quantitative polymerase chain reaction, we show differences in peroxisome proliferator-activated receptor-? activation, either alone or in combination with dexamethasone, thus demonstrating differential effects of the PKA pathway, most likely depending on its mode of activation.",
+        "Study Description": "Osteogenic differentiation of human mesenchymal stromal cells (hMSCs) may potentially be used in cell-based bone tissue-engineering applications to enhance the bone-forming potential of these cells. Osteogenic differentiation and adipogenic differentiation are thought to be mutually exclusive, and although several signaling pathways and cues that induce osteogenic or adipogenic differentiation, respectively, have been identified, there is no general consensus on how to optimally differentiate hMSCs into the osteogenic lineage. Some pathways have also been reported to be involved in both adipogenic and osteogenic differentiation, as for example, the protein kinase A (PKA) pathway, and the aim of this study was to investigate the role of cAMP/PKA signaling in differentiation of hMSCs in more detail. We show that activation of this pathway with dibutyryl-cAMP results in enhanced alkaline phosphatase expression, whereas another cAMP analog induces adipogenesis in long-term mineralization cultures. Adipogenic differentiation, induced by 8-bromo-cAMP, was accompanied by stronger PKA activity and higher expression of cAMP-responsive genes, suggesting that stronger activation correlates with adipogenic differentiation. In addition, a whole-genome expression analysis showed an increase in expression of adipogenic genes in 8-br-cAMP-treated cells. Furthermore, by means of quantitative polymerase chain reaction, we show differences in peroxisome proliferator-activated receptor-gamma activation, either alone or in combination with dexamethasone, thus demonstrating differential effects of the PKA pathway, most likely depending on its mode of activation.",
         "Study File Name": "s_study_sample.txt",
-        "Study Identifier": "StudyID_8",
+        "Study Identifier": "StudyID_01",
         "Study Public Release Date": "2012-05-30",
+        "Study Researchers Involved": "Doorn J, Leusink M, Groen N, van de Peppel J, van Leeuwen JP, van Blitterswijk CA, de Boer J",
         "Study Submission Date": "2011-08-25",
         "Study Title": "Diverse effects of cyclic AMP variants on osteogenic and adipogenic differentiation of human mesenchymal stromal cells"
       },
@@ -84,46 +124,46 @@ export const STUDIES: Study[] = [
       ],
       "STUDY PROTOCOLS": [
         {
-          "Study Protocol Description": "After 6 or 72 h of treatment, cells were lyzed directly from the plate. RNA was isolated using a Bioke RNA II nucleospin RNA isolation kit (Machery Nagel), and RNA concentrations were measured using an ND100 spectrophotometer (Nanodrop technologies).",
-          "Study Protocol Name": "RNA extraction",
-          "Study Protocol Type": "RNA extraction"
-        },
-        {
-          "Study Protocol Description": "Arrays were scanned on an Illumina iScan, and raw intensity values were background corrected in Genomestudio (Illumina). Further data processing and statistical testing were performed using R and Bioconductor statistical software (www.bioconductor.org/).",
-          "Study Protocol Name": "data collection",
-          "Study Protocol Type": "data collection"
-        },
-        {
-          "Study Protocol Description": "The normalized intensity values were transformed using variance stabilization.",
-          "Study Protocol Name": "data transformation",
-          "Study Protocol Type": "data transformation"
-        },
-        {
-          "Study Protocol Description": "From 500 ng of RNA, cRNA was synthesized using the Illumina TotalPrep RNA amplification Kit (Ambion/Life Technologies), according to the manufacturer's protocol, and RNA and cRNA quality was verified on Bioanalyzer 2100 (Agilent).",
-          "Study Protocol Name": "labeling",
-          "Study Protocol Type": "labeling"
+          "Study Protocol Description": "Bone marrow aspirates were obtained from donors after obtaining written informed consent. hMSCs were isolated and proliferated as described previously. Briefly, aspirates were resuspended using 20G needles, plated at a density of 5.105 cells/cm2, and cultured in an hMSC proliferation medium, consisting of an alpha-minimal essential medium (alpha-MEM; Life Technologies), 10% fetal bovine serum (FBS; Cambrex Bio sciences, Verviers), 0.2 mM ascorbic acid 2-phosphate (ASAP; Sigma Aldrich), 2 mM L-glutamine (Invitrogen, Life Technologies), 100 U/mL penicillin (Life Technologies), 10 ug/mL streptomycin (Life Technologies), and 1 ng/mL basic fibroblast growth factor (bFGF; Instruchemie). Cells were grown at 37\u00b0C, in a humid atmosphere with 5% CO2. The medium was refreshed twice a week, and cells were used for further subculturing or cryopreservation upon reaching near confluence. The hMSC basic medium was composed of a proliferation medium without bFGF.\nFor whole-genome expression analysis, hMSCs were seeded in 12-well plates at 5000 cells/cm2 and allowed to attach for 10\u201315 h in a proliferation medium. The next day, either a basic medium or a basic medium supplemented with 1 mM db-cAMP or 8-br-cAMP was added. After 6 or 72 h of treatment, cells were lyzed directly from the plate, and RNA was isolated.",
+          "Study Protocol Name": "Protocol_01_Sample_treatment",
+          "Study Protocol Type": "Protocol_01_Sample_treatment"
         },
         {
           "Study Protocol Description": "In this study no materials were synthesized. All cells were grown on standard 12-well polystyrene plates.",
-          "Study Protocol Name": "material synthesis",
-          "Study Protocol Type": "material synthesis"
+          "Study Protocol Name": "Protocol_02_Material_synthesis",
+          "Study Protocol Type": "Protocol_02_Material_synthesis"
+        },
+        {
+          "Study Protocol Description": "After 6 or 72 h of treatment, cells were lyzed directly from the plate. RNA was isolated using a Bioke RNA II nucleospin RNA isolation kit (Machery Nagel), and RNA concentrations were measured using an ND100 spectrophotometer (Nanodrop technologies).",
+          "Study Protocol Name": "Protocol_03_RNA_extraction",
+          "Study Protocol Type": "Protocol_03_RNA_extraction"
+        },
+        {
+          "Study Protocol Description": "From 500 ng of RNA, cRNA was synthesized using the Illumina TotalPrep RNA amplification Kit (Ambion/Life Technologies), according to the manufacturer's protocol, and RNA and cRNA quality was verified on Bioanalyzer 2100 (Agilent).",
+          "Study Protocol Name": "Protocol_04_Labeling",
+          "Study Protocol Type": "Protocol_04_Labeling"
+        },
+        {
+          "Study Protocol Description": "Microarrays were performed using Illumina HT-12 v3 expression Beadchips (Illumina), according to the manufacturer's protocol. Briefly, 750 ng of cRNA was hybridized on the array overnight, after which the array was washed and blocked. Then, by addition of streptavidin Cy-3 (Illumina), a fluorescent signal was developed.",
+          "Study Protocol Name": "Protocol_05_Nucleic_acid_hybridization",
+          "Study Protocol Parameters Name": "Hybridization Date",
+          "Study Protocol Type": "Protocol_05_Nucleic_acid_hybridization"
+        },
+        {
+          "Study Protocol Description": "Arrays were scanned on an Illumina iScan, and raw intensity values were background corrected in Genomestudio (Illumina). Further data processing and statistical testing were performed using R and Bioconductor statistical software (www.bioconductor.org/).",
+          "Study Protocol Name": "Protocol_06_Data_collection",
+          "Study Protocol Type": "Protocol_06_Data_collection"
         },
         {
           "Study Protocol Description": "The probe-level raw intensity values were quantile normalized.",
-          "Study Protocol Name": "normalization data transformation",
+          "Study Protocol Name": "Protocol_07_Normalization_data_transformation",
           "Study Protocol Parameters Name": "Background correction",
-          "Study Protocol Type": "normalization data transformation"
+          "Study Protocol Type": "Protocol_07_Normalization_data_transformation"
         },
         {
-          "Study Protocol Description": "Microarrays were performed using Illumina HT-12 v3 expression Beadchips (Illumina), according to the manufacturer's protocol. Briefly, 750 ng of cRNA was hybridized on the array overnight, after which the array was washed and blocked. Then, by addition of streptavidin Cy-3 (Illumina), a fluorescent signal was developed. ",
-          "Study Protocol Name": "nucleic acid hybridization",
-          "Study Protocol Parameters Name": "Hybridization Date",
-          "Study Protocol Type": "nucleic acid hybridization"
-        },
-        {
-          "Study Protocol Description": "Bone marrow aspirates were obtained from donors after obtaining written informed consent. hMSCs were isolated and proliferated as described previously. Briefly, aspirates were resuspended using 20G needles, plated at a density of 5.105 cells/cm2, and cultured in an hMSC proliferation medium, consisting of an ?-minimal essential medium (?-MEM; Life Technologies), 10% fetal bovine serum (FBS; Cambrex Bio sciences, Verviers), 0.2 mM ascorbic acid 2-phosphate (ASAP; Sigma Aldrich), 2 mM L-glutamine (Invitrogen, Life Technologies), 100 U/mL penicillin (Life Technologies), 10 ?g/mL streptomycin (Life Technologies), and 1 ng/mL basic fibroblast growth factor (bFGF; Instruchemie). Cells were grown at 37\u00b0C, in a humid atmosphere with 5% CO2. The medium was refreshed twice a week, and cells were used for further subculturing or cryopreservation upon reaching near confluence. The hMSC basic medium was composed of a proliferation medium without bFGF.\nFor whole-genome expression analysis, hMSCs were seeded in 12-well plates at 5000 cells/cm2 and allowed to attach for 10\u201315 h in a proliferation medium. The next day, either a basic medium or a basic medium supplemented with 1 mM db-cAMP or 8-br-cAMP was added. After 6 or 72 h of treatment, cells were lyzed directly from the plate, and RNA was isolated.",
-          "Study Protocol Name": "sample treatment",
-          "Study Protocol Type": "sample treatment"
+          "Study Protocol Description": "The normalized intensity values were transformed using variance stabilization.",
+          "Study Protocol Name": "Protocol_08_Data transformation",
+          "Study Protocol Type": "Protocol_08_Data transformation"
         }
       ],
       "STUDY PUBLICATIONS": [
@@ -141,11 +181,11 @@ export const STUDIES: Study[] = [
   },
 
   {
-    id: 10,
+    id: 2,
     sampleIds: [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153],
     _source: {
       "INVESTIGATION": {
-        "Investigation Identifier": "1476371228002",
+        "Investigation Identifier": "1478018798109",
         "Investigation Title": "Investigation"
       },
       "ONTOLOGY SOURCE REFERENCE": {
@@ -157,8 +197,9 @@ export const STUDIES: Study[] = [
       "STUDY": {
         "Study Description": "Biomaterial properties can be tailored for specific applications via systematic and high-throughput screening of biomaterial\u2013cell interactions. However, progress in material development is often hampered by the lack of adequate in vitro testing methods, frequently due to incomplete understanding of involved in vivo mechanisms. In line with drug discovery in pharmacology, a crucial step in assay development for biomaterial screening is the identification of a target to direct the screen against. Herein, the cell type to be used for screening is of essential importance and has to be carefully chosen. So far, few attention has been put on selecting a cell type specifically suitable for in vitro testing of materials for predefined applications. In this manuscript, we describe an approach to define a suitable cell type for screening assays, for which biomaterials for bone regeneration served as example. Using a bioinformatics methodology, different cell lines are compared on three well-characterized model materials. The transcriptional profiles of MG63, iMSC, SV-HFO, hPPCT, hBPCT and SW480 cells are assessed on 3 calcium phosphate-based materials to evaluate their potential application in a screening assay. We show that MG63 is the most suitable cell line to evaluate biomaterials for bone regeneration applications, evidenced by their robust gene expression differences between the 3 model materials. The gene expression differences between the cell lines were assessed based on the overall gene expression profiles and specific subsets of genes and pathways related to osteogenesis and bone homeostasis in response to the 3 materials tested. In the next phase, this cell line will be used to identify a target correlating with in vivo biomaterial performance and henceforth to develop an in vitro screening system.",
         "Study File Name": "s_study_sample.txt",
-        "Study Identifier": "StudyID_10",
+        "Study Identifier": "StudyID_02",
         "Study Public Release Date": "2013-04-28",
+        "Study Researchers Involved": "Groen N, van de Peppel J, Yuan H, van Leeuwen JP, van Blitterswijk CA, de Boer J",
         "Study Submission Date": "2013-03-12",
         "Study Title": "Bioinformatics-based selection of a model cell type for in vitro biomaterial testing"
       },
@@ -180,6 +221,9 @@ export const STUDIES: Study[] = [
           "Study Person Last Name": "Hebels"
         }
       ],
+      "STUDY DESIGN DESCRIPTORS": {
+        "Study Design Type": "material testing design"
+      },
       "STUDY FACTORS": [
         {
           "Study Factor Name": "Age",
@@ -220,46 +264,46 @@ export const STUDIES: Study[] = [
       ],
       "STUDY PROTOCOLS": [
         {
-          "Study Protocol Description": "A colorectal adenocarcinoma derived epithelial cell line (SW480, ATCC; kindly provided by Prof. H. Clevers), a peripheral nerve derived pericyte cell line (hPPCT) and a blood-brain barrier derived pericyte cell line (hBPCT, both kindly provided by Prof. T. Kanda) [35] were cultured in basic medium composed of Dulbecco's modified Eagle's medium (DMEM, Life Technologies), 10% fetal bovine serum (FBS, Lonza), 100 U/mL penicillin (Life Technologies) and 100 g/mL streptomycin (Life Technologies). Both pericyte cell lines were expanded on collagen type I coated 100 mm plates (BD BioCoat\u2122) at 33 \u00b0C. The osteosarcoma cell line MG63 (ATCC) and immortalized mesenchymal stromal cell line (iMSC, kindly provided by Dr. O. Myklebost (Oslo University Hospital, Norway)) were expanded in basic medium containing ?-minimal essential medium (?-MEM, Life Technologies), 10% fetal bovine serum, 0.2 mm ascorbic acid (Asap, Life Technologies), 2 mm l-glutamine (Life Technologies), 100 U/mL penicillin, 100 ?g/ml streptomycin. A human pre-osteoblastic cell line (SV-HFO; [36] and [37]) was cultured in basic medium containing phenol-free ?-MEM (Life Technologies), 10% FBS, 100 U/mL penicillin, 100 ?g/ml streptomycin, 20 mm HEPES and pH-adjusted to 7.5. Medium was refreshed twice a week and cells were used for experiments, further sub-culturing or cryopreservation upon reaching near confluence. Further experiments were performed at 37 \u00b0C and 5% CO2 for each cell type. \nTo characterize the cell-material constructs, 200,000 cells were seeded per standard volume of 150 ?L of pre-wetted material in 100 ?L basic medium and allowed to attach for 4 h before adding additional medium. However, for iMSC, initial seeding number was increased to 300,000 in order to obtain sufficient RNA to perform the microarray study. The cell-material constructs were cultured in their respective basic medium (without any additives) for 48 h, after which cross sections were made to evaluate the cell distribution throughout the material.",
-          "Study Protocol Name": "sample treatment",
-          "Study Protocol Type": "sample treatment"
+          "Study Protocol Description": "A colorectal adenocarcinoma derived epithelial cell line (SW480, ATCC; kindly provided by Prof. H. Clevers), a peripheral nerve derived pericyte cell line (hPPCT) and a blood-brain barrier derived pericyte cell line (hBPCT, both kindly provided by Prof. T. Kanda) [35] were cultured in basic medium composed of Dulbecco's modified Eagle's medium (DMEM, Life Technologies), 10% fetal bovine serum (FBS, Lonza), 100 U/mL penicillin (Life Technologies) and 100 g/mL streptomycin (Life Technologies). Both pericyte cell lines were expanded on collagen type I coated 100 mm plates (BD BioCoat\u2122) at 33 \u00b0C. The osteosarcoma cell line MG63 (ATCC) and immortalized mesenchymal stromal cell line (iMSC, kindly provided by Dr. O. Myklebost (Oslo University Hospital, Norway)) were expanded in basic medium containing alpha-minimal essential medium (alpha-MEM, Life Technologies), 10% fetal bovine serum, 0.2 mm ascorbic acid (Asap, Life Technologies), 2 mm l-glutamine (Life Technologies), 100 U/mL penicillin, 100 ug/ml streptomycin. A human pre-osteoblastic cell line (SV-HFO; [36] and [37]) was cultured in basic medium containing phenol-free alpha-MEM (Life Technologies), 10% FBS, 100 U/mL penicillin, 100 ug/ml streptomycin, 20 mm HEPES and pH-adjusted to 7.5. Medium was refreshed twice a week and cells were used for experiments, further sub-culturing or cryopreservation upon reaching near confluence. Further experiments were performed at 37 \u00b0C and 5% CO2 for each cell type. \nTo characterize the cell-material constructs, 200,000 cells were seeded per standard volume of 150 uL of pre-wetted material in 100 uL basic medium and allowed to attach for 4 h before adding additional medium. However, for iMSC, initial seeding number was increased to 300,000 in order to obtain sufficient RNA to perform the microarray study. The cell-material constructs were cultured in their respective basic medium (without any additives) for 48 h, after which cross sections were made to evaluate the cell distribution throughout the material.",
+          "Study Protocol Name": "Protocol_01_Sample_treatment",
+          "Study Protocol Type": "Protocol_01_Sample_treatment"
         },
         {
           "Study Protocol Description": "Hydroxyapatite (HA) ceramics were prepared from HA powder (Merck) using the dual-phase mixing method and sintered at 1250 \u00b0C for 8 h according to a previously described method [39]. Biphasic calcium phosphate (BCP) ceramics were fabricated using the H2O2 method using in-house-made calcium-deficient apatite powder and sintered at 1150 \u00b0C (BCP) [17]. The method used to synthesize the BCP ceramics was also used for preparation of tricalcium phosphate (TCP). TCP ceramics were prepared from TCP powder (Plasma Biotal) and sintered at 1100 \u00b0C. Ceramic particles (1\u20132 mm) were prepared, cleaned ultrasonically with acetone, 70% ethanol and demineralized water, dried at 80 \u00b0C, and sterilized by gamma irradiation prior to use.",
-          "Study Protocol Name": "material synthesis",
-          "Study Protocol Type": "material synthesis"
+          "Study Protocol Name": "Protocol_02_Material_synthesis",
+          "Study Protocol Type": "Protocol_02_Material_synthesis"
         },
         {
           "Study Protocol Description": "After 48 h, total RNA was isolated from each cell type cultured on the materials using TRIzol (Invitrogen) and the Nucleospin RNA isolation kit (Macherey\u2013Nagel) according to the manufacturer's protocol.",
-          "Study Protocol Name": "RNA extraction",
-          "Study Protocol Type": "RNA extraction"
+          "Study Protocol Name": "Protocol_03_RNA_extraction",
+          "Study Protocol Type": "Protocol_03_RNA_extraction"
         },
         {
           "Study Protocol Description": "From 350 ng of RNA, cRNA was synthesized using the Illumina TotalPrep RNA amplification Kit, according to the manufacturer's protocol and both RNA and cRNA quality were verified on a Bioanalyzer 2100 (Agilent).",
-          "Study Protocol Name": "labeling",
-          "Study Protocol Type": "labeling"
+          "Study Protocol Name": "Protocol_04_Labeling",
+          "Study Protocol Type": "Protocol_04_Labeling"
         },
         {
-          "Study Protocol Description": "Microarrays were performed using Illumina HT-12 v4 expression Beadchips, according to the manufacturer's protocol. Briefly, 750 ng of cRNA was hybridized on the array overnight after which the array was washed and blocked. Then, by addition of streptavidin Cy-3 a fluorescent signal was developed. ",
-          "Study Protocol Name": "nucleic acid hybridization",
+          "Study Protocol Description": "Microarrays were performed using Illumina HT-12 v4 expression Beadchips, according to the manufacturer's protocol. Briefly, 750 ng of cRNA was hybridized on the array overnight after which the array was washed and blocked. Then, by addition of streptavidin Cy-3 a fluorescent signal was developed.",
+          "Study Protocol Name": "Protocol_05_Nucleic_acid_hybridization",
           "Study Protocol Parameters Name": "Hybridization Date",
-          "Study Protocol Type": "nucleic acid hybridization"
+          "Study Protocol Type": "Protocol_05_Nucleic_acid_hybridization"
         },
         {
           "Study Protocol Description": "Arrays were scanned on an Illumina Beadarray reader and raw intensity values were background corrected in BeadStudio (Illumina).",
-          "Study Protocol Name": "data collection",
-          "Study Protocol Type": "data collection"
+          "Study Protocol Name": "Protocol_06_Data_collection",
+          "Study Protocol Type": "Protocol_06_Data_collection"
         },
         {
           "Study Protocol Description": "The probe-level raw intensity values were quantile normalized.",
-          "Study Protocol Name": "normalization data transformation",
+          "Study Protocol Name": "Protocol_07_Normalization_data_transformation",
           "Study Protocol Parameters Name": "Background correction",
-          "Study Protocol Type": "normalization data transformation"
+          "Study Protocol Type": "Protocol_07_Normalization_data_transformation"
         },
         {
           "Study Protocol Description": "The normalized probe-level intensity values were transformed using variance stabilization (VSN).",
-          "Study Protocol Name": "data transformation",
-          "Study Protocol Type": "data transformation"
+          "Study Protocol Name": "Protocol_08_Data transformation",
+          "Study Protocol Type": "Protocol_08_Data transformation"
         }
       ],
       "STUDY PUBLICATIONS": [
@@ -282,11 +326,11 @@ export const STUDIES: Study[] = [
 
  import reader, config, json
  cfg = config.Config()
- a = reader.read_assay(cfg, open('../../data/ISAcreatorArchives/StudyID_8_archive/a_transcription_micro_1.txt', 'r'))
- s = reader.read_study_sample(cfg, open('../../data/ISAcreatorArchives/StudyID_8_archive/s_study_sample.txt', 'r'))
+ a = reader.read_assay(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/a_transcription_micro_1.txt', 'r'))
+ s = reader.read_study_sample(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/s_study_sample.txt', 'r'))
  d = reader.join_study_sample_and_assay(reader.clean_up_study_samples(s), reader.clean_up_assay(a))
- a2 = reader.read_assay(cfg, open('../../data/ISAcreatorArchives/StudyID_10_archive/a_transcription_micro_1.txt', 'r'))
- s2 = reader.read_study_sample(cfg, open('../../data/ISAcreatorArchives/StudyID_10_archive/s_study_sample.txt', 'r'))
+ a2 = reader.read_assay(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/a_transcription_micro_1.txt', 'r'))
+ s2 = reader.read_study_sample(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/s_study_sample.txt', 'r'))
  d2 = reader.join_study_sample_and_assay(reader.clean_up_study_samples(s2), reader.clean_up_assay(a2))
 
  result = []
@@ -294,12 +338,12 @@ export const STUDIES: Study[] = [
  for i, (k, v) in enumerate(d.iteritems()):
      vv = v.copy()
      vv['Sample Name'] = k
-     result.append({'id': i, 'studyId': 8, '_source': vv})
+     result.append({'id': i, 'studyId': 1, '_source': vv})
 
  for i, (k, v) in enumerate(d2.iteritems()):
      vv = v.copy()
      vv['Sample Name'] = k
-     result.append({'id': 100+i, 'studyId': 10, '_source': vv})
+     result.append({'id': 100+i, 'studyId': 2, '_source': vv})
 
  print(json.dumps(result, indent=2, sort_keys=True))
 
@@ -307,7 +351,6 @@ export const STUDIES: Study[] = [
 export const SAMPLES: Sample[] = [
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -327,36 +370,36 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-1-2",
+      "Sample ID": "01-1-2",
       "Sample Name": "5342595019_D",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 0,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -379,44 +422,44 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-2-2",
+      "Sample ID": "01-2-2",
       "Sample Match": "5342595019_D",
       "Sample Name": "5342595019_E",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 1,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
       "Barcode": "5342595019_F",
       "Biological Replicate": 2,
       "Biologically degradable": "no",
-      "CAS number": " 23583-48-4",
+      "CAS number": "23583-48-4",
       "Cell type": "stromal cell",
       "Compound": "8-bromo-cAMP",
       "Compound abbreviation": "8-br-cAMP",
@@ -432,37 +475,37 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-3-2",
+      "Sample ID": "01-3-2",
       "Sample Match": "5342595019_D",
       "Sample Name": "5342595019_F",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 2,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -482,36 +525,36 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-1-3",
+      "Sample ID": "01-1-3",
       "Sample Name": "5342595019_G",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 3,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -531,36 +574,36 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-1-1",
+      "Sample ID": "01-1-1",
       "Sample Name": "5342595019_A",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 4,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -583,44 +626,44 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-2-1",
+      "Sample ID": "01-2-1",
       "Sample Match": "5342595019_A",
       "Sample Name": "5342595019_B",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 5,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
       "Barcode": "5342595019_C",
       "Biological Replicate": 1,
       "Biologically degradable": "no",
-      "CAS number": " 23583-48-4",
+      "CAS number": "23583-48-4",
       "Cell type": "stromal cell",
       "Compound": "8-bromo-cAMP",
       "Compound abbreviation": "8-br-cAMP",
@@ -636,37 +679,37 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-3-1",
+      "Sample ID": "01-3-1",
       "Sample Match": "5342595019_A",
       "Sample Name": "5342595019_C",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 6,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -689,44 +732,44 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-2-3",
+      "Sample ID": "01-2-3",
       "Sample Match": "5342595019_G",
       "Sample Name": "5342595019_H",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 7,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
       "Barcode": "5342595019_I",
       "Biological Replicate": 3,
       "Biologically degradable": "no",
-      "CAS number": " 23583-48-4",
+      "CAS number": "23583-48-4",
       "Cell type": "stromal cell",
       "Compound": "8-bromo-cAMP",
       "Compound abbreviation": "8-br-cAMP",
@@ -742,37 +785,37 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-3-3",
+      "Sample ID": "01-3-3",
       "Sample Match": "5342595019_G",
       "Sample Name": "5342595019_I",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 8,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -795,44 +838,44 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-5-3",
+      "Sample ID": "01-5-3",
       "Sample Match": "5342595028_G",
       "Sample Name": "5342595028_H",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 9,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
       "Barcode": "5342595028_I",
       "Biological Replicate": 3,
       "Biologically degradable": "no",
-      "CAS number": " 23583-48-4",
+      "CAS number": "23583-48-4",
       "Cell type": "stromal cell",
       "Compound": "8-bromo-cAMP",
       "Compound abbreviation": "8-br-cAMP",
@@ -848,37 +891,37 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-6-3",
+      "Sample ID": "01-6-3",
       "Sample Match": "5342595028_G",
       "Sample Name": "5342595028_I",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 10,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -898,36 +941,36 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-4-2",
+      "Sample ID": "01-4-2",
       "Sample Name": "5342595028_D",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 11,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -950,44 +993,44 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-5-2",
+      "Sample ID": "01-5-2",
       "Sample Match": "5342595028_D",
       "Sample Name": "5342595028_E",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 12,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
       "Barcode": "5342595028_F",
       "Biological Replicate": 2,
       "Biologically degradable": "no",
-      "CAS number": " 23583-48-4",
+      "CAS number": "23583-48-4",
       "Cell type": "stromal cell",
       "Compound": "8-bromo-cAMP",
       "Compound abbreviation": "8-br-cAMP",
@@ -1003,37 +1046,37 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-6-2",
+      "Sample ID": "01-6-2",
       "Sample Match": "5342595028_D",
       "Sample Name": "5342595028_F",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 13,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -1053,36 +1096,36 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-4-3",
+      "Sample ID": "01-4-3",
       "Sample Name": "5342595028_G",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 14,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -1102,36 +1145,36 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-4-1",
+      "Sample ID": "01-4-1",
       "Sample Name": "5342595028_A",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 15,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -1154,44 +1197,44 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-5-1",
+      "Sample ID": "01-5-1",
       "Sample Match": "5342595028_A",
       "Sample Name": "5342595028_B",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 16,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
-      "Age": 2,
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
       "Barcode": "5342595028_C",
       "Biological Replicate": 1,
       "Biologically degradable": "no",
-      "CAS number": " 23583-48-4",
+      "CAS number": "23583-48-4",
       "Cell type": "stromal cell",
       "Compound": "8-bromo-cAMP",
       "Compound abbreviation": "8-br-cAMP",
@@ -1207,33 +1250,34 @@ export const SAMPLES: Sample[] = [
       "Material abbreviation": "PS",
       "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Passage number": 2,
       "Platform": "Illumina",
       "Protocols": [
-        "sample treatment",
-        "material synthesis"
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
       ],
-      "Sample ID": "8-6-1",
+      "Sample ID": "01-6-1",
       "Sample Match": "5342595028_A",
       "Sample Name": "5342595028_C",
       "Sex": "unknown",
-      "Source Name": 8,
+      "Source Name": 1,
       "Strain abbreviation": "hMSC",
       "Strain full name": "human mesenchymal stromal cells",
-      "Study ID": 8,
+      "Study ID": 1,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_8 Annotations.txt",
-        "Array Data Matrix File": "StudyID_8 Raw data matrix file.txt",
+        "Annotation file": "StudyID_01 Annotations.txt",
+        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v3",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_8 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 17,
-    "studyId": 8
+    "studyId": 1
   },
   {
     "_source": {
@@ -1257,29 +1301,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-12-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-12-3",
       "Sample Name": "5937337021_L",
       "Sex": "male",
       "Sintering temperature": 1100,
       "Source Name": "5937337021_L",
       "Strain abbreviation": "iMSC",
       "Strain full name": "immortalized mesenchymal stromal cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 100,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1303,29 +1350,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-8-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-8-3",
       "Sample Name": "5937337059_L",
       "Sex": "unknown",
       "Sintering temperature": 1250,
       "Source Name": "5937337059_L",
       "Strain abbreviation": "hPPCT",
       "Strain full name": "human peripheral nerve derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 101,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1349,29 +1399,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "colon",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-18-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-18-1",
       "Sample Name": "5937337061_B",
       "Sex": "male",
       "Sintering temperature": 1100,
       "Source Name": "5937337061_B",
       "Strain abbreviation": "SW480",
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "epithelium",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 102,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1395,29 +1448,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-12-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-12-2",
       "Sample Name": "5937337021_E",
       "Sex": "male",
       "Sintering temperature": 1100,
       "Source Name": "5937337021_E",
       "Strain abbreviation": "iMSC",
       "Strain full name": "immortalized mesenchymal stromal cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 103,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1441,29 +1497,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "brain",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-3-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-3-2",
       "Sample Name": "5937337021_D",
       "Sex": "unknown",
       "Sintering temperature": 1100,
       "Source Name": "5937337021_D",
       "Strain abbreviation": "hBPCT",
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 104,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1489,29 +1548,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-10-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-10-3",
       "Sample Name": "5937337021_G",
       "Sex": "male",
       "Sintering temperature": 1150,
       "Source Name": "5937337021_G",
       "Strain abbreviation": "iMSC",
       "Strain full name": "immortalized mesenchymal stromal cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 105,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1537,29 +1599,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-16-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-16-3",
       "Sample Name": "5937337021_F",
       "Sex": "male",
       "Sintering temperature": 1150,
       "Source Name": "5937337021_F",
       "Strain abbreviation": "SW480",
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "epithelium",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 106,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1583,29 +1648,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "colon",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-18-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-18-3",
       "Sample Name": "5937337021_A",
       "Sex": "male",
       "Sintering temperature": 1100,
       "Source Name": "5937337021_A",
       "Strain abbreviation": "SW480",
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "epithelium",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 107,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1629,29 +1697,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-11-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-11-2",
       "Sample Name": "5937337059_E",
       "Sex": "male",
       "Sintering temperature": 1250,
       "Source Name": "5937337059_E",
       "Strain abbreviation": "iMSC",
       "Strain full name": "immortalized mesenchymal stromal cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 108,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1675,29 +1746,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-8-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-8-2",
       "Sample Name": "5937337021_C",
       "Sex": "unknown",
       "Sintering temperature": 1250,
       "Source Name": "5937337021_C",
       "Strain abbreviation": "hPPCT",
       "Strain full name": "human peripheral nerve derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 109,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1721,29 +1795,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-11-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-11-3",
       "Sample Name": "5937337021_B",
       "Sex": "male",
       "Sintering temperature": 1250,
       "Source Name": "5937337021_B",
       "Strain abbreviation": "iMSC",
       "Strain full name": "immortalized mesenchymal stromal cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 110,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1767,29 +1844,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-9-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-9-2",
       "Sample Name": "5937337059_H",
       "Sex": "unknown",
       "Sintering temperature": 1100,
       "Source Name": "5937337059_H",
       "Strain abbreviation": "hPPCT",
       "Strain full name": "human peripheral nerve derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 111,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1813,29 +1893,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "colon",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-17-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-17-3",
       "Sample Name": "5937337059_I",
       "Sex": "male",
       "Sintering temperature": 1250,
       "Source Name": "5937337059_I",
       "Strain abbreviation": "SW480",
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "epithelium",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 112,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1859,29 +1942,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-14-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-14-3",
       "Sample Name": "5937337059_J",
       "Sex": "male",
       "Sintering temperature": 1250,
       "Source Name": "5937337059_J",
       "Strain abbreviation": "MG-63",
       "Strain full name": "osteosarcoma cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 113,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1905,29 +1991,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-6-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-6-1",
       "Sample Name": "5937337059_K",
       "Sex": "unknown",
       "Sintering temperature": 1100,
       "Source Name": "5937337059_K",
       "Strain abbreviation": "SV-HFO",
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 114,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1953,29 +2042,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-4-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-4-3",
       "Sample Name": "5937337021_I",
       "Sex": "unknown",
       "Sintering temperature": 1150,
       "Source Name": "5937337021_I",
       "Strain abbreviation": "SV-HFO",
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 115,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -1999,29 +2091,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-14-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-14-2",
       "Sample Name": "5937337021_H",
       "Sex": "male",
       "Sintering temperature": 1250,
       "Source Name": "5937337021_H",
       "Strain abbreviation": "MG-63",
       "Strain full name": "osteosarcoma cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 116,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2045,29 +2140,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "brain",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-2-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-2-3",
       "Sample Name": "5937337021_K",
       "Sex": "unknown",
       "Sintering temperature": 1250,
       "Source Name": "5937337021_K",
       "Strain abbreviation": "hBPCT",
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 117,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2091,29 +2189,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-15-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-15-3",
       "Sample Name": "5937337021_J",
       "Sex": "male",
       "Sintering temperature": 1100,
       "Source Name": "5937337021_J",
       "Strain abbreviation": "MG-63",
       "Strain full name": "osteosarcoma cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 118,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2139,29 +2240,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-10-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-10-2",
       "Sample Name": "5937337059_G",
       "Sex": "male",
       "Sintering temperature": 1150,
       "Source Name": "5937337059_G",
       "Strain abbreviation": "iMSC",
       "Strain full name": "immortalized mesenchymal stromal cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 119,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2187,29 +2291,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-16-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-16-1",
       "Sample Name": "5937337059_F",
       "Sex": "male",
       "Sintering temperature": 1150,
       "Source Name": "5937337059_F",
       "Strain abbreviation": "SW480",
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "epithelium",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 120,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2233,29 +2340,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-6-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-6-2",
       "Sample Name": "5937337059_A",
       "Sex": "unknown",
       "Sintering temperature": 1100,
       "Source Name": "5937337059_A",
       "Strain abbreviation": "SV-HFO",
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 121,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2281,29 +2391,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-4-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-4-2",
       "Sample Name": "5937337059_B",
       "Sex": "unknown",
       "Sintering temperature": 1150,
       "Source Name": "5937337059_B",
       "Strain abbreviation": "SV-HFO",
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 122,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2327,29 +2440,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "colon",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-17-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-17-2",
       "Sample Name": "5937337061_A",
       "Sex": "male",
       "Sintering temperature": 1250,
       "Source Name": "5937337061_A",
       "Strain abbreviation": "SW480",
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "epithelium",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 123,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2375,29 +2491,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-16-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-16-2",
       "Sample Name": "5937337059_C",
       "Sex": "male",
       "Sintering temperature": 1150,
       "Source Name": "5937337059_C",
       "Strain abbreviation": "SW480",
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "epithelium",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 124,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2421,29 +2540,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-15-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-15-2",
       "Sample Name": "5937337059_D",
       "Sex": "male",
       "Sintering temperature": 1100,
       "Source Name": "5937337059_D",
       "Strain abbreviation": "MG-63",
       "Strain full name": "osteosarcoma cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 125,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2469,29 +2591,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-1-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-1-2",
       "Sample Name": "5937337061_C",
       "Sex": "unknown",
       "Sintering temperature": 1150,
       "Source Name": "5937337061_C",
       "Strain abbreviation": "hBPCT",
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 126,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2517,29 +2642,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-4-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-4-1",
       "Sample Name": "5937337049_L",
       "Sex": "unknown",
       "Sintering temperature": 1150,
       "Source Name": "5937337049_L",
       "Strain abbreviation": "SV-HFO",
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 127,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2563,29 +2691,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-15-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-15-1",
       "Sample Name": "5937337049_K",
       "Sex": "male",
       "Sintering temperature": 1100,
       "Source Name": "5937337049_K",
       "Strain abbreviation": "MG-63",
       "Strain full name": "osteosarcoma cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 128,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2609,29 +2740,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "brain",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-2-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-2-2",
       "Sample Name": "5937337049_J",
       "Sex": "unknown",
       "Sintering temperature": 1250,
       "Source Name": "5937337049_J",
       "Strain abbreviation": "hBPCT",
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 129,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2655,29 +2789,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-5-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-5-3",
       "Sample Name": "5937337049_I",
       "Sex": "unknown",
       "Sintering temperature": 1250,
       "Source Name": "5937337049_I",
       "Strain abbreviation": "SV-HFO",
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 130,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2701,29 +2838,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "colon",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-17-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-17-1",
       "Sample Name": "5937337049_H",
       "Sex": "male",
       "Sintering temperature": 1250,
       "Source Name": "5937337049_H",
       "Strain abbreviation": "SW480",
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "epithelium",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 131,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2747,29 +2887,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "brain",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-3-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-3-1",
       "Sample Name": "5937337049_G",
       "Sex": "unknown",
       "Sintering temperature": 1100,
       "Source Name": "5937337049_G",
       "Strain abbreviation": "hBPCT",
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 132,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2795,29 +2938,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-7-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-7-3",
       "Sample Name": "5937337049_F",
       "Sex": "unknown",
       "Sintering temperature": 1150,
       "Source Name": "5937337049_F",
       "Strain abbreviation": "hPPCT",
       "Strain full name": "human peripheral nerve derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 133,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2841,29 +2987,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-6-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-6-3",
       "Sample Name": "5937337049_E",
       "Sex": "unknown",
       "Sintering temperature": 1100,
       "Source Name": "5937337049_E",
       "Strain abbreviation": "SV-HFO",
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 134,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2889,29 +3038,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-7-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-7-1",
       "Sample Name": "5937337049_D",
       "Sex": "unknown",
       "Sintering temperature": 1150,
       "Source Name": "5937337049_D",
       "Strain abbreviation": "hPPCT",
       "Strain full name": "human peripheral nerve derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 135,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2937,29 +3089,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-1-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-1-1",
       "Sample Name": "5937337049_C",
       "Sex": "unknown",
       "Sintering temperature": 1150,
       "Source Name": "5937337049_C",
       "Strain abbreviation": "hBPCT",
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 136,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -2983,29 +3138,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-8-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-8-1",
       "Sample Name": "5937337049_B",
       "Sex": "unknown",
       "Sintering temperature": 1250,
       "Source Name": "5937337049_B",
       "Strain abbreviation": "hPPCT",
       "Strain full name": "human peripheral nerve derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 137,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3029,29 +3187,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-14-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-14-1",
       "Sample Name": "5937337049_A",
       "Sex": "male",
       "Sintering temperature": 1250,
       "Source Name": "5937337049_A",
       "Strain abbreviation": "MG-63",
       "Strain full name": "osteosarcoma cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 138,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3075,29 +3236,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-9-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-9-1",
       "Sample Name": "5937337044_B",
       "Sex": "unknown",
       "Sintering temperature": 1100,
       "Source Name": "5937337044_B",
       "Strain abbreviation": "hPPCT",
       "Strain full name": "human peripheral nerve derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 139,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3123,29 +3287,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-13-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-13-1",
       "Sample Name": "5937337044_C",
       "Sex": "male",
       "Sintering temperature": 1150,
       "Source Name": "5937337044_C",
       "Strain abbreviation": "MG-63",
       "Strain full name": "osteosarcoma cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 140,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3169,29 +3336,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-11-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-11-1",
       "Sample Name": "5937337044_A",
       "Sex": "male",
       "Sintering temperature": 1250,
       "Source Name": "5937337044_A",
       "Strain abbreviation": "iMSC",
       "Strain full name": "immortalized mesenchymal stromal cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 141,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3217,29 +3387,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-13-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-13-2",
       "Sample Name": "5937337044_F",
       "Sex": "male",
       "Sintering temperature": 1150,
       "Source Name": "5937337044_F",
       "Strain abbreviation": "MG-63",
       "Strain full name": "osteosarcoma cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 142,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3263,29 +3436,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "brain",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-3-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-3-3",
       "Sample Name": "5937337044_G",
       "Sex": "unknown",
       "Sintering temperature": 1100,
       "Source Name": "5937337044_G",
       "Strain abbreviation": "hBPCT",
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 143,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3309,29 +3485,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "brain",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-2-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-2-1",
       "Sample Name": "5937337044_D",
       "Sex": "unknown",
       "Sintering temperature": 1250,
       "Source Name": "5937337044_D",
       "Strain abbreviation": "hBPCT",
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 144,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3355,29 +3534,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-5-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-5-1",
       "Sample Name": "5937337044_E",
       "Sex": "unknown",
       "Sintering temperature": 1250,
       "Source Name": "5937337044_E",
       "Strain abbreviation": "SV-HFO",
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 145,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3401,29 +3583,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-12-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-12-1",
       "Sample Name": "5937337044_J",
       "Sex": "male",
       "Sintering temperature": 1100,
       "Source Name": "5937337044_J",
       "Strain abbreviation": "iMSC",
       "Strain full name": "immortalized mesenchymal stromal cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 146,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3447,29 +3632,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "colon",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-18-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-18-2",
       "Sample Name": "5937337044_K",
       "Sex": "male",
       "Sintering temperature": 1100,
       "Source Name": "5937337044_K",
       "Strain abbreviation": "SW480",
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "epithelium",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 147,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3495,29 +3683,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-7-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-7-2",
       "Sample Name": "5937337044_H",
       "Sex": "unknown",
       "Sintering temperature": 1150,
       "Source Name": "5937337044_H",
       "Strain abbreviation": "hPPCT",
       "Strain full name": "human peripheral nerve derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 148,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3543,29 +3734,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-13-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-13-3",
       "Sample Name": "5937337044_I",
       "Sex": "male",
       "Sintering temperature": 1150,
       "Source Name": "5937337044_I",
       "Strain abbreviation": "MG-63",
       "Strain full name": "osteosarcoma cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 149,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3589,29 +3783,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-5-2",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-5-2",
       "Sample Name": "5937337061_E",
       "Sex": "unknown",
       "Sintering temperature": 1250,
       "Source Name": "5937337061_E",
       "Strain abbreviation": "SV-HFO",
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 150,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3637,29 +3834,32 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-10-1",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-10-1",
       "Sample Name": "5937337061_D",
       "Sex": "male",
       "Sintering temperature": 1150,
       "Source Name": "5937337061_D",
       "Strain abbreviation": "iMSC",
       "Strain full name": "immortalized mesenchymal stromal cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "connective",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 151,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3683,29 +3883,32 @@ export const SAMPLES: Sample[] = [
       "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-9-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-9-3",
       "Sample Name": "5937337044_L",
       "Sex": "unknown",
       "Sintering temperature": 1100,
       "Source Name": "5937337044_L",
       "Strain abbreviation": "hPPCT",
       "Strain full name": "human peripheral nerve derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 152,
-    "studyId": 10
+    "studyId": 2
   },
   {
     "_source": {
@@ -3731,28 +3934,31 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [],
-      "Sample ID": "10-1-3",
+      "Protocols": [
+        "Protocol_01_Sample_treatment",
+        "Protocol_02_Material_synthesis"
+      ],
+      "Sample ID": "02-1-3",
       "Sample Name": "5937337061_F",
       "Sex": "unknown",
       "Sintering temperature": 1150,
       "Source Name": "5937337061_F",
       "Strain abbreviation": "hBPCT",
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
-      "Study ID": 10,
+      "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
-        "Annotation file": "StudyID_10 Annotations.txt",
-        "Array Data Matrix File": "StudyID_10 Raw data matrix file.txt",
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
         "Array Design REF": "Illumina HT12v4",
         "Background correction": "yes",
         "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_10 Processed data matrix file.txt",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
         "Label": "biotin",
         "Normalization Name": "quantile"
       }
     },
     "id": 153,
-    "studyId": 10
+    "studyId": 2
   }
 ]

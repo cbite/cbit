@@ -159,6 +159,33 @@ def remove_common_prefixes(d):
     return result
 
 
+def remove_isa_name_prefixes(i):
+    """Recursively remove useless prefixes inserted by ISAcreator"""
+
+    result = {}
+    for k, v in i.iteritems():
+        kPrime = re.sub(r'^Comment\[(.*)\]$', r'\1', k)
+        if isinstance(v, dict):
+            result[kPrime] = remove_isa_name_prefixes(v)
+        elif isinstance(v, list):
+            result[kPrime] = [remove_isa_name_prefixes(vv) for vv in v]
+        else:
+            result[kPrime] = v
+    return result
+
+
+def conform_investigation_to_schema(i):
+    """Ensure that dictionary values that should be lists are lists, even if single-valued"""
+
+    result = i.copy()
+    if 'STUDY PUBLICATIONS' not in result:
+        result['STUDY PUBLICATIONS'] = []
+    elif not isinstance(result['STUDY PUBLICATIONS'], list):
+        result['STUDY PUBLICATIONS'] = [result['STUDY PUBLICATIONS']]
+
+    return result
+
+
 def read_study_sample(cfg, f):
     # A study sample is a regular TSV file, with strings quoted by double-quotes.
     # Fortunately, every line has the same number of columns
