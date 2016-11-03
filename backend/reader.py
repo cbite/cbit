@@ -251,8 +251,68 @@ def clean_up_study_samples(df):
                 result[colname] = value
 
         # Special columns
-        result['Protocols'] = protocols
+        result['Protocols'] = ', '.join(protocols)
         all_results[row['Sample Name']] = result
+
+    return all_results
+
+
+def apply_special_treatments_to_study_sample(d):
+    """
+    Some keys for the study sample require special treatment:
+     * Break down 'Phase composition', 'Elements composition' and 'Wettability'
+     * Merge names and abbreviations
+
+    All special fields added are prefixed with '*' to allow
+    exclusion in downstream data exports.
+
+    Input dict: Sample Name -> Key -> Value
+    """
+
+    def is_float(s):
+        try:
+            v = float(s)
+            return True
+        except ValueError:
+            return False
+
+    def break_out_composition_like_field(inValueName, outResult, outValueNameTemplate):
+        """
+        Break out fields like phase composition
+        e.g. given a sample with 'Phase composition' TCP=80;HA=20,
+        add two extra fields:
+        * 'Phase composition - % TCP': 80
+        * 'Phase composition - % HA': 20
+        """
+        if inValueName in outResult:
+            for entry in outResult[inValueName].split(';'):
+                # Only for properly formatted fields
+                fields = entry.split('=')
+                if len(fields) == 2 and is_float(fields[1]):
+                    k = fields[0]
+                    v = float(fields[1])
+                    outResult[outValueNameTemplate.format(k)] = v
+
+    def merge(outResult, nameField, abbrevField, outFieldName):
+        if nameField in outResult and abbrevField in outResult:
+            outResult[outFieldName] = '{0} - {1}'.format(outResult[abbrevField], outResult[nameField])
+
+    all_results = {}
+    for sampleName, sample in d.iteritems():
+        result = sample.copy()
+
+        break_out_composition_like_field(
+            'Phase composition', result, '*Phase composition - % {0}')
+        break_out_composition_like_field(
+            'Elements composition', result, '*Elements composition - % {0}')
+        break_out_composition_like_field(
+            'Wettability', result, '*Wettability - {0} contact angle (°)')
+
+        merge(result, 'Material Name', 'Material abbreviation', '*Material')
+        merge(result, 'Strain full name', 'Strain abbreviation', '*Strain')
+        merge(result, 'Compound', 'Compound abbreviation', '*Compound')
+
+        all_results[sampleName] = result
 
     return all_results
 

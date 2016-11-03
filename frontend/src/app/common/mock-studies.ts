@@ -329,9 +329,11 @@ export const STUDIES: Study[] = [
  a = reader.read_assay(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/a_transcription_micro_1.txt', 'r'))
  s = reader.read_study_sample(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/s_study_sample.txt', 'r'))
  d = reader.join_study_sample_and_assay(reader.clean_up_study_samples(s), reader.clean_up_assay(a))
+ d = reader.apply_special_treatments_to_study_sample(d)
  a2 = reader.read_assay(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/a_transcription_micro_1.txt', 'r'))
  s2 = reader.read_study_sample(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/s_study_sample.txt', 'r'))
  d2 = reader.join_study_sample_and_assay(reader.clean_up_study_samples(s2), reader.clean_up_assay(a2))
+ d2 = reader.apply_special_treatments_to_study_sample(d2)
 
  result = []
 
@@ -351,6 +353,8 @@ export const STUDIES: Study[] = [
 export const SAMPLES: Sample[] = [
   {
     "_source": {
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -372,10 +376,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-1-2",
       "Sample Name": "5342595019_D",
       "Sex": "unknown",
@@ -400,6 +401,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "db-cAMP - dibutyryl-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -424,10 +428,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-2-2",
       "Sample Match": "5342595019_D",
       "Sample Name": "5342595019_E",
@@ -453,6 +454,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "8-br-cAMP - 8-bromo-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -477,10 +481,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-3-2",
       "Sample Match": "5342595019_D",
       "Sample Name": "5342595019_F",
@@ -506,6 +507,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -527,10 +530,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-1-3",
       "Sample Name": "5342595019_G",
       "Sex": "unknown",
@@ -555,6 +555,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -576,10 +578,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-1-1",
       "Sample Name": "5342595019_A",
       "Sex": "unknown",
@@ -604,6 +603,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "db-cAMP - dibutyryl-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -628,10 +630,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-2-1",
       "Sample Match": "5342595019_A",
       "Sample Name": "5342595019_B",
@@ -657,6 +656,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "8-br-cAMP - 8-bromo-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -681,10 +683,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-3-1",
       "Sample Match": "5342595019_A",
       "Sample Name": "5342595019_C",
@@ -710,6 +709,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "db-cAMP - dibutyryl-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -734,10 +736,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-2-3",
       "Sample Match": "5342595019_G",
       "Sample Name": "5342595019_H",
@@ -763,6 +762,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "8-br-cAMP - 8-bromo-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -787,10 +789,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-3-3",
       "Sample Match": "5342595019_G",
       "Sample Name": "5342595019_I",
@@ -816,6 +815,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "db-cAMP - dibutyryl-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -840,10 +842,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-5-3",
       "Sample Match": "5342595028_G",
       "Sample Name": "5342595028_H",
@@ -869,6 +868,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "8-br-cAMP - 8-bromo-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -893,10 +895,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-6-3",
       "Sample Match": "5342595028_G",
       "Sample Name": "5342595028_I",
@@ -922,6 +921,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -943,10 +944,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-4-2",
       "Sample Name": "5342595028_D",
       "Sex": "unknown",
@@ -971,6 +969,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "db-cAMP - dibutyryl-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -995,10 +996,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-5-2",
       "Sample Match": "5342595028_D",
       "Sample Name": "5342595028_E",
@@ -1024,6 +1022,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "8-br-cAMP - 8-bromo-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -1048,10 +1049,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-6-2",
       "Sample Match": "5342595028_D",
       "Sample Name": "5342595028_F",
@@ -1077,6 +1075,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -1098,10 +1098,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-4-3",
       "Sample Name": "5342595028_G",
       "Sex": "unknown",
@@ -1126,6 +1123,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -1147,10 +1146,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-4-1",
       "Sample Name": "5342595028_A",
       "Sex": "unknown",
@@ -1175,6 +1171,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "db-cAMP - dibutyryl-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -1199,10 +1198,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-5-1",
       "Sample Match": "5342595028_A",
       "Sample Name": "5342595028_B",
@@ -1228,6 +1224,9 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Compound": "8-br-cAMP - 8-bromo-cAMP",
+      "*Material": "PS - polystyrene",
+      "*Strain": "hMSC - human mesenchymal stromal cells",
       "Array or chip design": "Illumina HT12v3",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 12.5,
@@ -1252,10 +1251,7 @@ export const SAMPLES: Sample[] = [
       "Organism": "Homo sapiens",
       "Passage number": 2,
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "01-6-1",
       "Sample Match": "5342595028_A",
       "Sample Name": "5342595028_C",
@@ -1281,39 +1277,42 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "hPPCT - human peripheral nerve derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337021_L",
-      "Biological Replicate": 3,
+      "Barcode": "5937337049_D",
+      "Biological Replicate": 1,
       "Biologically degradable": "yes",
-      "Cell type": "stromal cell",
+      "Cell type": "pericyte",
       "Control": false,
       "Culture Duration": 48,
-      "Culture medium": "alpha-MEM",
+      "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
-      "Group ID": 12,
+      "Group ID": 7,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
-      "Material Name": "tricalcium phosphate",
+      "Material Name": "biphasic calcium phosphate",
       "Material Shape": "particle",
-      "Material abbreviation": "TCP",
-      "Organ": "bone",
+      "Material abbreviation": "BCP",
+      "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
+      "Phase composition": "HA=80;TCP=20",
+      "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-12-3",
-      "Sample Name": "5937337021_L",
-      "Sex": "male",
-      "Sintering temperature": 1100,
-      "Source Name": "5937337021_L",
-      "Strain abbreviation": "iMSC",
-      "Strain full name": "immortalized mesenchymal stromal cell line",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-7-1",
+      "Sample Name": "5937337049_D",
+      "Sex": "unknown",
+      "Sintering temperature": 1150,
+      "Source Name": "5937337049_D",
+      "Strain abbreviation": "hPPCT",
+      "Strain full name": "human peripheral nerve derived pericyte cell line",
       "Study ID": 2,
-      "Tissue": "connective",
+      "Tissue": "muscular",
       "_assay": {
         "Annotation file": "StudyID_02 Annotations.txt",
         "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
@@ -1330,39 +1329,42 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "SV-HFO - SV40-immortalized human fetal osteoblast cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337059_L",
+      "Barcode": "5937337021_I",
       "Biological Replicate": 3,
       "Biologically degradable": "yes",
-      "Cell type": "pericyte",
+      "Cell type": "osteoblast",
       "Control": false,
       "Culture Duration": 48,
-      "Culture medium": "DMEM",
+      "Culture medium": "alpha-MEM phenol-free",
       "Gene expression type": "Microarray",
-      "Group ID": 8,
+      "Group ID": 4,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
-      "Material Name": "hydroxyapatite",
+      "Material Name": "biphasic calcium phosphate",
       "Material Shape": "particle",
-      "Material abbreviation": "HA",
-      "Organ": "sciatic nerve",
+      "Material abbreviation": "BCP",
+      "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Phase composition": "HA=80;TCP=20",
+      "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-8-3",
-      "Sample Name": "5937337059_L",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-4-3",
+      "Sample Name": "5937337021_I",
       "Sex": "unknown",
-      "Sintering temperature": 1250,
-      "Source Name": "5937337059_L",
-      "Strain abbreviation": "hPPCT",
-      "Strain full name": "human peripheral nerve derived pericyte cell line",
+      "Sintering temperature": 1150,
+      "Source Name": "5937337021_I",
+      "Strain abbreviation": "SV-HFO",
+      "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
       "Study ID": 2,
-      "Tissue": "muscular",
+      "Tissue": "connective",
       "_assay": {
         "Annotation file": "StudyID_02 Annotations.txt",
         "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
@@ -1379,39 +1381,42 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "MG-63 - osteosarcoma cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337061_B",
-      "Biological Replicate": 1,
+      "Barcode": "5937337044_I",
+      "Biological Replicate": 3,
       "Biologically degradable": "yes",
-      "Cell type": "epithelial cell",
+      "Cell type": "osteosarcoma",
       "Control": false,
       "Culture Duration": 48,
-      "Culture medium": "DMEM",
+      "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
-      "Group ID": 18,
+      "Group ID": 13,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
-      "Material Name": "tricalcium phosphate",
+      "Material Name": "biphasic calcium phosphate",
       "Material Shape": "particle",
-      "Material abbreviation": "TCP",
-      "Organ": "colon",
+      "Material abbreviation": "BCP",
+      "Organ": "bone",
       "Organism": "Homo sapiens",
+      "Phase composition": "HA=80;TCP=20",
+      "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-18-1",
-      "Sample Name": "5937337061_B",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-13-3",
+      "Sample Name": "5937337044_I",
       "Sex": "male",
-      "Sintering temperature": 1100,
-      "Source Name": "5937337061_B",
-      "Strain abbreviation": "SW480",
-      "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
+      "Sintering temperature": 1150,
+      "Source Name": "5937337044_I",
+      "Strain abbreviation": "MG-63",
+      "Strain full name": "osteosarcoma cell line",
       "Study ID": 2,
-      "Tissue": "epithelium",
+      "Tissue": "connective",
       "_assay": {
         "Annotation file": "StudyID_02 Annotations.txt",
         "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
@@ -1428,6 +1433,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "iMSC - immortalized mesenchymal stromal cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -1448,10 +1455,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-12-2",
       "Sample Name": "5937337021_E",
       "Sex": "male",
@@ -1477,6 +1481,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "hBPCT - human blood-brain barrier derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -1497,10 +1503,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "brain",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-3-2",
       "Sample Name": "5937337021_D",
       "Sex": "unknown",
@@ -1526,6 +1529,10 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "iMSC - immortalized mesenchymal stromal cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -1548,10 +1555,7 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-10-3",
       "Sample Name": "5937337021_G",
       "Sex": "male",
@@ -1577,6 +1581,10 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "SW480 - colorectal adenocarcinoma derived epithelial cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -1599,10 +1607,7 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-16-3",
       "Sample Name": "5937337021_F",
       "Sex": "male",
@@ -1628,6 +1633,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "SW480 - colorectal adenocarcinoma derived epithelial cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -1648,10 +1655,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "colon",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-18-3",
       "Sample Name": "5937337021_A",
       "Sex": "male",
@@ -1677,6 +1681,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "iMSC - immortalized mesenchymal stromal cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -1697,10 +1703,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-11-2",
       "Sample Name": "5937337059_E",
       "Sex": "male",
@@ -1726,6 +1729,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "hPPCT - human peripheral nerve derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -1746,10 +1751,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-8-2",
       "Sample Name": "5937337021_C",
       "Sex": "unknown",
@@ -1775,6 +1777,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "iMSC - immortalized mesenchymal stromal cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -1795,10 +1799,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-11-3",
       "Sample Name": "5937337021_B",
       "Sex": "male",
@@ -1824,6 +1825,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "hPPCT - human peripheral nerve derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -1844,10 +1847,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-9-2",
       "Sample Name": "5937337059_H",
       "Sex": "unknown",
@@ -1873,39 +1873,38 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "iMSC - immortalized mesenchymal stromal cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337059_I",
+      "Barcode": "5937337021_L",
       "Biological Replicate": 3,
       "Biologically degradable": "yes",
-      "Cell type": "epithelial cell",
+      "Cell type": "stromal cell",
       "Control": false,
       "Culture Duration": 48,
-      "Culture medium": "DMEM",
+      "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
-      "Group ID": 17,
+      "Group ID": 12,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
-      "Material Name": "hydroxyapatite",
+      "Material Name": "tricalcium phosphate",
       "Material Shape": "particle",
-      "Material abbreviation": "HA",
-      "Organ": "colon",
+      "Material abbreviation": "TCP",
+      "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-17-3",
-      "Sample Name": "5937337059_I",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-12-3",
+      "Sample Name": "5937337021_L",
       "Sex": "male",
-      "Sintering temperature": 1250,
-      "Source Name": "5937337059_I",
-      "Strain abbreviation": "SW480",
-      "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
+      "Sintering temperature": 1100,
+      "Source Name": "5937337021_L",
+      "Strain abbreviation": "iMSC",
+      "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
-      "Tissue": "epithelium",
+      "Tissue": "connective",
       "_assay": {
         "Annotation file": "StudyID_02 Annotations.txt",
         "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
@@ -1922,6 +1921,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "MG-63 - osteosarcoma cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -1942,10 +1943,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-14-3",
       "Sample Name": "5937337059_J",
       "Sex": "male",
@@ -1971,6 +1969,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "SV-HFO - SV40-immortalized human fetal osteoblast cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -1991,10 +1991,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-6-1",
       "Sample Name": "5937337059_K",
       "Sex": "unknown",
@@ -2020,41 +2017,38 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "hPPCT - human peripheral nerve derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337021_I",
+      "Barcode": "5937337059_L",
       "Biological Replicate": 3,
       "Biologically degradable": "yes",
-      "Cell type": "osteoblast",
+      "Cell type": "pericyte",
       "Control": false,
       "Culture Duration": 48,
-      "Culture medium": "alpha-MEM phenol-free",
+      "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
-      "Group ID": 4,
+      "Group ID": 8,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
-      "Material Name": "biphasic calcium phosphate",
+      "Material Name": "hydroxyapatite",
       "Material Shape": "particle",
-      "Material abbreviation": "BCP",
-      "Organ": "bone",
+      "Material abbreviation": "HA",
+      "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
-      "Phase composition": "HA=80;TCP=20",
-      "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-4-3",
-      "Sample Name": "5937337021_I",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-8-3",
+      "Sample Name": "5937337059_L",
       "Sex": "unknown",
-      "Sintering temperature": 1150,
-      "Source Name": "5937337021_I",
-      "Strain abbreviation": "SV-HFO",
-      "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
+      "Sintering temperature": 1250,
+      "Source Name": "5937337059_L",
+      "Strain abbreviation": "hPPCT",
+      "Strain full name": "human peripheral nerve derived pericyte cell line",
       "Study ID": 2,
-      "Tissue": "connective",
+      "Tissue": "muscular",
       "_assay": {
         "Annotation file": "StudyID_02 Annotations.txt",
         "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
@@ -2071,6 +2065,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "MG-63 - osteosarcoma cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2091,10 +2087,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-14-2",
       "Sample Name": "5937337021_H",
       "Sex": "male",
@@ -2120,6 +2113,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "hBPCT - human blood-brain barrier derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2140,10 +2135,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "brain",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-2-3",
       "Sample Name": "5937337021_K",
       "Sex": "unknown",
@@ -2169,6 +2161,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "MG-63 - osteosarcoma cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2189,10 +2183,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-15-3",
       "Sample Name": "5937337021_J",
       "Sex": "male",
@@ -2218,108 +2209,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
-      "Array or chip design": "Illumina HT12v4",
-      "Assay Type": "in vitro",
-      "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337059_G",
-      "Biological Replicate": 2,
-      "Biologically degradable": "yes",
-      "Cell type": "stromal cell",
-      "Control": false,
-      "Culture Duration": 48,
-      "Culture medium": "alpha-MEM",
-      "Gene expression type": "Microarray",
-      "Group ID": 10,
-      "Manufacturer": "Xpand Biotechnology",
-      "Material Class": "ceramic",
-      "Material Name": "biphasic calcium phosphate",
-      "Material Shape": "particle",
-      "Material abbreviation": "BCP",
-      "Organ": "bone",
-      "Organism": "Homo sapiens",
-      "Phase composition": "HA=80;TCP=20",
-      "Phase composition device": "XRD",
-      "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-10-2",
-      "Sample Name": "5937337059_G",
-      "Sex": "male",
-      "Sintering temperature": 1150,
-      "Source Name": "5937337059_G",
-      "Strain abbreviation": "iMSC",
-      "Strain full name": "immortalized mesenchymal stromal cell line",
-      "Study ID": 2,
-      "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
-    },
-    "id": 119,
-    "studyId": 2
-  },
-  {
-    "_source": {
-      "Array or chip design": "Illumina HT12v4",
-      "Assay Type": "in vitro",
-      "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337059_F",
-      "Biological Replicate": 1,
-      "Biologically degradable": "yes",
-      "Cell type": "epithelial cell",
-      "Control": false,
-      "Culture Duration": 48,
-      "Culture medium": "DMEM",
-      "Gene expression type": "Microarray",
-      "Group ID": 16,
-      "Manufacturer": "Xpand Biotechnology",
-      "Material Class": "ceramic",
-      "Material Name": "biphasic calcium phosphate",
-      "Material Shape": "particle",
-      "Material abbreviation": "BCP",
-      "Organ": "colon",
-      "Organism": "Homo sapiens",
-      "Phase composition": "HA=80;TCP=20",
-      "Phase composition device": "XRD",
-      "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-16-1",
-      "Sample Name": "5937337059_F",
-      "Sex": "male",
-      "Sintering temperature": 1150,
-      "Source Name": "5937337059_F",
-      "Strain abbreviation": "SW480",
-      "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
-      "Study ID": 2,
-      "Tissue": "epithelium",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
-    },
-    "id": 120,
-    "studyId": 2
-  },
-  {
-    "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "SV-HFO - SV40-immortalized human fetal osteoblast cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2340,10 +2231,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-6-2",
       "Sample Name": "5937337059_A",
       "Sex": "unknown",
@@ -2364,11 +2252,63 @@ export const SAMPLES: Sample[] = [
         "Normalization Name": "quantile"
       }
     },
-    "id": 121,
+    "id": 119,
     "studyId": 2
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "SV-HFO - SV40-immortalized human fetal osteoblast cell line",
+      "Array or chip design": "Illumina HT12v4",
+      "Assay Type": "in vitro",
+      "Attach Duration (hours)": 4.0,
+      "Barcode": "5937337044_E",
+      "Biological Replicate": 1,
+      "Biologically degradable": "yes",
+      "Cell type": "osteoblast",
+      "Control": false,
+      "Culture Duration": 48,
+      "Culture medium": "alpha-MEM phenol-free",
+      "Gene expression type": "Microarray",
+      "Group ID": 5,
+      "Manufacturer": "Xpand Biotechnology",
+      "Material Class": "ceramic",
+      "Material Name": "hydroxyapatite",
+      "Material Shape": "particle",
+      "Material abbreviation": "HA",
+      "Organ": "bone",
+      "Organism": "Homo sapiens",
+      "Platform": "Illumina",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-5-1",
+      "Sample Name": "5937337044_E",
+      "Sex": "unknown",
+      "Sintering temperature": 1250,
+      "Source Name": "5937337044_E",
+      "Strain abbreviation": "SV-HFO",
+      "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
+      "Study ID": 2,
+      "Tissue": "connective",
+      "_assay": {
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
+        "Array Design REF": "Illumina HT12v4",
+        "Background correction": "yes",
+        "Data Transformation Name": "variance stabilization",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
+        "Label": "biotin",
+        "Normalization Name": "quantile"
+      }
+    },
+    "id": 120,
+    "studyId": 2
+  },
+  {
+    "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "SV-HFO - SV40-immortalized human fetal osteoblast cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2391,10 +2331,7 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-4-2",
       "Sample Name": "5937337059_B",
       "Sex": "unknown",
@@ -2415,44 +2352,43 @@ export const SAMPLES: Sample[] = [
         "Normalization Name": "quantile"
       }
     },
-    "id": 122,
+    "id": 121,
     "studyId": 2
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "iMSC - immortalized mesenchymal stromal cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337061_A",
-      "Biological Replicate": 2,
+      "Barcode": "5937337044_J",
+      "Biological Replicate": 1,
       "Biologically degradable": "yes",
-      "Cell type": "epithelial cell",
+      "Cell type": "stromal cell",
       "Control": false,
       "Culture Duration": 48,
-      "Culture medium": "DMEM",
+      "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
-      "Group ID": 17,
+      "Group ID": 12,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
-      "Material Name": "hydroxyapatite",
+      "Material Name": "tricalcium phosphate",
       "Material Shape": "particle",
-      "Material abbreviation": "HA",
-      "Organ": "colon",
+      "Material abbreviation": "TCP",
+      "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-17-2",
-      "Sample Name": "5937337061_A",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-12-1",
+      "Sample Name": "5937337044_J",
       "Sex": "male",
-      "Sintering temperature": 1250,
-      "Source Name": "5937337061_A",
-      "Strain abbreviation": "SW480",
-      "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
+      "Sintering temperature": 1100,
+      "Source Name": "5937337044_J",
+      "Strain abbreviation": "iMSC",
+      "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
-      "Tissue": "epithelium",
+      "Tissue": "connective",
       "_assay": {
         "Annotation file": "StudyID_02 Annotations.txt",
         "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
@@ -2464,11 +2400,15 @@ export const SAMPLES: Sample[] = [
         "Normalization Name": "quantile"
       }
     },
-    "id": 123,
+    "id": 122,
     "studyId": 2
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "SW480 - colorectal adenocarcinoma derived epithelial cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2491,10 +2431,7 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-16-2",
       "Sample Name": "5937337059_C",
       "Sex": "male",
@@ -2515,11 +2452,13 @@ export const SAMPLES: Sample[] = [
         "Normalization Name": "quantile"
       }
     },
-    "id": 124,
+    "id": 123,
     "studyId": 2
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "MG-63 - osteosarcoma cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2540,10 +2479,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-15-2",
       "Sample Name": "5937337059_D",
       "Sex": "male",
@@ -2564,15 +2500,19 @@ export const SAMPLES: Sample[] = [
         "Normalization Name": "quantile"
       }
     },
-    "id": 125,
+    "id": 124,
     "studyId": 2
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "hPPCT - human peripheral nerve derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337061_C",
+      "Barcode": "5937337044_H",
       "Biological Replicate": 2,
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
@@ -2580,26 +2520,71 @@ export const SAMPLES: Sample[] = [
       "Culture Duration": 48,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
-      "Group ID": 1,
+      "Group ID": 7,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
       "Material Name": "biphasic calcium phosphate",
       "Material Shape": "particle",
       "Material abbreviation": "BCP",
-      "Organ": "brain",
+      "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-1-2",
-      "Sample Name": "5937337061_C",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-7-2",
+      "Sample Name": "5937337044_H",
       "Sex": "unknown",
       "Sintering temperature": 1150,
-      "Source Name": "5937337061_C",
+      "Source Name": "5937337044_H",
+      "Strain abbreviation": "hPPCT",
+      "Strain full name": "human peripheral nerve derived pericyte cell line",
+      "Study ID": 2,
+      "Tissue": "muscular",
+      "_assay": {
+        "Annotation file": "StudyID_02 Annotations.txt",
+        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
+        "Array Design REF": "Illumina HT12v4",
+        "Background correction": "yes",
+        "Data Transformation Name": "variance stabilization",
+        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
+        "Label": "biotin",
+        "Normalization Name": "quantile"
+      }
+    },
+    "id": 125,
+    "studyId": 2
+  },
+  {
+    "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "hBPCT - human blood-brain barrier derived pericyte cell line",
+      "Array or chip design": "Illumina HT12v4",
+      "Assay Type": "in vitro",
+      "Attach Duration (hours)": 4.0,
+      "Barcode": "5937337049_J",
+      "Biological Replicate": 2,
+      "Biologically degradable": "yes",
+      "Cell type": "pericyte",
+      "Control": false,
+      "Culture Duration": 48,
+      "Culture medium": "DMEM",
+      "Gene expression type": "Microarray",
+      "Group ID": 2,
+      "Manufacturer": "Xpand Biotechnology",
+      "Material Class": "ceramic",
+      "Material Name": "hydroxyapatite",
+      "Material Shape": "particle",
+      "Material abbreviation": "HA",
+      "Organ": "brain",
+      "Organism": "Homo sapiens",
+      "Platform": "Illumina",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-2-2",
+      "Sample Name": "5937337049_J",
+      "Sex": "unknown",
+      "Sintering temperature": 1250,
+      "Source Name": "5937337049_J",
       "Strain abbreviation": "hBPCT",
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
       "Study ID": 2,
@@ -2620,6 +2605,10 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "SV-HFO - SV40-immortalized human fetal osteoblast cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2642,10 +2631,7 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-4-1",
       "Sample Name": "5937337049_L",
       "Sex": "unknown",
@@ -2671,6 +2657,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "MG-63 - osteosarcoma cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2691,10 +2679,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-15-1",
       "Sample Name": "5937337049_K",
       "Sex": "male",
@@ -2720,39 +2705,42 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "SW480 - colorectal adenocarcinoma derived epithelial cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337049_J",
-      "Biological Replicate": 2,
+      "Barcode": "5937337059_F",
+      "Biological Replicate": 1,
       "Biologically degradable": "yes",
-      "Cell type": "pericyte",
+      "Cell type": "epithelial cell",
       "Control": false,
       "Culture Duration": 48,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
-      "Group ID": 2,
+      "Group ID": 16,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
-      "Material Name": "hydroxyapatite",
+      "Material Name": "biphasic calcium phosphate",
       "Material Shape": "particle",
-      "Material abbreviation": "HA",
-      "Organ": "brain",
+      "Material abbreviation": "BCP",
+      "Organ": "colon",
       "Organism": "Homo sapiens",
+      "Phase composition": "HA=80;TCP=20",
+      "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-2-2",
-      "Sample Name": "5937337049_J",
-      "Sex": "unknown",
-      "Sintering temperature": 1250,
-      "Source Name": "5937337049_J",
-      "Strain abbreviation": "hBPCT",
-      "Strain full name": "human blood-brain barrier derived pericyte cell line",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-16-1",
+      "Sample Name": "5937337059_F",
+      "Sex": "male",
+      "Sintering temperature": 1150,
+      "Source Name": "5937337059_F",
+      "Strain abbreviation": "SW480",
+      "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
-      "Tissue": "muscular",
+      "Tissue": "epithelium",
       "_assay": {
         "Annotation file": "StudyID_02 Annotations.txt",
         "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
@@ -2769,6 +2757,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "SV-HFO - SV40-immortalized human fetal osteoblast cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2789,10 +2779,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-5-3",
       "Sample Name": "5937337049_I",
       "Sex": "unknown",
@@ -2818,6 +2805,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "SW480 - colorectal adenocarcinoma derived epithelial cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2838,10 +2827,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "colon",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-17-1",
       "Sample Name": "5937337049_H",
       "Sex": "male",
@@ -2867,6 +2853,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "hBPCT - human blood-brain barrier derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2887,10 +2875,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "brain",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-3-1",
       "Sample Name": "5937337049_G",
       "Sex": "unknown",
@@ -2916,6 +2901,10 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "hPPCT - human peripheral nerve derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2938,10 +2927,7 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-7-3",
       "Sample Name": "5937337049_F",
       "Sex": "unknown",
@@ -2967,6 +2953,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "SV-HFO - SV40-immortalized human fetal osteoblast cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -2987,10 +2975,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-6-3",
       "Sample Name": "5937337049_E",
       "Sex": "unknown",
@@ -3016,41 +3001,42 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "iMSC - immortalized mesenchymal stromal cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337049_D",
-      "Biological Replicate": 1,
+      "Barcode": "5937337059_G",
+      "Biological Replicate": 2,
       "Biologically degradable": "yes",
-      "Cell type": "pericyte",
+      "Cell type": "stromal cell",
       "Control": false,
       "Culture Duration": 48,
-      "Culture medium": "DMEM",
+      "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
-      "Group ID": 7,
+      "Group ID": 10,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
       "Material Name": "biphasic calcium phosphate",
       "Material Shape": "particle",
       "Material abbreviation": "BCP",
-      "Organ": "sciatic nerve",
+      "Organ": "bone",
       "Organism": "Homo sapiens",
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-7-1",
-      "Sample Name": "5937337049_D",
-      "Sex": "unknown",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-10-2",
+      "Sample Name": "5937337059_G",
+      "Sex": "male",
       "Sintering temperature": 1150,
-      "Source Name": "5937337049_D",
-      "Strain abbreviation": "hPPCT",
-      "Strain full name": "human peripheral nerve derived pericyte cell line",
+      "Source Name": "5937337059_G",
+      "Strain abbreviation": "iMSC",
+      "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
-      "Tissue": "muscular",
+      "Tissue": "connective",
       "_assay": {
         "Annotation file": "StudyID_02 Annotations.txt",
         "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
@@ -3067,6 +3053,10 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "hBPCT - human blood-brain barrier derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3089,10 +3079,7 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-1-1",
       "Sample Name": "5937337049_C",
       "Sex": "unknown",
@@ -3118,6 +3105,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "hPPCT - human peripheral nerve derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3138,10 +3127,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-8-1",
       "Sample Name": "5937337049_B",
       "Sex": "unknown",
@@ -3167,6 +3153,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "MG-63 - osteosarcoma cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3187,10 +3175,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-14-1",
       "Sample Name": "5937337049_A",
       "Sex": "male",
@@ -3216,6 +3201,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "hPPCT - human peripheral nerve derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3236,10 +3223,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-9-1",
       "Sample Name": "5937337044_B",
       "Sex": "unknown",
@@ -3265,6 +3249,10 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "MG-63 - osteosarcoma cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3287,10 +3275,7 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-13-1",
       "Sample Name": "5937337044_C",
       "Sex": "male",
@@ -3316,6 +3301,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "iMSC - immortalized mesenchymal stromal cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3336,10 +3323,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-11-1",
       "Sample Name": "5937337044_A",
       "Sex": "male",
@@ -3365,6 +3349,10 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "MG-63 - osteosarcoma cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3387,10 +3375,7 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-13-2",
       "Sample Name": "5937337044_F",
       "Sex": "male",
@@ -3416,6 +3401,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "hBPCT - human blood-brain barrier derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3436,10 +3423,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "brain",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-3-3",
       "Sample Name": "5937337044_G",
       "Sex": "unknown",
@@ -3465,6 +3449,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "hBPCT - human blood-brain barrier derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3485,10 +3471,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "brain",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-2-1",
       "Sample Name": "5937337044_D",
       "Sex": "unknown",
@@ -3514,39 +3497,38 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "SW480 - colorectal adenocarcinoma derived epithelial cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337044_E",
-      "Biological Replicate": 1,
+      "Barcode": "5937337059_I",
+      "Biological Replicate": 3,
       "Biologically degradable": "yes",
-      "Cell type": "osteoblast",
+      "Cell type": "epithelial cell",
       "Control": false,
       "Culture Duration": 48,
-      "Culture medium": "alpha-MEM phenol-free",
+      "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
-      "Group ID": 5,
+      "Group ID": 17,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
       "Material Name": "hydroxyapatite",
       "Material Shape": "particle",
       "Material abbreviation": "HA",
-      "Organ": "bone",
+      "Organ": "colon",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-5-1",
-      "Sample Name": "5937337044_E",
-      "Sex": "unknown",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-17-3",
+      "Sample Name": "5937337059_I",
+      "Sex": "male",
       "Sintering temperature": 1250,
-      "Source Name": "5937337044_E",
-      "Strain abbreviation": "SV-HFO",
-      "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
+      "Source Name": "5937337059_I",
+      "Strain abbreviation": "SW480",
+      "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
-      "Tissue": "connective",
+      "Tissue": "epithelium",
       "_assay": {
         "Annotation file": "StudyID_02 Annotations.txt",
         "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
@@ -3563,39 +3545,38 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "SW480 - colorectal adenocarcinoma derived epithelial cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337044_J",
-      "Biological Replicate": 1,
+      "Barcode": "5937337061_A",
+      "Biological Replicate": 2,
       "Biologically degradable": "yes",
-      "Cell type": "stromal cell",
+      "Cell type": "epithelial cell",
       "Control": false,
       "Culture Duration": 48,
-      "Culture medium": "alpha-MEM",
+      "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
-      "Group ID": 12,
+      "Group ID": 17,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
-      "Material Name": "tricalcium phosphate",
+      "Material Name": "hydroxyapatite",
       "Material Shape": "particle",
-      "Material abbreviation": "TCP",
-      "Organ": "bone",
+      "Material abbreviation": "HA",
+      "Organ": "colon",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-12-1",
-      "Sample Name": "5937337044_J",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-17-2",
+      "Sample Name": "5937337061_A",
       "Sex": "male",
-      "Sintering temperature": 1100,
-      "Source Name": "5937337044_J",
-      "Strain abbreviation": "iMSC",
-      "Strain full name": "immortalized mesenchymal stromal cell line",
+      "Sintering temperature": 1250,
+      "Source Name": "5937337061_A",
+      "Strain abbreviation": "SW480",
+      "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
-      "Tissue": "connective",
+      "Tissue": "epithelium",
       "_assay": {
         "Annotation file": "StudyID_02 Annotations.txt",
         "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
@@ -3612,6 +3593,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "SW480 - colorectal adenocarcinoma derived epithelial cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3632,10 +3615,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "colon",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-18-2",
       "Sample Name": "5937337044_K",
       "Sex": "male",
@@ -3661,10 +3641,14 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "hBPCT - human blood-brain barrier derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337044_H",
+      "Barcode": "5937337061_C",
       "Biological Replicate": 2,
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
@@ -3672,28 +3656,25 @@ export const SAMPLES: Sample[] = [
       "Culture Duration": 48,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
-      "Group ID": 7,
+      "Group ID": 1,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
       "Material Name": "biphasic calcium phosphate",
       "Material Shape": "particle",
       "Material abbreviation": "BCP",
-      "Organ": "sciatic nerve",
+      "Organ": "brain",
       "Organism": "Homo sapiens",
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-7-2",
-      "Sample Name": "5937337044_H",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-1-2",
+      "Sample Name": "5937337061_C",
       "Sex": "unknown",
       "Sintering temperature": 1150,
-      "Source Name": "5937337044_H",
-      "Strain abbreviation": "hPPCT",
-      "Strain full name": "human peripheral nerve derived pericyte cell line",
+      "Source Name": "5937337061_C",
+      "Strain abbreviation": "hBPCT",
+      "Strain full name": "human blood-brain barrier derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
       "_assay": {
@@ -3712,41 +3693,38 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "SW480 - colorectal adenocarcinoma derived epithelial cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
-      "Barcode": "5937337044_I",
-      "Biological Replicate": 3,
+      "Barcode": "5937337061_B",
+      "Biological Replicate": 1,
       "Biologically degradable": "yes",
-      "Cell type": "osteosarcoma",
+      "Cell type": "epithelial cell",
       "Control": false,
       "Culture Duration": 48,
-      "Culture medium": "alpha-MEM",
+      "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
-      "Group ID": 13,
+      "Group ID": 18,
       "Manufacturer": "Xpand Biotechnology",
       "Material Class": "ceramic",
-      "Material Name": "biphasic calcium phosphate",
+      "Material Name": "tricalcium phosphate",
       "Material Shape": "particle",
-      "Material abbreviation": "BCP",
-      "Organ": "bone",
+      "Material abbreviation": "TCP",
+      "Organ": "colon",
       "Organism": "Homo sapiens",
-      "Phase composition": "HA=80;TCP=20",
-      "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
-      "Sample ID": "02-13-3",
-      "Sample Name": "5937337044_I",
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
+      "Sample ID": "02-18-1",
+      "Sample Name": "5937337061_B",
       "Sex": "male",
-      "Sintering temperature": 1150,
-      "Source Name": "5937337044_I",
-      "Strain abbreviation": "MG-63",
-      "Strain full name": "osteosarcoma cell line",
+      "Sintering temperature": 1100,
+      "Source Name": "5937337061_B",
+      "Strain abbreviation": "SW480",
+      "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
-      "Tissue": "connective",
+      "Tissue": "epithelium",
       "_assay": {
         "Annotation file": "StudyID_02 Annotations.txt",
         "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
@@ -3763,6 +3741,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "HA - hydroxyapatite",
+      "*Strain": "SV-HFO - SV40-immortalized human fetal osteoblast cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3783,10 +3763,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "bone",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-5-2",
       "Sample Name": "5937337061_E",
       "Sex": "unknown",
@@ -3812,6 +3789,10 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "iMSC - immortalized mesenchymal stromal cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3834,10 +3815,7 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-10-1",
       "Sample Name": "5937337061_D",
       "Sex": "male",
@@ -3863,6 +3841,8 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "TCP - tricalcium phosphate",
+      "*Strain": "hPPCT - human peripheral nerve derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3883,10 +3863,7 @@ export const SAMPLES: Sample[] = [
       "Organ": "sciatic nerve",
       "Organism": "Homo sapiens",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-9-3",
       "Sample Name": "5937337044_L",
       "Sex": "unknown",
@@ -3912,6 +3889,10 @@ export const SAMPLES: Sample[] = [
   },
   {
     "_source": {
+      "*Material": "BCP - biphasic calcium phosphate",
+      "*Phase composition - % HA": 80.0,
+      "*Phase composition - % TCP": 20.0,
+      "*Strain": "hBPCT - human blood-brain barrier derived pericyte cell line",
       "Array or chip design": "Illumina HT12v4",
       "Assay Type": "in vitro",
       "Attach Duration (hours)": 4.0,
@@ -3934,10 +3915,7 @@ export const SAMPLES: Sample[] = [
       "Phase composition": "HA=80;TCP=20",
       "Phase composition device": "XRD",
       "Platform": "Illumina",
-      "Protocols": [
-        "Protocol_01_Sample_treatment",
-        "Protocol_02_Material_synthesis"
-      ],
+      "Protocols": "Protocol_01_Sample_treatment, Protocol_02_Material_synthesis",
       "Sample ID": "02-1-3",
       "Sample Name": "5937337061_F",
       "Sex": "unknown",
