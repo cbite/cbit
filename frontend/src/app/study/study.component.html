@@ -41,9 +41,9 @@
   <ol>
     <li *ngFor="let sample of samples">
       <div><b><a (click)="selectSample(sample)" href="javascript:void(0)">{{ sample._source['Sample Name'] }}</a></b></div>
-      <span *ngFor="let propName of distinctKeys(sample)">
+      <span *ngFor="let propName of distinctKeys(sample); let isLast = last">
         <span *ngIf="sample._source[propName]">
-          <i>{{ propName }}</i>: {{ sample._source[propName] }} -
+          <i>{{ propName }}</i>: {{ sample._source[propName] }}<span *ngIf="!isLast">, </span>
         </span>
       </span>
     </li>

@@ -43,7 +43,9 @@ export class StudyComponent implements OnInit {
     if (this.samples.length > 0) {
       let firstSample = this.samples[0];
       for (let key in firstSample._source) {
-        this.commonKeys[key] = firstSample._source[key];
+        if (key.substr(0, 1) !== '*') {
+          this.commonKeys[key] = firstSample._source[key];
+        }
       }
 
       for (let sample of this.samples) {
@@ -63,6 +65,7 @@ export class StudyComponent implements OnInit {
     }
     return (
       Object.keys(sample._source)
+        .filter(key => key.substr(0,1) !== '*')
         .filter(key => !(key in this.commonKeys))
         .filter(key => !(key in ignoreSampleKeys))
         .filter(key => sample._source[key] !== sample._source['Sample Name'])
