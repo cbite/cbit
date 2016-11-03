@@ -9,7 +9,7 @@ import {FiltersService, FiltersState} from "../services/filters.service";
   <ul>
     <li *ngFor='let study of studies'>
       <a (click)="onClick(study)">{{study.id}}.</a> <b>{{ study._source['STUDY']['Study Title'] }}</b>
-      <i>by {{ study._source['STUDY PUBLICATIONS'][0]['Study Publication Author List'] }}</i>
+      <i>by {{ study._source['STUDY']['Study Researchers Involved'] }}</i>
     </li>
   </ul>
   `
@@ -35,6 +35,6 @@ export class StudiesComponent implements OnInit {
   updateStudies(filters: FiltersState): void {
     this.studies = this._studyService.getStudies();
     let rawSamples = this._studyService.getStudiesMatching(filters);
-    this.studies = rawSamples.sort((a, b) => a._source['STUDY PUBLICATIONS'][0]['Study Publication Author List'].localeCompare(b._source['STUDY PUBLICATIONS'][0]['Study Publication Author List']));
+    this.studies = rawSamples.sort((a, b) => a._source['STUDY']['Study Researchers Involved'].localeCompare(b._source['STUDY']['Study Researchers Involved']));
   }
 }

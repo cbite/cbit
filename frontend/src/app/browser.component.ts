@@ -64,8 +64,8 @@ export class BrowserComponent {
   updateStudies(filters: FiltersState): void {
     let rawMatches = this._studyService.getUnifiedMatches(filters);
     this.matches = rawMatches.sort((a, b) =>
-      a.study._source['STUDY PUBLICATIONS'][0]['Study Publication Author List']
-        .localeCompare(b.study._source['STUDY PUBLICATIONS'][0]['Study Publication Author List']));
+      a.study._source['STUDY']['Study Researchers Involved']
+        .localeCompare(b.study._source['STUDY']['Study Researchers Involved']));
 
     let keys = new Set<string>();
     this.matches.forEach(studyMatch => {

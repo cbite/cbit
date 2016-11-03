@@ -13,7 +13,7 @@
             <a (click)="selectStudy(studyMatch.study)" href="javascript:void(0)">
               {{studyMatch.study.id}}. <b>{{ studyMatch.study._source['STUDY']['Study Title'] }}</b>
             </a>
-            <i>by {{ studyMatch.study._source['STUDY PUBLICATIONS'][0]['Study Publication Author List'] }}</i>
+            <i>by {{ studyMatch.study._source['STUDY']['Study Researchers Involved'] }}</i>
             <br/>
             <b>{{ studyMatch.sampleMatches.length }} matching samples</b>
             <button (click)="areSamplesHidden[studyMatch.studyId] = !areSamplesHidden[studyMatch.studyId]">Show/Hide</button>
