@@ -4,6 +4,23 @@ import {Study, Sample} from "./common/study.model";
 import {Router} from "@angular/router";
 import {FiltersService, FiltersState} from "./services/filters.service";
 import {FormControl, Form} from "@angular/forms";
+import {HIDDEN_SAMPLE_FILTER_LABELS} from "./filters/filter-sidebar.component";
+
+export const KEYS_IN_MINI_SUMMARY = {
+  // Key = value name in sample metadata
+  // Value = name to use in mini-summary
+  'Assay Type':              'Assay Type',
+  'Control':                 'Control',
+  'Organism':                'Organism',
+  'Cell type':               'Cell type',
+  'Strain abbreviation':     'Strain',
+  'Organ':                   'Organ',
+  'Compound abbreviation':   'Compound',
+  'Dose (mM)':               'Dose (mM)',  // TODO: Use sensible units, i.e. unitful number between 1 and 1000
+  'Material abbreviation':   'Material',
+  'Material Class':          'Material Class',
+  'Material Shape':          'Material Shape'
+};
 
 @Component({
   selector: 'browser',
@@ -107,16 +124,35 @@ export class BrowserComponent {
     this.numMatchingSamples = this.matches.reduce((soFar, studyMatch) => soFar + studyMatch.sampleMatches.length, 0);
   }
 
-  distinctKeys(studyId: number, sample: Sample): string[] {
+  distinctKeyValues(studyId: number, sample: Sample): Object {
     let ignoreSampleKeys = {
       'Sample ID': true
     }
-    return (
-      Object.keys(sample._source)
+    var result = {};
+    for (let key of Object.keys(sample._source)
         .filter(key => !(key in this.commonKeys[studyId]))
         .filter(key => !(key in ignoreSampleKeys))
-        .filter(key => sample._source[key] !== sample._source['Sample Name'])
-    );
+        .filter(key => !(key in HIDDEN_SAMPLE_FILTER_LABELS))
+        .filter(key => sample._source[key] !== sample._source['Sample Name'])) {
+
+      let keyWithoutStar = (key.substr(0,1) === '*' ? key.substr(1) : key);
+      result[keyWithoutStar] = sample._source[key];
+    }
+    return result;
+  }
+
+  filteredDistinctKeyValues(studyId: number, sample: Sample): Object {
+    var result = {};
+    for (let key of Object.keys(sample._source)) {
+      if ((key in KEYS_IN_MINI_SUMMARY) &&
+        !(key in this.commonKeys[studyId]) &&
+        (sample._source[key] !== sample._source['Sample Name'])
+      ) {
+        let shortKey = KEYS_IN_MINI_SUMMARY[key];
+        result[shortKey] = sample._source[key];
+      }
+    }
+    return result;
   }
 
   sortSampleMatches(sampleMatches: SampleMatch[]): SampleMatch[] {

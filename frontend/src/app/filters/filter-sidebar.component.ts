@@ -4,7 +4,7 @@ import {FiltersService, FiltersState} from "../services/filters.service";
 import {StudyService} from "../services/study.service";
 import * as _ from 'lodash';
 
-const HIDDEN_SAMPLE_FILTER_LABELS = {
+export const HIDDEN_SAMPLE_FILTER_LABELS = {
   'Barcode': true,
   'Biological Replicate': true,
   'Sample ID': true,

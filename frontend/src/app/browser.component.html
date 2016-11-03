@@ -25,18 +25,14 @@
                   <a (click)="selectSample(sampleMatch.sample)" href="javascript:void(0)">
                     <b>{{ sampleMatch.sample._source['Sample Name'] }}</b>
                   </a>
-                  <br/>
-                  <span *ngFor="let key of distinctKeys(studyMatch.studyId, sampleMatch.sample)">
-                    - <i>{{ key }}</i>: {{ sampleMatch.sample._source[key] }}
+                  <span *ngFor="let kv of filteredDistinctKeyValues(studyMatch.studyId, sampleMatch.sample) | mapToIterable; let isLast = last">
+                    <i>{{ kv.key }}</i>: {{ kv.val }}<span *ngIf="!isLast">, </span>
                   </span>
 
 
                   <div class="hovertext">
-                    <div *ngFor="let propName of sampleKeys">
-
-                      <div *ngIf="sampleMatch.sample._source[propName]">
-                        <b>{{ propName }}</b>: {{ sampleMatch.sample._source[propName] }}
-                      </div>
+                    <div *ngFor="let kv of distinctKeyValues(studyMatch.studyId, sampleMatch.sample) | mapToIterable">
+                      <b>{{ kv.key }}</b>: {{ kv.val }}
                     </div>
                   </div>
                 </div>
