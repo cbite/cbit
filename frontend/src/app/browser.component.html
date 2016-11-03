@@ -34,12 +34,8 @@
                   <div class="hovertext">
                     <div *ngFor="let propName of sampleKeys">
 
-                      <div *ngIf="sampleMatch.sample._source[propName] && propName !== '_assay'">
+                      <div *ngIf="sampleMatch.sample._source[propName]">
                         <b>{{ propName }}</b>: {{ sampleMatch.sample._source[propName] }}
-                      </div>
-
-                      <div *ngIf="sampleMatch.sample._source[propName] && propName === '_assay'">
-                        <b>Assay Properties</b>: <pre>{{ sampleMatch.sample._source[propName] | json }}</pre>
                       </div>
                     </div>
                   </div>

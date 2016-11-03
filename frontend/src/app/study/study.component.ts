@@ -59,7 +59,6 @@ export class StudyComponent implements OnInit {
 
   distinctKeys(sample: Sample): string[] {
     let ignoreSampleKeys = {
-      //'_assay': true,
       'Sample ID': true
     }
     return (

@@ -109,7 +109,6 @@ export class BrowserComponent {
 
   distinctKeys(studyId: number, sample: Sample): string[] {
     let ignoreSampleKeys = {
-      '_assay': true,
       'Sample ID': true
     }
     return (

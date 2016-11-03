@@ -42,13 +42,9 @@
     <li *ngFor="let sample of samples">
       <div><b><a (click)="selectSample(sample)" href="javascript:void(0)">{{ sample._source['Sample Name'] }}</a></b></div>
       <span *ngFor="let propName of distinctKeys(sample)">
-        <span *ngIf="sample._source[propName] && propName !== '_assay'">
+        <span *ngIf="sample._source[propName]">
           <i>{{ propName }}</i>: {{ sample._source[propName] }} -
         </span>
-
-        <div *ngIf="sample._source[propName] && propName === '_assay'">
-          <b>Assay Properties</b>: <pre>{{ sample._source[propName] | json }}</pre>
-        </div>
       </span>
     </li>
   </ol>
