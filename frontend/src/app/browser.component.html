@@ -14,6 +14,8 @@
               {{studyMatch.study.id}}. <b>{{ studyMatch.study._source['STUDY']['Study Title'] }}</b>
             </a>
             <i>by {{ studyMatch.study._source['STUDY']['Study Researchers Involved'] }}</i>
+            <pubmed-links [study]="studyMatch.study"></pubmed-links>
+            <doi-links [study]="studyMatch.study"></doi-links>
             <br/>
             <b>{{ studyMatch.sampleMatches.length }} matching samples</b>
             <button (click)="areSamplesHidden[studyMatch.studyId] = !areSamplesHidden[studyMatch.studyId]">Show/Hide</button>
