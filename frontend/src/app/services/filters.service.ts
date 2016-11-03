@@ -1,15 +1,6 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
 
-interface StudyFilters {
-  [category: string]: {
-    [subcategory: string]: {
-      [includeValueName: string]: boolean
-      // assume true if absent
-    }
-  }
-}
-
 interface SampleFilters {
   [category: string]: {
     [includeValueName: string]: boolean
@@ -20,14 +11,12 @@ interface SampleFilters {
 export interface FiltersState {
   searchText: string,
   includeControls: boolean,
-  studyFilters: StudyFilters,
   sampleFilters: SampleFilters
 }
 
 export const EMPTY_FILTERS: FiltersState = {
   searchText: '',
   includeControls: true,
-  studyFilters: {},
   sampleFilters: {}
 }
 
@@ -61,45 +50,6 @@ export class FiltersService {
     this._filters.next(Object.assign({}, this._filters.getValue(), {
       includeControls: newIncludeControls
     }));
-  }
-
-  setStudyFilters(newStudyFilters: StudyFilters): void {
-    this._filters.next(Object.assign({}, this._filters.getValue(), {
-      studyFilters: newStudyFilters
-    }))
-  }
-
-  setStudyFilter(category: string, subcategory: string, valueName: string, include: boolean): void {
-    // Copy out relevant filters section, if any
-    let curFilters = _.cloneDeep(this.getFilters().studyFilters);
-    let theseFilters = Object.assign({}, (curFilters[category] || {})[subcategory] || {})
-
-    if(include) {
-      // Filter values default to "true" if absent from filters dictionary, so remove this item
-      delete theseFilters[valueName];
-    } else {
-      theseFilters[valueName] = false;
-    }
-
-    // If theseFilters is empty, stop filtering on this subcategory / category
-    if (_.isEmpty(theseFilters)) {
-      if (category in curFilters) {
-        delete curFilters[category][subcategory];
-
-        // And delete the category if necessary
-        if (_.isEmpty(curFilters[category])) {
-          delete curFilters[category];
-        }
-      }
-    } else {
-      if (!(category in curFilters)) {
-        curFilters[category] = {};
-      }
-      curFilters[category][subcategory] = theseFilters;
-    }
-
-    // Update filters
-    this.setStudyFilters(curFilters);
   }
 
   setSampleFilters(newSampleFilters: SampleFilters): void {

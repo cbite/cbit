@@ -3,7 +3,6 @@ import {Injectable} from "@angular/core";
 import {STUDIES, SAMPLES} from '../common/mock-studies';
 import * as _ from 'lodash';
 import {FiltersState, EMPTY_FILTERS} from "./filters.service";
-import {isUndefined} from "util";
 
 export const NULL_CATEGORY_NAME = '<None>';
 
@@ -19,7 +18,6 @@ export interface UnifiedMatch {
   studyId: number,
   study: Study,
   isFullTextMatch?: boolean,
-  passesMetadataFilters?: boolean,
   sampleMatches: SampleMatch[],
   isMatch?: boolean
 }
@@ -49,87 +47,8 @@ export class StudyService {
     return this.getStudies().find(study => study.id === id);
   }
 
-  shouldStudyBeExcluded(category: string, subcategory: string, excludeValuesMap: {[valueName: string]: boolean},
-    study: Study): boolean {
-
-    // Have to be careful: study._source[category] may be a list!
-    var values: Array<string> = [];
-    if (!(category in study._source)) {
-      values.push(NULL_CATEGORY_NAME);
-    } else {
-      var underCategory = study._source[category];
-      if (!Array.isArray(underCategory)) {
-        underCategory = [underCategory];  // Avoid duplicating code below
-      }
-
-      if (underCategory.length === 0) {
-        values.push(NULL_CATEGORY_NAME);
-      } else {
-        for (let item of underCategory) {
-          if (subcategory in item) {
-            values.push('' + item[subcategory]);  // Force string comparison, yuck!
-          } else {
-            values.push(NULL_CATEGORY_NAME);
-          }
-        }
-      }
-    }
-
-    // values now contains a list of all values of `category`->`subcategory`, including NULL_CATEGORY_NAME
-    // if the entry is ever missing anywhere
-
-    // Exclude an item only if *all* its values are excluded
-    return values.every(value => (value in excludeValuesMap));
-  };
-
   getStudiesMatching(filters: FiltersState): Study[] {
     return this.getUnifiedMatches(filters).map(studyMatch => studyMatch.study);
-  }
-
-  forceIncludeInStudyFilters(filters: FiltersState, category: string, subcategory: string) {
-    if ((category in filters.studyFilters) &&
-        (subcategory in filters.studyFilters[category])) {
-
-      let tweakedFilters = _.cloneDeep(filters);
-      delete tweakedFilters.studyFilters[category][subcategory];
-      return tweakedFilters;
-    } else {
-      return filters;
-    }
-  }
-
-  getStudyCounts(filters: FiltersState, category: string, subcategory: string) {
-    // Apply all filters *except* the one being queried (so we get a count of all studies that would be included
-    // if we allow a particular value for this category-subcategory pair)
-    var tweakedFilters = this.forceIncludeInStudyFilters(filters, category, subcategory);
-    var matches = this.getUnifiedMatches(tweakedFilters);
-
-    // Simulate ElasticSearch-like aggregation
-    let result = {};
-    for (let studyMatch of matches) {
-      let study = studyMatch.study;
-      if (category in study._source) {
-        let toSearch = study._source[category];
-        if (!Array.isArray(toSearch)) {
-          toSearch = [toSearch];   // Avoid duplicating code below
-        }
-
-        // Avoid double counting studies where multiple entries have the same value
-        let matches = new Set<string>();
-        for (let entry of toSearch) {
-          if (subcategory in entry) {
-            matches.add(entry[subcategory]);
-          } else {
-            matches.add(NULL_CATEGORY_NAME);
-          }
-        }
-        matches.forEach(match => {
-          result[match] = (result[match] || 0) + 1;
-        })
-      }
-    }
-
-    return result;
   }
 
   getSamples(): Sample[] {
@@ -236,23 +155,7 @@ export class StudyService {
     });
     this.debugUnifiedMatches('After 1:', result);
 
-    // 2. Apply study metadata exclusion filters
-    result.forEach(studyMatch => {
-      studyMatch.passesMetadataFilters = true;
-    });
-
-    _.forOwn(filters.studyFilters, (d, category) => {
-      _.forOwn(d, (dd, subcategory) => {
-        result.forEach(studyMatch => {
-          if (this.shouldStudyBeExcluded(category, subcategory, dd, studyMatch.study)) {
-            studyMatch.passesMetadataFilters = false;
-          }
-        });
-      });
-    });
-    this.debugUnifiedMatches('After 2:', result);
-
-    // 3. Apply sample metadata exclusion filters
+    // 2. Apply sample metadata exclusion filters
     result.forEach(studyMatch => {
       studyMatch.sampleMatches.forEach(sampleMatch => {
         sampleMatch.passesMetadataFilters = true;
@@ -269,14 +172,12 @@ export class StudyService {
     });
     this.debugUnifiedMatches('After 3:', result);
 
-    // 4. Mark samples preliminarily as "matches" if
-    // 1) the study hasn't been excluded by a metadata filter
-    // 2) the sample hasn't been excluded by a metadata filter
+    // 3. Mark samples preliminarily as "matches" if
+    // 1) the sample hasn't been excluded by a metadata filter
     // AND 2) the study has a full-text match or the sample has a full-text match
     result.forEach(studyMatch => {
       studyMatch.sampleMatches.forEach(sampleMatch => {
         sampleMatch.isMatch = (
-          studyMatch.passesMetadataFilters &&
           sampleMatch.passesMetadataFilters &&
           (studyMatch.isFullTextMatch || sampleMatch.isFullTextMatch)
         );
@@ -284,7 +185,7 @@ export class StudyService {
     });
     this.debugUnifiedMatches('After 4:', result);
 
-    // 5. Further match control samples of "matching" samples
+    // 4. Further match control samples of "matching" samples
     if (filters.includeControls) {
       result.forEach(studyMatch => {
         var extraControlSampleNames = new Set<string>();
@@ -307,7 +208,6 @@ export class StudyService {
     // or have a matching sample
     result.forEach(studyMatch => {
       studyMatch.isMatch = (
-        studyMatch.passesMetadataFilters &&
         (studyMatch.isFullTextMatch || studyMatch.sampleMatches.some(sampleMatch => sampleMatch.isMatch))
       );
     });

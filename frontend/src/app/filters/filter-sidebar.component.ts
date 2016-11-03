@@ -4,18 +4,6 @@ import {FiltersService, FiltersState} from "../services/filters.service";
 import {StudyService} from "../services/study.service";
 import * as _ from 'lodash';
 
-const HIDDEN_STUDY_FILTER_LABELS = {
-  'INVESTIGATION: Investigation Identifier': true,
-  'STUDY: Study Description': true,
-  'STUDY: Study Identifier': true,
-  'STUDY: Study Title': true,
-  'STUDY PROTOCOLS: Study Protocol Description': true,
-  'STUDY PUBLICATIONS: Study Publication Author List': true,
-  'STUDY PUBLICATIONS: Study Publication DOI': true,
-  'STUDY PUBLICATIONS: Study PubMed ID': true,
-  'STUDY PUBLICATIONS: Study Publication Title': true
-};
-
 const HIDDEN_SAMPLE_FILTER_LABELS = {
   'Barcode': true,
   'Sample ID': true,
@@ -37,15 +25,7 @@ const HIDDEN_SAMPLE_FILTER_LABELS = {
     Include controls
   </form>
   
-  <h2>Study Filters <button (click)="toggleStudyFilters();">Show/Hide</button></h2>
-  <div [class.hidden]="studyFiltersHidden" *ngFor="let categoryKV of allStudyFilterLabels | mapToIterable">
-    <div *ngFor="let subcategory of categoryKV.val">
-      <study-filters *ngIf='showStudyFilter(categoryKV.key, subcategory)' [category]="categoryKV.key" [subcategory]="subcategory"></study-filters>
-    </div>
-  </div>
-  
-  <h2>Sample Filters <button (click)="toggleSampleFilters();">Show/Hide</button></h2>
-  <div [class.hidden]="sampleFiltersHidden" *ngFor="let category of allSampleFilterLabels">
+  <div *ngFor="let category of allSampleFilterLabels">
     <sample-filters *ngIf='showSampleFilter(category)' [category]="category"></sample-filters>
   </div>
   
@@ -58,15 +38,7 @@ export class FilterSidebarComponent implements OnInit {
   // For inspiration, see: http://blog.thoughtram.io/angular/2016/01/06/taking-advantage-of-observables-in-angular2.html
   searchTextInForm = new FormControl();
   includeControlsInForm = new FormControl();
-  studyFiltersHidden: boolean = false;
-  sampleFiltersHidden: boolean = false;
-
-  allStudyFilterLabels = {};
   allSampleFilterLabels = {};
-
-  showStudyFilter(category: string, subcategory: string): boolean {
-    return !(`${category}: ${subcategory}` in HIDDEN_STUDY_FILTER_LABELS);
-  }
 
   showSampleFilter(category: string): boolean {
     return !(category in HIDDEN_SAMPLE_FILTER_LABELS);
@@ -100,38 +72,6 @@ export class FilterSidebarComponent implements OnInit {
     }
   }
 
-  makeStudyFilterLabels(): any {
-    // Make a list of all possible filterable properties in studies
-    // TODO: have the back-end maintain this list
-    var
-      allStudyFilterLabels = {}
-      ;
-    for (let study of this._studyService.getStudies()) {
-      for (let category in study._source) {
-        let underLabel = study._source[category];
-
-        if (!(category in allStudyFilterLabels)) {
-          allStudyFilterLabels[category] = []
-        }
-
-        if (!Array.isArray(underLabel)) {
-          underLabel = [underLabel];   // Wrap non-arrays under single-item array to not duplicate code below
-        }
-
-        let subcategories = {}
-        for (let d of underLabel) {
-          for (let subcategory in d) {
-            subcategories[subcategory] = true;
-          }
-        }
-
-        allStudyFilterLabels[category] = Object.keys(subcategories).sort();
-      }
-    }
-
-    return allStudyFilterLabels;
-  }
-
   makeSampleFilterLabels(): any {
     // Make a list of all possible filterable properties in samples
     // TODO: have the back-end maintain this list
@@ -148,19 +88,10 @@ export class FilterSidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.allStudyFilterLabels = this.makeStudyFilterLabels();
     this.allSampleFilterLabels = this.makeSampleFilterLabels();
   }
 
   clearFilters(): void {
     this._filtersService.clearFilters();
-  }
-
-  toggleStudyFilters(): void {
-    this.studyFiltersHidden = !this.studyFiltersHidden;
-  }
-
-  toggleSampleFilters(): void {
-    this.sampleFiltersHidden = !this.sampleFiltersHidden;
   }
 }
