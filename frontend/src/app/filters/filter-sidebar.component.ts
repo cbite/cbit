@@ -6,10 +6,14 @@ import * as _ from 'lodash';
 
 const HIDDEN_SAMPLE_FILTER_LABELS = {
   'Barcode': true,
+  'Biological Replicate': true,
   'Sample ID': true,
   'Sample Name': true,
   'Source Name': true,
-  'Study ID': true
+  'Study ID': true,
+  'Group ID': true,
+  'Protocols': true,
+  'Sample Match': true
 };
 
 @Component({
