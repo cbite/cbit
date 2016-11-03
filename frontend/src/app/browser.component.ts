@@ -68,11 +68,6 @@ export class BrowserComponent {
     this._router.navigate(link);
   }
 
-  selectSample(sample: Sample): void {
-    let link = ['/sample', sample.id];
-    this._router.navigate(link);
-  }
-
   ngOnInit(): void {
     //this._studyService.getStudies().then(studies => this.studies = studies);
     this._filtersService.filters.subscribe(filters => this.updateStudies(filters));
