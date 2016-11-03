@@ -385,16 +385,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 0,
     "studyId": 1
@@ -438,16 +432,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 1,
     "studyId": 1
@@ -491,16 +479,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 2,
     "studyId": 1
@@ -539,16 +521,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 3,
     "studyId": 1
@@ -587,16 +563,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 4,
     "studyId": 1
@@ -640,16 +610,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 5,
     "studyId": 1
@@ -693,16 +657,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 6,
     "studyId": 1
@@ -746,16 +704,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 7,
     "studyId": 1
@@ -799,16 +751,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 8,
     "studyId": 1
@@ -852,16 +798,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 9,
     "studyId": 1
@@ -905,16 +845,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 10,
     "studyId": 1
@@ -953,16 +887,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 11,
     "studyId": 1
@@ -1006,16 +934,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 12,
     "studyId": 1
@@ -1059,16 +981,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 13,
     "studyId": 1
@@ -1107,16 +1023,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 14,
     "studyId": 1
@@ -1155,16 +1065,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 15,
     "studyId": 1
@@ -1208,16 +1112,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 16,
     "studyId": 1
@@ -1261,16 +1159,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human mesenchymal stromal cells",
       "Study ID": 1,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_01 Annotations.txt",
-        "Array Data Matrix File": "StudyID_01 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v3",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_01 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 17,
     "studyId": 1
@@ -1313,16 +1205,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human peripheral nerve derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 100,
     "studyId": 2
@@ -1365,16 +1251,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 101,
     "studyId": 2
@@ -1417,16 +1297,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "osteosarcoma cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 102,
     "studyId": 2
@@ -1465,16 +1339,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 103,
     "studyId": 2
@@ -1513,16 +1381,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 104,
     "studyId": 2
@@ -1565,16 +1427,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 105,
     "studyId": 2
@@ -1617,16 +1473,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
       "Tissue": "epithelium",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 106,
     "studyId": 2
@@ -1665,16 +1515,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
       "Tissue": "epithelium",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 107,
     "studyId": 2
@@ -1713,16 +1557,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 108,
     "studyId": 2
@@ -1761,16 +1599,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human peripheral nerve derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 109,
     "studyId": 2
@@ -1809,16 +1641,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 110,
     "studyId": 2
@@ -1857,16 +1683,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human peripheral nerve derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 111,
     "studyId": 2
@@ -1905,16 +1725,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 112,
     "studyId": 2
@@ -1953,16 +1767,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "osteosarcoma cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 113,
     "studyId": 2
@@ -2001,16 +1809,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 114,
     "studyId": 2
@@ -2049,16 +1851,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human peripheral nerve derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 115,
     "studyId": 2
@@ -2097,16 +1893,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "osteosarcoma cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 116,
     "studyId": 2
@@ -2145,16 +1935,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 117,
     "studyId": 2
@@ -2193,16 +1977,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "osteosarcoma cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 118,
     "studyId": 2
@@ -2241,16 +2019,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 119,
     "studyId": 2
@@ -2289,16 +2061,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 120,
     "studyId": 2
@@ -2341,16 +2107,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 121,
     "studyId": 2
@@ -2389,16 +2149,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 122,
     "studyId": 2
@@ -2441,16 +2195,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
       "Tissue": "epithelium",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 123,
     "studyId": 2
@@ -2489,16 +2237,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "osteosarcoma cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 124,
     "studyId": 2
@@ -2541,16 +2283,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human peripheral nerve derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 125,
     "studyId": 2
@@ -2589,16 +2325,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 126,
     "studyId": 2
@@ -2641,16 +2371,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 127,
     "studyId": 2
@@ -2689,16 +2413,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "osteosarcoma cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 128,
     "studyId": 2
@@ -2741,16 +2459,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
       "Tissue": "epithelium",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 129,
     "studyId": 2
@@ -2789,16 +2501,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 130,
     "studyId": 2
@@ -2837,16 +2543,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
       "Tissue": "epithelium",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 131,
     "studyId": 2
@@ -2885,16 +2585,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 132,
     "studyId": 2
@@ -2937,16 +2631,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human peripheral nerve derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 133,
     "studyId": 2
@@ -2985,16 +2673,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 134,
     "studyId": 2
@@ -3037,16 +2719,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 135,
     "studyId": 2
@@ -3089,16 +2765,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 136,
     "studyId": 2
@@ -3137,16 +2807,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human peripheral nerve derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 137,
     "studyId": 2
@@ -3185,16 +2849,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "osteosarcoma cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 138,
     "studyId": 2
@@ -3233,16 +2891,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human peripheral nerve derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 139,
     "studyId": 2
@@ -3285,16 +2937,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "osteosarcoma cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 140,
     "studyId": 2
@@ -3333,16 +2979,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 141,
     "studyId": 2
@@ -3385,16 +3025,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "osteosarcoma cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 142,
     "studyId": 2
@@ -3433,16 +3067,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 143,
     "studyId": 2
@@ -3481,16 +3109,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 144,
     "studyId": 2
@@ -3529,16 +3151,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
       "Tissue": "epithelium",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 145,
     "studyId": 2
@@ -3577,16 +3193,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
       "Tissue": "epithelium",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 146,
     "studyId": 2
@@ -3625,16 +3235,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
       "Tissue": "epithelium",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 147,
     "studyId": 2
@@ -3677,16 +3281,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 148,
     "studyId": 2
@@ -3725,16 +3323,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "colorectal adenocarcinoma derived epithelial cell line",
       "Study ID": 2,
       "Tissue": "epithelium",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 149,
     "studyId": 2
@@ -3773,16 +3365,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "SV40-immortalized human fetal osteoblast cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 150,
     "studyId": 2
@@ -3825,16 +3411,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "immortalized mesenchymal stromal cell line",
       "Study ID": 2,
       "Tissue": "connective",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 151,
     "studyId": 2
@@ -3873,16 +3453,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human peripheral nerve derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 152,
     "studyId": 2
@@ -3925,16 +3499,10 @@ export const SAMPLES: Sample[] = [
       "Strain full name": "human blood-brain barrier derived pericyte cell line",
       "Study ID": 2,
       "Tissue": "muscular",
-      "_assay": {
-        "Annotation file": "StudyID_02 Annotations.txt",
-        "Array Data Matrix File": "StudyID_02 Raw data matrix file.txt",
-        "Array Design REF": "Illumina HT12v4",
-        "Background correction": "yes",
-        "Data Transformation Name": "variance stabilization",
-        "Derived Array Data Matrix File": "StudyID_02 Processed data matrix file.txt",
-        "Label": "biotin",
-        "Normalization Name": "quantile"
-      }
+      "Transcriptomics Assay Detail: Background correction": "yes",
+      "Transcriptomics Assay Detail: Data Transformation Name": "variance stabilization",
+      "Transcriptomics Assay Detail: Label": "biotin",
+      "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 153,
     "studyId": 2
