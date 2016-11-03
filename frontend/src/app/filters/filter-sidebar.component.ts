@@ -13,7 +13,15 @@ const HIDDEN_SAMPLE_FILTER_LABELS = {
   'Study ID': true,
   'Group ID': true,
   'Protocols': true,
-  'Sample Match': true
+  'Sample Match': true,
+
+  // Fields that have been merged in backend
+  'Material Name': true,
+  'Material abbreviation': true,
+  'Strain full name': true,
+  'Strain abbreviation': true,
+  'Compound': true,
+  'Compound abbreviation': true
 };
 
 @Component({
@@ -88,7 +96,14 @@ export class FilterSidebarComponent implements OnInit {
       }
     }
 
-    return Object.keys(allSampleFilterLabels).sort();
+    var withoutStar = function(s: string): string {
+      if (s.substr(0, 1) == '*') {
+        return s.substr(1);
+      } else {
+        return s;
+      }
+    }
+    return Object.keys(allSampleFilterLabels).sort((a,b) => withoutStar(a).localeCompare(withoutStar(b)));
   }
 
   ngOnInit(): void {
