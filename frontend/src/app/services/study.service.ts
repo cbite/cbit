@@ -6,6 +6,12 @@ import {FiltersState, EMPTY_FILTERS} from "./filters.service";
 
 export const NULL_CATEGORY_NAME = '<None>';
 
+export const STUDY_METADATA_SEARCH_FIELDS = new Set<string>([
+  'Study Researchers Involved',
+  'Study Publication Author List',
+  'Study PubMed ID'
+]);
+
 export interface SampleMatch {
   sampleId: number,
   sample: Sample,
@@ -148,7 +154,7 @@ export class StudyService {
     // 1. Annotate samples and studies according to whether their metadata matches the search text.
     let q = filters.searchText.toLocaleLowerCase();
     result.forEach(studyMatch => {
-      studyMatch.isFullTextMatch = (q === '') || (this.deepFind(studyMatch.study, q));
+      studyMatch.isFullTextMatch = (q === '') || (this.deepFind(studyMatch.study, q, STUDY_METADATA_SEARCH_FIELDS));
       studyMatch.sampleMatches.forEach(sampleMatch => {
         sampleMatch.isFullTextMatch = (q === '') || (this.deepFind(sampleMatch.sample, q));
       })
@@ -228,7 +234,7 @@ export class StudyService {
     return result;
   }
 
-  deepFind(target: (Object|Array<any>), searchText: string): boolean {
+  deepFind(target: (Object|Array<any>), searchText: string, onlyForKeys?: Set<string>): boolean {
     var
       key: string,
       value: any
@@ -238,13 +244,13 @@ export class StudyService {
         value = target[key];
         switch (typeof value) {
           case 'object':
-            if (this.deepFind(value, searchText)) {
+            if (this.deepFind(value, searchText, onlyForKeys)) {
               return true;
             }
             break;
           case 'string':
           case 'number':
-            if (('' + value).toLocaleLowerCase().indexOf(searchText) != -1) {
+            if ((!onlyForKeys || onlyForKeys.has(key)) && ('' + value).toLocaleLowerCase().indexOf(searchText) != -1) {
               return true;
             }
         }
