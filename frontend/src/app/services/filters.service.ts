@@ -130,4 +130,21 @@ export class FiltersService {
     // Update filters
     this.setSampleFilters(curFilters);
   }
+
+  setSampleFilterAll(category: string): void {
+    let curFilters = _.cloneDeep(this.getFilters().sampleFilters);
+    delete curFilters[category];
+    this.setSampleFilters(curFilters);
+  }
+
+  setSampleFilterNone(category: string, excludedValues: Array<string>): void {
+    let curFilters = _.cloneDeep(this.getFilters().sampleFilters);
+    let thisFilter = {}
+    for (let v of excludedValues) {
+      thisFilter[v] = false;
+    }
+    curFilters[category] = thisFilter;
+    this.setSampleFilters(curFilters);
+  }
+
 }

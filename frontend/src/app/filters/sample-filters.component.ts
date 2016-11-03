@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from "@angular/core";
-import {FiltersState, FiltersService} from "../services/filters.service";
+import {FiltersState, FiltersService, EMPTY_FILTERS} from "../services/filters.service";
 import {StudyService} from "../services/study.service";
 import * as _ from 'lodash';
 
@@ -8,6 +8,7 @@ import * as _ from 'lodash';
   template: `
   <div [class.hidden]="isTrivial()">
     <h3>{{ category }} <button (click)="isHidden = !isHidden;">Show/Hide</button></h3>
+    [Select <a href="javascript:void(0)" (click)="selectAll()">All</a> | <a href="javascript:void(0)" (click)="selectNone()">None</a>]
     <ul [class.hidden]="isHidden">
       <div *ngFor="let possibleValue of counts | mapToIterable">
         <input type="checkbox" [name]="category" [value]="possibleValue.key"
@@ -55,5 +56,14 @@ export class SampleFiltersComponent implements OnInit {
 
   updateFilters(e: any, valueName: string): void {
     this._filtersService.setSampleFilter(this.category, valueName, e.target.checked);
+  }
+
+  selectAll(): void {
+    this._filtersService.setSampleFilterAll(this.category);
+  }
+
+  selectNone(): void {
+    var excludedValues = Object.keys(this._studyService.getSampleCounts(EMPTY_FILTERS, this.category));
+    this._filtersService.setSampleFilterNone(this.category, excludedValues);
   }
 }
