@@ -150,6 +150,85 @@ export class StudyService {
   // PRIVATE DETAILS
   // ===============
 
+  // Relevant controls are listed in the results under
+  // results.aggregations.controls.buckets[*].key
+  private buildESQueryEnumerateControls(filters: FiltersState): any {
+
+    let queryPieces = this.buildESQueryPieces({ filters: filters });
+    let extraMustClauses = Object.values(queryPieces.mustClause);
+    let extraMustNotClauses = Object.values(queryPieces.mustNotClause);
+
+    return {
+      size: 0,  // We only care about the aggregation below
+      query: {
+        bool: {
+          should: queryPieces.shouldClauses,
+          must: [ {exists: {field: "Sample Match"}} ].concat(extraMustClauses),
+          must_not: extraMustNotClauses
+        }
+      },
+      aggs: {
+        controls: {
+          terms: {
+            field: "Sample Match",
+            size: 10000   // TODO: Think harder about upper limits
+          }
+        }
+      }
+    }
+  }
+
+  private extractControlIdsFromResultOfESQueryEnumerateControls(esResult: any): string[] {
+    return esResult.aggregations.controls.buckets.map(bucket => bucket.key);
+  }
+
+  private buildESQueryPieces(params: {
+    filters: FiltersState,
+    controlStudyIds?: string[]
+  }): {
+    shouldClauses: any[],
+    mustClause: { [category: string]: any },
+    mustNotClause: { [category: string]: any }
+  } {
+    let shouldClauses: any[] = [];
+    let mustClause: { [category: string]: any } = {};
+    let mustNotClause: { [category: string]: any } = {};
+
+    if (params.filters.searchText) {
+      shouldClauses.push({ match_phrase: { _all: params.filters.searchText } });
+      shouldClauses.push({
+        has_parent: {
+          type: 'study',
+          query: { match_phrase: { _all: params.filters.searchText } }
+        }
+      });
+    }
+
+    if (params.controlStudyIds && params.controlStudyIds.length > 0) {
+      shouldClauses.push({ terms: { 'Sample Name': params.controlStudyIds } });
+    }
+
+    _.forOwn(params.filters.sampleFilters, (sampleFilter: SampleFilter, category: string) => {
+      let termsQuery = {};
+      termsQuery[category] = Object.keys(sampleFilter.detail);
+
+      switch (sampleFilter.mode) {
+        case FilterMode.AllButThese:
+          mustNotClause[category] = termsQuery;
+          break;
+        case FilterMode.OnlyThese:
+          mustClause[category] = termsQuery;
+          break;
+      }
+    });
+
+    return {
+      shouldClauses: shouldClauses,
+      mustClause: mustClause,
+      mustNotClause: mustNotClause
+    };
+  }
+
   private _lastFilters: FiltersState;
   private _lastStudyMatches: Study[];
   private esClient: ESClient;
