@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {FiltersService, FiltersState} from "../services/filters.service";
 import {StudyService, ManySampleCounts} from "../services/study.service";
@@ -66,7 +66,8 @@ export class FilterSidebarComponent implements OnInit {
 
   constructor(
     private _studyService: StudyService,
-    private _filtersService: FiltersService
+    private _filtersService: FiltersService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     //this.searchTextInForm = new FormControl(this._filtersService.getFilters().searchText);
     this.searchTextInForm.valueChanges
@@ -97,6 +98,10 @@ export class FilterSidebarComponent implements OnInit {
           .subscribe(newMatchCounts => {
             this.allSampleFilterMatchCounts = newMatchCounts;
             this.ready = true;
+
+            // Force Angular2 change detection to see ready = true change.  Not sure why it's not being
+            // picked up automatically
+            this.changeDetectorRef.detectChanges();
           });
       });
   }
