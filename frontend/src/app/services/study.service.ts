@@ -28,6 +28,11 @@ export interface UnifiedMatch {
   isMatch?: boolean
 }
 
+export interface StudyAndSamples {
+  study: Study,
+  samples: Sample[]
+}
+
 @Injectable()
 export class StudyService {
   /*getStudies(): Promise<Study[]> {
@@ -42,46 +47,18 @@ export class StudyService {
       .then(studies => studies.find(study => study.id === id));
   }*/
 
-  private _lastFilters: FiltersState;
-  private _lastStudyMatches: Study[];
-
-  getStudies(): Study[] {
-    return STUDIES;
-  }
-
-  getStudy(id: number): Study {
-    return this.getStudies().find(study => study.id === id);
-  }
-
+  // PUBLIC INTERFACE
+  // ================
   getSamples(): Sample[] {
     return SAMPLES;
   }
 
-  shouldSampleBeExcluded(category: string, excludeValuesMap: {[valueName: string]: boolean}, sample: Sample): boolean {
-
-    // Have to be careful: study._source[category] may be a list!
-    var value: string;
-    if (category in sample._source) {
-      value = '' + sample._source[category];  // Force string comparison, yuck!
-    } else {
-      value = NULL_CATEGORY_NAME;
-    }
-
-    return value in excludeValuesMap;
-  }
-
-  getSample(id: number): Sample {
-    return this.getSamples().find(sample => sample.id === id);
-  }
-
-  forceIncludeInSampleFilters(filters: FiltersState, category: string) {
-    if (category in filters.sampleFilters) {
-
-      let tweakedFilters = _.cloneDeep(filters);
-      delete tweakedFilters.sampleFilters[category];
-      return tweakedFilters;
-    } else {
-      return filters;
+  getStudyAndRelatedSamples(studyId: number): StudyAndSamples {
+    let study = this.getStudy(studyId);
+    let samples = study.sampleIds.map(sampleId => this.getSample(sampleId));
+    return {
+      study: study,
+      samples: samples
     }
   }
 
@@ -102,22 +79,6 @@ export class StudyService {
     }
 
     return result;
-  }
-
-  debugUnifiedMatches(label: string, matchesSoFar: UnifiedMatch[]): void {
-    /*
-    console.log(label);
-    console.log(JSON.stringify(matchesSoFar.map(studyMatch => {
-      var x = _.clone(studyMatch);
-      delete x.study;
-      x.sampleMatches = x.sampleMatches.map(sampleMatch => {
-        var y = _.clone(sampleMatch);
-        delete y.sample;
-        return y;
-      });
-      return x;
-    })));
-    */
   }
 
   getUnifiedMatches(filters: FiltersState): UnifiedMatch[] {
@@ -220,7 +181,66 @@ export class StudyService {
     return result;
   }
 
-  deepFind(target: (Object|Array<any>), searchText: string, onlyForKeys?: Set<string>): boolean {
+
+  // PRIVATE DETAILS
+  // ===============
+
+  private _lastFilters: FiltersState;
+  private _lastStudyMatches: Study[];
+
+  private getStudies(): Study[] {
+    return STUDIES;
+  }
+
+  private getStudy(id: number): Study {
+    return this.getStudies().find(study => study.id === id);
+  }
+
+  private getSample(id: number): Sample {
+    return this.getSamples().find(sample => sample.id === id);
+  }
+
+  private shouldSampleBeExcluded(category: string, excludeValuesMap: {[valueName: string]: boolean}, sample: Sample): boolean {
+
+    // Have to be careful: study._source[category] may be a list!
+    var value: string;
+    if (category in sample._source) {
+      value = '' + sample._source[category];  // Force string comparison, yuck!
+    } else {
+      value = NULL_CATEGORY_NAME;
+    }
+
+    return value in excludeValuesMap;
+  }
+
+  private forceIncludeInSampleFilters(filters: FiltersState, category: string) {
+    if (category in filters.sampleFilters) {
+
+      let tweakedFilters = _.cloneDeep(filters);
+      delete tweakedFilters.sampleFilters[category];
+      return tweakedFilters;
+    } else {
+      return filters;
+    }
+  }
+
+  private debugUnifiedMatches(label: string, matchesSoFar: UnifiedMatch[]): void {
+    /*
+    console.log(label);
+    console.log(JSON.stringify(matchesSoFar.map(studyMatch => {
+      var x = _.clone(studyMatch);
+      delete x.study;
+      x.sampleMatches = x.sampleMatches.map(sampleMatch => {
+        var y = _.clone(sampleMatch);
+        delete y.sample;
+        return y;
+      });
+      return x;
+    })));
+    */
+  }
+
+  private deepFind(target: (Object|Array<any>), searchText: string, onlyForKeys?: Set<string>): boolean {
     var
       key: string,
       value: any

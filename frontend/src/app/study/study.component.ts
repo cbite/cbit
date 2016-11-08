@@ -26,12 +26,9 @@ export class StudyComponent implements OnInit {
       let id = +params['id'];
       //this._studyService.getStudy(id)
       //  .then(study => this.study = study);
-      this.study = this._studyService.getStudy(id);
-      this.samples = (
-        this.study.sampleIds
-          .map(sampleId => this._studyService.getSample(sampleId))
-          .sort((a, b) => a._source['Sample Name'].localeCompare(b._source['Sample Name']))
-      );
+      let studyAndSamples = this._studyService.getStudyAndRelatedSamples(id);
+      this.study = studyAndSamples.study;
+      this.samples = studyAndSamples.samples.sort((a, b) => a._source['Sample Name'].localeCompare(b._source['Sample Name']));
 
       let keys = new Set<string>();
       this.samples.forEach(sample => Object.keys(sample._source).forEach(key => keys.add(key)));
