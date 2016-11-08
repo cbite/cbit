@@ -82,13 +82,9 @@ export class FilterSidebarComponent implements OnInit {
       this.includeControlsInForm.setValue(filters.includeControls, {emitEvent: false});
     }
 
-    let newAllSampleFilterMatchCounts = {};
-    for (let category of this.allSampleFilterLabels) {
-      if (this.showSampleFilter(category)) {
-        newAllSampleFilterMatchCounts[category] = this._studyService.getSampleCounts(filters, category);
-      }
-    }
-    this.allSampleFilterMatchCounts = newAllSampleFilterMatchCounts;
+    this.allSampleFilterMatchCounts = this._studyService.getManySampleCounts(filters,
+      this.allSampleFilterLabels.filter(category => this.showSampleFilter(category))
+    )
   }
 
   makeSampleFilterLabels(): any {

@@ -71,22 +71,11 @@ export class StudyService {
     }
   }
 
-  getSampleCounts(filters: FiltersState, category: string) {
-    // Apply all filters *except* the one being queried (so we get a count of all studies that would be included
-    // if we allow a particular value for this category-subcategory pair)
-    var tweakedFilters = this.forceIncludeInSampleFilters(filters, category);
-    var matches = this.getUnifiedMatches(tweakedFilters);
-
-    // Simulate ElasticSearch-like aggregation
+  getManySampleCounts(filters: FiltersState, categories: string[]) {
     let result = {};
-    for (let studyMatch of matches) {
-      for (let sampleMatch of studyMatch.sampleMatches) {
-        let sample = sampleMatch.sample;
-        var value = '' + (sample._source[category] || NULL_CATEGORY_NAME);
-        result[value] = (result[value] || 0) + 1;
-      }
+    for (let category of categories) {
+      result[category] = this.getSampleCounts(filters, category);
     }
-
     return result;
   }
 
@@ -239,6 +228,25 @@ export class StudyService {
     } else {
       return filters;
     }
+  }
+
+  private getSampleCounts(filters: FiltersState, category: string) {
+    // Apply all filters *except* the one being queried (so we get a count of all studies that would be included
+    // if we allow a particular value for this category-subcategory pair)
+    var tweakedFilters = this.forceIncludeInSampleFilters(filters, category);
+    var matches = this.getUnifiedMatches(tweakedFilters);
+
+    // Simulate ElasticSearch-like aggregation
+    let result = {};
+    for (let studyMatch of matches) {
+      for (let sampleMatch of studyMatch.sampleMatches) {
+        let sample = sampleMatch.sample;
+        var value = '' + (sample._source[category] || NULL_CATEGORY_NAME);
+        result[value] = (result[value] || 0) + 1;
+      }
+    }
+
+    return result;
   }
 
   private debugUnifiedMatches(label: string, matchesSoFar: UnifiedMatch[]): void {
