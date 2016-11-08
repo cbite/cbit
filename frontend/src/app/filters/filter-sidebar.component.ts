@@ -90,10 +90,12 @@ export class FilterSidebarComponent implements OnInit {
     }
 
     this.ready = false;
-    this.allSampleFilterMatchCounts = this._studyService.getManySampleCounts(filters,
+    this._studyService.getManySampleCountsAsync(filters,
       this.allSampleFilterLabels.filter(category => this.showSampleFilter(category))
-    )
-    this.ready = true;
+    ).then(result => {
+      this.allSampleFilterMatchCounts = result;
+      this.ready = true;
+    })
   }
 
   makeSampleFilterLabels(): Promise<string[]> {

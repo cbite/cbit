@@ -33,6 +33,14 @@ export interface StudyAndSamples {
   samples: Sample[]
 }
 
+export interface SampleCounts {
+  [valueName: string]: number
+}
+
+export interface ManySampleCounts {
+  [category: string]: SampleCounts
+}
+
 @Injectable()
 export class StudyService {
   /*getStudies(): Promise<Study[]> {
@@ -81,12 +89,17 @@ export class StudyService {
     );
   }
 
-  getManySampleCounts(filters: FiltersState, categories: string[]) {
-    let result = {};
-    for (let category of categories) {
-      result[category] = this.getSampleCounts(filters, category);
-    }
-    return result;
+  getManySampleCountsAsync(filters: FiltersState, categories: string[]): Promise<ManySampleCounts> {
+    return (
+      new Promise<ManySampleCounts>(resolve => setTimeout(resolve, 2000)) // delay 2 seconds
+        .then(() => {
+          let result = {};
+          for (let category of categories) {
+            result[category] = this.getSampleCounts(filters, category);
+          }
+          return result;
+        })
+    )
   }
 
   getUnifiedMatches(filters: FiltersState): UnifiedMatch[] {
@@ -240,7 +253,7 @@ export class StudyService {
     }
   }
 
-  private getSampleCounts(filters: FiltersState, category: string) {
+  private getSampleCounts(filters: FiltersState, category: string): SampleCounts {
     // Apply all filters *except* the one being queried (so we get a count of all studies that would be included
     // if we allow a particular value for this category-subcategory pair)
     var tweakedFilters = this.forceIncludeInSampleFilters(filters, category);
