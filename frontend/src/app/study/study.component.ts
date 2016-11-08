@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectorRef} from '@angular/core';
 import {Study, Sample} from '../common/study.model';
 import {StudyService, StudyAndSamples} from "../services/study.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
@@ -19,7 +19,8 @@ export class StudyComponent implements OnInit {
     private _router: Router,
     private _studyService: StudyService,
     private _route: ActivatedRoute,
-    private _location: Location
+    private _location: Location,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -27,7 +28,13 @@ export class StudyComponent implements OnInit {
       let id: string = params['id'];
       //this._studyService.getStudy(id)
       //  .then(study => this.study = study);
-      this._studyService.getStudyAndRelatedSamplesAsync(id).then(result => this.processStudyAndSamples(result));
+      this._studyService.getStudyAndRelatedSamplesAsync(id).then(result => {
+        this.processStudyAndSamples(result);
+
+        // Force Angular2 change detection to see ready = true change.
+        // Not sure why it's not being picked up automatically
+        this.changeDetectorRef.detectChanges();
+      });
     });
   }
 

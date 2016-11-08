@@ -1,4 +1,4 @@
-import {Study, Sample} from '../common/study.model';
+import {Study, Sample, RawStudy} from '../common/study.model';
 import {Injectable} from "@angular/core";
 import {STUDIES, SAMPLES} from '../common/mock-studies';
 import * as _ from 'lodash';
@@ -56,17 +56,71 @@ export class StudyService {
     );
   }
 
-  getStudyAndRelatedSamplesAsync(studyId: string): Promise<StudyAndSamples> {
+  getStudyAndRelatedSamplesAsync(studyId: string): PromiseLike<StudyAndSamples> {
     return (
-      new Promise<StudyAndSamples>(resolve => setTimeout(resolve, 2000)) // delay 2 seconds
-        .then(() => {
-          let study = this.getStudy(studyId);
-          let samples = study.sampleIds.map(sampleId => this.getSample(sampleId));
-          return {
-            study: study,
-            samples: samples
-          };
-        })
+      this.esClient.search({
+        index: 'cbit',
+        body: {
+          size: 10000,   // TODO: Think about what to do with large studies
+          query: {
+            bool: {
+              should: [
+                {
+                  bool: {
+                    must: [
+                      { match: { _type: "study" } },
+                      { match: { _id: studyId } },
+                    ]
+                  }
+                },
+                {
+                  bool: {
+                    must: [
+                      { match: { _type: "sample" } },
+                      {
+                        has_parent: {
+                          type: "study",
+                          query: { match: { _id: studyId } }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }).then(response => {
+        let hits = response.hits.hits;
+        let study: Study;
+        let samples: Sample[] = [];
+        let i = 1;
+        for (let hit of hits) {
+          if (hit._type === 'study') {
+            if (!study) {
+              study = {
+                id: hit._id,
+                sampleIds: [],   // TODO: Drop this field
+                _source: <RawStudy>hit._source
+              }
+            } else {
+              console.log("More than one study returned!")
+            }
+          } else if (hit._type === 'sample') {
+            samples.push({
+              id: i,
+              studyId: studyId,
+              _source: hit._source
+            });
+            i += 1;
+          }
+        }
+
+        return {
+          study: study,
+          samples: samples
+        }
+      })
     );
   }
 
@@ -111,16 +165,8 @@ export class StudyService {
     return STUDIES;
   }
 
-  private getStudy(id: string): Study {
-    return this.getStudies().find(study => study.id === id);
-  }
-
   private getSamples(): Sample[] {
     return SAMPLES;
-  }
-
-  private getSample(id: number): Sample {
-    return this.getSamples().find(sample => sample.id === id);
   }
 
   private shouldSampleBeExcluded(category: string, sampleFilter: SampleFilter, sample: Sample): boolean {
