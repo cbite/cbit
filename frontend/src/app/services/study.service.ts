@@ -53,10 +53,6 @@ export class StudyService {
     return this.getStudies().find(study => study.id === id);
   }
 
-  getStudiesMatching(filters: FiltersState): Study[] {
-    return this.getUnifiedMatches(filters).map(studyMatch => studyMatch.study);
-  }
-
   getSamples(): Sample[] {
     return SAMPLES;
   }
@@ -72,16 +68,6 @@ export class StudyService {
     }
 
     return value in excludeValuesMap;
-  }
-
-  getSamplesMatching(filters: FiltersState): Sample[] {
-    // See http://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
-    var flatten = function(nestedLists: any[][]): any[] {
-      return Array.prototype.concat.apply([], nestedLists);
-    }
-    return flatten(this.getUnifiedMatches(filters).map(studyMatch =>
-      studyMatch.sampleMatches.map(sampleMatch => sampleMatch.sample)
-    ));
   }
 
   getSample(id: number): Sample {
