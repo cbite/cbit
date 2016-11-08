@@ -67,13 +67,18 @@ export class StudyService {
     );
   }
 
-  getStudyAndRelatedSamples(studyId: number): StudyAndSamples {
-    let study = this.getStudy(studyId);
-    let samples = study.sampleIds.map(sampleId => this.getSample(sampleId));
-    return {
-      study: study,
-      samples: samples
-    }
+  getStudyAndRelatedSamplesAsync(studyId: number): Promise<StudyAndSamples> {
+    return (
+      new Promise<StudyAndSamples>(resolve => setTimeout(resolve, 2000)) // delay 2 seconds
+        .then(() => {
+          let study = this.getStudy(studyId);
+          let samples = study.sampleIds.map(sampleId => this.getSample(sampleId));
+          return {
+            study: study,
+            samples: samples
+          };
+        })
+    );
   }
 
   getManySampleCounts(filters: FiltersState, categories: string[]) {

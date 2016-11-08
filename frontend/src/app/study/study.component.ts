@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Study, Sample} from '../common/study.model';
-import {StudyService} from "../services/study.service";
+import {StudyService, StudyAndSamples} from "../services/study.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import { Location } from '@angular/common';
 
@@ -13,6 +13,7 @@ export class StudyComponent implements OnInit {
   samples: Sample[];
   sampleKeys: string[];
   commonKeys: { [studyId: number]: { [key: string]: any } };
+  ready = false
 
   constructor(
     private _router: Router,
@@ -26,15 +27,18 @@ export class StudyComponent implements OnInit {
       let id = +params['id'];
       //this._studyService.getStudy(id)
       //  .then(study => this.study = study);
-      let studyAndSamples = this._studyService.getStudyAndRelatedSamples(id);
-      this.study = studyAndSamples.study;
-      this.samples = studyAndSamples.samples.sort((a, b) => a._source['Sample Name'].localeCompare(b._source['Sample Name']));
-
-      let keys = new Set<string>();
-      this.samples.forEach(sample => Object.keys(sample._source).forEach(key => keys.add(key)));
-      keys.delete('Sample Name');
-      this.sampleKeys = Array.from(keys);
+      this._studyService.getStudyAndRelatedSamplesAsync(id).then(result => this.processStudyAndSamples(result));
     });
+  }
+
+  processStudyAndSamples(studyAndSamples: StudyAndSamples): void {
+    this.study = studyAndSamples.study;
+    this.samples = studyAndSamples.samples.sort((a, b) => a._source['Sample Name'].localeCompare(b._source['Sample Name']));
+
+    let keys = new Set<string>();
+    this.samples.forEach(sample => Object.keys(sample._source).forEach(key => keys.add(key)));
+    keys.delete('Sample Name');
+    this.sampleKeys = Array.from(keys);
 
     this.commonKeys = {};
     if (this.samples.length > 0) {
@@ -54,6 +58,8 @@ export class StudyComponent implements OnInit {
         }
       }
     }
+
+    this.ready = true;
   }
 
   distinctKeys(sample: Sample): string[] {
