@@ -16,7 +16,7 @@
         <ul>
           <li *ngFor='let studyMatch of matches'>
             <a (click)="selectStudy(studyMatch.study)" href="javascript:void(0)">
-              {{studyMatch.study.id}}. <b>{{ studyMatch.study._source['STUDY']['Study Title'] }}</b>
+              <b>{{ studyMatch.study._source['STUDY']['Study Title'] }}</b>
             </a>
             <i>by {{ studyMatch.study._source['STUDY']['Study Researchers Involved'] }}</i>
             <pubmed-links [study]="studyMatch.study"></pubmed-links>

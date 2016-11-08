@@ -6,9 +6,9 @@ import { Study, Sample } from './study.model';
  import reader, config, json
  cfg = config.Config()
 
- i = reader.read_investigation(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/i_Investigation.txt', 'r'))
+ i = reader.read_investigation(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/i_Investigation.txt', 'rb'))
  result = {
-   'id': 1,
+   'id': 'AVhDnx1kcZts01DBflFT',
    'sampleIds': [k for k in range(0, 17+1)],
    '_source': reader.conform_investigation_to_schema(
                 reader.remove_isa_name_prefixes(
@@ -22,9 +22,9 @@ import { Study, Sample } from './study.model';
  }
  print(json.dumps(result, indent=2, sort_keys=True))
 
- i = reader.read_investigation(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/i_Investigation.txt', 'r'))
+ i = reader.read_investigation(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/i_Investigation.txt', 'rb'))
  result = {
-   'id': 2,
+   'id': 'AVhDnyLlcZts01DBflFU',
    'sampleIds': [k for k in range(100, 153+1)],
    '_source': reader.conform_investigation_to_schema(
                 reader.remove_isa_name_prefixes(
@@ -41,9 +41,7 @@ import { Study, Sample } from './study.model';
  */
 export const STUDIES: Study[] = [
   {
-    id: 1,
-    sampleIds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-    _source: {
+    "_source": {
       "INVESTIGATION": {
         "Investigation Identifier": "1478015927860",
         "Investigation Title": "Investigation"
@@ -177,13 +175,32 @@ export const STUDIES: Study[] = [
           "Study Publication Title": "Diverse effects of cyclic AMP variants on osteogenic and adipogenic differentiation of human mesenchymal stromal cells"
         }
       ]
-    }
+    },
+    "id": "AVhDnx1kcZts01DBflFT",
+    "sampleIds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ]
   },
 
   {
-    id: 2,
-    sampleIds: [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153],
-    _source: {
+    "_source": {
       "INVESTIGATION": {
         "Investigation Identifier": "1478018798109",
         "Investigation Title": "Investigation"
@@ -317,7 +334,64 @@ export const STUDIES: Study[] = [
           "Study Publication Title": "Bioinformatics-based selection of a model cell type for in vitro biomaterial testing"
         }
       ]
-    }
+    },
+    "id": "AVhDnyLlcZts01DBflFU",
+    "sampleIds": [
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      152,
+      153
+    ]
   }
 ]
 
@@ -326,12 +400,12 @@ export const STUDIES: Study[] = [
 
  import reader, config, json
  cfg = config.Config()
- a = reader.read_assay(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/a_transcription_micro_1.txt', 'r'))
- s = reader.read_study_sample(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/s_study_sample.txt', 'r'))
+ a = reader.read_assay(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/a_transcription_micro_1.txt', 'rb'))
+ s = reader.read_study_sample(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/s_study_sample.txt', 'rb'))
  d = reader.join_study_sample_and_assay(reader.clean_up_study_samples(s), reader.clean_up_assay(a))
  d = reader.apply_special_treatments_to_study_sample(d)
- a2 = reader.read_assay(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/a_transcription_micro_1.txt', 'r'))
- s2 = reader.read_study_sample(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/s_study_sample.txt', 'r'))
+ a2 = reader.read_assay(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/a_transcription_micro_1.txt', 'rb'))
+ s2 = reader.read_study_sample(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/s_study_sample.txt', 'rb'))
  d2 = reader.join_study_sample_and_assay(reader.clean_up_study_samples(s2), reader.clean_up_assay(a2))
  d2 = reader.apply_special_treatments_to_study_sample(d2)
 
@@ -340,12 +414,12 @@ export const STUDIES: Study[] = [
  for i, (k, v) in enumerate(d.iteritems()):
      vv = v.copy()
      vv['Sample Name'] = k
-     result.append({'id': i, 'studyId': 1, '_source': vv})
+     result.append({'id': i, 'studyId': 'AVhDnx1kcZts01DBflFT', '_source': vv})
 
  for i, (k, v) in enumerate(d2.iteritems()):
      vv = v.copy()
      vv['Sample Name'] = k
-     result.append({'id': 100+i, 'studyId': 2, '_source': vv})
+     result.append({'id': 100+i, 'studyId': 'AVhDnyLlcZts01DBflFU', '_source': vv})
 
  print(json.dumps(result, indent=2, sort_keys=True))
 
@@ -391,7 +465,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 0,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -438,7 +512,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 1,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -485,7 +559,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 2,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -527,7 +601,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 3,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -569,7 +643,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 4,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -616,7 +690,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 5,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -663,7 +737,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 6,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -710,7 +784,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 7,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -757,7 +831,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 8,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -804,7 +878,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 9,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -851,7 +925,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 10,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -893,7 +967,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 11,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -940,7 +1014,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 12,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -987,7 +1061,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 13,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -1029,7 +1103,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 14,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -1071,7 +1145,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 15,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -1118,7 +1192,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 16,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -1165,7 +1239,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 17,
-    "studyId": 1
+    "studyId": "AVhDnx1kcZts01DBflFT"
   },
   {
     "_source": {
@@ -1181,7 +1255,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 7,
@@ -1211,7 +1285,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 100,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1227,7 +1301,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteoblast",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM phenol-free",
       "Gene expression type": "Microarray",
       "Group ID": 4,
@@ -1257,7 +1331,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 101,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1273,7 +1347,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteosarcoma",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 13,
@@ -1303,7 +1377,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 102,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1317,7 +1391,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "stromal cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 12,
@@ -1345,7 +1419,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 103,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1359,7 +1433,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 3,
@@ -1387,7 +1461,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 104,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1403,7 +1477,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "stromal cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 10,
@@ -1433,7 +1507,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 105,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1449,7 +1523,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "epithelial cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 16,
@@ -1479,7 +1553,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 106,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1493,7 +1567,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "epithelial cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 18,
@@ -1521,7 +1595,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 107,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1535,7 +1609,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "stromal cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 11,
@@ -1563,7 +1637,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 108,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1577,7 +1651,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 8,
@@ -1605,7 +1679,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 109,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1619,7 +1693,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "stromal cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 11,
@@ -1647,7 +1721,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 110,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1661,7 +1735,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 9,
@@ -1689,7 +1763,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 111,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1703,7 +1777,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "stromal cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 12,
@@ -1731,7 +1805,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 112,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1745,7 +1819,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteosarcoma",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 14,
@@ -1773,7 +1847,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 113,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1787,7 +1861,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteoblast",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM phenol-free",
       "Gene expression type": "Microarray",
       "Group ID": 6,
@@ -1815,7 +1889,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 114,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1829,7 +1903,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 8,
@@ -1857,7 +1931,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 115,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1871,7 +1945,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteosarcoma",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 14,
@@ -1899,7 +1973,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 116,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1913,7 +1987,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 2,
@@ -1941,7 +2015,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 117,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1955,7 +2029,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteosarcoma",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 15,
@@ -1983,7 +2057,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 118,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -1997,7 +2071,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteoblast",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM phenol-free",
       "Gene expression type": "Microarray",
       "Group ID": 6,
@@ -2025,7 +2099,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 119,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2039,7 +2113,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteoblast",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM phenol-free",
       "Gene expression type": "Microarray",
       "Group ID": 5,
@@ -2067,7 +2141,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 120,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2083,7 +2157,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteoblast",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM phenol-free",
       "Gene expression type": "Microarray",
       "Group ID": 4,
@@ -2113,7 +2187,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 121,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2127,7 +2201,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "stromal cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 12,
@@ -2155,7 +2229,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 122,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2171,7 +2245,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "epithelial cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 16,
@@ -2201,7 +2275,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 123,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2215,7 +2289,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteosarcoma",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 15,
@@ -2243,7 +2317,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 124,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2259,7 +2333,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 7,
@@ -2289,7 +2363,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 125,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2303,7 +2377,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 2,
@@ -2331,7 +2405,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 126,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2347,7 +2421,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteoblast",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM phenol-free",
       "Gene expression type": "Microarray",
       "Group ID": 4,
@@ -2377,7 +2451,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 127,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2391,7 +2465,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteosarcoma",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 15,
@@ -2419,7 +2493,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 128,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2435,7 +2509,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "epithelial cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 16,
@@ -2465,7 +2539,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 129,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2479,7 +2553,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteoblast",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM phenol-free",
       "Gene expression type": "Microarray",
       "Group ID": 5,
@@ -2507,7 +2581,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 130,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2521,7 +2595,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "epithelial cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 17,
@@ -2549,7 +2623,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 131,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2563,7 +2637,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 3,
@@ -2591,7 +2665,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 132,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2607,7 +2681,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 7,
@@ -2637,7 +2711,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 133,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2651,7 +2725,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteoblast",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM phenol-free",
       "Gene expression type": "Microarray",
       "Group ID": 6,
@@ -2679,7 +2753,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 134,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2695,7 +2769,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "stromal cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 10,
@@ -2725,7 +2799,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 135,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2741,7 +2815,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 1,
@@ -2771,7 +2845,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 136,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2785,7 +2859,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 8,
@@ -2813,7 +2887,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 137,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2827,7 +2901,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteosarcoma",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 14,
@@ -2855,7 +2929,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 138,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2869,7 +2943,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 9,
@@ -2897,7 +2971,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 139,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2913,7 +2987,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteosarcoma",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 13,
@@ -2943,7 +3017,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 140,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -2957,7 +3031,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "stromal cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 11,
@@ -2985,7 +3059,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 141,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3001,7 +3075,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteosarcoma",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 13,
@@ -3031,7 +3105,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 142,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3045,7 +3119,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 3,
@@ -3073,7 +3147,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 143,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3087,7 +3161,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 2,
@@ -3115,7 +3189,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 144,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3129,7 +3203,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "epithelial cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 17,
@@ -3157,7 +3231,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 145,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3171,7 +3245,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "epithelial cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 17,
@@ -3199,7 +3273,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 146,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3213,7 +3287,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "epithelial cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 18,
@@ -3241,7 +3315,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 147,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3257,7 +3331,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 1,
@@ -3287,7 +3361,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 148,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3301,7 +3375,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "epithelial cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 18,
@@ -3329,7 +3403,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 149,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3343,7 +3417,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "osteoblast",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM phenol-free",
       "Gene expression type": "Microarray",
       "Group ID": 5,
@@ -3371,7 +3445,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 150,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3387,7 +3461,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "stromal cell",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "alpha-MEM",
       "Gene expression type": "Microarray",
       "Group ID": 10,
@@ -3417,7 +3491,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 151,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3431,7 +3505,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 9,
@@ -3459,7 +3533,7 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 152,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   },
   {
     "_source": {
@@ -3475,7 +3549,7 @@ export const SAMPLES: Sample[] = [
       "Biologically degradable": "yes",
       "Cell type": "pericyte",
       "Control": false,
-      "Culture Duration": 48,
+      "Culture Duration (hours)": 48.0,
       "Culture medium": "DMEM",
       "Gene expression type": "Microarray",
       "Group ID": 1,
@@ -3505,6 +3579,6 @@ export const SAMPLES: Sample[] = [
       "Transcriptomics Assay Detail: Normalization Name": "quantile"
     },
     "id": 153,
-    "studyId": 2
+    "studyId": "AVhDnyLlcZts01DBflFU"
   }
 ]

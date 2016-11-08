@@ -80,13 +80,13 @@ export interface RawStudy {
 }
 
 export interface Study {
-  id: number,
+  id: string,
   sampleIds: Array<number>,
   _source: RawStudy
 }
 
 export interface Sample {
   id: number,
-  studyId: number,
+  studyId: string,
   _source: Object
 }

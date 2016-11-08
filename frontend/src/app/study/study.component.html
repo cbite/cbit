@@ -3,9 +3,8 @@
 </div>
 
 <div *ngIf="ready && study">
-  <h1>Study ID {{ study.id }}</h1>
-  <h2>Name: {{ study._source['STUDY']['Study Title'] }}</h2>
-  <h3>Researchers Involved: {{ study._source['STUDY']['Study Researchers Involved'] }}</h3>
+  <h1>{{ study._source['STUDY']['Study Title'] }}</h1>
+  <h2>{{ study._source['STUDY']['Study Researchers Involved'] }}</h2>
 
   <h3>Extra Info</h3>
   <ul>

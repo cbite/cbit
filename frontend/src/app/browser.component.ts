@@ -52,8 +52,8 @@ export class BrowserComponent {
 
   matches: UnifiedMatch[] = [];
   sampleKeys: string[];
-  commonKeys: { [studyId: number]: { [key: string]: any } };
-  areSamplesHidden: { [studyId: number]: boolean } = {};
+  commonKeys: { [studyId: string]: { [key: string]: any } };
+  areSamplesHidden: { [studyId: string]: boolean } = {};
   numMatchingStudies: number = 0;
   numMatchingSamples: number = 0;
   ready = false;
@@ -127,7 +127,7 @@ export class BrowserComponent {
     this.numMatchingSamples = this.matches.reduce((soFar, studyMatch) => soFar + studyMatch.sampleMatches.length, 0);
   }
 
-  distinctKeyValues(studyId: number, sample: Sample): Object {
+  distinctKeyValues(studyId: string, sample: Sample): Object {
     let ignoreSampleKeys = {
       'Sample ID': true
     }
@@ -144,7 +144,7 @@ export class BrowserComponent {
     return result;
   }
 
-  filteredDistinctKeyValues(studyId: number, sample: Sample): Object {
+  filteredDistinctKeyValues(studyId: string, sample: Sample): Object {
     var result = {};
     for (let key of Object.keys(sample._source)) {
       if ((key in KEYS_IN_MINI_SUMMARY) &&

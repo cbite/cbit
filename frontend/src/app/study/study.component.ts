@@ -12,7 +12,7 @@ export class StudyComponent implements OnInit {
   study: Study;
   samples: Sample[];
   sampleKeys: string[];
-  commonKeys: { [studyId: number]: { [key: string]: any } };
+  commonKeys: { [key: string]: any };
   ready = false
 
   constructor(
@@ -24,7 +24,7 @@ export class StudyComponent implements OnInit {
 
   ngOnInit(): void {
     this._route.params.forEach((params: Params) => {
-      let id = +params['id'];
+      let id: string = params['id'];
       //this._studyService.getStudy(id)
       //  .then(study => this.study = study);
       this._studyService.getStudyAndRelatedSamplesAsync(id).then(result => this.processStudyAndSamples(result));

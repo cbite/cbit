@@ -21,7 +21,7 @@ export interface SampleMatch {
 }
 
 export interface UnifiedMatch {
-  studyId: number,
+  studyId: string,
   study: Study,
   isFullTextMatch?: boolean,
   sampleMatches: SampleMatch[],
@@ -75,7 +75,7 @@ export class StudyService {
     );
   }
 
-  getStudyAndRelatedSamplesAsync(studyId: number): Promise<StudyAndSamples> {
+  getStudyAndRelatedSamplesAsync(studyId: string): Promise<StudyAndSamples> {
     return (
       new Promise<StudyAndSamples>(resolve => setTimeout(resolve, 2000)) // delay 2 seconds
         .then(() => {
@@ -122,7 +122,7 @@ export class StudyService {
     return STUDIES;
   }
 
-  private getStudy(id: number): Study {
+  private getStudy(id: string): Study {
     return this.getStudies().find(study => study.id === id);
   }
 
