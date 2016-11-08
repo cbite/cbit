@@ -53,7 +53,7 @@ export class StudyService {
     var
       allSampleFilterLabels = {}
       ;
-    for (let sample of this..getSamples()) {
+    for (let sample of this.getSamples()) {
       for (let category in sample._source) {
         allSampleFilterLabels[category] = true;
       }

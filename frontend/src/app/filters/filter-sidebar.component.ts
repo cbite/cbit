@@ -38,7 +38,7 @@ export const HIDDEN_SAMPLE_FILTER_LABELS = {
   </form>
   
   <div *ngFor="let category of allSampleFilterLabels">
-    <sample-filters *ngIf='showSampleFilter(category)' [category]="category"></sample-filters>
+    <sample-filters *ngIf='showSampleFilter(category)' [category]="category" [counts]="allSampleFilterMatchCounts[category]"></sample-filters>
   </div>
   
   <h1>Applied Filters (DEBUG)</h1>
@@ -50,7 +50,8 @@ export class FilterSidebarComponent implements OnInit {
   // For inspiration, see: http://blog.thoughtram.io/angular/2016/01/06/taking-advantage-of-observables-in-angular2.html
   searchTextInForm = new FormControl();
   includeControlsInForm = new FormControl();
-  allSampleFilterLabels = {};
+  allSampleFilterLabels: string[] = [];
+  allSampleFilterMatchCounts = {};
 
   showSampleFilter(category: string): boolean {
     return !(category in HIDDEN_SAMPLE_FILTER_LABELS);
@@ -68,8 +69,6 @@ export class FilterSidebarComponent implements OnInit {
     this.includeControlsInForm.valueChanges
       .distinctUntilChanged()  // Don't emit the same value twice
       .subscribe(newIncludeControls => _filtersService.setIncludeControls(newIncludeControls))
-
-    this._filtersService.filters.subscribe(filters => this.updateFilters(filters));
   }
 
   updateFilters(filters: FiltersState): void {
@@ -82,6 +81,14 @@ export class FilterSidebarComponent implements OnInit {
       // emitEvent: false => Avoid event loops
       this.includeControlsInForm.setValue(filters.includeControls, {emitEvent: false});
     }
+
+    let newAllSampleFilterMatchCounts = {};
+    for (let category of this.allSampleFilterLabels) {
+      if (this.showSampleFilter(category)) {
+        newAllSampleFilterMatchCounts[category] = this._studyService.getSampleCounts(filters, category);
+      }
+    }
+    this.allSampleFilterMatchCounts = newAllSampleFilterMatchCounts;
   }
 
   makeSampleFilterLabels(): any {
@@ -99,6 +106,7 @@ export class FilterSidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.allSampleFilterLabels = this.makeSampleFilterLabels();
+    this._filtersService.filters.subscribe(filters => this.updateFilters(filters));
   }
 
   clearFilters(): void {

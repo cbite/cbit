@@ -22,11 +22,11 @@ import * as _ from 'lodash';
 })
 export class SampleFiltersComponent implements OnInit {
   @Input() category: string;
-  categoryRealName: string;
-  isHidden = false;
-  counts: {
+  @Input() counts: {
     [value: string]: number   // Free-form mapping of values to counts
   } = {}
+  categoryRealName: string;
+  isHidden = false;
 
   isTrivial(): boolean {
     return (Object.keys(this.counts).length <= 1);
@@ -39,11 +39,6 @@ export class SampleFiltersComponent implements OnInit {
 
   ngOnInit(): void {
     this.categoryRealName = (this.category.substr(0, 1) == '*' ? this.category.substr(1) : this.category);
-    this._filtersService.filters.subscribe(filters => this.update(filters))
-  }
-
-  update(filters: FiltersState): void {
-    this.counts = this._studyService.getSampleCounts(filters, this.category);
   }
 
   isValIncluded(valueName: string): boolean {
