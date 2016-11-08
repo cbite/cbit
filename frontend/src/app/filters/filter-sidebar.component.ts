@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {FiltersService, FiltersState} from "../services/filters.service";
-import {StudyService} from "../services/study.service";
+import {StudyService, ManySampleCounts} from "../services/study.service";
 import * as _ from 'lodash';
 
 export const HIDDEN_SAMPLE_FILTER_LABELS = {
@@ -78,7 +78,30 @@ export class FilterSidebarComponent implements OnInit {
       .subscribe(newIncludeControls => _filtersService.setIncludeControls(newIncludeControls))
   }
 
-  updateFilters(filters: FiltersState): void {
+  ngOnInit(): void {
+    this.makeSampleFilterLabels()
+      .then(allSampleFilterLabels => {
+        this.allSampleFilterLabels = allSampleFilterLabels;
+
+        this._filtersService.filters
+          .subscribe(filters => this.updateFiltersUI(filters));
+
+        // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
+        this._filtersService.filters
+          .switchMap(filters => {
+            this.ready = false;
+            return this._studyService.getManySampleCountsAsync(filters,
+              this.allSampleFilterLabels.filter(category => this.showSampleFilter(category))
+            );
+          })
+          .subscribe(newMatchCounts => {
+            this.allSampleFilterMatchCounts = newMatchCounts;
+            this.ready = true;
+          });
+      });
+  }
+
+  updateFiltersUI(filters: FiltersState): void {
     if (filters.searchText !== this.searchTextInForm.value) {
       // emitEvent: false => Avoid event loops
       this.searchTextInForm.setValue(filters.searchText, {emitEvent: false});
@@ -88,14 +111,6 @@ export class FilterSidebarComponent implements OnInit {
       // emitEvent: false => Avoid event loops
       this.includeControlsInForm.setValue(filters.includeControls, {emitEvent: false});
     }
-
-    this.ready = false;
-    this._studyService.getManySampleCountsAsync(filters,
-      this.allSampleFilterLabels.filter(category => this.showSampleFilter(category))
-    ).then(result => {
-      this.allSampleFilterMatchCounts = result;
-      this.ready = true;
-    })
   }
 
   makeSampleFilterLabels(): Promise<string[]> {
@@ -112,14 +127,6 @@ export class FilterSidebarComponent implements OnInit {
       this._studyService.getSampleMetadataFieldNamesAsync()
         .then(names => names.sort((a,b) => withoutStar(a).localeCompare(withoutStar(b))))
     );
-  }
-
-  ngOnInit(): void {
-    this.makeSampleFilterLabels()
-      .then(allSampleFilterLabels => {
-        this.allSampleFilterLabels = allSampleFilterLabels;
-        this._filtersService.filters.subscribe(filters => this.updateFilters(filters));
-      });
   }
 
   clearFilters(): void {
