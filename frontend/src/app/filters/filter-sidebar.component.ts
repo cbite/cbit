@@ -99,8 +99,8 @@ export class FilterSidebarComponent implements OnInit {
             this.allSampleFilterMatchCounts = newMatchCounts;
             this.ready = true;
 
-            // Force Angular2 change detection to see ready = true change.  Not sure why it's not being
-            // picked up automatically
+            // Force Angular2 change detection to see ready = true change.
+            // Not sure why it's not being picked up automatically
             this.changeDetectorRef.detectChanges();
           });
       });
@@ -118,7 +118,7 @@ export class FilterSidebarComponent implements OnInit {
     }
   }
 
-  makeSampleFilterLabels(): Promise<string[]> {
+  makeSampleFilterLabels(): PromiseLike<string[]> {
     // Make a list of all possible filterable properties in samples
 
     var withoutStar = function(s: string): string {

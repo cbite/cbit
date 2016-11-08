@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import {STUDIES, SAMPLES} from '../common/mock-studies';
 import * as _ from 'lodash';
 import {FiltersState, EMPTY_FILTERS, SampleFilter, FilterMode} from "./filters.service";
+import { Client as ESClient, SearchResponse as ESSearchResponse } from "elasticsearch";
 
 export const NULL_CATEGORY_NAME = '<None>';
 
@@ -46,21 +47,12 @@ export class StudyService {
 
   // PUBLIC INTERFACE
   // ================
-  getSampleMetadataFieldNamesAsync(): Promise<string[]> {
+  getSampleMetadataFieldNamesAsync(): PromiseLike<string[]> {
     return (
-      new Promise<string[]>(resolve => setTimeout(resolve, 2000)) // delay 2 seconds
-        .then(() => {
-          var
-            allSampleFilterLabels = {}
-            ;
-          for (let sample of this.getSamples()) {
-            for (let category in sample._source) {
-              allSampleFilterLabels[category] = true;
-            }
-          }
-
-          return Object.keys(allSampleFilterLabels);
-        })
+      this.esClient.indices.getMapping({
+        index: 'cbit',
+        type: 'sample'
+      }).then(mappings => Object.keys(mappings['cbit'].mappings['sample'].properties))
     );
   }
 
@@ -106,6 +98,14 @@ export class StudyService {
 
   private _lastFilters: FiltersState;
   private _lastStudyMatches: Study[];
+  private esClient: ESClient;
+
+  constructor() {
+    this.esClient = new ESClient({
+      host: 'http://localhost:9200',
+      log: 'trace'
+    })
+  }
 
   private getStudies(): Study[] {
     return STUDIES;
