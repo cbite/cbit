@@ -49,8 +49,17 @@ export class StudyService {
 
   // PUBLIC INTERFACE
   // ================
-  getSamples(): Sample[] {
-    return SAMPLES;
+  getSampleMetadataFieldNames(): string[] {
+    var
+      allSampleFilterLabels = {}
+      ;
+    for (let sample of this..getSamples()) {
+      for (let category in sample._source) {
+        allSampleFilterLabels[category] = true;
+      }
+    }
+
+    return Object.keys(allSampleFilterLabels);
   }
 
   getStudyAndRelatedSamples(studyId: number): StudyAndSamples {
@@ -194,6 +203,10 @@ export class StudyService {
 
   private getStudy(id: number): Study {
     return this.getStudies().find(study => study.id === id);
+  }
+
+  private getSamples(): Sample[] {
+    return SAMPLES;
   }
 
   private getSample(id: number): Sample {

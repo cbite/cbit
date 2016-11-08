@@ -86,15 +86,6 @@ export class FilterSidebarComponent implements OnInit {
 
   makeSampleFilterLabels(): any {
     // Make a list of all possible filterable properties in samples
-    // TODO: have the back-end maintain this list
-    var
-      allSampleFilterLabels = {}
-      ;
-    for (let sample of this._studyService.getSamples()) {
-      for (let category in sample._source) {
-        allSampleFilterLabels[category] = true;
-      }
-    }
 
     var withoutStar = function(s: string): string {
       if (s.substr(0, 1) == '*') {
@@ -103,7 +94,7 @@ export class FilterSidebarComponent implements OnInit {
         return s;
       }
     }
-    return Object.keys(allSampleFilterLabels).sort((a,b) => withoutStar(a).localeCompare(withoutStar(b)));
+    return this._studyService.getSampleMetadataFieldNames().sort((a,b) => withoutStar(a).localeCompare(withoutStar(b)));
   }
 
   ngOnInit(): void {
