@@ -69,11 +69,6 @@ export class StudyComponent implements OnInit {
     );
   }
 
-  selectSample(sample: Sample): void {
-    let link = ['/sample', sample.id];
-    this._router.navigate(link);
-  }
-
   isCategoryIsMultiValued(category: string): boolean {
     return Array.isArray(this.study._source[category]);
   }
