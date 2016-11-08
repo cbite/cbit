@@ -1,4 +1,5 @@
 <div>
+
   <!-- Ultra-ghetto 1990s-style table formatting for now -->
   <table width="100%">
     <tr>
@@ -6,7 +7,11 @@
         <filter-sidebar></filter-sidebar>
       </td>
 
-      <td style="vertical-align:top">
+      <td *ngIf="!ready" style="vertical-align:top">
+        <span style="color: red;font-style: italic">Calculating results...</span>
+      </td>
+
+      <td *ngIf="ready" style="vertical-align:top">
         <h1>Results ({{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples)</h1>
         <ul>
           <li *ngFor='let studyMatch of matches'>

@@ -102,7 +102,102 @@ export class StudyService {
     )
   }
 
-  getUnifiedMatches(filters: FiltersState): UnifiedMatch[] {
+  getUnifiedMatchesAsync(filters: FiltersState): Promise<UnifiedMatch[]> {
+    return (
+      new Promise<UnifiedMatch[]>(resolve => setTimeout(resolve, 2000))  // delay 2 seconds
+        .then(() => {
+          return this.getUnifiedMatchesSync(filters);
+        })
+    )
+  }
+
+
+  // PRIVATE DETAILS
+  // ===============
+
+  private _lastFilters: FiltersState;
+  private _lastStudyMatches: Study[];
+
+  private getStudies(): Study[] {
+    return STUDIES;
+  }
+
+  private getStudy(id: number): Study {
+    return this.getStudies().find(study => study.id === id);
+  }
+
+  private getSamples(): Sample[] {
+    return SAMPLES;
+  }
+
+  private getSample(id: number): Sample {
+    return this.getSamples().find(sample => sample.id === id);
+  }
+
+  private shouldSampleBeExcluded(category: string, sampleFilter: SampleFilter, sample: Sample): boolean {
+
+    var value: string;
+    if (category in sample._source) {
+      value = '' + sample._source[category];  // Force string comparison, yuck!
+    } else {
+      value = NULL_CATEGORY_NAME;
+    }
+
+    switch (sampleFilter.mode) {
+      case FilterMode.AllButThese:
+        return (value in sampleFilter.detail);
+      case FilterMode.OnlyThese:
+        return !(value in sampleFilter.detail);
+    }
+  }
+
+  private forceIncludeInSampleFilters(filters: FiltersState, category: string) {
+    if (category in filters.sampleFilters) {
+
+      let tweakedFilters = _.cloneDeep(filters);
+      delete tweakedFilters.sampleFilters[category];
+      return tweakedFilters;
+    } else {
+      return filters;
+    }
+  }
+
+  private getSampleCounts(filters: FiltersState, category: string): SampleCounts {
+    // Apply all filters *except* the one being queried (so we get a count of all studies that would be included
+    // if we allow a particular value for this category-subcategory pair)
+    var tweakedFilters = this.forceIncludeInSampleFilters(filters, category);
+    var matches = this.getUnifiedMatchesSync(tweakedFilters);
+
+    // Simulate ElasticSearch-like aggregation
+    let result = {};
+    for (let studyMatch of matches) {
+      for (let sampleMatch of studyMatch.sampleMatches) {
+        let sample = sampleMatch.sample;
+        var value = '' + (sample._source[category] || NULL_CATEGORY_NAME);
+        result[value] = (result[value] || 0) + 1;
+      }
+    }
+
+    return result;
+  }
+
+  private debugUnifiedMatches(label: string, matchesSoFar: UnifiedMatch[]): void {
+    /*
+    console.log(label);
+    console.log(JSON.stringify(matchesSoFar.map(studyMatch => {
+      var x = _.clone(studyMatch);
+      delete x.study;
+      x.sampleMatches = x.sampleMatches.map(sampleMatch => {
+        var y = _.clone(sampleMatch);
+        delete y.sample;
+        return y;
+      });
+      return x;
+    })));
+    */
+  }
+
+  private getUnifiedMatchesSync(filters: FiltersState): UnifiedMatch[] {
 
     // 0. Start by including everything
     let result: UnifiedMatch[] = this.getStudies().map(study => <UnifiedMatch>{
@@ -200,92 +295,6 @@ export class StudyService {
     // - Then impose study and sample metadata exclusions
 
     return result;
-  }
-
-
-  // PRIVATE DETAILS
-  // ===============
-
-  private _lastFilters: FiltersState;
-  private _lastStudyMatches: Study[];
-
-  private getStudies(): Study[] {
-    return STUDIES;
-  }
-
-  private getStudy(id: number): Study {
-    return this.getStudies().find(study => study.id === id);
-  }
-
-  private getSamples(): Sample[] {
-    return SAMPLES;
-  }
-
-  private getSample(id: number): Sample {
-    return this.getSamples().find(sample => sample.id === id);
-  }
-
-  private shouldSampleBeExcluded(category: string, sampleFilter: SampleFilter, sample: Sample): boolean {
-
-    var value: string;
-    if (category in sample._source) {
-      value = '' + sample._source[category];  // Force string comparison, yuck!
-    } else {
-      value = NULL_CATEGORY_NAME;
-    }
-
-    switch (sampleFilter.mode) {
-      case FilterMode.AllButThese:
-        return (value in sampleFilter.detail);
-      case FilterMode.OnlyThese:
-        return !(value in sampleFilter.detail);
-    }
-  }
-
-  private forceIncludeInSampleFilters(filters: FiltersState, category: string) {
-    if (category in filters.sampleFilters) {
-
-      let tweakedFilters = _.cloneDeep(filters);
-      delete tweakedFilters.sampleFilters[category];
-      return tweakedFilters;
-    } else {
-      return filters;
-    }
-  }
-
-  private getSampleCounts(filters: FiltersState, category: string): SampleCounts {
-    // Apply all filters *except* the one being queried (so we get a count of all studies that would be included
-    // if we allow a particular value for this category-subcategory pair)
-    var tweakedFilters = this.forceIncludeInSampleFilters(filters, category);
-    var matches = this.getUnifiedMatches(tweakedFilters);
-
-    // Simulate ElasticSearch-like aggregation
-    let result = {};
-    for (let studyMatch of matches) {
-      for (let sampleMatch of studyMatch.sampleMatches) {
-        let sample = sampleMatch.sample;
-        var value = '' + (sample._source[category] || NULL_CATEGORY_NAME);
-        result[value] = (result[value] || 0) + 1;
-      }
-    }
-
-    return result;
-  }
-
-  private debugUnifiedMatches(label: string, matchesSoFar: UnifiedMatch[]): void {
-    /*
-    console.log(label);
-    console.log(JSON.stringify(matchesSoFar.map(studyMatch => {
-      var x = _.clone(studyMatch);
-      delete x.study;
-      x.sampleMatches = x.sampleMatches.map(sampleMatch => {
-        var y = _.clone(sampleMatch);
-        delete y.sample;
-        return y;
-      });
-      return x;
-    })));
-    */
   }
 
   private deepFind(target: (Object|Array<any>), searchText: string, onlyForKeys?: Set<string>): boolean {
