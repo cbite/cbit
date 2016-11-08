@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from "@angular/core";
-import {FiltersState, FiltersService, EMPTY_FILTERS} from "../services/filters.service";
+import {FiltersState, FiltersService, EMPTY_FILTERS, FilterMode} from "../services/filters.service";
 import {StudyService, NULL_CATEGORY_NAME} from "../services/study.service";
 import * as _ from 'lodash';
 
@@ -33,7 +33,6 @@ export class SampleFiltersComponent implements OnInit {
   }
 
   constructor(
-    private _studyService: StudyService,
     private _filtersService: FiltersService
   ) {}
 
@@ -44,8 +43,15 @@ export class SampleFiltersComponent implements OnInit {
   isValIncluded(valueName: string): boolean {
     let curFilters = this._filtersService.getFilters().sampleFilters;
     if (this.category in curFilters) {
-      // Checked if true or absent, unchecked if false
-      return (curFilters[this.category][valueName] !== false);
+      let categoryFilter = curFilters[this.category];
+      switch (categoryFilter.mode) {
+        case FilterMode.AllButThese:
+          // Checked if true or absent, unchecked if false
+          return !(categoryFilter.detail[valueName] === false);
+        case FilterMode.OnlyThese:
+          // Checked if true, unchecked if false or absent
+          return  (categoryFilter.detail[valueName] === true);
+      }
     } else {
       return true;   // If no filters specified, default to all values
     }
@@ -60,8 +66,7 @@ export class SampleFiltersComponent implements OnInit {
   }
 
   selectNone(): void {
-    var excludedValues = Object.keys(this._studyService.getSampleCounts(EMPTY_FILTERS, this.category));
-    this._filtersService.setSampleFilterNone(this.category, excludedValues);
+    this._filtersService.setSampleFilterNone(this.category);
   }
 
   decodePhaseCompositionLike(s: string, entryFormatter: (component: string, value: number) => string): string {

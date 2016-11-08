@@ -2,7 +2,7 @@ import {Study, Sample} from '../common/study.model';
 import {Injectable} from "@angular/core";
 import {STUDIES, SAMPLES} from '../common/mock-studies';
 import * as _ from 'lodash';
-import {FiltersState, EMPTY_FILTERS} from "./filters.service";
+import {FiltersState, EMPTY_FILTERS, SampleFilter, FilterMode} from "./filters.service";
 
 export const NULL_CATEGORY_NAME = '<None>';
 
@@ -123,10 +123,10 @@ export class StudyService {
         sampleMatch.passesMetadataFilters = true;
       });
     });
-    _.forOwn(filters.sampleFilters, (d, category) => {
+    _.forOwn(filters.sampleFilters, (sampleFilter, category) => {
       result.forEach(studyMatch => {
         studyMatch.sampleMatches.forEach(sampleMatch => {
-          if (this.shouldSampleBeExcluded(category, d, sampleMatch.sample)) {
+          if (this.shouldSampleBeExcluded(category, sampleFilter, sampleMatch.sample)) {
             sampleMatch.passesMetadataFilters = false;
           }
         });
@@ -213,9 +213,8 @@ export class StudyService {
     return this.getSamples().find(sample => sample.id === id);
   }
 
-  private shouldSampleBeExcluded(category: string, excludeValuesMap: {[valueName: string]: boolean}, sample: Sample): boolean {
+  private shouldSampleBeExcluded(category: string, sampleFilter: SampleFilter, sample: Sample): boolean {
 
-    // Have to be careful: study._source[category] may be a list!
     var value: string;
     if (category in sample._source) {
       value = '' + sample._source[category];  // Force string comparison, yuck!
@@ -223,7 +222,12 @@ export class StudyService {
       value = NULL_CATEGORY_NAME;
     }
 
-    return value in excludeValuesMap;
+    switch (sampleFilter.mode) {
+      case FilterMode.AllButThese:
+        return (value in sampleFilter.detail);
+      case FilterMode.OnlyThese:
+        return !(value in sampleFilter.detail);
+    }
   }
 
   private forceIncludeInSampleFilters(filters: FiltersState, category: string) {

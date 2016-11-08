@@ -1,11 +1,22 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
 
-interface SampleFilters {
-  [category: string]: {
-    [includeValueName: string]: boolean
-    // assume true if absent
+export const enum FilterMode {
+  AllButThese,
+  OnlyThese
+}
+
+export interface SampleFilter {
+  mode: FilterMode,
+  detail: {
+    // If mode is AllButThese, include every value category except those listed below.
+    // Otherwise, if mode is OnlyThese, only include the values below.
+    [valueName: string]: boolean
   }
+}
+
+export interface SampleFilters {
+  [category: string]: SampleFilter
 }
 
 export interface FiltersState {
@@ -60,18 +71,27 @@ export class FiltersService {
 
   setSampleFilter(category: string, valueName: string, include: boolean): void {
     // Copy out relevant filters section, if any
-    let curFilters = _.cloneDeep(this.getFilters().sampleFilters);
-    let theseFilters = Object.assign({}, curFilters[category] || {})
+    let curFilters: SampleFilters = _.cloneDeep(this.getFilters().sampleFilters);
+    let theseFilters = Object.assign({}, curFilters[category] || {mode: FilterMode.AllButThese, detail: {}})
 
-    if(include) {
-      // Filter values default to "true" if absent from filters dictionary, so remove this item
-      delete theseFilters[valueName];
+    if (theseFilters.mode === FilterMode.AllButThese) {
+      if (include) {
+        // Filter values default to "true" if absent from filters dictionary, so remove this item
+        delete theseFilters.detail[valueName];
+      } else {
+        theseFilters.detail[valueName] = false;
+      }
     } else {
-      theseFilters[valueName] = false;
+      if (include) {
+        theseFilters.detail[valueName] = true;
+      } else {
+        // Filter values default to "false" if absent from filters dictionary, so remove this item
+        delete theseFilters.detail[valueName];
+      }
     }
 
-    // If theseFilters is empty, stop filtering on this category
-    if (_.isEmpty(theseFilters)) {
+    // If theseFilters is empty & the mode is AllButThese, stop filtering on this category
+    if (theseFilters.mode === FilterMode.AllButThese && _.isEmpty(theseFilters.detail)) {
       delete curFilters[category];
     } else {
       curFilters[category] = theseFilters;
@@ -87,13 +107,12 @@ export class FiltersService {
     this.setSampleFilters(curFilters);
   }
 
-  setSampleFilterNone(category: string, excludedValues: Array<string>): void {
+  setSampleFilterNone(category: string): void {
     let curFilters = _.cloneDeep(this.getFilters().sampleFilters);
-    let thisFilter = {}
-    for (let v of excludedValues) {
-      thisFilter[v] = false;
+    curFilters[category] = {
+      mode: FilterMode.OnlyThese,
+      detail: {}
     }
-    curFilters[category] = thisFilter;
     this.setSampleFilters(curFilters);
   }
 
