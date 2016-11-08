@@ -37,8 +37,14 @@ export const HIDDEN_SAMPLE_FILTER_LABELS = {
     Include controls
   </form>
   
-  <div *ngFor="let category of allSampleFilterLabels">
-    <sample-filters *ngIf='showSampleFilter(category)' [category]="category" [counts]="allSampleFilterMatchCounts[category]"></sample-filters>
+  <div *ngIf="!ready">
+    <span style="color: red;font-style: italic">Building filters list...</span>
+  </div>
+  
+  <div *ngIf="ready">
+    <div *ngFor="let category of allSampleFilterLabels">
+      <sample-filters *ngIf='showSampleFilter(category)' [category]="category" [counts]="allSampleFilterMatchCounts[category]"></sample-filters>
+    </div>
   </div>
   
   <h1>Applied Filters (DEBUG)</h1>
@@ -52,6 +58,7 @@ export class FilterSidebarComponent implements OnInit {
   includeControlsInForm = new FormControl();
   allSampleFilterLabels: string[] = [];
   allSampleFilterMatchCounts = {};
+  ready = false;
 
   showSampleFilter(category: string): boolean {
     return !(category in HIDDEN_SAMPLE_FILTER_LABELS);
@@ -82,12 +89,14 @@ export class FilterSidebarComponent implements OnInit {
       this.includeControlsInForm.setValue(filters.includeControls, {emitEvent: false});
     }
 
+    this.ready = false;
     this.allSampleFilterMatchCounts = this._studyService.getManySampleCounts(filters,
       this.allSampleFilterLabels.filter(category => this.showSampleFilter(category))
     )
+    this.ready = true;
   }
 
-  makeSampleFilterLabels(): any {
+  makeSampleFilterLabels(): Promise<string[]> {
     // Make a list of all possible filterable properties in samples
 
     var withoutStar = function(s: string): string {
@@ -97,12 +106,18 @@ export class FilterSidebarComponent implements OnInit {
         return s;
       }
     }
-    return this._studyService.getSampleMetadataFieldNames().sort((a,b) => withoutStar(a).localeCompare(withoutStar(b)));
+    return (
+      this._studyService.getSampleMetadataFieldNamesAsync()
+        .then(names => names.sort((a,b) => withoutStar(a).localeCompare(withoutStar(b))))
+    );
   }
 
   ngOnInit(): void {
-    this.allSampleFilterLabels = this.makeSampleFilterLabels();
-    this._filtersService.filters.subscribe(filters => this.updateFilters(filters));
+    this.makeSampleFilterLabels()
+      .then(allSampleFilterLabels => {
+        this.allSampleFilterLabels = allSampleFilterLabels;
+        this._filtersService.filters.subscribe(filters => this.updateFilters(filters));
+      });
   }
 
   clearFilters(): void {

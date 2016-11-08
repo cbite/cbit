@@ -49,17 +49,22 @@ export class StudyService {
 
   // PUBLIC INTERFACE
   // ================
-  getSampleMetadataFieldNames(): string[] {
-    var
-      allSampleFilterLabels = {}
-      ;
-    for (let sample of this.getSamples()) {
-      for (let category in sample._source) {
-        allSampleFilterLabels[category] = true;
-      }
-    }
+  getSampleMetadataFieldNamesAsync(): Promise<string[]> {
+    return (
+      new Promise<string[]>(resolve => setTimeout(resolve, 2000)) // delay 2 seconds
+        .then(() => {
+          var
+            allSampleFilterLabels = {}
+            ;
+          for (let sample of this.getSamples()) {
+            for (let category in sample._source) {
+              allSampleFilterLabels[category] = true;
+            }
+          }
 
-    return Object.keys(allSampleFilterLabels);
+          return Object.keys(allSampleFilterLabels);
+        })
+    );
   }
 
   getStudyAndRelatedSamples(studyId: number): StudyAndSamples {
