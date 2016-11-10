@@ -7,6 +7,7 @@ export interface RawStudyInfo {
 
 export interface RawStudyPublication {
   // Only describing the metadata we actually use in the front-end
+  'Study Publication Author List'?: string,
   "Study Publication DOI"?: string,
   "Study PubMed ID"?: string,
   [propName: string]: any    // Allow anything else as well

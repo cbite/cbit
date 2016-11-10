@@ -1,3 +1,6 @@
+// TODO: This code needs URGENT re-factoring to make it less convoluted and more robust.
+// But for now, it works :-D
+
 import {Study, Sample, RawStudy} from '../common/study.model';
 import {Injectable} from "@angular/core";
 import * as _ from 'lodash';
@@ -436,7 +439,7 @@ export class StudyService {
   constructor() {
     this.esClient = new ESClient({
       host: 'http://localhost:9200'
-      //,log: 'trace'
+      //,log: 'trace'  // Uncomment to see every query to ES & its response
     })
   }
 }

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Study, RawStudyProtocol, RawStudyPublication} from "../common/study.model";
+import {Study, RawStudyPublication} from "../common/study.model";
 
 @Component({
   selector: 'pubmed-links',
