@@ -4,6 +4,7 @@ import {STUDIES, SAMPLES} from '../common/mock-studies';
 import * as _ from 'lodash';
 import {FiltersState, EMPTY_FILTERS, SampleFilter, FilterMode} from "./filters.service";
 import { Client as ESClient, SearchResponse as ESSearchResponse } from "elasticsearch";
+import {Observable} from "rxjs";
 
 export const NULL_CATEGORY_NAME = '<None>';
 
@@ -124,8 +125,119 @@ export class StudyService {
     );
   }
 
-  getManySampleCountsAsync(filters: FiltersState, categories: string[]): Promise<ManySampleCounts> {
-    return (
+  getManySampleCountsAsync(filters: FiltersState, categories: string[]): PromiseLike<ManySampleCounts> {
+    // 1. Get list of controls needed
+    let controlsPromise: PromiseLike<string[]>;
+    if (filters.includeControls) {
+      controlsPromise = this.esClient.search({
+        index: 'cbit',
+        type: 'sample',
+        body: this.buildESQueryEnumerateControls(filters)
+      }).then(rawResults => this.extractControlIdsFromResultOfESQueryEnumerateControls(rawResults));
+    } else {
+      controlsPromise = Promise.resolve([]);
+    }
+
+    return controlsPromise.then((controlIds: string[]) => {
+      let q = this.buildESQueryPieces({filters: filters, controlStudyIds: controlIds});
+      let aggs: any = {};
+
+      aggs['all_filters'] = {
+        filter: {
+          bool: {
+            should: [
+              { terms: { 'Sample Name': controlIds } },  // Include controls no matter what
+              {
+                bool: {
+                  must: Object.values(q.mustClause),
+                  must_not: Object.values(q.mustNotClause)
+                }
+              }
+            ]
+          }
+        },
+        aggs: {}
+      };
+
+      for (let category of categories) {
+
+        let thisAgg: any = aggs['all_filters'].aggs;
+
+        if (category in q.mustClause || category in q.mustNotClause) {
+
+          // Special filter for this category
+          let theseMustClauses = (
+            Object.keys(q.mustClause)
+              .filter( key => key !== category )
+              .reduce( (res, key) => (res[key] = q.mustClause[key], res), {} )
+          );
+          let theseMustNotClauses = (
+            Object.keys(q.mustNotClause)
+              .filter( key => key !== category )
+              .reduce( (res, key) => (res[key] = q.mustClause[key], res), {} )
+          );
+
+          aggs['Filtered ' + category] = {
+            filter: {
+              bool: {
+                should: [
+                  { terms: { 'Sample Name': controlIds } },  // Include controls no matter what
+                  {
+                    bool: {
+                      must: theseMustClauses,
+                      must_not: theseMustNotClauses
+                    }
+                  }
+                ]
+              }
+            },
+            aggs: {}
+          }
+          thisAgg = aggs['Filtered ' + category].aggs;
+        }
+
+        thisAgg[category] = {
+          terms: {
+            field: category,
+            missing: NULL_CATEGORY_NAME,
+            size: 100,   // Return first 100 field values
+            order: { _term: "asc" }
+          }
+        }
+      }
+
+      return this.esClient.search({
+        index: 'cbit', type: 'sample', body: {
+          query: {
+            bool: {
+              should: q.shouldClauses
+            }
+          },
+          size: 0,  // TODO: Think about sizes
+          aggs: aggs
+        }
+      });
+    }).then(rawAggs => {
+      let result: ManySampleCounts = { };
+
+      let oneAggSet: any;
+      let bucket: any;
+      for (oneAggSet of Object.values(rawAggs.aggregations)) {
+        for (let category of Object.keys(oneAggSet)) {
+          if (category !== 'doc_count') {
+            let thisResult: any = {}
+            for (bucket of oneAggSet[category].buckets) {
+              thisResult[bucket.key] = bucket.doc_count;
+            }
+            result[category] = thisResult;
+          }
+        }
+      }
+
+      return result;
+    });
+
+    /*return (
       new Promise<ManySampleCounts>(resolve => setTimeout(resolve, 2000)) // delay 2 seconds
         .then(() => {
           let result = {};
@@ -134,16 +246,105 @@ export class StudyService {
           }
           return result;
         })
-    )
+    )*/
   }
 
-  getUnifiedMatchesAsync(filters: FiltersState): Promise<UnifiedMatch[]> {
-    return (
+  getUnifiedMatchesAsync(filters: FiltersState): PromiseLike<UnifiedMatch[]> {
+    let q: any;
+
+    // Closure variable
+    let returnedSamples: any;
+
+    // 1. Get list of controls needed
+    let controlsPromise: PromiseLike<string[]>;
+    if (filters.includeControls) {
+      controlsPromise = this.esClient.search({
+        index: 'cbit',
+        type: 'sample',
+        body: this.buildESQueryEnumerateControls(filters)
+      }).then(rawResults => this.extractControlIdsFromResultOfESQueryEnumerateControls(rawResults));
+    } else {
+      controlsPromise = Promise.resolve([]);
+    }
+
+    return controlsPromise.then((controlIds: string[]) => {
+      q = this.buildESQueryPieces({filters: filters, controlStudyIds: controlIds});
+      return this.esClient.search({
+        index: 'cbit', type: 'sample', body: {
+          query: {
+            bool: {
+              should: [
+                { terms: { 'Sample Name': controlIds } },  // Include controls no matter what
+                {
+                  bool: {
+                    should: q.shouldClauses,
+                    must: Object.values(q.mustClause),
+                    must_not: Object.values(q.mustNotClause)
+                  }
+                }
+              ]
+            }
+          },
+          size: 10000,  // TODO: Think about sizes
+          aggs: {
+            studies: {
+              terms: {
+                field: "_parent",
+                size: 10000  // TODO: Think about size limits
+              }
+            }
+          }
+        }
+      });
+    }).then(rawReturnedSamples => {
+      returnedSamples = rawReturnedSamples;
+      let studyIds: string[] = returnedSamples.aggregations.studies.buckets.map((bucket: any) => bucket.key);
+      return this.esClient.search({
+        index: 'cbit', body: {
+          query: {
+            ids: {
+              type: 'study',
+              values: studyIds
+            }
+          },
+          size: 10000 // TODO: Think about sizes
+        }
+      });
+    }).then(returnedStudies => {
+      let unifiedMatches = {};
+      for (let study of returnedStudies.hits.hits) {
+        unifiedMatches[study._id] = {
+          studyId: study._id,
+          study: {
+            id: study._id,
+            sampleIds: [],
+            _source: study._source
+          },
+          sampleMatches: []
+        }
+      }
+
+      for (let sample of returnedSamples.hits.hits) {
+        unifiedMatches[sample._parent].sampleMatches.push({
+          sampleId: sample._id,
+          sample: {
+            id: 0,
+            studyId: sample._parent,
+            _source: sample._source
+          }
+        });
+      }
+
+      return Object.values(unifiedMatches);
+    });
+
+    /*return (
+
       new Promise<UnifiedMatch[]>(resolve => setTimeout(resolve, 2000))  // delay 2 seconds
         .then(() => {
           return this.getUnifiedMatchesSync(filters);
         })
-    )
+    )*/
   }
 
 
@@ -179,7 +380,7 @@ export class StudyService {
   }
 
   private extractControlIdsFromResultOfESQueryEnumerateControls(esResult: any): string[] {
-    return esResult.aggregations.controls.buckets.map(bucket => bucket.key);
+    return esResult.aggregations.controls.buckets.map((bucket: any) => bucket.key);
   }
 
   private buildESQueryPieces(params: {
@@ -202,6 +403,8 @@ export class StudyService {
           query: { match_phrase: { _all: params.filters.searchText } }
         }
       });
+    } else {
+      shouldClauses.push({ match_all: {} });
     }
 
     if (params.controlStudyIds && params.controlStudyIds.length > 0) {
@@ -209,15 +412,27 @@ export class StudyService {
     }
 
     _.forOwn(params.filters.sampleFilters, (sampleFilter: SampleFilter, category: string) => {
-      let termsQuery = {};
-      termsQuery[category] = Object.keys(sampleFilter.detail);
+      let termsQueryBody = {};
+      termsQueryBody[category] = Object.keys(sampleFilter.detail).filter(k => k != NULL_CATEGORY_NAME);
+      let queryClause: any = { terms: termsQueryBody };
+
+      if (NULL_CATEGORY_NAME in sampleFilter.detail) {
+        queryClause = {
+          bool: {
+            should: [
+              { bool: { must_not: { exists: { field: category } } } },
+              queryClause
+            ]
+          }
+        };
+      }
 
       switch (sampleFilter.mode) {
         case FilterMode.AllButThese:
-          mustNotClause[category] = termsQuery;
+          mustNotClause[category] = queryClause;
           break;
         case FilterMode.OnlyThese:
-          mustClause[category] = termsQuery;
+          mustClause[category] = queryClause;
           break;
       }
     });
@@ -235,8 +450,8 @@ export class StudyService {
 
   constructor() {
     this.esClient = new ESClient({
-      host: 'http://localhost:9200',
-      log: 'trace'
+      host: 'http://localhost:9200'
+      //,log: 'trace'
     })
   }
 

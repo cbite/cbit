@@ -7,12 +7,12 @@
         <filter-sidebar></filter-sidebar>
       </td>
 
-      <td *ngIf="!ready" style="vertical-align:top">
-        <span style="color: red;font-style: italic">Calculating results...</span>
-      </td>
-
-      <td *ngIf="ready" style="vertical-align:top">
+      <td style="vertical-align:top">
         <h1>Results ({{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples)</h1>
+        <div>
+          <span *ngIf="!ready" style="color: red;font-style: italic">Updating results...</span>
+          <span *ngIf="ready" style="color: grey;font-style: italic">Results up-to-date</span>
+        </div>
         <ul>
           <li *ngFor='let studyMatch of matches'>
             <a (click)="selectStudy(studyMatch.study)" href="javascript:void(0)">

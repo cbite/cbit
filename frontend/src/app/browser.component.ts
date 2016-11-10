@@ -1,10 +1,11 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectorRef} from '@angular/core';
 import {StudyService, UnifiedMatch, SampleMatch} from "./services/study.service";
 import {Study, Sample} from "./common/study.model";
 import {Router} from "@angular/router";
 import {FiltersService, FiltersState} from "./services/filters.service";
 import {FormControl, Form} from "@angular/forms";
 import {HIDDEN_SAMPLE_FILTER_LABELS} from "./filters/filter-sidebar.component";
+import {Observable} from "rxjs";
 
 export const KEYS_IN_MINI_SUMMARY = {
   // Key = value name in sample metadata
@@ -61,7 +62,8 @@ export class BrowserComponent {
   constructor(
     private _router: Router,
     private _studyService: StudyService,
-    private _filtersService: FiltersService
+    private _filtersService: FiltersService,
+    private changeDetectorRef: ChangeDetectorRef
   ) { }
 
   selectStudy(study: Study): void {
@@ -74,11 +76,15 @@ export class BrowserComponent {
     this._filtersService.filters
       .switchMap(filters => {
         this.ready = false;
-        return this._studyService.getUnifiedMatchesAsync(filters);
+        return Observable.fromPromise(<Promise<UnifiedMatch[]>> this._studyService.getUnifiedMatchesAsync(filters));
       })
       .subscribe(rawMatches => {
         this.updateMatches(rawMatches);
         this.ready = true;
+
+        // Force Angular2 change detection to see ready = true change.
+        // Not sure why it's not being picked up automatically
+        this.changeDetectorRef.detectChanges();
       });
   }
 

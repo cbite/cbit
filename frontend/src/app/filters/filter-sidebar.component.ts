@@ -3,6 +3,7 @@ import {FormControl} from "@angular/forms";
 import {FiltersService, FiltersState} from "../services/filters.service";
 import {StudyService, ManySampleCounts} from "../services/study.service";
 import * as _ from 'lodash';
+import {Observable} from "rxjs";
 
 export const HIDDEN_SAMPLE_FILTER_LABELS = {
   'Barcode': true,
@@ -28,20 +29,21 @@ export const HIDDEN_SAMPLE_FILTER_LABELS = {
   selector: 'filter-sidebar',
   template: `
   <h1>Filters <button (click)="clearFilters()">Clear</button></h1>
+  <div>
+    <span *ngIf="!ready" style="color: red;font-style: italic">Updating filters list...</span>
+    <span *ngIf="ready" style="color: grey;font-style: italic">Filters list up-to-date</span>
+  </div>
+  
   
   <form type="inline">
     <label for="searchText">Search for:</label>
     <input id="searchText" type="text" name='searchText' [formControl]="searchTextInForm"/>
     <br/>
     <input id="includeControls" type="checkbox" name="includeControls" [formControl]="includeControlsInForm"/>
-    Include controls
+    Also include associated controls
   </form>
   
-  <div *ngIf="!ready">
-    <span style="color: red;font-style: italic">Building filters list...</span>
-  </div>
-  
-  <div *ngIf="ready">
+  <div>
     <div *ngFor="let category of allSampleFilterLabels">
       <sample-filters *ngIf='showSampleFilter(category)' [category]="category" [counts]="allSampleFilterMatchCounts[category]"></sample-filters>
     </div>
@@ -91,9 +93,10 @@ export class FilterSidebarComponent implements OnInit {
         this._filtersService.filters
           .switchMap(filters => {
             this.ready = false;
-            return this._studyService.getManySampleCountsAsync(filters,
+            // Hack conversion of PromiseLike<ManySampleCounts> to Promise<ManySampleCounts>
+            return Observable.fromPromise(<Promise<ManySampleCounts>> (this._studyService.getManySampleCountsAsync(filters,
               this.allSampleFilterLabels.filter(category => this.showSampleFilter(category))
-            );
+            )));
           })
           .subscribe(newMatchCounts => {
             this.allSampleFilterMatchCounts = newMatchCounts;
