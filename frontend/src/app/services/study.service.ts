@@ -270,7 +270,8 @@ export class StudyService {
                   bool: {
                     should: q.shouldClauses,
                     must: Object.values(q.mustClause),
-                    must_not: Object.values(q.mustNotClause)
+                    must_not: Object.values(q.mustNotClause),
+                    minimum_should_match: 1
                   }
                 }
               ]
@@ -348,7 +349,8 @@ export class StudyService {
         bool: {
           should: queryPieces.shouldClauses,
           must: [ {exists: {field: "Sample Match"}} ].concat(extraMustClauses),
-          must_not: extraMustNotClauses
+          must_not: extraMustNotClauses,
+          minimum_should_match: 1
         }
       },
       aggs: {
