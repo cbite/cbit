@@ -57,6 +57,8 @@ export class BrowserComponent {
   areSamplesHidden: { [studyId: string]: boolean } = {};
   numMatchingStudies: number = 0;
   numMatchingSamples: number = 0;
+  numExcludedStudies: number = 0;
+  numExcludedSamples: number = 0;
   ready = false;
 
   constructor(
@@ -76,6 +78,12 @@ export class BrowserComponent {
     this._filtersService.filters
       .switchMap(filters => {
         this.ready = false;
+        this.updateDownloadSelectionStats();
+
+        // Force Angular2 change detection to see ready = true change.
+        // Not sure why it's not being picked up automatically
+        this.changeDetectorRef.detectChanges();
+
         return Observable.fromPromise(<Promise<UnifiedMatch[]>> this._studyService.getUnifiedMatchesAsync(filters));
       })
       .subscribe(rawMatches => {
@@ -86,6 +94,12 @@ export class BrowserComponent {
         // Not sure why it's not being picked up automatically
         this.changeDetectorRef.detectChanges();
       });
+  }
+
+  updateDownloadSelectionStats() {
+    let curFilters = this._filtersService.getFilters();
+    this.numExcludedStudies = Object.keys(curFilters.studiesExcludedForDownload).length;
+    this.numExcludedSamples = Object.keys(curFilters.samplesExcludedForDownload).length;
   }
 
   updateMatches(rawMatches: UnifiedMatch[]): void {
@@ -166,5 +180,21 @@ export class BrowserComponent {
 
   sortSampleMatches(sampleMatches: SampleMatch[]): SampleMatch[] {
     return sampleMatches.sort((a, b) => a.sample._source['Sample Name'].localeCompare(b.sample._source['Sample Name']))
+  }
+
+  isStudySelected(studyId: string) {
+    return !(studyId in this._filtersService.getFilters().studiesExcludedForDownload);
+  }
+
+  updateStudySelection(e: any, studyId: string) {
+    this._filtersService.setStudySelected(studyId, e.target.checked);
+  }
+
+  isSampleSelected(sampleId: number) {
+    return !(sampleId in this._filtersService.getFilters().samplesExcludedForDownload);
+  }
+
+  updateSampleSelection(e: any, sampleId: number) {
+    this._filtersService.setSampleSelected(sampleId, e.target.checked);
   }
 }

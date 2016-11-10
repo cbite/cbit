@@ -13,8 +13,12 @@
           <span *ngIf="!ready" style="color: red;font-style: italic">Updating results...</span>
           <span *ngIf="ready" style="color: grey;font-style: italic">Results up-to-date</span>
         </div>
+        <span *ngIf="(numExcludedStudies > 0) || (numExcludedSamples > 0)" style="color: red;font-style: italic;">Explicitly excluding {{ numExcludedStudies }} studies and {{ numExcludedSamples }} samples from download</span>
         <ul>
           <li *ngFor='let studyMatch of matches'>
+            <input type="checkbox"
+                   [checked]="isStudySelected(studyMatch.studyId)"
+                   (change)="updateStudySelection($event, studyMatch.studyId)"/>
             <a (click)="selectStudy(studyMatch.study)" href="javascript:void(0)">
               <b>{{ studyMatch.study._source['STUDY']['Study Title'] }}</b>
             </a>
@@ -27,6 +31,9 @@
             <ul *ngIf="!areSamplesHidden[studyMatch.studyId]">
               <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
                 <div class="showonhover">
+                  <input type="checkbox"
+                         [checked]="isSampleSelected(sampleMatch.sampleId)"
+                         (change)="updateSampleSelection($event, sampleMatch.sampleId)"/>
                   <b>{{ sampleMatch.sample._source['Sample Name'] }}</b>
                   <span *ngFor="let kv of filteredDistinctKeyValues(studyMatch.studyId, sampleMatch.sample) | mapToIterable; let isLast = last">
                     <i>{{ kv.key }}</i>: {{ kv.val }}<span *ngIf="!isLast">, </span>
