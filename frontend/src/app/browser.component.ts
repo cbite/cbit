@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {FiltersService} from "./services/filters.service";
 import {HIDDEN_SAMPLE_FILTER_LABELS} from "./filters/filter-sidebar.component";
 import {Observable, Subject} from "rxjs";
+import {DownloadSelectionService} from "./services/download-selection.service";
 
 export const KEYS_IN_MINI_SUMMARY = {
   // Key = value name in sample metadata
@@ -56,6 +57,8 @@ export class BrowserComponent implements OnInit, OnDestroy {
   areSamplesHidden: { [studyId: string]: boolean } = {};
   numMatchingStudies: number = 0;
   numMatchingSamples: number = 0;
+  numStudiesInCart: number = 0;
+  numSamplesInCart: number = 0;
   numExcludedStudies: number = 0;
   numExcludedSamples: number = 0;
   ready = false;
@@ -65,6 +68,7 @@ export class BrowserComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _studyService: StudyService,
     private _filtersService: FiltersService,
+    private _downloadSelectionService: DownloadSelectionService,
     private changeDetectorRef: ChangeDetectorRef
   ) { }
 
@@ -78,12 +82,6 @@ export class BrowserComponent implements OnInit, OnDestroy {
     this._filtersService.filters
       .switchMap(filters => {
         this.ready = false;
-        this.updateDownloadSelectionStats();
-
-        // Force Angular2 change detection to see ready = true change.
-        // Not sure why it's not being picked up automatically
-        this.changeDetectorRef.detectChanges();
-
         return Observable.fromPromise(<Promise<UnifiedMatch[]>> this._studyService.getUnifiedMatchesAsync(filters));
       })
       .takeUntil(this.stopStream)
@@ -95,6 +93,16 @@ export class BrowserComponent implements OnInit, OnDestroy {
         // Not sure why it's not being picked up automatically
         this.changeDetectorRef.detectChanges();
       });
+
+    this._downloadSelectionService.selection
+      .takeUntil(this.stopStream)
+      .subscribe(selection => {
+        this.updateDownloadSelectionStats();
+
+        // Force Angular2 change detection to see ready = true change.
+        // Not sure why it's not being picked up automatically
+        this.changeDetectorRef.detectChanges();
+      })
   }
 
   ngOnDestroy() {
@@ -102,9 +110,15 @@ export class BrowserComponent implements OnInit, OnDestroy {
   }
 
   updateDownloadSelectionStats() {
-    let curFilters = this._filtersService.getFilters();
-    this.numExcludedStudies = Object.keys(curFilters.studiesExcludedForDownload).length;
-    this.numExcludedSamples = Object.keys(curFilters.samplesExcludedForDownload).length;
+    let curSelection = this._downloadSelectionService.getSelection();
+
+    this.numStudiesInCart = Object.keys(curSelection.inCart).length;
+    this.numSamplesInCart = (
+      Object.values(curSelection.inCart)
+        .reduce((soFar, sampleIdsObj) => soFar + Object.keys(sampleIdsObj).length, 0)
+    );
+    this.numExcludedStudies = Object.keys(curSelection.studiesExcludedFromAddToCart).length;
+    this.numExcludedSamples = Object.keys(curSelection.samplesExcludedFromAddToCart).length;
   }
 
   updateMatches(rawMatches: UnifiedMatch[]): void {
@@ -188,18 +202,46 @@ export class BrowserComponent implements OnInit, OnDestroy {
   }
 
   isStudySelected(studyId: string) {
-    return !(studyId in this._filtersService.getFilters().studiesExcludedForDownload);
+    return !(studyId in this._downloadSelectionService.getSelection().studiesExcludedFromAddToCart);
   }
 
   updateStudySelection(e: any, studyId: string) {
-    this._filtersService.setStudySelected(studyId, e.target.checked);
+    this._downloadSelectionService.setStudySelected(studyId, e.target.checked);
   }
 
   isSampleSelected(sampleId: string) {
-    return !(sampleId in this._filtersService.getFilters().samplesExcludedForDownload);
+    return !(sampleId in this._downloadSelectionService.getSelection().samplesExcludedFromAddToCart);
   }
 
   updateSampleSelection(e: any, sampleId: string) {
-    this._filtersService.setSampleSelected(sampleId, e.target.checked);
+    this._downloadSelectionService.setSampleSelected(sampleId, e.target.checked);
+  }
+
+  clearExclusions() {
+    this._downloadSelectionService.clearExclusions();
+  }
+
+  clearCart() {
+    console.log("A");
+    this._downloadSelectionService.clearCart();
+  }
+
+  addCurrentSelectionToCart() {
+    console.log("B");
+
+    // Reduce matches to study & sample ids (probably should be working with that as our primitive data anyway)
+    let allToAdd:  { [studyId: string]: { [sampleId: string]: boolean } } = {};
+
+    for (let studyMatch of this.matches) {
+      let studyToAdd = allToAdd[studyMatch.study._id] = {};
+      for (let sample of studyMatch.sampleMatches) {
+        studyToAdd[sample._id] = true;
+      }
+    }
+
+    console.log(JSON.stringify(allToAdd));
+
+    // Filtering for excluded studies / samples is done in DownloadSelectionService
+    this._downloadSelectionService.addToCart(allToAdd);
   }
 }

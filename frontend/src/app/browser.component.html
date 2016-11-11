@@ -13,7 +13,15 @@
           <span *ngIf="!ready" style="color: red;font-style: italic">Updating results...</span>
           <span *ngIf="ready" style="color: grey;font-style: italic">Results up-to-date</span>
         </div>
-        <span *ngIf="(numExcludedStudies > 0) || (numExcludedSamples > 0)" style="color: red;font-style: italic;">Explicitly excluding {{ numExcludedStudies }} studies and {{ numExcludedSamples }} samples from download</span>
+        <div>
+          In download cart: {{ numStudiesInCart }} studies, {{ numSamplesInCart }} samples.
+          <button (click)="clearCart()">Clear Cart</button>
+          <button (click)="addCurrentSelectionToCart()">Add Selection To Cart</button>
+          <span *ngIf="(numExcludedStudies > 0) || (numExcludedSamples > 0)" style="color: red;font-style: italic;">
+            Explicitly excluding {{ numExcludedStudies }} studies and {{ numExcludedSamples }} samples from download
+            <button (click)="clearExclusions()">Clear Exclusions</button>
+          </span>
+        </div>
         <ul>
           <li *ngFor='let studyMatch of matches'>
             <input type="checkbox"

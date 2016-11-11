@@ -19,28 +19,16 @@ export interface SampleFilters {
   [category: string]: SampleFilter
 }
 
-export interface StudiesExcludedForDownload {
-  [studyId: string]: boolean
-}
-
-export interface SamplesExcludedForDownload {
-  [sampleId: string]: boolean
-}
-
 export interface FiltersState {
   searchText: string,
   includeControls: boolean,
-  sampleFilters: SampleFilters,
-  studiesExcludedForDownload: StudiesExcludedForDownload,
-  samplesExcludedForDownload: SamplesExcludedForDownload
+  sampleFilters: SampleFilters
 }
 
 export const EMPTY_FILTERS: FiltersState = {
   searchText: '',
   includeControls: true,
-  sampleFilters: {},
-  studiesExcludedForDownload: {},
-  samplesExcludedForDownload: {}
+  sampleFilters: {}
 }
 
 // For inspiration, see: http://blog.angular-university.io/how-to-build-angular2-apps-using-rxjs-observable-data-services-pitfalls-to-avoid/
@@ -126,37 +114,5 @@ export class FiltersService {
       detail: {}
     }
     this.setSampleFilters(curFilters);
-  }
-
-  setStudiesExcludedForDownload(newStudiesExcludedForDownload: StudiesExcludedForDownload): void {
-    this._filters.next(Object.assign({}, this._filters.getValue(), {
-      studiesExcludedForDownload: newStudiesExcludedForDownload
-    }))
-  }
-
-  setStudySelected(studyId: string, include: boolean): void {
-    let curStudies = _.cloneDeep(this.getFilters().studiesExcludedForDownload);
-    if (!include) {
-      curStudies[studyId] = true;
-    } else {
-      delete curStudies[studyId];
-    }
-    this.setStudiesExcludedForDownload(curStudies);
-  }
-
-  setSamplesExcludedForDownload(newSamplesExcludedForDownload: SamplesExcludedForDownload): void {
-    this._filters.next(Object.assign({}, this._filters.getValue(), {
-      samplesExcludedForDownload: newSamplesExcludedForDownload
-    }))
-  }
-
-  setSampleSelected(sampleId: string, include: boolean): void {
-    let curSamples: SamplesExcludedForDownload = _.cloneDeep(this.getFilters().samplesExcludedForDownload);
-    if (!include) {
-      curSamples[sampleId] = true;
-    } else {
-      delete curSamples[sampleId];
-    }
-    this.setSamplesExcludedForDownload(curSamples);
   }
 }
