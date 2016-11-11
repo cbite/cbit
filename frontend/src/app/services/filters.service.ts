@@ -24,7 +24,7 @@ export interface StudiesExcludedForDownload {
 }
 
 export interface SamplesExcludedForDownload {
-  [sampleId: number]: boolean
+  [sampleId: string]: boolean
 }
 
 export interface FiltersState {
@@ -150,8 +150,8 @@ export class FiltersService {
     }))
   }
 
-  setSampleSelected(sampleId: number, include: boolean): void {
-    let curSamples = _.cloneDeep(this.getFilters().samplesExcludedForDownload);
+  setSampleSelected(sampleId: string, include: boolean): void {
+    let curSamples: SamplesExcludedForDownload = _.cloneDeep(this.getFilters().samplesExcludedForDownload);
     if (!include) {
       curSamples[sampleId] = true;
     } else {

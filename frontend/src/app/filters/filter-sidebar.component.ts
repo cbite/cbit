@@ -2,7 +2,6 @@ import {Component, OnInit, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {FiltersService, FiltersState} from "../services/filters.service";
 import {StudyService, ManySampleCounts} from "../services/study.service";
-import * as _ from 'lodash';
 import {Observable, Subject} from "rxjs";
 
 export const HIDDEN_SAMPLE_FILTER_LABELS = {

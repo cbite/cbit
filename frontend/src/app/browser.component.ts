@@ -1,9 +1,8 @@
-import {Component, Input, ChangeDetectorRef, OnInit, OnDestroy} from '@angular/core';
-import {StudyService, UnifiedMatch, SampleMatch} from "./services/study.service";
+import {Component, ChangeDetectorRef, OnInit, OnDestroy} from '@angular/core';
+import {StudyService, UnifiedMatch} from "./services/study.service";
 import {Study, Sample} from "./common/study.model";
 import {Router} from "@angular/router";
-import {FiltersService, FiltersState} from "./services/filters.service";
-import {FormControl, Form} from "@angular/forms";
+import {FiltersService} from "./services/filters.service";
 import {HIDDEN_SAMPLE_FILTER_LABELS} from "./filters/filter-sidebar.component";
 import {Observable, Subject} from "rxjs";
 
@@ -70,7 +69,7 @@ export class BrowserComponent implements OnInit, OnDestroy {
   ) { }
 
   selectStudy(study: Study): void {
-    let link = ['/study', study.id];
+    let link = ['/study', study._id];
     this._router.navigate(link);
   }
 
@@ -115,15 +114,15 @@ export class BrowserComponent implements OnInit, OnDestroy {
 
     let keys = new Set<string>();
     this.matches.forEach(studyMatch => {
-      studyMatch.sampleMatches.forEach(sampleMatch => Object.keys(sampleMatch.sample._source).forEach(key => keys.add(key)));
+      studyMatch.sampleMatches.forEach(sampleMatch => Object.keys(sampleMatch._source).forEach(key => keys.add(key)));
     });
     keys.delete('Sample Name');
     this.sampleKeys = Array.from(keys).sort();
 
     // By default, show matching samples
     for (let studyMatch of this.matches) {
-      if (!(studyMatch.studyId in this.areSamplesHidden)) {
-        this.areSamplesHidden[studyMatch.studyId] = false;
+      if (!(studyMatch.study._id in this.areSamplesHidden)) {
+        this.areSamplesHidden[studyMatch.study._id] = false;
       }
     }
 
@@ -132,21 +131,21 @@ export class BrowserComponent implements OnInit, OnDestroy {
       let studyCommonKeys = {};
       if (studyMatch.sampleMatches.length > 0) {
         let firstSampleMatch = studyMatch.sampleMatches[0];
-        for (let key in firstSampleMatch.sample._source) {
-          studyCommonKeys[key] = firstSampleMatch.sample._source[key];
+        for (let key in firstSampleMatch._source) {
+          studyCommonKeys[key] = firstSampleMatch._source[key];
         }
 
         for (let sampleMatch of studyMatch.sampleMatches) {
           for (let commonKey in studyCommonKeys) {
-            if (!(commonKey in sampleMatch.sample._source) ||
-              (sampleMatch.sample._source[commonKey] !== studyCommonKeys[commonKey])) {
+            if (!(commonKey in sampleMatch._source) ||
+              (sampleMatch._source[commonKey] !== studyCommonKeys[commonKey])) {
               delete studyCommonKeys[commonKey];
             }
           }
         }
       }
 
-      this.commonKeys[studyMatch.studyId] = studyCommonKeys;
+      this.commonKeys[studyMatch.study._id] = studyCommonKeys;
     }
 
     this.numMatchingStudies = this.matches.length;
@@ -184,8 +183,8 @@ export class BrowserComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  sortSampleMatches(sampleMatches: SampleMatch[]): SampleMatch[] {
-    return sampleMatches.sort((a, b) => a.sample._source['Sample Name'].localeCompare(b.sample._source['Sample Name']))
+  sortSampleMatches(sampleMatches: Sample[]): Sample[] {
+    return sampleMatches.sort((a, b) => a._source['Sample Name'].localeCompare(b._source['Sample Name']))
   }
 
   isStudySelected(studyId: string) {
@@ -196,11 +195,11 @@ export class BrowserComponent implements OnInit, OnDestroy {
     this._filtersService.setStudySelected(studyId, e.target.checked);
   }
 
-  isSampleSelected(sampleId: number) {
+  isSampleSelected(sampleId: string) {
     return !(sampleId in this._filtersService.getFilters().samplesExcludedForDownload);
   }
 
-  updateSampleSelection(e: any, sampleId: number) {
+  updateSampleSelection(e: any, sampleId: string) {
     this._filtersService.setSampleSelected(sampleId, e.target.checked);
   }
 }

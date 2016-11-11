@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from "@angular/core";
-import {FiltersState, FiltersService, EMPTY_FILTERS, FilterMode} from "../services/filters.service";
-import {StudyService, NULL_CATEGORY_NAME} from "../services/study.service";
-import * as _ from 'lodash';
+import {FiltersService, FilterMode} from "../services/filters.service";
+import {NULL_CATEGORY_NAME} from "../services/study.service";
 
 @Component({
   selector: 'sample-filters',

@@ -16,20 +16,9 @@ export const STUDY_METADATA_SEARCH_FIELDS = new Set<string>([
   'Study PubMed ID'
 ]);
 
-export interface SampleMatch {
-  sampleId: number,
-  sample: Sample,
-  isFullTextMatch?: boolean,
-  passesMetadataFilters?: boolean,
-  isMatch?: boolean
-}
-
 export interface UnifiedMatch {
-  studyId: string,
   study: Study,
-  isFullTextMatch?: boolean,
-  sampleMatches: SampleMatch[],
-  isMatch?: boolean
+  sampleMatches: Sample[],
 }
 
 export interface StudyAndSamples {
@@ -94,26 +83,18 @@ export class StudyService {
           }
         }
       }).then(response => {
-        let hits = response.hits.hits;
+        let hits: any[] = response.hits.hits;
         let study: Study;
         let samples: Sample[] = [];
-        let i = 1;
         for (let hit of hits) {
           if (hit._type === 'study') {
             if (!study) {
-              study = {
-                id: hit._id,
-                _source: <RawStudy>hit._source
-              }
+              study = (<Study> hit)
             } else {
               console.log("More than one study returned!")
             }
           } else if (hit._type === 'sample') {
-            samples.push({
-              id: i,
-              _source: hit._source
-            });
-            i += 1;
+            samples.push(<Sample> hit);
           }
         }
 
@@ -306,28 +287,18 @@ export class StudyService {
         }
       });
     }).then(returnedStudies => {
-      let unifiedMatches = {};
-      for (let study of returnedStudies.hits.hits) {
+      let unifiedMatches: {[studyId: string]: UnifiedMatch} = {};
+      let study: any;
+      for (study of returnedStudies.hits.hits) {
         unifiedMatches[study._id] = {
-          studyId: study._id,
-          study: {
-            id: study._id,
-            sampleIds: [],
-            _source: study._source
-          },
+          study: study,
           sampleMatches: []
         }
       }
 
-      for (let sample of returnedSamples.hits.hits) {
-        unifiedMatches[sample._parent].sampleMatches.push({
-          sampleId: sample._id,
-          sample: {
-            id: 0,
-            studyId: sample._parent,
-            _source: sample._source
-          }
-        });
+      let sample: any;
+      for (sample of returnedSamples.hits.hits) {
+        unifiedMatches[sample._parent].sampleMatches.push(sample);
       }
 
       return Object.values(unifiedMatches);

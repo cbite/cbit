@@ -15,17 +15,21 @@ export interface RawStudyPublication {
 
 export interface RawStudy {
   // Only describing the metadata we actually use in the front-end
-  "STUDY":                      RawStudyInfo,          // 1 study per investigation
+  "STUDY":                      RawStudyInfo,                // 1 study per investigation
   "STUDY PUBLICATIONS":         Array<RawStudyPublication>,  // TODO: Enforce array in back-end
   [propName: string]: any    // Allow anything else as well
 }
 
+export interface RawSample {
+  [propName: string]: any    // Allow anything
+}
+
 export interface Study {
-  id: string,
+  _id: string,
   _source: RawStudy
 }
 
 export interface Sample {
-  id: number,
-  _source: Object
+  _id: string,
+  _source: RawSample
 }
