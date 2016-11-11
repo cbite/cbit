@@ -1,11 +1,11 @@
-import {Component, Input, ChangeDetectorRef} from '@angular/core';
+import {Component, Input, ChangeDetectorRef, OnInit, OnDestroy} from '@angular/core';
 import {StudyService, UnifiedMatch, SampleMatch} from "./services/study.service";
 import {Study, Sample} from "./common/study.model";
 import {Router} from "@angular/router";
 import {FiltersService, FiltersState} from "./services/filters.service";
 import {FormControl, Form} from "@angular/forms";
 import {HIDDEN_SAMPLE_FILTER_LABELS} from "./filters/filter-sidebar.component";
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 
 export const KEYS_IN_MINI_SUMMARY = {
   // Key = value name in sample metadata
@@ -49,7 +49,7 @@ export const KEYS_IN_MINI_SUMMARY = {
   `],
   providers: [StudyService]
 })
-export class BrowserComponent {
+export class BrowserComponent implements OnInit, OnDestroy {
 
   matches: UnifiedMatch[] = [];
   sampleKeys: string[];
@@ -60,6 +60,7 @@ export class BrowserComponent {
   numExcludedStudies: number = 0;
   numExcludedSamples: number = 0;
   ready = false;
+  stopStream = new Subject<string>();
 
   constructor(
     private _router: Router,
@@ -86,6 +87,7 @@ export class BrowserComponent {
 
         return Observable.fromPromise(<Promise<UnifiedMatch[]>> this._studyService.getUnifiedMatchesAsync(filters));
       })
+      .takeUntil(this.stopStream)
       .subscribe(rawMatches => {
         this.updateMatches(rawMatches);
         this.ready = true;
@@ -94,6 +96,10 @@ export class BrowserComponent {
         // Not sure why it's not being picked up automatically
         this.changeDetectorRef.detectChanges();
       });
+  }
+
+  ngOnDestroy() {
+    this.stopStream.next('stop');
   }
 
   updateDownloadSelectionStats() {

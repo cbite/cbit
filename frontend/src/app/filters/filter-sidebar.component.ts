@@ -1,9 +1,9 @@
-import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {FiltersService, FiltersState} from "../services/filters.service";
 import {StudyService, ManySampleCounts} from "../services/study.service";
 import * as _ from 'lodash';
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 
 export const HIDDEN_SAMPLE_FILTER_LABELS = {
   'Barcode': true,
@@ -53,7 +53,7 @@ export const HIDDEN_SAMPLE_FILTER_LABELS = {
   <pre>{{ _filtersService.getFilters() | json }}</pre>
   `
 })
-export class FilterSidebarComponent implements OnInit {
+export class FilterSidebarComponent implements OnInit, OnDestroy {
 
   // For inspiration, see: http://blog.thoughtram.io/angular/2016/01/06/taking-advantage-of-observables-in-angular2.html
   searchTextInForm = new FormControl();
@@ -61,6 +61,7 @@ export class FilterSidebarComponent implements OnInit {
   allSampleFilterLabels: string[] = [];
   allSampleFilterMatchCounts = {};
   ready = false;
+  stopStream = new Subject<string>();
 
   showSampleFilter(category: string): boolean {
     return !(category in HIDDEN_SAMPLE_FILTER_LABELS);
@@ -75,9 +76,11 @@ export class FilterSidebarComponent implements OnInit {
     this.searchTextInForm.valueChanges
       .debounceTime(200)       // Don't propagate changes until this many ms have elapsed without change
       .distinctUntilChanged()  // Don't emit the same value twice
+      .takeUntil(this.stopStream)
       .subscribe(newSearchText => _filtersService.setSearchText(newSearchText));
     this.includeControlsInForm.valueChanges
       .distinctUntilChanged()  // Don't emit the same value twice
+      .takeUntil(this.stopStream)
       .subscribe(newIncludeControls => _filtersService.setIncludeControls(newIncludeControls))
   }
 
@@ -87,6 +90,7 @@ export class FilterSidebarComponent implements OnInit {
         this.allSampleFilterLabels = allSampleFilterLabels;
 
         this._filtersService.filters
+          .takeUntil(this.stopStream)
           .subscribe(filters => this.updateFiltersUI(filters));
 
         // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
@@ -98,6 +102,7 @@ export class FilterSidebarComponent implements OnInit {
               this.allSampleFilterLabels.filter(category => this.showSampleFilter(category))
             )));
           })
+          .takeUntil(this.stopStream)
           .subscribe(newMatchCounts => {
             this.allSampleFilterMatchCounts = newMatchCounts;
             this.ready = true;
@@ -107,6 +112,10 @@ export class FilterSidebarComponent implements OnInit {
             this.changeDetectorRef.detectChanges();
           });
       });
+  }
+
+  ngOnDestroy() {
+    this.stopStream.next('stop');
   }
 
   updateFiltersUI(filters: FiltersState): void {
