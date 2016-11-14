@@ -19,7 +19,8 @@ const URL = 'http://localhost:23456/studies';
        [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
        (fileOver)="fileOverBase($event)"
        [uploader]="uploader"
-       class="well my-drop-zone">
+       class="well my-drop-zone"
+       style="display: inline-block">
        Drag a file here
   </div>
   or select a file here: <input type="file" ng2FileSelect [uploader]="uploader"/>
@@ -27,7 +28,7 @@ const URL = 'http://localhost:23456/studies';
   Then click here: <button type="button" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Upload</button>
   <div>
     Progress:
-    <div class="w3-progress-container">
+    <div class="w3-progress-container" style="display: inline-block">
       <div class="w3-progressbar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
     </div>
     Status: {{ status }}
