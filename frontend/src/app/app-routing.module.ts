@@ -5,12 +5,14 @@ import {WelcomeComponent} from "./welcome.component";
 import {BrowserComponent} from "./browser.component";
 import {StudyComponent} from "./study/study.component";
 import {DownloadComponent} from "./download.component";
+import {UploadComponent} from "./uploader/upload.component";
 
 const routes: Routes = [
   { path: '',           redirectTo: '/welcome', pathMatch: 'full' },
   { path: 'welcome',    component: WelcomeComponent },
   { path: 'browse',     component: BrowserComponent },
   { path: 'download',   component: DownloadComponent },
+  { path: 'upload',     component: UploadComponent },
   { path: 'study/:id',  component: StudyComponent }
 ];
 
