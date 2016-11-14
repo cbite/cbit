@@ -2,3 +2,7 @@
 /frontend/node_modules
 /frontend/build
 .ipynb_checkpoints
+/backend/pidfile.txt
+/backend/access.log
+/backend/error.log
+/backedn/files

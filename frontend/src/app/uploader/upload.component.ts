@@ -8,7 +8,7 @@ import {
 // Heavily adapted from here:
 // http://valor-software.com/ng2-file-upload/
 
-const URL = 'http://localhost:23456/api';
+const URL = 'http://localhost:23456/studies';
 
 @Component({
   template: `
@@ -48,7 +48,11 @@ const URL = 'http://localhost:23456/api';
   //directives: [FileSelectDirective, FileDropDirective]
 })
 export class UploadComponent implements OnInit {
-  public uploader: FileUploader = new FileUploader({url: URL});
+  public uploader: FileUploader = new FileUploader({
+    url: URL,
+    method: 'POST',
+    disableMultipart: true  // Send the file body directly as request body, don't wrap it in any way
+  });
   public hasBaseDropZoneOver: boolean = false;
   status = 'Waiting for upload...';
 
@@ -65,7 +69,7 @@ export class UploadComponent implements OnInit {
       this.status = `Cancel: ${item.file.name}`;
     }
 
-    this.uploader.
+    //this.uploader.
   }
 
   public fileOverBase(e:any):void {
