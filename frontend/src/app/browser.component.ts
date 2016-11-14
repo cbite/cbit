@@ -244,4 +244,8 @@ export class BrowserComponent implements OnInit, OnDestroy {
     // Filtering for excluded studies / samples is done in DownloadSelectionService
     this._downloadSelectionService.addToCart(allToAdd);
   }
+
+  proceedToDownload() {
+    this._router.navigate(['/download']);
+  }
 }

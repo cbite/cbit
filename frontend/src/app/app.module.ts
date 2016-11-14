@@ -7,6 +7,7 @@ import { AppComponent }   from './app.component';
 import {StudyComponent}   from "./study/study.component";
 import {WelcomeComponent} from "./welcome.component";
 import {BrowserComponent} from "./browser.component";
+import {DownloadComponent} from "./download.component";
 import {AppRoutingModule} from "./app-routing.module";
 import {FilterSidebarComponent} from "./filters/filter-sidebar.component";
 import {MapToIterablePipe} from "./common/mapToIterable.pipe";
@@ -26,6 +27,7 @@ import {DOILinksComponent} from "./study/doi-links.component";
     AppComponent,
     WelcomeComponent,
     BrowserComponent,
+    DownloadComponent,
     PubmedLinksComponent,
     DOILinksComponent,
     FilterSidebarComponent,

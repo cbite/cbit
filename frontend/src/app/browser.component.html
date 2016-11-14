@@ -17,6 +17,7 @@
           In download cart: {{ numStudiesInCart }} studies, {{ numSamplesInCart }} samples.
           <button (click)="clearCart()">Clear Cart</button>
           <button (click)="addCurrentSelectionToCart()">Add Selection To Cart</button>
+          <button (click)="proceedToDownload()">Proceed to Download</button>
           <span *ngIf="(numExcludedStudies > 0) || (numExcludedSamples > 0)" style="color: red;font-style: italic;">
             Explicitly excluding {{ numExcludedStudies }} studies and {{ numExcludedSamples }} samples from download
             <button (click)="clearExclusions()">Clear Exclusions</button>
@@ -33,6 +34,7 @@
             <i>by {{ studyMatch.study._source['STUDY']['Study Researchers Involved'] }}</i>
             <pubmed-links [study]="studyMatch.study"></pubmed-links>
             <doi-links [study]="studyMatch.study"></doi-links>
+            <a [href]="studyMatch.study._source['*Archive URL']">Download Archive</a>
             <br/>
             <b>{{ studyMatch.sampleMatches.length }} matching samples</b>
             <button (click)="areSamplesHidden[studyMatch.study._id] = !areSamplesHidden[studyMatch.study._id]">Show/Hide</button>
