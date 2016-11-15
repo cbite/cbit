@@ -80,42 +80,49 @@ def read_archive(archive_filename):
         with z.open(assay_file_name, 'r') as f:
             assay = read_assay(f)
 
-        # TODO: Support multiple data set files per study
-        if len(set(assay['Derived Array Data Matrix File'])) != 1:
-            raise NotImplementedError('Multiple data set files per study')
-        processedDataFilename = assay['Derived Array Data Matrix File'].iloc[0]
-        if processedDataFilename not in filenames:
-            raise IOError(
-                'Processed data file "{0}" is missing from archive'.format(
-                    processedDataFilename))
-        with z.open(processedDataFilename, 'r') as f:
-            processed_data_set = read_processed_data(f)
+        if False:
+            # TODO: Reenable actual data ingestion!
 
-        # Check that processed data file for a sample actually includes data for each sample
-        for sampleName in study_sample['Sample Name']:
-            if sampleName not in processed_data_set.columns:
-                raise ValueError(
-                    "Sample {0} has no corresponding data in {1}".format(
-                        sampleName, processedDataFilename))
+            # TODO: Support multiple data set files per study
+            if len(set(assay['Derived Array Data Matrix File'])) != 1:
+                raise NotImplementedError('Multiple data set files per study')
+            processedDataFilename = assay['Derived Array Data Matrix File'].iloc[0]
+            if processedDataFilename not in filenames:
+                raise IOError(
+                    'Processed data file "{0}" is missing from archive'.format(
+                        processedDataFilename))
+            with z.open(processedDataFilename, 'r') as f:
+                processed_data_set = read_processed_data(f)
 
-        # And check that every column in the processed data has an associated sample in the study
-        for sampleName in processed_data_set.columns:
-            if sampleName not in study_sample['Sample Name'].values:
-                raise ValueError(
-                    "No sample metadata for sample {0} in {1}".format(
-                        sampleName, processedDataFilename))
+            # Check that processed data file for a sample actually includes data for each sample
+            for sampleName in study_sample['Sample Name']:
+                if sampleName not in processed_data_set.columns:
+                    raise ValueError(
+                        "Sample {0} has no corresponding data in {1}".format(
+                            sampleName, processedDataFilename))
 
-        # TODO: Support multiple annotation files per study
-        if len(set(assay['Comment[Annotation file]'])) != 1:
-            raise NotImplementedError('Multiple annotation files per study')
-        annotationFilename = assay['Comment[Annotation file]'].iloc[0]
-        if annotationFilename not in filenames:
-            raise IOError(
-                'Annotations file "{0}" is missing from archive'.format(
-                    annotationFilename))
-        with z.open(annotationFilename, 'r') as f:
-            annotationData = read_annotations(f)
+            # And check that every column in the processed data has an associated sample in the study
+            for sampleName in processed_data_set.columns:
+                if sampleName not in study_sample['Sample Name'].values:
+                    raise ValueError(
+                        "No sample metadata for sample {0} in {1}".format(
+                            sampleName, processedDataFilename))
 
-        # Skip raw data for now
+            # TODO: Support multiple annotation files per study
+            if len(set(assay['Comment[Annotation file]'])) != 1:
+                raise NotImplementedError('Multiple annotation files per study')
+            annotationFilename = assay['Comment[Annotation file]'].iloc[0]
+            if annotationFilename not in filenames:
+                raise IOError(
+                    'Annotations file "{0}" is missing from archive'.format(
+                        annotationFilename))
+            with z.open(annotationFilename, 'r') as f:
+                annotationData = read_annotations(f)
+
+        else:
+            # Skip raw data for now
+            processed_data_set = None
+            annotationData = None
+
 
         return Archive(investigation, study_sample, assay, processed_data_set, annotationData)

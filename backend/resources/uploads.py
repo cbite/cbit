@@ -6,7 +6,7 @@ import elasticsearch
 import falcon
 
 import config.config as cfg
-import data.importer
+from data import importer
 
 # Possible upload statuses
 UPLOAD_STATUS_UPLOADING = 'uploading'
@@ -155,5 +155,5 @@ class UploadResource(object):
         if not es.indices.exists('cbit'):
             raise falcon.HTTPInternalServerError(description='ElasticSearch database not ready.  Have you run set_up_dbs.py?')
 
-        importer.import_archive(cfg, db_conn, es, filename, study_uuid)
+        importer.import_archive(db_conn, es, filename, study_uuid)
 

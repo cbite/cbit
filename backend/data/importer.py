@@ -47,6 +47,9 @@ def import_archive(db_conn, es, archive_filename, study_uuid):
     num_docs_added, errors = helpers.bulk(es, index='cbit', doc_type='sample',
                                           actions=result)
 
+    # TODO: Fix ingestion into PostgreSQL
+    return
+
     # Now add columns to SQL
     with db_conn.cursor() as cur:
 
