@@ -5,8 +5,9 @@ bind = [
     #"0.0.0.0:23456"   # TODO: Uncomment in production
 ]
 workers = multiprocessing.cpu_count() * 2 + 1
-worker_class = 'gevent'
+worker_class = 'sync'  # WARNING: if you change to gevent, patch psycopg2 to be gevent-safe: https://bitbucket.org/dvarrazzo/psycogreen/
 pidfile = 'pidfile.txt'
+reload = True    # TODO: Set to false in production!
 #daemon = True   # TODO: Uncomment in production
 #user = 'cbitbackend'  # TODO: Make user in production, then uncomment this
 #group = 'cbitbackend'  # TODO: Make group in production, then uncomment this

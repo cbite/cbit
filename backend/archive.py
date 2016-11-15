@@ -1,5 +1,6 @@
 from config import Config
 import zipfile
+import reader
 from reader import read_investigation, read_study_sample, read_assay, read_annotations, read_processed_data
 
 class Archive(object):
@@ -23,7 +24,15 @@ def read_archive(cfg, archive_filename):
                     investigation_file_name))
 
         with z.open(investigation_file_name, 'r') as f:
-            investigation = read_investigation(cfg, f)
+            investigation = reader.conform_investigation_to_schema(
+                reader.remove_isa_name_prefixes(
+                    reader.remove_empty_values_in_dict(
+                        reader.flatten_investigation(
+                            read_investigation(cfg, f)
+                        )
+                    )
+                )
+            )
 
         if 'STUDY' not in investigation:
             raise ValueError('No STUDY section defined in {0}'.format(

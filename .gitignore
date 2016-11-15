@@ -5,4 +5,5 @@
 /backend/pidfile.txt
 /backend/access.log
 /backend/error.log
-/backedn/files
+/backend/files
+/backend/uploads

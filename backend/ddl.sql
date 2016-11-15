@@ -1,3 +1,10 @@
+DROP TABLE IF EXISTS uploads CASCADE ;
+CREATE TABLE uploads (
+   uuid UUID PRIMARY KEY
+  ,createdOn TIMESTAMP DEFAULT(CURRENT_TIMESTAMP)
+  ,status VARCHAR NOT NULL  -- Possible values: 'uploading', 'uploaded', 'ingesting', 'ingested'
+);
+
 DROP TABLE IF EXISTS dim_study CASCADE ;
 CREATE TABLE dim_study (
    id SERIAL PRIMARY KEY
