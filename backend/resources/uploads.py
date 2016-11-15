@@ -1,6 +1,7 @@
 import json
 import os
 import uuid
+import shutil
 
 import elasticsearch
 import falcon
@@ -126,9 +127,29 @@ class UploadResource(object):
                         (UPLOAD_STATUS_INGESTING, upload_uuid))
         db_conn.commit()
 
-        # 3. Ingest archive
-        self._ingest_archive(os.path.join(cfg.UPLOADS_PATH, upload_uuid, 'archive.zip'),
-                       db_conn, upload_uuid)
+        # 3. Ingest archive into DBs
+        uploaded_archive_path = os.path.join(cfg.UPLOADS_PATH, upload_uuid, 'archive.zip')
+        try:
+            self._ingest_archive(uploaded_archive_path, db_conn, upload_uuid)
+        except ValueError as e:
+            # Ingest failed, go back to UPLOADED state
+            with db_conn.cursor() as cur:
+                cur.execute("UPDATE uploads " +
+                            "SET status = %s " +
+                            "WHERE uuid = %s",
+                            (UPLOAD_STATUS_UPLOADED, upload_uuid))
+            db_conn.commit()
+
+            raise falcon.HTTPBadRequest(description=str(e))
+
+        # 4. Move archive .zip into place
+        ingested_archive_path = os.path.join(cfg.FILES_PATH, upload_uuid, 'archive.zip')
+        try:
+            os.makedirs(os.path.dirname(ingested_archive_path))
+        except os.FileExistsError:
+            pass
+        shutil.move(uploaded_archive_path, ingested_archive_path)
+        shutil.rmtree(os.path.dirname(uploaded_archive_path))
 
         # 4. Change status to ingested
         with db_conn.cursor() as cur:

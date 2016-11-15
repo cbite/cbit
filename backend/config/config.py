@@ -20,3 +20,4 @@ ES_PORT = 9200
 FQDN = 'localhost:23456'  # TODO: In production, should be cbit.maastrichtuniversity.nl
 
 UPLOADS_PATH = 'uploads'
+FILES_PATH = 'files'
