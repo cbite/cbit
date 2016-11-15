@@ -8,7 +8,7 @@
 
   <h3>Extra Info</h3>
   <ul>
-    <li *ngFor="let categoryKV of study._source | mapToIterable">
+    <li *ngFor="let categoryKV of studyCategoryMap | mapToIterable">
       <b>{{ categoryKV.key }}:</b>
 
       <div *ngIf="isCategoryIsMultiValued(categoryKV.key)">

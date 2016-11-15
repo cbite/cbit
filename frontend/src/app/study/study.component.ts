@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ChangeDetectorRef} from '@angular/core';
-import {Study, Sample} from '../common/study.model';
+import {Study, Sample, RawStudy} from '../common/study.model';
 import {StudyService, StudyAndSamples} from "../services/study.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import { Location } from '@angular/common';
@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 })
 export class StudyComponent implements OnInit {
   study: Study;
+  studyCategoryMap: RawStudy;
   samples: Sample[];
   sampleKeys: string[];
   commonKeys: { [key: string]: any };
@@ -40,6 +41,8 @@ export class StudyComponent implements OnInit {
 
   processStudyAndSamples(studyAndSamples: StudyAndSamples): void {
     this.study = studyAndSamples.study;
+    this.studyCategoryMap = Object.assign({}, this.study._source);
+    delete this.studyCategoryMap['*Archive URL'];
     this.samples = studyAndSamples.samples.sort((a, b) => a._source['Sample Name'].localeCompare(b._source['Sample Name']));
 
     let keys = new Set<string>();
