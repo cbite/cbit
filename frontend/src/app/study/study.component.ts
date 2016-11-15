@@ -43,7 +43,9 @@ export class StudyComponent implements OnInit {
     this.study = studyAndSamples.study;
     this.studyCategoryMap = Object.assign({}, this.study._source);
     delete this.studyCategoryMap['*Archive URL'];
-    this.samples = studyAndSamples.samples.sort((a, b) => a._source['Sample Name'].localeCompare(b._source['Sample Name']));
+
+    // YUCK! Despite what the mappings in ElasticSearch say, 'Sample Name' in the JSON results can be an integer!
+    this.samples = studyAndSamples.samples.sort((a, b) => (a._source['Sample Name'] + '').localeCompare((b._source['Sample Name'] + '')));
 
     let keys = new Set<string>();
     this.samples.forEach(sample => Object.keys(sample._source).forEach(key => keys.add(key)));

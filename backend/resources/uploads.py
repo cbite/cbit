@@ -132,6 +132,9 @@ class UploadResource(object):
         try:
             self._ingest_archive(uploaded_archive_path, db_conn, upload_uuid)
         except ValueError as e:
+            import traceback
+            tb = traceback.format_exc()
+
             # Ingest failed, go back to UPLOADED state
             with db_conn.cursor() as cur:
                 cur.execute("UPDATE uploads " +
@@ -140,7 +143,7 @@ class UploadResource(object):
                             (UPLOAD_STATUS_UPLOADED, upload_uuid))
             db_conn.commit()
 
-            raise falcon.HTTPBadRequest(description=str(e))
+            raise falcon.HTTPBadRequest(description=str(e) + '\ntraceback: ' + tb)
 
         # 4. Move archive .zip into place
         ingested_archive_path = os.path.join(cfg.FILES_PATH, upload_uuid, 'archive.zip')

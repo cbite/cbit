@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+# TODO: Make sure all calls to format use unicode strings
+# i.e., '{0} - {1}'.format(outResult[abbrevField], outResult[nameField])
+# should be u'{0} - {1}'.format(outResult[abbrevField], outResult[nameField])
+
 import os.path
 import itertools
 import pandas as pd
@@ -243,7 +247,7 @@ def clean_up_study_samples(df):
         elif orig_unit == 'half life':
             raise ValueError('half life is a relative time unit, not convertible to hour')
         else:
-            raise ValueError('Unknown unit of time: {0}'.format(orig_unit))
+            raise ValueError(u'Unknown unit of time: {0}'.format(orig_unit))
 
     def concentration_to_mM(orig_value, orig_unit):
         """unit -> concentration unit -> unit of molarity"""
@@ -260,7 +264,7 @@ def clean_up_study_samples(df):
         elif orig_unit == 'femtomolar':
             return orig_value / 1000000000000.0
         else:
-            raise ValueError('Unknown unit of concentration: {0}'.format(orig_unit))
+            raise ValueError(u'Unknown unit of concentration: {0}'.format(orig_unit))
 
     def mass_to_g(orig_value, orig_unit):
         """unit -> mass unit, excluding unit -> mass unit -> molar mass unit"""
@@ -289,7 +293,7 @@ def clean_up_study_samples(df):
             return orig_value * 1000 * daltonInG
 
         else:
-            raise ValueError('Unknown unit of mass: {0}'.format(orig_unit))
+            raise ValueError(u'Unknown unit of mass: {0}'.format(orig_unit))
 
     def area_to_m2(orig_value, orig_unit):
         """unit -> area unit"""
@@ -304,7 +308,7 @@ def clean_up_study_samples(df):
             return orig_value / (10000000000. ** 2)
 
         else:
-            raise ValueError('Unknown unit of area: {0}'.format(orig_unit))
+            raise ValueError(u'Unknown unit of area: {0}'.format(orig_unit))
 
     def weight_loss_to_percent_per_week(orig_value, orig_unit):
         """% / [length unit]"""
@@ -322,7 +326,7 @@ def clean_up_study_samples(df):
                 except ValueError:
                     pass  # Fall through to the exception below
 
-        raise ValueError('Unknown unit of weight loss: {0}'.format(orig_unit))
+        raise ValueError(u'Unknown unit of weight loss: {0}'.format(orig_unit))
 
 
     def length_to_m(orig_value, orig_unit):
@@ -344,7 +348,7 @@ def clean_up_study_samples(df):
             return orig_value / 1000000000000.
 
         else:
-            raise ValueError('Unknown unit of length: {0}'.format(orig_unit))
+            raise ValueError(u'Unknown unit of length: {0}'.format(orig_unit))
 
     def area_to_m2(orig_value, orig_unit):
         """unit -> area unit"""
@@ -359,7 +363,7 @@ def clean_up_study_samples(df):
             return orig_value / (10000000000. ** 2)
 
         else:
-            raise ValueError('Unknown unit of area: {0}'.format(orig_unit))
+            raise ValueError(u'Unknown unit of area: {0}'.format(orig_unit))
 
     unit_conversions = {
         'Age':                    (time_to_hour,        'hours'),
@@ -392,7 +396,7 @@ def clean_up_study_samples(df):
                 pass
             elif colname in unit_conversions:
                 conversion_function, dest_units = unit_conversions[colname]
-                result['{0} ({1})'.format(colname, dest_units)] = (
+                result[u'{0} ({1})'.format(colname, dest_units)] = (
                     conversion_function(float(value), row[unit_colnames[colname]])
                 )
             else:
@@ -443,7 +447,7 @@ def apply_special_treatments_to_study_sample(d):
 
     def merge(outResult, nameField, abbrevField, outFieldName):
         if nameField in outResult and abbrevField in outResult:
-            outResult[outFieldName] = '{0} - {1}'.format(outResult[abbrevField], outResult[nameField])
+            outResult[outFieldName] = u'{0} - {1}'.format(outResult[abbrevField], outResult[nameField])
 
     all_results = {}
     for sampleName, sample in d.iteritems():
@@ -454,7 +458,7 @@ def apply_special_treatments_to_study_sample(d):
         break_out_composition_like_field(
             'Elements composition', result, '*Elements composition - % {0}')
         break_out_composition_like_field(
-            'Wettability', result, '*Wettability - {0} contact angle (°)')
+            'Wettability', result, u'*Wettability - {0} contact angle (°)')
 
         merge(result, 'Material Name', 'Material abbreviation', '*Material')
         merge(result, 'Strain full name', 'Strain abbreviation', '*Strain')
@@ -516,7 +520,7 @@ def join_study_sample_and_assay(clean_s, clean_a):
                          'Array Data Matrix File',
                          'Array Design REF',
                          'Derived Array Data Matrix File'):
-                result[sample]['Transcriptomics Assay Detail: {0}'.format(k)] = v
+                result[sample][u'Transcriptomics Assay Detail: {0}'.format(k)] = v
 
     return result
 

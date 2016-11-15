@@ -198,7 +198,8 @@ export class BrowserComponent implements OnInit, OnDestroy {
   }
 
   sortSampleMatches(sampleMatches: Sample[]): Sample[] {
-    return sampleMatches.sort((a, b) => a._source['Sample Name'].localeCompare(b._source['Sample Name']))
+    // YUCK! Despite what the mappings in ElasticSearch say, 'Sample Name' in the JSON results can be an integer!
+    return sampleMatches.sort((a, b) => (a._source['Sample Name'] + '').localeCompare((b._source['Sample Name'] + '')))
   }
 
   isStudySelected(studyId: string) {
