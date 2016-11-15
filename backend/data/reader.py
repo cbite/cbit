@@ -291,6 +291,40 @@ def clean_up_study_samples(df):
         else:
             raise ValueError('Unknown unit of mass: {0}'.format(orig_unit))
 
+    def area_to_m2(orig_value, orig_unit):
+        """unit -> area unit"""
+
+        if orig_unit == 'square meter':
+            return orig_value
+        elif orig_unit == 'square centimeter':
+            return orig_value / (100. ** 2)
+        elif orig_unit == 'square millimeter':
+            return orig_value / (1000. ** 2)
+        elif orig_unit == 'square angstrom':
+            return orig_value / (10000000000. ** 2)
+
+        else:
+            raise ValueError('Unknown unit of area: {0}'.format(orig_unit))
+
+    def weight_loss_to_percent_per_week(orig_value, orig_unit):
+        """% / [length unit]"""
+
+        if '/' in orig_unit:
+            percent, length_unit = [_.strip() for _ in orig_unit.split('/', 1)]
+            if percent == '%':
+                try:
+                    denom_in_hours = time_to_hour(1.0, length_unit)
+                    denom_in_weeks = denom_in_hours / float(7 * 24)
+
+                    # Example: % / day will have denom_in_weeks = 1./7.
+                    # To convert % / day to % / week, divide by (1./7.)
+                    return orig_value / denom_in_weeks
+                except ValueError:
+                    pass  # Fall through to the exception below
+
+        raise ValueError('Unknown unit of weight loss: {0}'.format(orig_unit))
+
+
     def length_to_m(orig_value, orig_unit):
         """unit -> length unit, excluding centiMorgan, centiRay"""
 
@@ -333,7 +367,7 @@ def clean_up_study_samples(df):
         'Culture Duration':       (time_to_hour,        'hours'),
         'Dose Duration':          (time_to_hour,        'hours'),
         'Dose':                   (concentration_to_mM, 'mM'),
-        'Weight loss':            (mass_to_g,           'g'),
+        'Weight loss':            (weight_loss_to_percent_per_week, '% / week'),
         'Pore size':              (length_to_m,         'm'),
         'Grain size':             (length_to_m,         'm'),
         'Specific surface area':  (area_to_m2,          'm2'),
