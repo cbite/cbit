@@ -1,4 +1,3 @@
-from config import Config
 import zipfile
 import reader
 from reader import read_investigation, read_study_sample, read_assay, read_annotations, read_processed_data
@@ -12,7 +11,7 @@ class Archive(object):
         self.annotations = annotations
 
 
-def read_archive(cfg, archive_filename):
+def read_archive(archive_filename):
     with zipfile.ZipFile(archive_filename, mode='r') as z:
         filenames = z.namelist()
 
@@ -28,7 +27,7 @@ def read_archive(cfg, archive_filename):
                 reader.remove_isa_name_prefixes(
                     reader.remove_empty_values_in_dict(
                         reader.flatten_investigation(
-                            read_investigation(cfg, f)
+                            read_investigation(f)
                         )
                     )
                 )
@@ -56,7 +55,7 @@ def read_archive(cfg, archive_filename):
             raise IOError('Study file "{0}" is missing from archive'.format(
                 study_file_name))
         with z.open(study_file_name, 'r') as f:
-            study_sample = read_study_sample(cfg, f)
+            study_sample = read_study_sample(f)
 
         if 'STUDY ASSAYS' not in investigation:
             raise ValueError('No STUDY ASSAYS section defined in {0}'.format(
@@ -79,7 +78,7 @@ def read_archive(cfg, archive_filename):
             raise IOError('Assay file "{0}" is missing from archive'.format(
                 assay_file_name))
         with z.open(assay_file_name, 'r') as f:
-            assay = read_assay(cfg, f)
+            assay = read_assay(f)
 
         # TODO: Support multiple data set files per study
         if len(set(assay['Derived Array Data Matrix File'])) != 1:
@@ -90,7 +89,7 @@ def read_archive(cfg, archive_filename):
                 'Processed data file "{0}" is missing from archive'.format(
                     processedDataFilename))
         with z.open(processedDataFilename, 'r') as f:
-            processed_data_set = read_processed_data(cfg, f)
+            processed_data_set = read_processed_data(f)
 
         # Check that processed data file for a sample actually includes data for each sample
         for sampleName in study_sample['Sample Name']:
@@ -115,7 +114,7 @@ def read_archive(cfg, archive_filename):
                 'Annotations file "{0}" is missing from archive'.format(
                     annotationFilename))
         with z.open(annotationFilename, 'r') as f:
-            annotationData = read_annotations(cfg, f)
+            annotationData = read_annotations(f)
 
         # Skip raw data for now
 

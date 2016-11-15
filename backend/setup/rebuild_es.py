@@ -11,11 +11,14 @@
 #
 # ["one-liner" from http://stackoverflow.com/a/12269225]
 
+import sys
+sys.path.append('..')
+
 import elasticsearch
 from elasticsearch import helpers
-import reader, config, json
-
-cfg = config.Config()
+import config.config as cfg
+import data.reader
+import json
 
 # 0. Connect to DB
 es = elasticsearch.Elasticsearch(hosts=[{'host': 'localhost', 'port': 9200}])
@@ -171,7 +174,7 @@ es.indices.create(index='cbit', body={
 })
 
 # 3. Load study metadata
-i = reader.read_investigation(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/i_Investigation.txt', 'r'))
+i = reader.read_investigation(open('../../data/new_ISAcreatorArchives/StudyID_01_archive/i_Investigation.txt', 'r'))
 result = reader.conform_investigation_to_schema(
                 reader.remove_isa_name_prefixes(
                   reader.remove_empty_values_in_dict(
@@ -188,7 +191,7 @@ response = es.index(index='cbit', doc_type='study', body=result)
 study1_id = response['_id']
 print("Study 1 ID is '{0}'".format(study1_id))
 
-i = reader.read_investigation(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/i_Investigation.txt', 'r'))
+i = reader.read_investigation(open('../../data/new_ISAcreatorArchives/StudyID_02_archive/i_Investigation.txt', 'r'))
 result = reader.conform_investigation_to_schema(
                reader.remove_isa_name_prefixes(
                  reader.remove_empty_values_in_dict(
@@ -206,12 +209,12 @@ study2_id = response['_id']
 print("Study 2 ID is '{0}'".format(study2_id))
 
 # 4. Load all sample metadata
-a = reader.read_assay(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/a_transcription_micro_1.txt', 'r'))
-s = reader.read_study_sample(cfg, open('../../data/new_ISAcreatorArchives/StudyID_01_archive/s_study_sample.txt', 'r'))
+a = reader.read_assay(open('../../data/new_ISAcreatorArchives/StudyID_01_archive/a_transcription_micro_1.txt', 'r'))
+s = reader.read_study_sample(open('../../data/new_ISAcreatorArchives/StudyID_01_archive/s_study_sample.txt', 'r'))
 d = reader.join_study_sample_and_assay(reader.clean_up_study_samples(s), reader.clean_up_assay(a))
 d = reader.apply_special_treatments_to_study_sample(d)
-a2 = reader.read_assay(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/a_transcription_micro_1.txt', 'r'))
-s2 = reader.read_study_sample(cfg, open('../../data/new_ISAcreatorArchives/StudyID_02_archive/s_study_sample.txt', 'r'))
+a2 = reader.read_assay(open('../../data/new_ISAcreatorArchives/StudyID_02_archive/a_transcription_micro_1.txt', 'r'))
+s2 = reader.read_study_sample(open('../../data/new_ISAcreatorArchives/StudyID_02_archive/s_study_sample.txt', 'r'))
 d2 = reader.join_study_sample_and_assay(reader.clean_up_study_samples(s2), reader.clean_up_assay(a2))
 d2 = reader.apply_special_treatments_to_study_sample(d2)
 

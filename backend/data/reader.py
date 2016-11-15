@@ -5,8 +5,9 @@ import itertools
 import pandas as pd
 import re
 import numpy as np
+import config.config as cfg
 
-def read_investigation(cfg, f):
+def read_investigation(f):
     # An investigation file looks like this:
     #
     # SECTION HEADER
@@ -188,7 +189,7 @@ def conform_investigation_to_schema(i):
     return result
 
 
-def read_study_sample(cfg, f):
+def read_study_sample(f):
     # A study sample is a regular TSV file, with strings quoted by double-quotes.
     # Fortunately, every line has the same number of columns
     #
@@ -430,7 +431,7 @@ def apply_special_treatments_to_study_sample(d):
     return all_results
 
 
-def read_assay(cfg, f):
+def read_assay(f):
     # A transcription_micro file describes the technology used to measure
     # gene expression levels in each sample
     df = pd.read_table(f, encoding=cfg.FILE_ENCODING)
@@ -485,7 +486,7 @@ def join_study_sample_and_assay(clean_s, clean_a):
 
     return result
 
-def read_processed_data(cfg, f):
+def read_processed_data(f):
     # A processed data file is a flat table of expression strength numbers
     # (in some arbitrary units).  Rows are genes (more precisely, individual
     # probes in the gene chip), columns are samples
@@ -493,7 +494,7 @@ def read_processed_data(cfg, f):
     return df
 
 
-def read_annotations(cfg, f):
+def read_annotations(f):
     # An annotations file is a gene-chip-vendor-provided spec of what each
     # probe (row in processed data) is actually talking about
     #

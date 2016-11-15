@@ -5,11 +5,11 @@
 # Note: workaround for incompatibility between OS X and Postgres shared libs:
 # DYLD_LIBRARY_PATH="/Applications/Postgres.app/Contents/MacOS/lib" python set_up_dbs.py
 
-import config
+import config.config as cfg
 import psycopg2
 import elasticsearch
 
-def set_up_elasticsearch(cfg):
+def set_up_elasticsearch():
 
     print("** SETTING UP ELASTICSEARCH **")
     es = elasticsearch.Elasticsearch(
@@ -168,7 +168,7 @@ def set_up_elasticsearch(cfg):
     print('- Done with ElasticSearch')
 
 
-def set_up_postgres(cfg):
+def set_up_postgres():
     """See ddl.sql for actual DB statements"""
 
     print('** SETTING UP POSTGRESQL **')
@@ -208,7 +208,5 @@ def set_up_postgres(cfg):
 
 if __name__ == "__main__":
 
-    cfg = config.Config()
-
-    set_up_elasticsearch(cfg)
-    set_up_postgres(cfg)
+    set_up_elasticsearch()
+    set_up_postgres()

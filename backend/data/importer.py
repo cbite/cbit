@@ -4,19 +4,19 @@ import sys
 import zipfile
 import psycopg2
 import json
-from config import Config
+import config.config as cfg
 from archive import read_archive
 import reader
 from elasticsearch import helpers
 
-def connect_to_postgres(cfg):
+def connect_to_postgres():
     return psycopg2.connect(host=cfg.DB_HOST, port=cfg.DB_PORT, user=cfg.DB_USER, password=cfg.DB_PASS, database=cfg.DB_NAME)
 
 
 
 
-def import_archive(cfg, db_conn, es, archive_filename, study_uuid):
-    a = read_archive(cfg, archive_filename)
+def import_archive(db_conn, es, archive_filename, study_uuid):
+    a = read_archive(archive_filename)
 
     # Import metadata into ElasticSearch
     result = a.investigation
@@ -184,6 +184,5 @@ if __name__ == "__main__":
         sys.stderr.write("Usage: ./importer.py <study archive (zip file)>")
         raise SystemExit
 
-    cfg = Config()
     _, archive_filename = sys.argv
-    import_archive(cfg, archive_filename)
+    import_archive(archive_filename)
