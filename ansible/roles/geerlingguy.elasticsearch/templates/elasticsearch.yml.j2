@@ -101,3 +101,10 @@ http.port: {{ elasticsearch_http_port }}
 # action.destructive_requires_name: true
 script.inline: {{ elasticsearch_script_inline }}
 script.indexed: {{ elasticsearch_script_indexed }}
+
+
+# Enable CORS from anywhere (DON'T DO THIS IN PRODUCTION!!!)
+http.cors.enabled : true 
+http.cors.allow-origin : "*"
+http.cors.allow-methods : OPTIONS, HEAD, GET, POST, PUT, DELETE
+http.cors.allow-headers : X-Requested-With,X-Auth-Token,Content-Type, Content-Length
