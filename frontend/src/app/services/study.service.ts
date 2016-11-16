@@ -44,7 +44,7 @@ export class StudyService {
       this.esClient.indices.getMapping({
         index: 'cbit',
         type: 'sample'
-      }).then(mappings => Object.keys(mappings['cbit'].mappings['sample'].properties))
+      }).then(mappings => Object.keys(mappings['cbit'].mappings['sample'].properties || {}))
     );
   }
 
