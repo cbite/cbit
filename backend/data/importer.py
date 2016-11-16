@@ -26,7 +26,7 @@ def import_archive(db_conn, es, archive_filename, study_uuid):
         study_uuid=study_uuid
     )
 
-    response = es.index(index='cbit', doc_type='study', id=str(study_uuid), body=result)
+    response = es.index(index='cbit', doc_type='study', id=str(study_uuid), refresh=True, body=result)
 
     # 4. Load all sample metadata
     d = reader.apply_special_treatments_to_study_sample(
@@ -45,6 +45,7 @@ def import_archive(db_conn, es, archive_filename, study_uuid):
         result.append(vv)
 
     num_docs_added, errors = helpers.bulk(es, index='cbit', doc_type='sample',
+                                          refresh='wait_for',
                                           actions=result)
 
     # TODO: Fix ingestion into PostgreSQL
