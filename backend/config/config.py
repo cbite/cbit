@@ -18,6 +18,7 @@ ES_HOST = "localhost"
 ES_PORT = 9200
 
 FQDN = 'localhost:23456'  # TODO: In production, should be cbit.maastrichtuniversity.nl
+URL_BASE = 'http://{0}'.format(FQDN)
 
 UPLOADS_PATH = 'uploads'
 FILES_PATH = 'files'

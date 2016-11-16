@@ -70,6 +70,12 @@ class UploadsResource(object):
         # Final response
         resp.status = falcon.HTTP_CREATED
         resp.location = '/uploads/{0}'.format(upload_uuid)
+        resp_json = {
+            'upload_uuid': upload_uuid,
+            'status': UPLOAD_STATUS_UPLOADED,
+            'location': cfg.URL_BASE + resp.location
+        }
+        resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 
 
 class UploadResource(object):
