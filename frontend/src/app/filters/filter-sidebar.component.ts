@@ -43,8 +43,8 @@ export const HIDDEN_SAMPLE_FILTER_LABELS = {
   </form>
   
   <div>
-    <div *ngFor="let category of allSampleFilterLabels">
-      <sample-filters *ngIf='showSampleFilter(category)' [category]="category" [counts]="allSampleFilterMatchCounts[category]"></sample-filters>
+    <div *ngFor="let countKV of destarredAllSampleFilterMatchCounts() | mapToIterable">
+      <sample-filters *ngIf='showSampleFilter(countKV.key)' [category]="countKV.key" [counts]="countKV.val"></sample-filters>
     </div>
   </div>
   
@@ -143,6 +143,23 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
       this._studyService.getSampleMetadataFieldNamesAsync()
         .then(names => names.sort((a,b) => withoutStar(a).localeCompare(withoutStar(b))))
     );
+  }
+
+  destarredAllSampleFilterMatchCounts(): {[category: string]: {[valueName: string]: number}} {
+    var withoutStar = function(s: string): string {
+      if (s.substr(0, 1) == '*') {
+        return s.substr(1);
+      } else {
+        return s;
+      }
+    }
+
+    let result = {};
+    for (let key in this.allSampleFilterMatchCounts) {
+      let filteredKey = withoutStar(key);
+      result[filteredKey] = this.allSampleFilterMatchCounts[key];
+    }
+    return result;
   }
 
   clearFilters(): void {
