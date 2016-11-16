@@ -8,6 +8,7 @@ def CORSMiddleware():
         allow_origins_list=cors_origins,
         allow_credentials_origins_list=cors_origins,
         allow_all_methods=True,
-        allow_all_headers=True
+        allow_all_headers=True,
+        expose_headers_list=['location']
     )
     return cors.middleware
