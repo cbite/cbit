@@ -3,7 +3,7 @@ import { BrowserModule }       from '@angular/platform-browser';
 import { FormsModule }         from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { AppComponent }   from './app.component';
+import { CBiTComponent }   from './cbit.component';
 import {StudyComponent}   from "./study/study.component";
 import {WelcomeComponent} from "./welcome.component";
 import {BrowserComponent} from "./browser.component";
@@ -27,7 +27,7 @@ import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload/ng2-file
     AppRoutingModule
   ],
   declarations: [
-    AppComponent,
+    CBiTComponent,
     WelcomeComponent,
     BrowserComponent,
     DownloadComponent,
@@ -41,6 +41,6 @@ import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload/ng2-file
     FileSelectDirective,
     FileDropDirective
   ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [ CBiTComponent ]
 })
 export class AppModule { }
