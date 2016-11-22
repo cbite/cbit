@@ -1,6 +1,8 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
 
+import * as _ from 'lodash';
+
 export interface StudiesExcludedFromAddToCart {
   [studyId: string]: boolean
 }

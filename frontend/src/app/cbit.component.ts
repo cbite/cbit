@@ -6,9 +6,9 @@ import {DownloadSelectionService} from "./services/download-selection.service";
 import '../../public/css/styles.css';
 
 @Component({
-  selector: 'my-app',
-  templateUrl: './app.component.html',
+  selector: 'cbit',
+  templateUrl: './cbit.component.html',
   providers: [StudyService, FiltersService, DownloadSelectionService]
 })
-export class AppComponent {
+export class CBiTComponent {
 }
