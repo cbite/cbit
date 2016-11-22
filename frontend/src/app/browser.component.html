@@ -1,42 +1,90 @@
-<div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-3 sidebar">
+      <filter-sidebar></filter-sidebar>
+    </div>
 
-  <!-- Ultra-ghetto 1990s-style table formatting for now -->
-  <table width="100%">
-    <tr>
-      <td width="300px" style="vertical-align:top">
-        <filter-sidebar></filter-sidebar>
-      </td>
-
-      <td style="vertical-align:top">
-        <h1>Results ({{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples)</h1>
-        <div>
-          <span *ngIf="!ready" style="color: red;font-style: italic">Updating results...</span>
-          <span *ngIf="ready" style="color: grey;font-style: italic">Results up-to-date</span>
-        </div>
-        <div>
-          In download cart: {{ numStudiesInCart }} studies, {{ numSamplesInCart }} samples.
-          <button (click)="clearCart()">Clear Cart</button>
-          <button (click)="addCurrentSelectionToCart()">Add Selection To Cart</button>
-          <button (click)="proceedToDownload()">Proceed to Download</button>
-          <span *ngIf="(numExcludedStudies > 0) || (numExcludedSamples > 0)" style="color: red;font-style: italic;">
+    <div class="col-xs-9 col-xs-offset-3 main">
+      <h1>Results ({{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples)</h1>
+      <div>
+        <span *ngIf="!ready" style="color: red;font-style: italic">Updating results...</span>
+        <span *ngIf="ready" style="color: grey;font-style: italic">Results up-to-date</span>
+      </div>
+      <div>
+        In download cart: {{ numStudiesInCart }} studies, {{ numSamplesInCart }} samples.
+        <button (click)="clearCart()">Clear Cart</button>
+        <button (click)="addCurrentSelectionToCart()">Add Selection To Cart</button>
+        <button (click)="proceedToDownload()">Proceed to Download</button>
+        <span *ngIf="(numExcludedStudies > 0) || (numExcludedSamples > 0)" style="color: red;font-style: italic;">
             Explicitly excluding {{ numExcludedStudies }} studies and {{ numExcludedSamples }} samples from download
             <button (click)="clearExclusions()">Clear Exclusions</button>
           </span>
+      </div>
+
+      <div class="row">
+
+        <div *ngFor='let studyMatch of matches' class="col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <input type="checkbox"
+                     [checked]="isStudySelected(studyMatch.study._id)"
+                     (change)="updateStudySelection($event, studyMatch.study._id)"/>
+
+              <a (click)="selectStudy(studyMatch.study)" href="javascript:void(0)">
+                <h3 class="panel-title" style="float:left;width:80%">{{ studyMatch.study._source['STUDY']['Study Title'] }}</h3>
+              </a>
+
+              <div style="float:right">
+                <a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <div class="panel-body">
+              <p>by {{ studyMatch.study._source['STUDY']['Study Researchers Involved'] }}</p>
+
+              <a href="#study1-samples" data-toggle="collapse" class="triangle-icon collapsed">
+                <span class="glyphicon glyphicon-triangle-bottom"></span>
+                <span class="glyphicon glyphicon-triangle-right"></span>
+                {{ studyMatch.sampleMatches.length }} matching samples
+              </a>
+
+              <ul id="study1-samples" class="collapse" style="list-style: none">
+                <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 1</li>
+                <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 2</li>
+                <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 3</li>
+                <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 4</li>
+                <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 5</li>
+              </ul>
+            </div>
+            <div class="panel-footer">
+              <div class="btn-group btn-group-xs" style="float:right">
+                <pubmed-links [study]="studyMatch.study"></pubmed-links>
+                <doi-links [study]="studyMatch.study"></doi-links>
+                <a [href]="studyMatch.study._source['*Archive URL']">Download Archive</a>
+                <a href="#" class="btn btn-default" role="button">PubMed</a>
+                <a href="#" class="btn btn-default" role="button">DOI</a>
+                <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-download-alt"></span> Download</a>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
         </div>
-        <ul>
+      </div>
+
+    </div>
+
+    <div class="col-xs-3 footer-fixed-bottom nav">
+      <li>
+        <a href="#"><span class="glyphicon glyphicon-ban-circle"></span> Clear Filters</a>
+      </li>
+    </div>
+  </div>
+
+
+  <!-- Ultra-ghetto 1990s-style table formatting for now -->
+  <!--      <ul>
           <li *ngFor='let studyMatch of matches'>
-            <input type="checkbox"
-                   [checked]="isStudySelected(studyMatch.study._id)"
-                   (change)="updateStudySelection($event, studyMatch.study._id)"/>
-            <a (click)="selectStudy(studyMatch.study)" href="javascript:void(0)">
-              <b>{{ studyMatch.study._source['STUDY']['Study Title'] }}</b>
-            </a>
-            <i>by {{ studyMatch.study._source['STUDY']['Study Researchers Involved'] }}</i>
-            <pubmed-links [study]="studyMatch.study"></pubmed-links>
-            <doi-links [study]="studyMatch.study"></doi-links>
-            <a [href]="studyMatch.study._source['*Archive URL']">Download Archive</a>
-            <br/>
-            <b>{{ studyMatch.sampleMatches.length }} matching samples</b>
+
             <button (click)="areSamplesHidden[studyMatch.study._id] = !areSamplesHidden[studyMatch.study._id]">Show/Hide</button>
             <ul *ngIf="!areSamplesHidden[studyMatch.study._id]">
               <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
@@ -62,5 +110,6 @@
         </ul>
       </td>
     </tr>
-  </table>
+  </table>-->
+
 </div>

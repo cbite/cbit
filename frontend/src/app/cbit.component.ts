@@ -3,8 +3,8 @@ import {StudyService} from "./services/study.service";
 import {FiltersService} from "./services/filters.service";
 import {DownloadSelectionService} from "./services/download-selection.service";
 
-import '../../public/css/styles.css';
 import 'bootstrap/less/bootstrap.less';
+import '../../public/css/styles.css';
 import {Router} from "@angular/router";
 
 @Component({
