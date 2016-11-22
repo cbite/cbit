@@ -1,0 +1,358 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <script src="js/bootstrap.min.js"></script>
+
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">cBiT</a>
+                </div>
+
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Home</a></li>
+                        <li class="active"><a href="search.html">Search</a></li>
+                        <li><a href="download.html"><span class="glyphicon glyphicon-download-alt"></span> Download</a></li>
+                        <li><a href="upload.html"><span class="glyphicon glyphicon-cloud-upload"></span> Upload</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="row">
+                <li class="col-xs-3 sidebar">
+
+                    <ul class="nav nav-sidebar">
+                        <li class="searchbox">
+                            <label>Search for: </label>
+                            <span>
+                                <input type="text" class="searchbox" placeholder="e.g., BCP, stromal cell">
+                            </span>
+                        </li>
+
+                        <li>
+                            <a href="#filters-main" data-toggle="collapse" class="triangle-icon">
+                                <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                <span class="glyphicon glyphicon-triangle-right"></span>
+                                Main Filters
+                            </a>
+
+                            <ul id="filters-main" class="nav collapse in">
+                                <li class="nav-header">
+                                    <a data-toggle="collapse" href="#assay-type" class="triangle-icon">
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        <span class="glyphicon glyphicon-triangle-right"></span>
+                                    </a>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input id="assay-type-checkbox" type="checkbox" value="" checked>
+                                            <a href="#assay-type" data-toggle="collapse" class="triangle-icon">
+                                                Assay type
+                                            </a>
+                                        </label>
+                                    </div>
+
+                                    <ul class="nav collapse in" id="assay-type">
+                                        <li class="checkbox"><label><input type="checkbox" value="" checked>Option 1<div class="count">20</div></label></li>
+                                        <li class="checkbox"><label><input type="checkbox" value="" checked>Option 2<div class="count">15</div></label></li>
+                                        <li class="checkbox"><label><input type="checkbox" value="">Option 3<div class="count">10</div></label></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-header">
+                                    <a data-toggle="collapse" href="#material" class="triangle-icon">
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        <span class="glyphicon glyphicon-triangle-right"></span>
+                                    </a>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="checkbox" value="" checked>
+                                            <a href="#material" data-toggle="collapse" class="triangle-icon">
+                                                Material
+                                            </a>
+                                        </label>
+                                    </div>
+
+                                    <ul class="nav collapse in" id="material">
+                                        <li class="checkbox"><label><input type="checkbox" value="" checked>Option 1<div class="count">20</div></label></li>
+                                        <li class="checkbox"><label><input type="checkbox" value="" checked>Option 2<div class="count">15</div></label></li>
+                                        <li class="checkbox disabled"><label class="disabled"><input disabled type="checkbox" value="" checked>Option 3<div class="count">0</div></label></li>
+                                        <li class="checkbox disabled"><label class="disabled"><input disabled type="checkbox" value="">Option 4<div class="count">0</div></label></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-header">
+                                    <a data-toggle="collapse" href="#dose" class="triangle-icon">
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        <span class="glyphicon glyphicon-triangle-right"></span>
+                                    </a>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="checkbox" value="" checked>
+                                            <a href="#dose" data-toggle="collapse" class="triangle-icon">
+                                                Dose
+                                            </a>
+                                            (
+                                            <select>
+                                                <option>M</option>
+                                                <option selected>mM</option>
+                                                <option>µM</option>
+                                            </select>
+                                            )
+                                        </label>
+                                    </div>
+
+                                    <ul class="nav collapse in" id="dose">
+                                        <li class="checkbox"><label><input type="checkbox" value="" checked>Option 1<div class="count">20</div></label></li>
+                                        <li class="checkbox"><label><input type="checkbox" value="" checked>Option 2<div class="count">15</div></label></li>
+                                        <li class="checkbox disabled"><label class="disabled"><input disabled type="checkbox" value="" checked>Option 3<div class="count">0</div></label></li>
+                                        <li class="checkbox disabled"><label class="disabled"><input disabled type="checkbox" value="">Option 4<div class="count">0</div></label></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#filters-advanced" data-toggle="collapse" class="triangle-icon collapsed">
+                                <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                <span class="glyphicon glyphicon-triangle-right"></span>
+                                Advanced Filters
+                            </a>
+
+                            <ul id="filters-advanced" class="nav collapse">
+
+
+                                <li class="checkbox nav-header">
+                                    <label><input type="checkbox" value="" checked>Also include linked controls</label>
+                                </li>
+
+                                <li class="nav-header">
+                                    <a data-toggle="collapse" href="#strain" class="triangle-icon">
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        <span class="glyphicon glyphicon-triangle-right"></span>
+                                    </a>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="checkbox" value="" checked>
+                                            <a href="#strain" data-toggle="collapse" class="triangle-icon">
+                                                Strain
+                                            </a>
+                                        </label>
+                                    </div>
+
+                                    <ul class="nav collapse in" id="strain">
+                                        <li class="checkbox"><label><input type="checkbox" value="">Option 1<div class="count">20</div></label></li>
+                                        <li class="checkbox"><label><input type="checkbox" value="">Option 2<div class="count">15</div></label></li>
+                                        <li class="checkbox"><label><input type="checkbox" value="">Option 3<div class="count">10</div></label></li>
+                                        <li class="checkbox"><label><input type="checkbox" value="">Option 4<div class="count">20</div></label></li>
+                                        <li class="checkbox"><label><input type="checkbox" value="">Option 5<div class="count">15</div></label></li>
+                                        <li class="checkbox"><label><input type="checkbox" value="">Option 6<div class="count">10</div></label></li>
+                                        <li class="checkbox"><label><input type="checkbox" value="">Long long long long long long option name<div class="count">10</div></label></li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="col-xs-9 col-xs-offset-3 main">
+                    <h1 class="page-header">Results</h1>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title" style="float:left;width:80%">Study #1</h3>
+                                    <div style="float:right">
+                                        <a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="panel-body">
+                                    <p>by Alice & Bob</p>
+                                    <a href="#study1-samples" data-toggle="collapse" class="triangle-icon collapsed">
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        <span class="glyphicon glyphicon-triangle-right"></span>
+                                        5 matching samples
+                                    </a>
+
+                                    <ul id="study1-samples" class="collapse" style="list-style: none">
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 1</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 2</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 3</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 4</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 5</li>
+                                    </ul>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="btn-group btn-group-xs" style="float:right">
+                                        <a href="#" class="btn btn-default" role="button">PubMed</a>
+                                        <a href="#" class="btn btn-default" role="button">DOI</a>
+                                        <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-download-alt"></span> Download</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="panel panel-success">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title" style="float:left;width:80%">Study #2</h3>
+                                    <div style="float:right">
+                                        <a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-minus"></span></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="panel-body">
+                                    <p>by Alice & Bob</p>
+                                    <a href="#study2-samples" data-toggle="collapse" class="triangle-icon collapsed">
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        <span class="glyphicon glyphicon-triangle-right"></span>
+                                        5 matching samples
+                                    </a>
+
+                                    <ul id="study2-samples" class="collapse" style="list-style: none">
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 1</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 2</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 3</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 4</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 5</li>
+                                    </ul>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="btn-group btn-group-xs" style="float:right">
+                                        <a href="#" class="btn btn-default" role="button">PubMed</a>
+                                        <a href="#" class="btn btn-default" role="button">DOI</a>
+                                        <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-download-alt"></span> Download</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="panel panel-success">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title" style="float:left;width:80%">Study #3</h3>
+                                    <div style="float:right">
+                                        <a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-minus"></span></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="panel-body">
+                                    <p>by Alice & Bob</p>
+                                    <a href="#study3-samples" data-toggle="collapse" class="triangle-icon collapsed">
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        <span class="glyphicon glyphicon-triangle-right"></span>
+                                        5 matching samples
+                                    </a>
+
+                                    <ul id="study3-samples" class="collapse" style="list-style: none">
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 1</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 2</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 3</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 4</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 5</li>
+                                    </ul>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="btn-group btn-group-xs" style="float:right">
+                                        <a href="#" class="btn btn-default" role="button">PubMed</a>
+                                        <a href="#" class="btn btn-default" role="button">DOI</a>
+                                        <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-download-alt"></span> Download</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Do this every 3 studies -->
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-4">
+                            <div class="panel panel-success">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title" style="float:left;width:80%">Study #4</h3>
+                                    <div style="float:right">
+                                        <a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-minus"></span></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="panel-body">
+                                    <p>by Alice & Bob</p>
+                                    <a href="#study4-samples" data-toggle="collapse" class="triangle-icon collapsed">
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        <span class="glyphicon glyphicon-triangle-right"></span>
+                                        5 matching samples
+                                    </a>
+
+                                    <ul id="study4-samples" class="collapse" style="list-style: none">
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 1</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 2</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 3</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 4</li>
+                                        <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 5</li>
+                                    </ul>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="btn-group btn-group-xs" style="float:right">
+                                        <a href="#" class="btn btn-default" role="button">PubMed</a>
+                                        <a href="#" class="btn btn-default" role="button">DOI</a>
+                                        <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-download-alt"></span> Download</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-3 footer-fixed-bottom nav">
+                    <li>
+                        <a href="#"><span class="glyphicon glyphicon-ban-circle"></span> Clear Filters</a>
+                    </li>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+</html>
