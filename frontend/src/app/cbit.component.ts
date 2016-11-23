@@ -1,31 +1,23 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {StudyService} from "./services/study.service";
 import {FiltersService} from "./services/filters.service";
 import {DownloadSelectionService} from "./services/download-selection.service";
 
-import '../../public/css/styles.css';
-import {Router} from "@angular/router";
-
 @Component({
   selector: 'cbit',
-  templateUrl: './cbit.component.html',
+  template: `
+    <navbar></navbar>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  `,
+  styles: [`
+    /* Move down content because we have a fixed navbar that is 50px tall */
+    main {
+      padding-top: 50px;
+    }
+  `],
   providers: [StudyService, FiltersService, DownloadSelectionService]
 })
-export class CBiTComponent implements OnInit {
-  private currentUrl: string = '_';
-
-  constructor(private _router : Router){
-    this.currentUrl = ''
-  }
-
-  ngOnInit() {
-    //this._router.subscribe(
-    //  currentUrl => this.currentUrl = currentUrl,
-    //  error => console.log(error)
-    //);
-  }
-
-  isCurrentRoute(route : string) : boolean {
-    return this.currentUrl === route;
-  }
+export class CBiTComponent {
 }

@@ -17,6 +17,8 @@ import {PubmedLinksComponent} from "./study/pubmed-links.component";
 import {DOILinksComponent} from "./study/doi-links.component";
 
 import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload/ng2-file-upload';
+import {NavBarComponent} from "./navbar.component";
+import {CollapseDirective} from "./common/collapse.directive";
 
 
 @NgModule({
@@ -28,6 +30,7 @@ import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload/ng2-file
   ],
   declarations: [
     CBiTComponent,
+    NavBarComponent,
     WelcomeComponent,
     BrowserComponent,
     DownloadComponent,
@@ -39,7 +42,8 @@ import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload/ng2-file
     StudyComponent,
     MapToIterablePipe,
     FileSelectDirective,
-    FileDropDirective
+    FileDropDirective,
+    CollapseDirective
   ],
   bootstrap: [ CBiTComponent ]
 })
