@@ -42,19 +42,21 @@
             <div class="panel-body">
               <p>by {{ studyMatch.study._source['STUDY']['Study Researchers Involved'] }}</p>
 
-              <a href="#study1-samples" data-toggle="collapse" class="triangle-icon collapsed">
-                <span class="glyphicon glyphicon-triangle-bottom"></span>
-                <span class="glyphicon glyphicon-triangle-right"></span>
+              <a (click)="areSamplesHidden[studyMatch.study._id] = !areSamplesHidden[studyMatch.study._id]" href="javascript:void(0)">
+                <span *ngIf="!!areSamplesHidden[studyMatch.study._id]" class="glyphicon glyphicon-triangle-right"></span>
+                <span *ngIf="!areSamplesHidden[studyMatch.study._id]" class="glyphicon glyphicon-triangle-bottom"></span>
                 {{ studyMatch.sampleMatches.length }} matching samples
               </a>
 
-              <ul id="study1-samples" class="collapse" style="list-style: none">
-                <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 1</li>
-                <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 2</li>
-                <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 3</li>
-                <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 4</li>
-                <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 5</li>
-              </ul>
+              <div [collapse]="areSamplesHidden[studyMatch.study._id]">
+                <ul style="list-style: none">
+                  <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 1</li>
+                  <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 2</li>
+                  <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 3</li>
+                  <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 4</li>
+                  <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 5</li>
+                </ul>
+              </div>
             </div>
             <div class="panel-footer">
               <div class="btn-group btn-group-xs" style="float:right">

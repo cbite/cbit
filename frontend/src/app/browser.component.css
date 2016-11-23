@@ -143,14 +143,3 @@
 .main .page-header {
   margin-top: 0;
 }
-
-/*
- * Collapsible filters
- */
-
-.triangle-icon span.glyphicon-triangle-bottom{ display:inline-block; }
-.triangle-icon span.glyphicon-triangle-right { display:none;}
-
-.triangle-icon.collapsed span.glyphicon-triangle-right{ display:inline-block; }
-.triangle-icon.collapsed span.glyphicon-triangle-bottom { display:none;}
-
