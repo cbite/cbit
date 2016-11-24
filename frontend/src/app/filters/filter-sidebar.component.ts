@@ -4,53 +4,96 @@ import {FiltersService, FiltersState} from "../services/filters.service";
 import {StudyService, ManySampleCounts} from "../services/study.service";
 import {Observable, Subject} from "rxjs";
 
-export const HIDDEN_SAMPLE_FILTER_LABELS = {
-  'Barcode': true,
-  'Biological Replicate': true,
-  'Sample ID': true,
-  'Sample Name': true,
-  'Source Name': true,
-  'Study ID': true,
-  'Group ID': true,
-  'Protocols': true,
-  'Sample Match': true,
-
-  // Fields that have been merged in backend
-  'Material Name': true,
-  'Material abbreviation': true,
-  'Strain full name': true,
-  'Strain abbreviation': true,
-  'Compound': true,
-  'Compound abbreviation': true
-};
-
 @Component({
   selector: 'filter-sidebar',
   template: `
-  <h1>Filters <button (click)="clearFilters()">Clear</button></h1>
-  <div>
-    <span *ngIf="!ready" style="color: red;font-style: italic">Updating filters list...</span>
-    <span *ngIf="ready" style="color: grey;font-style: italic">Filters list up-to-date</span>
-  </div>
+    <ul class="nav nav-sidebar">
+      <li class="searchbox">
+        <label for="searchText">Search for:</label>
+        <spinner *ngIf="!ready"></spinner>
+        <span>
+          <input id="searchText" type="text" class="searchbox" placeholder="e.g., BCP, stromal cell" name='searchText' [formControl]="searchTextInForm"/>
+        </span>
+      </li>
   
+      <li>
+        <a href="javascript:void(0)" (click)="mainFiltersShown = !mainFiltersShown">
+          <span *ngIf=" mainFiltersShown" class="glyphicon glyphicon-triangle-bottom"></span>
+          <span *ngIf="!mainFiltersShown" class="glyphicon glyphicon-triangle-right"></span>
+          Main Filters
+        </a>
   
-  <form type="inline">
-    <label for="searchText">Search for:</label>
-    <input id="searchText" type="text" name='searchText' [formControl]="searchTextInForm"/>
-    <br/>
-    <input id="includeControls" type="checkbox" name="includeControls" [formControl]="includeControlsInForm"/>
-    Also include associated controls
-  </form>
+        <ul class="nav" [collapse]="!mainFiltersShown">
+          <sample-filters *ngFor="let countKV of destarredAllSampleFilterMatchCounts() | mapToIterable" 
+                          [category]="countKV.key"
+                          [counts]="countKV.val">
+          </sample-filters>
+        </ul>
+      </li>
   
-  <div>
-    <div *ngFor="let countKV of destarredAllSampleFilterMatchCounts() | mapToIterable">
-      <sample-filters *ngIf='showSampleFilter(countKV.key)' [category]="countKV.key" [counts]="countKV.val"></sample-filters>
-    </div>
-  </div>
+      <li>
+        <a href="javascript:void(0)" (click)="advancedFiltersShown = !advancedFiltersShown">
+          <span *ngIf=" advancedFiltersShown" class="glyphicon glyphicon-triangle-bottom"></span>
+          <span *ngIf="!advancedFiltersShown" class="glyphicon glyphicon-triangle-right"></span>
+          Advanced Filters
+        </a>
   
-  <h1>Applied Filters (DEBUG)</h1>
-  <pre>{{ _filtersService.getFilters() | json }}</pre>
-  `
+        <ul class="nav" [collapse]="!advancedFiltersShown">
+          <li class="checkbox nav-header">
+            <label>
+              <input id="includeControls" type="checkbox" name="includeControls" [formControl]="includeControlsInForm"/>
+              Also include associated controls
+            </label>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  `,
+  styles: [`
+    .nav-sidebar {
+      list-style: none;
+    }
+    .nav-sidebar > li {
+      padding-bottom: 10px;
+    }
+    .nav-sidebar > li > ul {
+      padding-left: 20px;
+    }
+    .nav-sidebar > li > a {
+      padding: 10px 0;
+    }
+    
+    .nav-sidebar .searchbox {
+      position: relative;
+    }
+    .nav-sidebar .searchbox label {
+      float: left;
+    }
+    .nav-sidebar .searchbox span {
+      display: block;
+      overflow: hidden;
+    }
+    .nav-sidebar .searchbox span > input[type="text"] {
+      width: 70%;
+      margin-left: 10px;
+    }
+    .nav-sidebar .searchbox spinner {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
+
+    .nav-sidebar > .active > a,
+    .nav-sidebar > .active > a:hover,
+    .nav-sidebar > .active > a:focus {
+      color: #fff;
+      background-color: #428bca;
+    }
+    
+    .nav-sidebar label.disabled {
+      color: darkgrey;
+    }
+  `]
 })
 export class FilterSidebarComponent implements OnInit, OnDestroy {
 
@@ -62,9 +105,8 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
   ready = false;
   stopStream = new Subject<string>();
 
-  showSampleFilter(category: string): boolean {
-    return !(category in HIDDEN_SAMPLE_FILTER_LABELS);
-  }
+  mainFiltersShown = true;
+  advancedFiltersShown = false;
 
   constructor(
     private _studyService: StudyService,
@@ -98,8 +140,8 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
             this.ready = false;
             // Hack conversion of PromiseLike<ManySampleCounts> to Promise<ManySampleCounts>
             return Observable.fromPromise(<Promise<ManySampleCounts>> (this._studyService.getManySampleCountsAsync(filters,
-              this.allSampleFilterLabels.filter(category => this.showSampleFilter(category))
-            )));
+              this.allSampleFilterLabels)
+            ));
           })
           .takeUntil(this.stopStream)
           .subscribe(newMatchCounts => {
@@ -160,9 +202,5 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
       result[filteredKey] = this.allSampleFilterMatchCounts[key];
     }
     return result;
-  }
-
-  clearFilters(): void {
-    this._filtersService.clearFilters();
   }
 }

@@ -19,6 +19,7 @@ import {DOILinksComponent} from "./study/doi-links.component";
 import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload/ng2-file-upload';
 import {NavBarComponent} from "./navbar.component";
 import {CollapseDirective} from "./common/collapse.directive";
+import {SpinnerComponent} from "./common/spinner.component";
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import {CollapseDirective} from "./common/collapse.directive";
     MapToIterablePipe,
     FileSelectDirective,
     FileDropDirective,
-    CollapseDirective
+    CollapseDirective,
+    SpinnerComponent
   ],
   bootstrap: [ CBiTComponent ]
 })

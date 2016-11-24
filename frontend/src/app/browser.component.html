@@ -5,10 +5,9 @@
     </div>
 
     <div class="col-xs-9 col-xs-offset-3 main">
-      <h1>Results ({{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples)</h1>
-      <div>
-        <span *ngIf="!ready" style="color: red;font-style: italic">Updating results...</span>
-        <span *ngIf="ready" style="color: grey;font-style: italic">Results up-to-date</span>
+      <div class="h1">
+        Results ({{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples)
+        <spinner *ngIf="!ready"></spinner>
       </div>
       <div>
         In download cart: {{ numStudiesInCart }} studies, {{ numSamplesInCart }} samples.
@@ -42,19 +41,33 @@
             <div class="panel-body">
               <p>by {{ studyMatch.study._source['STUDY']['Study Researchers Involved'] }}</p>
 
-              <a (click)="areSamplesHidden[studyMatch.study._id] = !areSamplesHidden[studyMatch.study._id]" href="javascript:void(0)">
-                <span *ngIf="!!areSamplesHidden[studyMatch.study._id]" class="glyphicon glyphicon-triangle-right"></span>
-                <span *ngIf="!areSamplesHidden[studyMatch.study._id]" class="glyphicon glyphicon-triangle-bottom"></span>
+              <a (click)="areSamplesShown[studyMatch.study._id] = !areSamplesShown[studyMatch.study._id]" href="javascript:void(0)">
+                <span *ngIf=" !areSamplesShown[studyMatch.study._id]" class="glyphicon glyphicon-triangle-right"></span>
+                <span *ngIf="!!areSamplesShown[studyMatch.study._id]" class="glyphicon glyphicon-triangle-bottom"></span>
                 {{ studyMatch.sampleMatches.length }} matching samples
               </a>
 
-              <div [collapse]="areSamplesHidden[studyMatch.study._id]">
+              <div [collapse]="!areSamplesShown[studyMatch.study._id]">
                 <ul style="list-style: none">
-                  <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 1</li>
-                  <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 2</li>
-                  <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 3</li>
-                  <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 4</li>
-                  <li><a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a> Sample 5</li>
+                  <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
+                    <div class="showonhover">
+                      <a href="javascript:void(0)" class="btn btn-default btn-xs" role="button"
+                         (click)="toggleSampleSelection(sampleMatch._id)">
+                        <span *ngIf=" isSampleSelected(sampleMatch._id)" class="glyphicon glyphicon-minus"></span>
+                        <span *ngIf="!isSampleSelected(sampleMatch._id)" class="glyphicon glyphicon-plus"></span>
+                      </a>
+                      <b>{{ sampleMatch._source['Sample Name'] }}</b>
+                      <span *ngFor="let kv of filteredDistinctKeyValues(studyMatch.study._id, sampleMatch) | mapToIterable; let isLast = last">
+                        <i>{{ kv.key }}</i>: {{ kv.val }}<span *ngIf="!isLast">, </span>
+                      </span>
+
+                      <div class="hovertext">
+                        <div *ngFor="let kv of distinctKeyValues(studyMatch.study._id, sampleMatch) | mapToIterable">
+                          <b>{{ kv.key }}</b>: {{ kv.val }}
+                        </div>
+                      </div>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -77,41 +90,11 @@
 
     <div class="col-xs-3 footer-fixed-bottom nav">
       <li>
-        <a href="#"><span class="glyphicon glyphicon-ban-circle"></span> Clear Filters</a>
+        <a href="javascript:void(0)" (click)="clearFilters()">
+          <span class="glyphicon glyphicon-ban-circle"></span> Clear Filters
+        </a>
       </li>
     </div>
   </div>
-
-
-  <!-- Ultra-ghetto 1990s-style table formatting for now -->
-  <!--      <ul>
-          <li *ngFor='let studyMatch of matches'>
-
-            <button (click)="areSamplesHidden[studyMatch.study._id] = !areSamplesHidden[studyMatch.study._id]">Show/Hide</button>
-            <ul *ngIf="!areSamplesHidden[studyMatch.study._id]">
-              <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
-                <div class="showonhover">
-                  <input type="checkbox"
-                         [checked]="isSampleSelected(sampleMatch._id)"
-                         (change)="updateSampleSelection($event, sampleMatch._id)"/>
-                  <b>{{ sampleMatch._source['Sample Name'] }}</b>
-                  <span *ngFor="let kv of filteredDistinctKeyValues(studyMatch.study._id, sampleMatch) | mapToIterable; let isLast = last">
-                    <i>{{ kv.key }}</i>: {{ kv.val }}<span *ngIf="!isLast">, </span>
-                  </span>
-
-
-                  <div class="hovertext">
-                    <div *ngFor="let kv of distinctKeyValues(studyMatch.study._id, sampleMatch) | mapToIterable">
-                      <b>{{ kv.key }}</b>: {{ kv.val }}
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </td>
-    </tr>
-  </table>-->
 
 </div>

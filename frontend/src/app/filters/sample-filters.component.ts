@@ -1,23 +1,106 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input, OnInit, ChangeDetectorRef} from "@angular/core";
 import {FiltersService, FilterMode} from "../services/filters.service";
 import {NULL_CATEGORY_NAME} from "../services/study.service";
+
+export const HIDDEN_SAMPLE_FILTER_LABELS = {
+  'Barcode': true,
+  'Biological Replicate': true,
+  'Sample ID': true,
+  'Sample Name': true,
+  'Source Name': true,
+  'Study ID': true,
+  'Group ID': true,
+  'Protocols': true,
+  'Sample Match': true,
+
+  // Fields that have been merged in backend
+  'Material Name': true,
+  'Material abbreviation': true,
+  'Strain full name': true,
+  'Strain abbreviation': true,
+  'Compound': true,
+  'Compound abbreviation': true
+};
 
 @Component({
   selector: 'sample-filters',
   template: `
-  <div [class.hidden]="isTrivial()">
-    <h3>{{ categoryRealName }} <button (click)="isHidden = !isHidden;">Show/Hide</button></h3>
-    [Select <a href="javascript:void(0)" (click)="selectAll()">All</a> | <a href="javascript:void(0)" (click)="selectNone()">None</a>]
-    <ul [class.hidden]="isHidden">
-      <div *ngFor="let possibleValue of counts | mapToIterable">
-        <input type="checkbox" [name]="category" [value]="possibleValue.key"
-          [checked]="isValIncluded(possibleValue.key)"
-          (change)="updateFilters($event, possibleValue.key)">
-          {{ formatValueName(possibleValue.key) }} ({{possibleValue.val}})
+    <li class="nav-header" *ngIf="!isTrivial() && showSampleFilter()">
+      <div class="fullLabel">
+        <a href="javascript:void(0)" (click)="isVisible = !isVisible">
+          <span *ngIf=" isVisible" class="glyphicon glyphicon-triangle-bottom"></span>
+          <span *ngIf="!isVisible" class="glyphicon glyphicon-triangle-right"></span>
+        </a>
+        <div class="my-label checkbox-inline">
+          <label>
+            <input type="checkbox" [name]="category" value=""
+                   [checked]="globalIsChecked()"
+                   (change)="globalChange($event)">
+            <a href="javascript:void(0)" (click)="isVisible = !isVisible">
+              {{ categoryRealName }}
+            </a>
+          </label>
+        </div>
       </div>
-    </ul>
-  </div>
-  `
+  
+      <div [collapse]="!isVisible">
+        <ul class="nav">
+          <li *ngFor="let possibleValue of counts | mapToIterable" class="checkbox">
+            <label>
+              <input type="checkbox"
+                     [name]="category"
+                     [value]="possibleValue.key"
+                     [checked]="isValIncluded(possibleValue.key)"
+                     (change)="updateFilters($event, possibleValue.key)">
+              {{ formatValueName(possibleValue.key) }}
+              <div class="count">{{possibleValue.val}}</div>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </li>
+  `,
+  styles: [`
+    li.nav-header {
+      padding-bottom: 10px;
+    }
+    .fullLabel {
+      margin-bottom: -10px;
+    } 
+    li.nav-header > div.fullLabel > a {
+      position: static;
+      display: inline;
+      padding: 0px;
+      font-weight: bold;
+    }
+    li.nav-header > div.fullLabel > div.my-label {
+      width: auto;
+    }
+    li.nav-header > div.fullLabel > div.my-label > label > a {
+      padding: 10px 0;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    li.nav-header > div.fullLabel > div.my-label > label > a:hover {
+      text-decoration: none;
+    }
+    
+    li.nav-header > div > ul {
+      padding-left: 40px;
+    }
+    
+    .count {
+      display: block;
+      position: absolute;
+      top: 0px;
+      right: 20px;
+      font-style: italic;
+      font-size: 80%;
+      padding-top: 2px;
+      width: 100%;
+      text-align: right;
+    }
+  `]
 })
 export class SampleFiltersComponent implements OnInit {
   @Input() category: string;
@@ -25,7 +108,17 @@ export class SampleFiltersComponent implements OnInit {
     [value: string]: number   // Free-form mapping of values to counts
   } = {}
   categoryRealName: string;
-  isHidden = false;
+
+  get isVisible(): boolean {
+    return this._filtersService.isFilterVisible(this.category);
+  }
+  set isVisible(value: boolean) {
+    this._filtersService.setFilterVisibility(this.category, value);
+  }
+
+  showSampleFilter(): boolean {
+    return !(this.category in HIDDEN_SAMPLE_FILTER_LABELS);
+  }
 
   isTrivial(): boolean {
     return (Object.keys(this.counts).length <= 1);
@@ -33,7 +126,7 @@ export class SampleFiltersComponent implements OnInit {
 
   constructor(
     private _filtersService: FiltersService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.categoryRealName = (this.category.substr(0, 1) == '*' ? this.category.substr(1) : this.category);
@@ -99,5 +192,11 @@ export class SampleFiltersComponent implements OnInit {
       default:
         return s;
     }
+  }
+
+  globalIsChecked(): boolean {
+    return true;
+  }
+  globalChange(e: any): void {
   }
 }

@@ -80,7 +80,13 @@ export class CollapseDirective {
       if (shouldBeCollapsed) {
         this.jqElem.addClass("collapse");
       } else {
-        this.jqElem.addClass("collapse in").height(this.jqElem[0].scrollHeight);;
+        this.jqElem.addClass("collapse in").height('auto');
+        //let that = this;
+
+        // Change height on next tick so that scrollHeight is valid (and not 0)
+        //setTimeout(function() {
+        //  that.jqElem.height('auto');//that.jqElem[0].scrollHeight);
+        //}, 4);
       }
 
     }

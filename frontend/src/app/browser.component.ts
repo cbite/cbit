@@ -3,7 +3,7 @@ import {StudyService, UnifiedMatch} from "./services/study.service";
 import {Study, Sample} from "./common/study.model";
 import {Router} from "@angular/router";
 import {FiltersService} from "./services/filters.service";
-import {HIDDEN_SAMPLE_FILTER_LABELS} from "./filters/filter-sidebar.component";
+import {HIDDEN_SAMPLE_FILTER_LABELS} from "./filters/sample-filters.component";
 import {Observable, Subject} from "rxjs";
 import {DownloadSelectionService} from "./services/download-selection.service";
 
@@ -34,7 +34,7 @@ export class BrowserComponent implements OnInit, OnDestroy {
   matches: UnifiedMatch[] = [];
   sampleKeys: string[];
   commonKeys: { [studyId: string]: { [key: string]: any } };
-  areSamplesHidden: { [studyId: string]: boolean } = {};
+  areSamplesShown: { [studyId: string]: boolean } = {};
   numMatchingStudies: number = 0;
   numMatchingSamples: number = 0;
   numStudiesInCart: number = 0;
@@ -113,10 +113,10 @@ export class BrowserComponent implements OnInit, OnDestroy {
     keys.delete('Sample Name');
     this.sampleKeys = Array.from(keys).sort();
 
-    // By default, show matching samples
+    // By default, hide matching samples
     for (let studyMatch of this.matches) {
-      if (!(studyMatch.study._id in this.areSamplesHidden)) {
-        this.areSamplesHidden[studyMatch.study._id] = false;
+      if (!(studyMatch.study._id in this.areSamplesShown)) {
+        this.areSamplesShown[studyMatch.study._id] = false;
       }
     }
 
@@ -194,8 +194,12 @@ export class BrowserComponent implements OnInit, OnDestroy {
     return !(sampleId in this._downloadSelectionService.getSelection().samplesExcludedFromAddToCart);
   }
 
-  updateSampleSelection(e: any, sampleId: string) {
-    this._downloadSelectionService.setSampleSelected(sampleId, e.target.checked);
+  //updateSampleSelection(e: any, sampleId: string) {
+  //  this._downloadSelectionService.setSampleSelected(sampleId, e.target.checked);
+  //}
+
+  toggleSampleSelection(sampleId: string) {
+    this._downloadSelectionService.setSampleSelected(sampleId, !this.isSampleSelected(sampleId));
   }
 
   clearExclusions() {
@@ -203,13 +207,10 @@ export class BrowserComponent implements OnInit, OnDestroy {
   }
 
   clearCart() {
-    console.log("A");
     this._downloadSelectionService.clearCart();
   }
 
   addCurrentSelectionToCart() {
-    console.log("B");
-
     // Reduce matches to study & sample ids (probably should be working with that as our primitive data anyway)
     let allToAdd:  { [studyId: string]: { [sampleId: string]: boolean } } = {};
 
@@ -228,5 +229,9 @@ export class BrowserComponent implements OnInit, OnDestroy {
 
   proceedToDownload() {
     this._router.navigate(['/download']);
+  }
+
+  clearFilters(): void {
+    this._filtersService.clearFilters();
   }
 }
