@@ -1,6 +1,6 @@
 import {Component, ChangeDetectorRef, OnInit, OnDestroy} from '@angular/core';
 import {StudyService, UnifiedMatch} from "./services/study.service";
-import {Study, Sample} from "./common/study.model";
+import {Study, Sample, RawStudyPublication} from "./common/study.model";
 import {Router} from "@angular/router";
 import {FiltersService} from "./services/filters.service";
 import {HIDDEN_SAMPLE_FILTER_LABELS} from "./filters/sample-filters.component";
@@ -92,11 +92,6 @@ export class BrowserComponent implements OnInit, OnDestroy {
   updateDownloadSelectionStats() {
     let curSelection = this._downloadSelectionService.getSelection();
 
-    this.numStudiesInCart = Object.keys(curSelection.inCart).length;
-    this.numSamplesInCart = (
-      Object.values(curSelection.inCart)
-        .reduce((soFar, sampleIdsObj) => soFar + Object.keys(sampleIdsObj).length, 0)
-    );
     this.numExcludedStudies = Object.keys(curSelection.studiesExcludedFromAddToCart).length;
     this.numExcludedSamples = Object.keys(curSelection.samplesExcludedFromAddToCart).length;
   }
@@ -227,11 +222,89 @@ export class BrowserComponent implements OnInit, OnDestroy {
     this._downloadSelectionService.addToCart(allToAdd);
   }
 
+  addStudyToCart(match: UnifiedMatch): void {
+    let toAdd = { [match.study._id]: {} };
+    for (let sampleMatch of match.sampleMatches) {
+      toAdd[match.study._id][sampleMatch._id] = true;
+    }
+    this._downloadSelectionService.addToCart(toAdd);
+  }
+
+  removeStudyFromCart(match: UnifiedMatch): void {
+    let toRemove = { [match.study._id]: {} };
+    for (let sampleMatch of match.sampleMatches) {
+      toRemove[match.study._id][sampleMatch._id] = true;
+    }
+    this._downloadSelectionService.removeFromCart(toRemove);
+  }
+
+  countMatchingSamplesInCart(match: UnifiedMatch): number {
+    let studyId = match.study._id;
+    let cart = this._downloadSelectionService.getSelection().inCart;
+
+    let numSamplesInCart = 0;
+    if (studyId in cart) {
+      for (let sampleMatch of match.sampleMatches) {
+        if (sampleMatch._id in cart[studyId]) {
+          numSamplesInCart++;
+        }
+      }
+    }
+    return numSamplesInCart
+  }
+
+  // Returns either 'yes', 'no', or 'partial'
+  studyMatchInCartState(match: UnifiedMatch): string {
+    let numSampleMatches = match.sampleMatches.length;
+    let numSamplesInCart = this.countMatchingSamplesInCart(match);
+
+    if (numSamplesInCart === 0) {
+      return 'no';
+    } else if (numSamplesInCart === numSampleMatches) {
+      return 'yes';
+    } else {
+      return 'partial';
+    }
+  }
+
+  isSampleInCart(studyId: string, sampleId: string): boolean {
+    let cart = this._downloadSelectionService.getSelection().inCart;
+    return (studyId in cart) && (sampleId in cart[studyId]);
+  }
+
+  addSampleToCart(studyId: string, sampleId: string): void {
+    this._downloadSelectionService.addToCart({
+      [studyId]: {
+        [sampleId]: true
+      }
+    });
+  }
+
+  removeSampleFromCart(studyId: string, sampleId: string): void {
+    this._downloadSelectionService.removeFromCart({
+      [studyId]: {
+        [sampleId]: true
+      }
+    });
+  }
+
   proceedToDownload() {
     this._router.navigate(['/download']);
   }
 
   clearFilters(): void {
     this._filtersService.clearFilters();
+  }
+
+  pubmedIdsOf(study: Study): string[] {
+    return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
+        .map((p: RawStudyPublication) => p['Study PubMed ID'])
+    );
+  }
+
+  doisOf(study: Study): string[] {
+    return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
+      .map((p: RawStudyPublication) => p['Study Publication DOI'])
+    );
   }
 }

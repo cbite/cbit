@@ -13,13 +13,17 @@ import {AppRoutingModule} from "./app-routing.module";
 import {FilterSidebarComponent} from "./filters/filter-sidebar.component";
 import {MapToIterablePipe} from "./common/mapToIterable.pipe";
 import {SampleFiltersComponent} from "./filters/sample-filters.component";
-import {PubmedLinksComponent} from "./study/pubmed-links.component";
-import {DOILinksComponent} from "./study/doi-links.component";
+import {PubmedLinksDirective} from "./study/pubmed-link.directive";
+import {DOILinkDirective} from "./study/doi-link.directive";
 
 import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload/ng2-file-upload';
 import {NavBarComponent} from "./navbar.component";
 import {CollapseDirective} from "./common/collapse.directive";
 import {SpinnerComponent} from "./common/spinner.component";
+import {SelectionIndicatorComponent} from "./selection-indicator.component";
+import {DropdownDirective} from "./common/dropdown.directive";
+import {DropdownMenuDirective} from "./common/dropdown-menu.directive";
+import {DropdownToggleDirective} from "./common/dropdown-toggle.directive";
 
 
 @NgModule({
@@ -36,8 +40,8 @@ import {SpinnerComponent} from "./common/spinner.component";
     BrowserComponent,
     DownloadComponent,
     UploadComponent,
-    PubmedLinksComponent,
-    DOILinksComponent,
+    PubmedLinksDirective,
+    DOILinkDirective,
     FilterSidebarComponent,
     SampleFiltersComponent,
     StudyComponent,
@@ -45,7 +49,11 @@ import {SpinnerComponent} from "./common/spinner.component";
     FileSelectDirective,
     FileDropDirective,
     CollapseDirective,
-    SpinnerComponent
+    SpinnerComponent,
+    SelectionIndicatorComponent,
+    DropdownDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective
   ],
   bootstrap: [ CBiTComponent ]
 })

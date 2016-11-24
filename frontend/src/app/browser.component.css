@@ -67,3 +67,14 @@
 .main .page-header {
   margin-top: 0;
 }
+
+.resultsCounts {
+  font-size: 90%;
+  margin-bottom: 20px;
+  font-style: oblique;
+}
+
+.addAllResultsButton {
+  float: right;
+  margin-top: 20px;
+}

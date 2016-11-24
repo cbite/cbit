@@ -114,4 +114,22 @@ export class DownloadSelectionService {
 
     this.setInCart(newCart);
   }
+
+  removeFromCart(studiesAndSampleIds: StudyAndSampleIds): void {
+    let newCart = _.cloneDeep(this.getSelection().inCart);
+    for (let studyIdToRemove in studiesAndSampleIds) {
+      if (studyIdToRemove in newCart) {
+        for (let sampleIdToRemove in studiesAndSampleIds[studyIdToRemove]) {
+          if (sampleIdToRemove in newCart[studyIdToRemove]) {
+            delete newCart[studyIdToRemove][sampleIdToRemove];
+          }
+        }
+
+        if (Object.keys(newCart[studyIdToRemove]).length === 0) {
+          delete newCart[studyIdToRemove];
+        }
+      }
+    }
+    this.setInCart(newCart);
+  }
 }

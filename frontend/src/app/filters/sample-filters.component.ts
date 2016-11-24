@@ -1,6 +1,10 @@
-import {Component, Input, OnInit, ChangeDetectorRef} from "@angular/core";
+import {
+  Component, Input, OnInit, ChangeDetectorRef, OnChanges, DoCheck, ViewChild, ElementRef,
+  AfterViewChecked
+} from "@angular/core";
 import {FiltersService, FilterMode} from "../services/filters.service";
 import {NULL_CATEGORY_NAME} from "../services/study.service";
+import * as $ from 'jquery';
 
 export const HIDDEN_SAMPLE_FILTER_LABELS = {
   'Barcode': true,
@@ -22,6 +26,12 @@ export const HIDDEN_SAMPLE_FILTER_LABELS = {
   'Compound abbreviation': true
 };
 
+enum GlobalCheckboxState {
+  All,
+  None,
+  Indeterminate
+}
+
 @Component({
   selector: 'sample-filters',
   template: `
@@ -33,9 +43,8 @@ export const HIDDEN_SAMPLE_FILTER_LABELS = {
         </a>
         <div class="my-label checkbox-inline">
           <label>
-            <input type="checkbox" [name]="category" value=""
-                   [checked]="globalIsChecked()"
-                   (change)="globalChange($event)">
+            <input class="globalCheckbox" type="checkbox" [name]="category" value=""
+                   (click)="clickGlobalCheckbox($event)">
             <a href="javascript:void(0)" (click)="isVisible = !isVisible">
               {{ categoryRealName }}
             </a>
@@ -102,12 +111,14 @@ export const HIDDEN_SAMPLE_FILTER_LABELS = {
     }
   `]
 })
-export class SampleFiltersComponent implements OnInit {
+export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   @Input() category: string;
   @Input() counts: {
     [value: string]: number   // Free-form mapping of values to counts
   } = {}
   categoryRealName: string;
+
+  @ViewChild(".globalCheckbox") globalCheckbox: any;
 
   get isVisible(): boolean {
     return this._filtersService.isFilterVisible(this.category);
@@ -125,11 +136,66 @@ export class SampleFiltersComponent implements OnInit {
   }
 
   constructor(
-    private _filtersService: FiltersService
+    private _filtersService: FiltersService,
+    private _elemRef: ElementRef
   ) { }
 
+  private jqElem: JQuery;
   ngOnInit(): void {
     this.categoryRealName = (this.category.substr(0, 1) == '*' ? this.category.substr(1) : this.category);
+    this.jqElem = $(this._elemRef.nativeElement);
+  }
+
+  getGlobalCheckboxState(): GlobalCheckboxState {
+    let curFilters = this._filtersService.getFilters().sampleFilters;
+    let numPossibleValues = Object.keys(this.counts).length;
+
+    if (this.category in curFilters) {
+      let categoryFilter = curFilters[this.category];
+      switch (categoryFilter.mode) {
+
+        case FilterMode.AllButThese:
+          let numExclusions = Object.keys(categoryFilter.detail).length;
+          if (numExclusions === 0) {
+            return GlobalCheckboxState.All;
+          } else if (numExclusions === numPossibleValues) {
+            return GlobalCheckboxState.None;
+          } else {
+            return GlobalCheckboxState.Indeterminate;
+          }
+
+        case FilterMode.OnlyThese:
+          let numInclusions = Object.keys(categoryFilter.detail).length;
+          if (numInclusions === 0) {
+            return GlobalCheckboxState.None;
+          } else if (numExclusions === numPossibleValues) {
+            return GlobalCheckboxState.All;
+          } else {
+            return GlobalCheckboxState.Indeterminate;
+          }
+      }
+    } else {
+      return GlobalCheckboxState.All;   // If no filters specified, default to all values
+    }
+  }
+
+  ngAfterViewChecked(): void {
+
+    let state = this.getGlobalCheckboxState();
+    let globalCheckbox = this.jqElem.find(".globalCheckbox");
+
+    switch (state) {
+      case GlobalCheckboxState.All:
+        globalCheckbox.prop({indeterminate: false, checked: true});
+        break;
+      case GlobalCheckboxState.None:
+        globalCheckbox.prop({indeterminate: false, checked: false});
+        break;
+      case GlobalCheckboxState.Indeterminate:
+        globalCheckbox.prop({indeterminate: true});
+        break;
+    }
+
   }
 
   isValIncluded(valueName: string): boolean {
@@ -151,14 +217,6 @@ export class SampleFiltersComponent implements OnInit {
 
   updateFilters(e: any, valueName: string): void {
     this._filtersService.setSampleFilter(this.category, valueName, e.target.checked);
-  }
-
-  selectAll(): void {
-    this._filtersService.setSampleFilterAll(this.category);
-  }
-
-  selectNone(): void {
-    this._filtersService.setSampleFilterNone(this.category);
   }
 
   decodePhaseCompositionLike(s: string, entryFormatter: (component: string, value: number) => string): string {
@@ -194,9 +252,26 @@ export class SampleFiltersComponent implements OnInit {
     }
   }
 
-  globalIsChecked(): boolean {
-    return true;
+  selectAll(): void {
+    this._filtersService.setSampleFilterAll(this.category);
   }
-  globalChange(e: any): void {
+
+  selectNone(): void {
+    this._filtersService.setSampleFilterNone(this.category);
+  }
+
+  clickGlobalCheckbox(e: any): void {
+    e.preventDefault();
+
+    let state = this.getGlobalCheckboxState();
+    switch (state) {
+      case GlobalCheckboxState.All:
+      case GlobalCheckboxState.Indeterminate:
+        this.selectNone();
+        break;
+      case GlobalCheckboxState.None:
+        this.selectAll();
+        break;
+    }
   }
 }

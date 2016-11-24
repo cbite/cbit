@@ -6,84 +6,127 @@
 
     <div class="col-xs-9 col-xs-offset-3 main">
       <div class="h1">
-        Results ({{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples)
+        Results
         <spinner *ngIf="!ready"></spinner>
+        <button class="btn btn-success addAllResultsButton" (click)="addCurrentSelectionToCart()">
+          <span class="glyphicon glyphicon-plus"></span> Add All Results To Cart
+        </button>
       </div>
-      <div>
-        In download cart: {{ numStudiesInCart }} studies, {{ numSamplesInCart }} samples.
-        <button (click)="clearCart()">Clear Cart</button>
-        <button (click)="addCurrentSelectionToCart()">Add Selection To Cart</button>
-        <button (click)="proceedToDownload()">Proceed to Download</button>
-        <span *ngIf="(numExcludedStudies > 0) || (numExcludedSamples > 0)" style="color: red;font-style: italic;">
-            Explicitly excluding {{ numExcludedStudies }} studies and {{ numExcludedSamples }} samples from download
-            <button (click)="clearExclusions()">Clear Exclusions</button>
-          </span>
+      <div class="resultsCounts">
+        {{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples
       </div>
 
       <div class="row">
 
-        <div *ngFor='let studyMatch of matches' class="col-md-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <input type="checkbox"
-                     [checked]="isStudySelected(studyMatch.study._id)"
-                     (change)="updateStudySelection($event, studyMatch.study._id)"/>
+        <!-- Have to expand *ngFor manually here to insert clearfix every 3 items -->
+        <template ngFor let-studyMatch [ngForOf]="matches" let-i="index">
+          <div class="col-md-4">
 
-              <a (click)="selectStudy(studyMatch.study)" href="javascript:void(0)">
-                <h3 class="panel-title" style="float:left;width:80%">{{ studyMatch.study._source['STUDY']['Study Title'] }}</h3>
-              </a>
+            <div class="panel"
+                 [class.panel-default]="studyMatchInCartState(studyMatch) === 'no'"
+                 [class.panel-success]="studyMatchInCartState(studyMatch) === 'yes'"
+                 [class.panel-warning]="studyMatchInCartState(studyMatch) === 'partial'"
+            >
+              <div class="panel-heading">
 
-              <div style="float:right">
-                <a href="#" class="btn btn-default btn-xs" role="button"><span class="glyphicon glyphicon-plus"></span></a>
+                <a (click)="selectStudy(studyMatch.study)" href="javascript:void(0)">
+                  <h3 class="panel-title" style="float:left;width:80%">{{ studyMatch.study._source['STUDY']['Study Title'] }}</h3>
+                </a>
+
+                <div [ngSwitch]="studyMatchInCartState(studyMatch)" class="pull-right">
+
+                  <a *ngSwitchCase="'no'" href="#" class="btn btn-success btn-xs" role="button"
+                     (click)="$event.preventDefault(); addStudyToCart(studyMatch)">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </a>
+
+                  <a *ngSwitchCase="'partial'" href="#" class="btn btn-warning btn-xs" role="button"
+                     (click)="$event.preventDefault(); addStudyToCart(studyMatch)">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </a>
+                  <a *ngSwitchCase="'partial'" href="#" class="btn btn-danger btn-xs" role="button"
+                     (click)="$event.preventDefault(); removeStudyFromCart(studyMatch)">
+                    <span class="glyphicon glyphicon-minus"></span>
+                  </a>
+
+                  <a *ngSwitchCase="'yes'" href="#" class="btn btn-danger btn-xs" role="button"
+                     (click)="$event.preventDefault(); removeStudyFromCart(studyMatch)">
+                    <span class="glyphicon glyphicon-minus"></span>
+                  </a>
+
+                </div>
+                <div class="clearfix"></div>
               </div>
-              <div class="clearfix"></div>
-            </div>
-            <div class="panel-body">
-              <p>by {{ studyMatch.study._source['STUDY']['Study Researchers Involved'] }}</p>
+              <div class="panel-body">
+                <p>by {{ studyMatch.study._source['STUDY']['Study Researchers Involved'] }}</p>
 
-              <a (click)="areSamplesShown[studyMatch.study._id] = !areSamplesShown[studyMatch.study._id]" href="javascript:void(0)">
-                <span *ngIf=" !areSamplesShown[studyMatch.study._id]" class="glyphicon glyphicon-triangle-right"></span>
-                <span *ngIf="!!areSamplesShown[studyMatch.study._id]" class="glyphicon glyphicon-triangle-bottom"></span>
-                {{ studyMatch.sampleMatches.length }} matching samples
-              </a>
+                <a (click)="areSamplesShown[studyMatch.study._id] = !areSamplesShown[studyMatch.study._id]" href="javascript:void(0)">
+                  <span *ngIf=" !areSamplesShown[studyMatch.study._id]" class="glyphicon glyphicon-triangle-right"></span>
+                  <span *ngIf="!!areSamplesShown[studyMatch.study._id]" class="glyphicon glyphicon-triangle-bottom"></span>
+                  {{ studyMatch.sampleMatches.length }} matching samples
+                  ({{ countMatchingSamplesInCart(studyMatch) }} in cart)
+                </a>
 
-              <div [collapse]="!areSamplesShown[studyMatch.study._id]">
-                <ul style="list-style: none">
-                  <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
-                    <div class="showonhover">
-                      <a href="javascript:void(0)" class="btn btn-default btn-xs" role="button"
-                         (click)="toggleSampleSelection(sampleMatch._id)">
-                        <span *ngIf=" isSampleSelected(sampleMatch._id)" class="glyphicon glyphicon-minus"></span>
-                        <span *ngIf="!isSampleSelected(sampleMatch._id)" class="glyphicon glyphicon-plus"></span>
-                      </a>
-                      <b>{{ sampleMatch._source['Sample Name'] }}</b>
-                      <span *ngFor="let kv of filteredDistinctKeyValues(studyMatch.study._id, sampleMatch) | mapToIterable; let isLast = last">
-                        <i>{{ kv.key }}</i>: {{ kv.val }}<span *ngIf="!isLast">, </span>
-                      </span>
+                <div [collapse]="!areSamplesShown[studyMatch.study._id]">
+                  <ul style="list-style: none">
+                    <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
+                      <div class="showonhover">
 
-                      <div class="hovertext">
-                        <div *ngFor="let kv of distinctKeyValues(studyMatch.study._id, sampleMatch) | mapToIterable">
-                          <b>{{ kv.key }}</b>: {{ kv.val }}
+                        <a *ngIf="!isSampleInCart(studyMatch.study._id, sampleMatch._id)" href="#"
+                           class="btn btn-success btn-xs" role="button"
+                           (click)="$event.preventDefault(); addSampleToCart(studyMatch.study._id, sampleMatch._id)">
+                          <span class="glyphicon glyphicon-plus"></span>
+                        </a>
+
+                        <a *ngIf="isSampleInCart(studyMatch.study._id, sampleMatch._id)" href="#"
+                           class="btn btn-danger btn-xs" role="button"
+                           (click)="$event.preventDefault(); removeSampleFromCart(studyMatch.study._id, sampleMatch._id)">
+                          <span class="glyphicon glyphicon-minus"></span>
+                        </a>
+
+                        <b>{{ sampleMatch._source['Sample Name'] }}</b>
+                        <span *ngFor="let kv of filteredDistinctKeyValues(studyMatch.study._id, sampleMatch) | mapToIterable; let isLast = last">
+                          <i>{{ kv.key }}</i>: {{ kv.val }}<span *ngIf="!isLast">, </span>
+                        </span>
+
+                        <div class="hovertext">
+                          <div *ngFor="let kv of distinctKeyValues(studyMatch.study._id, sampleMatch) | mapToIterable">
+                            <b>{{ kv.key }}</b>: {{ kv.val }}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="panel-footer">
+                <div class="btn-group btn-group-xs" style="float:right">
+                  <a *ngFor="let pubmedId of pubmedIdsOf(studyMatch.study)"
+                     class="btn btn-default" role="button"
+                     pubmed-link [pubmedId]="pubmedId">
+                    PubMed
+                  </a>
+
+                  <a *ngFor="let doi of doisOf(studyMatch.study)"
+                     class="btn btn-default" role="button"
+                     doi-link [doi]="doi">
+                    DOI
+                  </a>
+
+                  <a [href]="studyMatch.study._source['*Archive URL']"
+                     class="btn btn-default" role="button">
+                    <span class="glyphicon glyphicon-download-alt"></span>
+                    Download
+                  </a>
+                </div>
+                <div class="clearfix"></div>
               </div>
             </div>
-            <div class="panel-footer">
-              <div class="btn-group btn-group-xs" style="float:right">
-                <pubmed-links [study]="studyMatch.study"></pubmed-links>
-                <doi-links [study]="studyMatch.study"></doi-links>
-                <a [href]="studyMatch.study._source['*Archive URL']">Download Archive</a>
-                <a href="#" class="btn btn-default" role="button">PubMed</a>
-                <a href="#" class="btn btn-default" role="button">DOI</a>
-                <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-download-alt"></span> Download</a>
-              </div>
-              <div class="clearfix"></div>
-            </div>
+
           </div>
-        </div>
+
+          <div *ngIf="((i + 1) % 3) === 0" class="clearfix"></div>
+        </template>
       </div>
 
     </div>
