@@ -38,20 +38,21 @@ import {DownloadSelectionService} from "./services/download-selection.service";
           </ul>
           
           <ul class="nav navbar-nav navbar-right">
-            <li dropdown class="dropdown" [class.cartLI]="!isCartEmpty" [class.active]="isCurrentRoute('/selection')">
-              <a dropdownToggle class="cartLink" routerLink="/selection">
+            <li dropdown class="dropdown" [class.cartLI]="!isCartEmpty">
+              <a dropdownToggle class="cartLink">
                 <selection-indicator></selection-indicator>
                 <span class="caret"></span>
               </a>
               
               <ul dropdownMenu class="dropdown-menu">
-                <li>
+                <li [class.disabled]="isCartEmpty">
                   <a href="#" (click)="$event.preventDefault(); clearCart()">
+                    <span class="glyphicon glyphicon-ban-circle"></span> 
                     Clear Cart
                   </a>
                 </li>
                 
-                <li>
+                <li [class.disabled]="isCartEmpty">
                   <a href="#" (click)="$event.preventDefault(); proceedToDownload()">
                     <span class="glyphicon glyphicon-download-alt"></span>
                     Download
@@ -78,6 +79,9 @@ import {DownloadSelectionService} from "./services/download-selection.service";
     background-color: #fcc;
   }
   .cartLI:hover, .cartLI:focus {
+    background-color: #daa;
+  }
+  .navbar-default .navbar-nav > .cartLI.open > a, .navbar-default .navbar-nav > .cartLI.open > a:hover, .navbar-default .navbar-nav > .cartLI.open > a:focus {
     background-color: #daa;
   }
   `]

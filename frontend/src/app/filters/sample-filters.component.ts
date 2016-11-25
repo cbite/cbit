@@ -45,6 +45,7 @@ enum GlobalCheckboxState {
         <div class="my-label checkbox-inline">
           <label>
             <input class="globalCheckbox" type="checkbox" [name]="category" value=""
+                   [disabled]="!anyEnabled()"
                    (click)="clickGlobalCheckbox($event)">
             <a href="javascript:void(0)" (click)="isVisible = !isVisible">
               {{ categoryRealName }}
@@ -220,6 +221,16 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   isEnabled(valueName: string): boolean {
     // Enabled if valueName is present in counts and its value is not zero
     return !!(this.filteredCounts[valueName]);
+  }
+
+  anyEnabled(): boolean {
+    // Enabled if any valueName is present in counts and its value is not zero
+    for (let valueName in this.filteredCounts) {
+      if (this.filteredCounts) {
+        return true;
+      }
+    }
+    return false;
   }
 
   updateFilters(e: any, valueName: string): void {
