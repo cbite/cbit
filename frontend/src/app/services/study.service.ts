@@ -172,12 +172,12 @@ export class StudyService {
           let theseMustClauses = (
             Object.keys(q.mustClause)
               .filter( key => key !== category )
-              .reduce( (res, key) => (res[key] = q.mustClause[key], res), {} )
+              .reduce( (res, key) => { res.push(q.mustClause[key]); return res; }, [] )
           );
           let theseMustNotClauses = (
             Object.keys(q.mustNotClause)
               .filter( key => key !== category )
-              .reduce( (res, key) => (res[key] = q.mustClause[key], res), {} )
+              .reduce( (res, key) => { res.push(q.mustNotClause[key]); return res; }, [] )
           );
 
           aggs['Filtered ' + category] = {
