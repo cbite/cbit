@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import {FiltersState, EMPTY_FILTERS, SampleFilter, FilterMode} from "./filters.service";
 import { Client as ESClient, SearchResponse as ESSearchResponse } from "elasticsearch";
 import {Observable} from "rxjs";
+import * as $ from 'jquery';
 
 export const NULL_CATEGORY_NAME = '<None>';
 
@@ -104,6 +105,22 @@ export class StudyService {
         }
       })
     );
+  }
+
+  getAllCountsAsync(): Promise<ManySampleCounts> {
+    // TODO: Starting to move all contact with ES to the backend.  Eventually, should refactor
+    // contact with backend to not hardcode URLs, etc.
+    const URL = 'http://localhost:23456/metadata/all_counts';
+    return new Promise(function (resolve) {
+      $.ajax({
+        type: 'GET',
+        url: URL,
+        success: function(data:any, textStatus:string, jqXHR: XMLHttpRequest) {
+          resolve(data);
+        }
+        // TODO: Add error handling!
+      });
+    });
   }
 
   getManySampleCountsAsync(filters: FiltersState, categories: string[]): PromiseLike<ManySampleCounts> {

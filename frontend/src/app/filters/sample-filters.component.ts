@@ -6,6 +6,7 @@ import {FiltersService, FilterMode} from "../services/filters.service";
 import {NULL_CATEGORY_NAME} from "../services/study.service";
 import * as $ from 'jquery';
 
+// TODO: Move all usages of this to backend
 export const HIDDEN_SAMPLE_FILTER_LABELS = {
   'Barcode': true,
   'Biological Replicate': true,
@@ -35,7 +36,7 @@ enum GlobalCheckboxState {
 @Component({
   selector: 'sample-filters',
   template: `
-    <li class="nav-header" *ngIf="!isTrivial() && showSampleFilter()">
+    <li class="nav-header" *ngIf="!isTrivial()">
       <div class="fullLabel">
         <a href="javascript:void(0)" (click)="isVisible = !isVisible">
           <span *ngIf=" isVisible" class="glyphicon glyphicon-triangle-bottom"></span>
@@ -54,15 +55,16 @@ enum GlobalCheckboxState {
   
       <div [collapse]="!isVisible">
         <ul class="nav">
-          <li *ngFor="let possibleValue of counts | mapToIterable" class="checkbox">
-            <label>
+          <li *ngFor="let kv of allCounts | mapToIterable" class="checkbox">
+            <label [class.disabled]="!isEnabled(kv.key)">
               <input type="checkbox"
                      [name]="category"
-                     [value]="possibleValue.key"
-                     [checked]="isValIncluded(possibleValue.key)"
-                     (change)="updateFilters($event, possibleValue.key)">
-              {{ formatValueName(possibleValue.key) }}
-              <div class="count">{{possibleValue.val}}</div>
+                     [value]="kv.key"
+                     [disabled]="!isEnabled(kv.key)"
+                     [checked]="isValIncluded(kv.key)"
+                     (change)="updateFilters($event, kv.key)">
+              {{ formatValueName(kv.key) }}
+              <div class="count">{{filteredCounts[kv.key] || 0}}</div>
             </label>
           </li>
         </ul>
@@ -109,16 +111,25 @@ enum GlobalCheckboxState {
       width: 100%;
       text-align: right;
     }
+    .disabled {
+      color: #c0c0c0;
+    }
   `]
 })
 export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   @Input() category: string;
-  @Input() counts: {
+  @Input() allCounts: {
+    [value: string]: number   // Free-form mapping of values to counts
+  } = {}
+  @Input() filteredCounts: {
     [value: string]: number   // Free-form mapping of values to counts
   } = {}
   categoryRealName: string;
 
-  @ViewChild(".globalCheckbox") globalCheckbox: any;
+  constructor(
+    private _filtersService: FiltersService,
+    private _elemRef: ElementRef
+  ) { }
 
   get isVisible(): boolean {
     return this._filtersService.isFilterVisible(this.category);
@@ -127,18 +138,9 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
     this._filtersService.setFilterVisibility(this.category, value);
   }
 
-  showSampleFilter(): boolean {
-    return !(this.category in HIDDEN_SAMPLE_FILTER_LABELS);
-  }
-
   isTrivial(): boolean {
-    return (Object.keys(this.counts).length <= 1);
+    return (Object.keys(this.allCounts).length <= 1);
   }
-
-  constructor(
-    private _filtersService: FiltersService,
-    private _elemRef: ElementRef
-  ) { }
 
   private jqElem: JQuery;
   ngOnInit(): void {
@@ -148,7 +150,7 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
 
   getGlobalCheckboxState(): GlobalCheckboxState {
     let curFilters = this._filtersService.getFilters().sampleFilters;
-    let numPossibleValues = Object.keys(this.counts).length;
+    let numPossibleValues = Object.keys(this.allCounts).length;
 
     if (this.category in curFilters) {
       let categoryFilter = curFilters[this.category];
@@ -213,6 +215,11 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
     } else {
       return true;   // If no filters specified, default to all values
     }
+  }
+
+  isEnabled(valueName: string): boolean {
+    // Enabled if valueName is present in counts and its value is not zero
+    return !!(this.filteredCounts[valueName]);
   }
 
   updateFilters(e: any, valueName: string): void {

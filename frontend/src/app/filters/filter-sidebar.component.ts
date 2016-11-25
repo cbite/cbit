@@ -24,9 +24,10 @@ import {Observable, Subject} from "rxjs";
         </a>
   
         <ul class="nav" [collapse]="!mainFiltersShown">
-          <sample-filters *ngFor="let countKV of destarredAllSampleFilterMatchCounts() | mapToIterable" 
-                          [category]="countKV.key"
-                          [counts]="countKV.val">
+          <sample-filters *ngFor="let propName of unfilteredPropNames" 
+                          [category]="propName"
+                          [allCounts]="unfilteredPropNamesAndValueCounts[propName]"
+                          [filteredCounts]="allSampleFilterMatchCounts[propName] || {}">
           </sample-filters>
         </ul>
       </li>
@@ -100,8 +101,10 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
   // For inspiration, see: http://blog.thoughtram.io/angular/2016/01/06/taking-advantage-of-observables-in-angular2.html
   searchTextInForm = new FormControl();
   includeControlsInForm = new FormControl();
-  allSampleFilterLabels: string[] = [];
   allSampleFilterMatchCounts = {};
+
+  unfilteredPropNamesAndValueCounts = {};
+  unfilteredPropNames: string[] = [];
   ready = false;
   stopStream = new Subject<string>();
 
@@ -126,37 +129,57 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.makeSampleFilterLabels()
-      .then(allSampleFilterLabels => {
-        this.allSampleFilterLabels = allSampleFilterLabels;
-
-        this._filtersService.filters
-          .takeUntil(this.stopStream)
-          .subscribe(filters => this.updateFiltersUI(filters));
-
-        // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
-        this._filtersService.filters
-          .switchMap(filters => {
-            this.ready = false;
-            // Hack conversion of PromiseLike<ManySampleCounts> to Promise<ManySampleCounts>
-            return Observable.fromPromise(<Promise<ManySampleCounts>> (this._studyService.getManySampleCountsAsync(filters,
-              this.allSampleFilterLabels)
-            ));
-          })
-          .takeUntil(this.stopStream)
-          .subscribe(newMatchCounts => {
-            this.allSampleFilterMatchCounts = newMatchCounts;
-            this.ready = true;
-
-            // Force Angular2 change detection to see ready = true change.
-            // Not sure why it's not being picked up automatically
-            this.changeDetectorRef.detectChanges();
-          });
-      });
+    this.makeSampleFilterLabels().then(() => this.startListening());
   }
 
   ngOnDestroy() {
     this.stopStream.next('stop');
+  }
+
+  withoutStar(s: string): string {
+    if (s.substr(0, 1) == '*') {
+      return s.substr(1);
+    } else {
+      return s;
+    }
+  }
+
+  makeSampleFilterLabels(): PromiseLike<void> {
+    // Make a list of all possible filterable properties in samples (and their counts!)
+    return (
+      this._studyService.getAllCountsAsync()
+        .then(allCounts => {
+          this.unfilteredPropNamesAndValueCounts = allCounts;
+          this.unfilteredPropNames = Object.keys(allCounts).sort((a, b) => this.withoutStar(a).localeCompare(this.withoutStar(b)));
+        })
+    );
+  }
+
+  private startListening() {
+
+    // Ensure that external modifications to FiltersService are reflected in sidebar UI
+    this._filtersService.filters
+      .takeUntil(this.stopStream)
+      .subscribe(filters => this.updateFiltersUI(filters));
+
+    // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
+    this._filtersService.filters
+      .switchMap(filters => {
+        this.ready = false;
+        // Hack conversion of PromiseLike<ManySampleCounts> to Promise<ManySampleCounts>
+        return Observable.fromPromise(<Promise<ManySampleCounts>> (this._studyService.getManySampleCountsAsync(filters,
+            this.unfilteredPropNames)
+        ));
+      })
+      .takeUntil(this.stopStream)
+      .subscribe(newMatchCounts => {
+        this.allSampleFilterMatchCounts = newMatchCounts;
+        this.ready = true;
+
+        // Force Angular2 change detection to see ready = true change.
+        // Not sure why it's not being picked up automatically
+        this.changeDetectorRef.detectChanges();
+      });
   }
 
   updateFiltersUI(filters: FiltersState): void {
@@ -169,38 +192,5 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
       // emitEvent: false => Avoid event loops
       this.includeControlsInForm.setValue(filters.includeControls, {emitEvent: false});
     }
-  }
-
-  makeSampleFilterLabels(): PromiseLike<string[]> {
-    // Make a list of all possible filterable properties in samples
-
-    var withoutStar = function(s: string): string {
-      if (s.substr(0, 1) == '*') {
-        return s.substr(1);
-      } else {
-        return s;
-      }
-    }
-    return (
-      this._studyService.getSampleMetadataFieldNamesAsync()
-        .then(names => names.sort((a,b) => withoutStar(a).localeCompare(withoutStar(b))))
-    );
-  }
-
-  destarredAllSampleFilterMatchCounts(): {[category: string]: {[valueName: string]: number}} {
-    var withoutStar = function(s: string): string {
-      if (s.substr(0, 1) == '*') {
-        return s.substr(1);
-      } else {
-        return s;
-      }
-    }
-
-    let result = {};
-    for (let key in this.allSampleFilterMatchCounts) {
-      let filteredKey = withoutStar(key);
-      result[filteredKey] = this.allSampleFilterMatchCounts[key];
-    }
-    return result;
   }
 }
