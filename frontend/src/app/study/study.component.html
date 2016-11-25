@@ -3,10 +3,9 @@
 </div>
 
 <div *ngIf="ready && study">
-  <h1>{{ study._source['STUDY']['Study Title'] }}</h1>
-  <h2>{{ study._source['STUDY']['Study Researchers Involved'] }}</h2>
+  <h4>{{ study._source['STUDY']['Study Researchers Involved'] }}</h4>
 
-  <h3>Extra Info</h3>
+  <h5>Extra Info</h5>
   <ul>
     <li *ngFor="let categoryKV of studyCategoryMap | mapToIterable">
       <b>{{ categoryKV.key }}:</b>
@@ -33,14 +32,14 @@
     </li>
   </ul>
 
-  <h3>Samples</h3>
-  <h4>Common Properties:</h4>
+  <h5>Samples</h5>
+  <h6>Common Properties:</h6>
   <ul>
     <li *ngFor="let kv of commonKeys | mapToIterable">
       <i>{{ kv.key }}</i>: {{ kv.val }}
     </li>
   </ul>
-  <h4>Distinguishing properties:</h4>
+  <h6>Distinguishing properties:</h6>
   <ol>
     <li *ngFor="let sample of samples">
       <b>{{ sample._source['Sample Name'] }}</b>:
@@ -51,5 +50,5 @@
       </span>
     </li>
   </ol>
-  <button (click)="goBack()">Back</button>
+  <!--<button (click)="goBack()">Back</button>-->
 </div>

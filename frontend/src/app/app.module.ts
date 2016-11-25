@@ -24,6 +24,7 @@ import {SelectionIndicatorComponent} from "./selection-indicator.component";
 import {DropdownDirective} from "./common/dropdown.directive";
 import {DropdownMenuDirective} from "./common/dropdown-menu.directive";
 import {DropdownToggleDirective} from "./common/dropdown-toggle.directive";
+import {ModalModule} from "ng2-bootstrap";
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {DropdownToggleDirective} from "./common/dropdown-toggle.directive";
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ModalModule
   ],
   declarations: [
     CBiTComponent,

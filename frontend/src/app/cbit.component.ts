@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewContainerRef} from '@angular/core';
 import {StudyService} from "./services/study.service";
 import {FiltersService} from "./services/filters.service";
 import {DownloadSelectionService} from "./services/download-selection.service";
@@ -20,4 +20,8 @@ import {DownloadSelectionService} from "./services/download-selection.service";
   providers: [StudyService, FiltersService, DownloadSelectionService]
 })
 export class CBiTComponent {
+  // HACK FOR NG2-BOOTSTRAP MODALS!
+  // See https://valor-software.com/ng2-bootstrap/#/modals
+  public constructor(private viewContainerRef:ViewContainerRef) {
+  }
 }

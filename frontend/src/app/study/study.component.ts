@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
   templateUrl: 'study.component.html'
 })
 export class StudyComponent implements OnInit {
+  @Input() studyId: string;
   study: Study;
   studyCategoryMap: RawStudy;
   samples: Sample[];
@@ -25,8 +26,9 @@ export class StudyComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._route.params.forEach((params: Params) => {
-      let id: string = params['id'];
+    //this._route.params.forEach((params: Params) => {
+      //let id: string = params['id'];
+    let id = this.studyId;
       //this._studyService.getStudy(id)
       //  .then(study => this.study = study);
       this._studyService.getStudyAndRelatedSamplesAsync(id).then(result => {
@@ -36,7 +38,7 @@ export class StudyComponent implements OnInit {
         // Not sure why it's not being picked up automatically
         this.changeDetectorRef.detectChanges();
       });
-    });
+    //});
   }
 
   processStudyAndSamples(studyAndSamples: StudyAndSamples): void {
