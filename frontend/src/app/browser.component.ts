@@ -26,8 +26,7 @@ export const KEYS_IN_MINI_SUMMARY = {
 @Component({
   selector: 'browser',
   templateUrl: './browser.component.html',
-  styleUrls: ['./browser.component.css'],
-  providers: [StudyService]
+  styleUrls: ['./browser.component.css']
 })
 export class BrowserComponent implements OnInit, OnDestroy {
 
