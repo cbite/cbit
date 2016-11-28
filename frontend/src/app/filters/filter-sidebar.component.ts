@@ -167,9 +167,12 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
       .switchMap(filters => {
         this.ready = false;
         // Hack conversion of PromiseLike<ManySampleCounts> to Promise<ManySampleCounts>
-        return Observable.fromPromise(<Promise<ManySampleCounts>> (this._studyService.getManySampleCountsAsync(filters,
-            this.unfilteredPropNames)
-        ));
+        return Observable.fromPromise(
+          this._studyService.getManySampleCountsAsync(
+            filters,
+            this.unfilteredPropNames
+          )
+        );
       })
       .takeUntil(this.stopStream)
       .subscribe(newMatchCounts => {

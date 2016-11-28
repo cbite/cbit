@@ -3,8 +3,8 @@ import {BehaviorSubject, Observable} from "rxjs";
 import * as _ from 'lodash';
 
 export const enum FilterMode {
-  AllButThese,
-  OnlyThese
+  AllButThese = 0,
+  OnlyThese   = 1
 }
 
 export interface SampleFilter {

@@ -38,8 +38,7 @@ export class DownloadComponent implements OnInit {
       Object.values(this._downloadSelectionService.getSelection().inCart)
         .reduce((soFar, samples) => soFar + Object.keys(samples).length, 0);
 
-    Promise.all(studyIds.map(studyId => this._studyService.getStudyAndRelatedSamplesAsync(studyId)))
-      .then(studiesAndSamples => studiesAndSamples.map(studyAndSample => studyAndSample.study))
+    Promise.all(studyIds.map(studyId => this._studyService.getStudy(studyId)))
       .then(studies => {
         this.studies = studies;
         this.changeDetectorRef.detectChanges();

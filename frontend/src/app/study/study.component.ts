@@ -31,7 +31,21 @@ export class StudyComponent implements OnInit {
     let id = this.studyId;
       //this._studyService.getStudy(id)
       //  .then(study => this.study = study);
-      this._studyService.getStudyAndRelatedSamplesAsync(id).then(result => {
+
+      let studyPromise = this._studyService.getStudy(id);
+      let samplesPromise = this._studyService.getIdsOfSamplesInStudy(id).then(sampleIds => {
+        return Promise.all(sampleIds.map(sampleId => this._studyService.getSample(sampleId)));
+      });
+
+      Promise.all([studyPromise, samplesPromise]).then(results => {
+        let study = results[0];
+        let samples = results[1];
+
+        let result: StudyAndSamples = {
+          study: study,
+          samples: samples
+        };
+
         this.processStudyAndSamples(result);
 
         // Force Angular2 change detection to see ready = true change.
