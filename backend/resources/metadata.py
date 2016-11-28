@@ -142,15 +142,9 @@ class MetadataFilteredCountsResource(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
-        # 1. Get list of controls needed
-        if filters.includeControls:
-            rawControls = es.search(index='cbit', doc_type='sample',
-                                    body=self.buildESQueryEnumerateControls(filters))
-            controlIds = self.extractControlIdsFromResultOfESQueryEnumerateControls(rawControls)
-        else:
-            controlIds = []
+        controlIds = fetchControlsMatchingFilters(es, filters)
 
-        q = self.buildESQueryPieces(filters, controlIds)
+        q = buildESQueryPieces(filters, controlIds)
         aggs = {}
 
         allFiltersAggs = {}
@@ -242,112 +236,6 @@ class MetadataFilteredCountsResource(object):
         resp.body = json.dumps(result, indent=2, sort_keys=2)
 
 
-    def buildESQueryEnumerateControls(self, filters):
-        # Relevant controls are listed in the results under
-        # results.aggregations.controls.buckets[*].key
-
-        queryPieces = self.buildESQueryPieces(filters)  # type: ESQueryPieces
-        extraMustClauses = queryPieces.mustClause.values()
-        extraMustNotClauses = queryPieces.mustNotClause.values()
-
-        return {
-          "size": 0,  # We only care about the aggregation below
-          "query": {
-            "bool": {
-              "should": queryPieces.shouldClauses,
-              "must": [
-                  { "exists": { "field": "Sample Match" } }
-              ] + extraMustClauses,
-              "must_not": extraMustNotClauses,
-              "minimum_should_match": 1
-            }
-          },
-          "aggs": {
-            "controls": {
-              "terms": {
-                "field": "Sample Match",
-                "size": 10000   # TODO: Think harder about upper limits
-              }
-            }
-          }
-        }
-
-
-    def extractControlIdsFromResultOfESQueryEnumerateControls(self, esResult):
-        return [bucket["key"]
-                for bucket in esResult["aggregations"]["controls"]["buckets"]]
-
-
-    def buildESQueryPieces(self, filters, controlStudyIds = []):
-
-        shouldClauses = []  # type: list[dict]
-        mustClause = {}     # type: dict[str, dict]
-        mustNotClause = {}  # type: dict[str, dict]
-
-        if filters.searchText:
-            shouldClauses = [
-                {
-                    "match_phrase": {
-                        "_all": filters.searchText
-                    }
-                },
-                {
-                    "has_parent": {
-                        "type": "study",
-                        "query": {
-                            "match_phrase": {
-                                "_all": filters.searchText
-                            }
-                        }
-                    }
-                }
-            ]
-        else:
-            shouldClauses = [
-                {
-                    "match_all": {}
-                }
-            ]
-
-        if controlStudyIds:
-            shouldClauses.append({
-                "terms": {
-                    "Sample Name": controlStudyIds
-                }
-            })
-
-        for category, sampleFilter in filters.sampleFilters.iteritems():
-            queryClause = {
-                "terms": {
-                    category: [k for k in sampleFilter.detail.iterkeys() if k != NULL_CATEGORY_NAME]
-                }
-            }
-
-            if NULL_CATEGORY_NAME in sampleFilter.detail:
-                queryClause = {
-                    "bool": {
-                        "should": [
-                            { "bool": { "must_not": { "exists": { "field": category } } } },
-                            queryClause
-                        ]
-                    }
-                }
-
-            if sampleFilter.mode == FilterMode.AllButThese:
-                mustNotClause[category] = queryClause
-            elif sampleFilter.mode == FilterMode.OnlyThese:
-                mustClause[category] = queryClause
-
-        return ESQueryPieces(shouldClauses, mustClause, mustNotClause)
-
-
-class ESQueryPieces(object):
-    def __init__(self, shouldClauses, mustClause, mustNotClause):
-        self.shouldClauses = shouldClauses
-        self.mustClause = mustClause
-        self.mustNotClause = mustNotClause
-
-
 class MetadataSamplesInStudies(object):
     def on_post(self, req, resp):
         """
@@ -398,3 +286,188 @@ class MetadataSamplesInStudies(object):
 
         resp.status = falcon.HTTP_OK
         resp.body = json.dumps(result, indent=2, sort_keys=True)
+
+
+class MetadataSearch(object):
+    def on_post(self, req, resp):
+        """
+        Search for all samples that match the given filters
+
+        Request data
+        ============
+        {
+           "filters": {
+             ...   (front-end filters object of type FiltersState, see below)
+           }
+         }
+
+        Response data
+        =============
+        {
+          "StudyID123": {
+            "SampleID_1",
+            "SampleID_2",
+            ...
+          },
+          "StudyID456": {
+            "SampleID_X",
+            "SampleID_Y",
+            ...
+          },
+          ...
+        }
+        """
+
+        data = json.load(req.stream)
+        filters = FiltersState.from_json(data['filters'])  # type: FiltersState
+
+        es = elasticsearch.Elasticsearch(
+            hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
+
+        controlIds = fetchControlsMatchingFilters(es, filters)
+
+        q = buildESQueryPieces(filters, controlIds)  # type: ESQueryPieces
+        rawResults = es.search(index='cbit', doc_type='sample', _source=False, body={
+            "query": {
+                "bool": {
+                    "should": [
+                        { "terms": { "Sample Name": controlIds } },  # Include controls no matter what
+                        {
+                            "bool": {
+                                "should": q.shouldClauses,
+                                "must": q.mustClause.values(),
+                                "must_not": q.mustNotClause.values(),
+                                "minimum_should_match": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            "size": 10000   # TODO: Think about sizes
+        })
+
+        result = defaultdict(list)
+        for hit in rawResults["hits"]["hits"]:
+            result[hit["_parent"]].append(hit["_id"])
+
+        resp.status = falcon.HTTP_OK
+        resp.body = json.dumps(result, indent=2, sort_keys=True)
+
+
+# HELPER FUNCTIONS
+# ================
+
+
+class ESQueryPieces(object):
+    def __init__(self, shouldClauses, mustClause, mustNotClause):
+        self.shouldClauses = shouldClauses
+        self.mustClause = mustClause
+        self.mustNotClause = mustNotClause
+
+
+def buildESQueryPieces(filters, controlStudyIds = []):
+
+    shouldClauses = []  # type: list[dict]
+    mustClause = {}     # type: dict[str, dict]
+    mustNotClause = {}  # type: dict[str, dict]
+
+    if filters.searchText:
+        shouldClauses = [
+            {
+                "match_phrase": {
+                    "_all": filters.searchText
+                }
+            },
+            {
+                "has_parent": {
+                    "type": "study",
+                    "query": {
+                        "match_phrase": {
+                            "_all": filters.searchText
+                        }
+                    }
+                }
+            }
+        ]
+    else:
+        shouldClauses = [
+            {
+                "match_all": {}
+            }
+        ]
+
+    if controlStudyIds:
+        shouldClauses.append({
+            "terms": {
+                "Sample Name": controlStudyIds
+            }
+        })
+
+    for category, sampleFilter in filters.sampleFilters.iteritems():
+        queryClause = {
+            "terms": {
+                category: [k for k in sampleFilter.detail.iterkeys() if k != NULL_CATEGORY_NAME]
+            }
+        }
+
+        if NULL_CATEGORY_NAME in sampleFilter.detail:
+            queryClause = {
+                "bool": {
+                    "should": [
+                        { "bool": { "must_not": { "exists": { "field": category } } } },
+                        queryClause
+                    ]
+                }
+            }
+
+        if sampleFilter.mode == FilterMode.AllButThese:
+            mustNotClause[category] = queryClause
+        elif sampleFilter.mode == FilterMode.OnlyThese:
+            mustClause[category] = queryClause
+
+    return ESQueryPieces(shouldClauses, mustClause, mustNotClause)
+
+
+def buildESQueryEnumerateControls(filters):
+    # Relevant controls are listed in the results under
+    # results.aggregations.controls.buckets[*].key
+
+    queryPieces = buildESQueryPieces(filters)  # type: ESQueryPieces
+    extraMustClauses = queryPieces.mustClause.values()
+    extraMustNotClauses = queryPieces.mustNotClause.values()
+
+    return {
+      "size": 0,  # We only care about the aggregation below
+      "query": {
+        "bool": {
+          "should": queryPieces.shouldClauses,
+          "must": [
+              { "exists": { "field": "Sample Match" } }
+          ] + extraMustClauses,
+          "must_not": extraMustNotClauses,
+          "minimum_should_match": 1
+        }
+      },
+      "aggs": {
+        "controls": {
+          "terms": {
+            "field": "Sample Match",
+            "size": 10000   # TODO: Think harder about upper limits
+          }
+        }
+      }
+    }
+
+
+def extractControlIdsFromResultOfESQueryEnumerateControls(esResult):
+    return [bucket["key"]
+            for bucket in esResult["aggregations"]["controls"]["buckets"]]
+
+
+def fetchControlsMatchingFilters(es, filters):
+    if filters.includeControls:
+        rawControls = es.search(index='cbit', doc_type='sample',
+                                body=buildESQueryEnumerateControls(filters))
+        return extractControlIdsFromResultOfESQueryEnumerateControls(rawControls)
+    else:
+        return []
