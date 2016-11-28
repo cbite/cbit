@@ -24,6 +24,7 @@ export class CacheableBulkRequester<T> {
   // ================
 
   constructor(
+    public readonly name: string,
     public readonly url: string,
     public readonly cacheTimeMs: number,
     public readonly requestBufferTimeMs: number)

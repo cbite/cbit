@@ -1,12 +1,12 @@
 // TODO: This code needs URGENT re-factoring to make it less convoluted and more robust.
 // But for now, it works :-D
 
-import {Study, Sample, RawStudy} from '../common/study.model';
+// TODO: Stop hardcoding URLs for REST endpoints
+
+import {Study, Sample} from '../common/study.model';
 import {Injectable} from "@angular/core";
 import * as _ from 'lodash';
-import {FiltersState, EMPTY_FILTERS, SampleFilter, FilterMode} from "./filters.service";
-import { Client as ESClient, SearchResponse as ESSearchResponse } from "elasticsearch";
-import {Observable} from "rxjs";
+import {FiltersState} from "./filters.service";
 import * as $ from 'jquery';
 import {CacheableBulkRequester} from "../common/cacheable-bulk-request";
 
@@ -64,8 +64,6 @@ export class StudyService {
   }
 
   getAllCountsAsync(): Promise<ManySampleCounts> {
-    // TODO: Starting to move all contact with ES to the backend.  Eventually, should refactor
-    // contact with backend to not hardcode URLs, etc.
     const URL = 'http://localhost:23456/metadata/all_counts';
     return new Promise(function (resolve) {
       $.ajax({
@@ -78,7 +76,6 @@ export class StudyService {
   }
 
   getManySampleCountsAsync(filters: FiltersState, categories: string[]): Promise<ManySampleCounts> {
-
     const URL = 'http://localhost:23456/metadata/filtered_counts';
     return new Promise(resolve => {
       $.ajax({
@@ -90,7 +87,6 @@ export class StudyService {
           categories: categories
         }),
         success: function(data: ManySampleCounts, textStatus:string, jqXHR: XMLHttpRequest) {
-          console.log(JSON.stringify(data));
           resolve(data);
         }
         // TODO: Add error handling!
@@ -98,84 +94,45 @@ export class StudyService {
     });
   }
 
-  getUnifiedMatchesAsync(filters: FiltersState): PromiseLike<UnifiedMatch[]> {
-    let q: any;
+  getUnifiedMatchesAsync(filters: FiltersState): Promise<UnifiedMatch[]> {
+    // TODO: Refactor usages of this method to not require full study and sample metadata as a result
+    // (i.e., postpone calls to getStudy() and getSample() as long as possible)
+    let self = this;
+    const URL = 'http://localhost:23456/metadata/search';
+    return new Promise(resolve => {
+      $.ajax({
+        type: 'POST',
+        url: URL,
+        contentType: 'application/json',
+        data: JSON.stringify({
+          filters: filters
+        }),
+        success: function(data: { [studyId: string]: string[] }) {
+          let studyIds = Object.keys(data);
+          let sampleIds = _.flatten(Object.values(data));
 
-    // Closure variable
-    let returnedSamples: any;
+          let studiesPromise = Promise.all(studyIds.map(id => self.getStudy(id)));
+          let samplesPromise = Promise.all(sampleIds.map(id => self.getSample(id)));
 
-    // 1. Get list of controls needed
-    let controlsPromise: PromiseLike<string[]>;
-    if (filters.includeControls) {
-      controlsPromise = this.esClient.search({
-        index: 'cbit',
-        type: 'sample',
-        body: this.buildESQueryEnumerateControls(filters)
-      }).then(rawResults => this.extractControlIdsFromResultOfESQueryEnumerateControls(rawResults));
-    } else {
-      controlsPromise = Promise.resolve([]);
-    }
+          Promise.all([studiesPromise, samplesPromise]).then(results => {
+            let studies = results[0];
+            let samples = results[1];
 
-    return controlsPromise.then((controlIds: string[]) => {
-      q = this.buildESQueryPieces({filters: filters, controlStudyIds: controlIds});
-      return this.esClient.search({
-        index: 'cbit', type: 'sample', body: {
-          query: {
-            bool: {
-              should: [
-                { terms: { 'Sample Name': controlIds } },  // Include controls no matter what
-                {
-                  bool: {
-                    should: q.shouldClauses,
-                    must: Object.values(q.mustClause),
-                    must_not: Object.values(q.mustNotClause),
-                    minimum_should_match: 1
-                  }
-                }
-              ]
-            }
-          },
-          size: 10000,  // TODO: Think about sizes
-          aggs: {
-            studies: {
-              terms: {
-                field: "_parent",
-                size: 10000  // TODO: Think about size limits
-              }
-            }
-          }
+            let studiesById = _.zipObject(studyIds, studies);
+            let samplesById = _.zipObject(sampleIds, samples);
+
+            let unifiedMatches: UnifiedMatch[] = Object.keys(data).map(studyId => {
+              return {
+                study: studiesById[studyId],
+                sampleMatches: data[studyId].map(sampleId => samplesById[sampleId])
+              };
+            });
+
+            resolve(unifiedMatches);
+          });
         }
+        // TODO: Add error handling!
       });
-    }).then(rawReturnedSamples => {
-      returnedSamples = rawReturnedSamples;
-      let studyIds: string[] = returnedSamples.aggregations.studies.buckets.map((bucket: any) => bucket.key);
-      return this.esClient.search({
-        index: 'cbit', body: {
-          query: {
-            ids: {
-              type: 'study',
-              values: studyIds
-            }
-          },
-          size: 10000 // TODO: Think about sizes
-        }
-      });
-    }).then(returnedStudies => {
-      let unifiedMatches: {[studyId: string]: UnifiedMatch} = {};
-      let study: any;
-      for (study of returnedStudies.hits.hits) {
-        unifiedMatches[study._id] = {
-          study: study,
-          sampleMatches: []
-        }
-      }
-
-      let sample: any;
-      for (sample of returnedSamples.hits.hits) {
-        unifiedMatches[sample._parent].sampleMatches.push(sample);
-      }
-
-      return Object.values(unifiedMatches);
     });
   }
 
@@ -183,127 +140,27 @@ export class StudyService {
   // PRIVATE DETAILS
   // ===============
 
-  // Relevant controls are listed in the results under
-  // results.aggregations.controls.buckets[*].key
-  private buildESQueryEnumerateControls(filters: FiltersState): any {
-
-    let queryPieces = this.buildESQueryPieces({ filters: filters });
-    let extraMustClauses = Object.values(queryPieces.mustClause);
-    let extraMustNotClauses = Object.values(queryPieces.mustNotClause);
-
-    return {
-      size: 0,  // We only care about the aggregation below
-      query: {
-        bool: {
-          should: queryPieces.shouldClauses,
-          must: [ {exists: {field: "Sample Match"}} ].concat(extraMustClauses),
-          must_not: extraMustNotClauses,
-          minimum_should_match: 1
-        }
-      },
-      aggs: {
-        controls: {
-          terms: {
-            field: "Sample Match",
-            size: 10000   // TODO: Think harder about upper limits
-          }
-        }
-      }
-    }
-  }
-
-  private extractControlIdsFromResultOfESQueryEnumerateControls(esResult: any): string[] {
-    return esResult.aggregations.controls.buckets.map((bucket: any) => bucket.key);
-  }
-
-  private buildESQueryPieces(params: {
-    filters: FiltersState,
-    controlStudyIds?: string[]
-  }): {
-    shouldClauses: any[],
-    mustClause: { [category: string]: any },
-    mustNotClause: { [category: string]: any }
-  } {
-    let shouldClauses: any[] = [];
-    let mustClause: { [category: string]: any } = {};
-    let mustNotClause: { [category: string]: any } = {};
-
-    if (params.filters.searchText) {
-      shouldClauses.push({ match_phrase: { _all: params.filters.searchText } });
-      shouldClauses.push({
-        has_parent: {
-          type: 'study',
-          query: { match_phrase: { _all: params.filters.searchText } }
-        }
-      });
-    } else {
-      shouldClauses.push({ match_all: {} });
-    }
-
-    if (params.controlStudyIds && params.controlStudyIds.length > 0) {
-      shouldClauses.push({ terms: { 'Sample Name': params.controlStudyIds } });
-    }
-
-    _.forOwn(params.filters.sampleFilters, (sampleFilter: SampleFilter, category: string) => {
-      let termsQueryBody = {};
-      termsQueryBody[category] = Object.keys(sampleFilter.detail).filter(k => k != NULL_CATEGORY_NAME);
-      let queryClause: any = { terms: termsQueryBody };
-
-      if (NULL_CATEGORY_NAME in sampleFilter.detail) {
-        queryClause = {
-          bool: {
-            should: [
-              { bool: { must_not: { exists: { field: category } } } },
-              queryClause
-            ]
-          }
-        };
-      }
-
-      switch (sampleFilter.mode) {
-        case FilterMode.AllButThese:
-          mustNotClause[category] = queryClause;
-          break;
-        case FilterMode.OnlyThese:
-          mustClause[category] = queryClause;
-          break;
-      }
-    });
-
-    return {
-      shouldClauses: shouldClauses,
-      mustClause: mustClause,
-      mustNotClause: mustNotClause
-    };
-  }
-
-  private _lastFilters: FiltersState;
-  private _lastStudyMatches: Study[];
-  private esClient: ESClient;
-
   private studyRequester: CacheableBulkRequester<Study>;
   private sampleRequester: CacheableBulkRequester<Sample>;
   private sampleIdsRequester: CacheableBulkRequester<Array<string>>;
 
   constructor() {
-    this.esClient = new ESClient({
-      host: 'http://localhost:9200'
-      //,log: 'trace'  // Uncomment to see every query to ES & its response
-    });
-
     this.studyRequester = new CacheableBulkRequester<Study>(
+      "study",
       'http://localhost:23456/studies',
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
     );
 
     this.sampleRequester = new CacheableBulkRequester<Sample>(
+      "sample",
       'http://localhost:23456/samples',
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
     );
 
     this.sampleIdsRequester = new CacheableBulkRequester<Array<string>>(
+      "idsOfSamplesInStudy",
       'http://localhost:23456/metadata/samples_in_studies',
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
