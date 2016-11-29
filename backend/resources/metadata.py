@@ -354,6 +354,50 @@ class MetadataSearch(object):
         resp.body = json.dumps(result, indent=2, sort_keys=True)
 
 
+class MetadataFields(object):
+    def on_post(self, req, resp):
+        """
+        Return metadata about fields
+
+        Request data
+        ============
+        [
+          "FieldNameA",
+          "FieldNameB",
+          ...
+        ]
+
+        Response data
+        =============
+        {
+          "FieldNameA": {
+            "description": "A very A-type field"
+          },
+          "FieldNameB": {
+            ...
+          },
+          ...
+        }
+        """
+
+        fieldNames = json.load(req.stream)
+
+        db_conn = req.context['db']
+        with db_conn.cursor() as cur:
+            cur.execute("SELECT field_name, description FROM dim_meta_meta WHERE field_name IN %s",
+                        (tuple(fieldNames),))
+            dbResults = cur.fetchall()
+        db_conn.commit()
+
+        results = {fieldName: {} for fieldName in fieldNames}
+        for (fieldName, description) in dbResults:
+            results[fieldName]['description'] = description
+
+        resp.status = falcon.HTTP_OK
+        resp.body = json.dumps(results, indent=2, sort_keys=True)
+
+
+
 # HELPER FUNCTIONS
 # ================
 

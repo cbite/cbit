@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import {FiltersState} from "./filters.service";
 import * as $ from 'jquery';
 import {CacheableBulkRequester} from "../common/cacheable-bulk-request";
+import {FieldMeta} from "../common/field-meta.model";
 
 export const NULL_CATEGORY_NAME = '<None>';
 
@@ -61,6 +62,10 @@ export class StudyService {
 
   getSample(sampleId: string): Promise<Sample> {
     return this.sampleRequester.get(sampleId);
+  }
+
+  getFieldMeta(fieldName: string): Promise<FieldMeta> {
+    return this.fieldMetaRequester.get(fieldName);
   }
 
   getAllCountsAsync(): Promise<ManySampleCounts> {
@@ -142,7 +147,8 @@ export class StudyService {
 
   private studyRequester: CacheableBulkRequester<Study>;
   private sampleRequester: CacheableBulkRequester<Sample>;
-  private sampleIdsRequester: CacheableBulkRequester<Array<string>>;
+  private sampleIdsRequester: CacheableBulkRequester<string[]>;
+  private fieldMetaRequester: CacheableBulkRequester<FieldMeta>;
 
   constructor() {
     this.studyRequester = new CacheableBulkRequester<Study>(
@@ -159,9 +165,16 @@ export class StudyService {
       REQUEST_BUFFER_MS
     );
 
-    this.sampleIdsRequester = new CacheableBulkRequester<Array<string>>(
+    this.sampleIdsRequester = new CacheableBulkRequester<string[]>(
       "idsOfSamplesInStudy",
       'http://localhost:23456/metadata/samples_in_studies',
+      CACHE_LIFETIME_MS,
+      REQUEST_BUFFER_MS
+    );
+
+    this.fieldMetaRequester = new CacheableBulkRequester<FieldMeta>(
+      "fieldMeta",
+      'http://localhost:23456/metadata/fields',
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
     );

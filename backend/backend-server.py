@@ -8,7 +8,13 @@ from resources.uploads import UploadResource, UploadsResource
 from resources.samples import SamplesResource
 from resources.studies import StudiesResource
 from resources.study_archive import StudyArchiveResource
-from resources.metadata import MetadataAllCountsResource, MetadataFilteredCountsResource, MetadataSamplesInStudies, MetadataSearch
+from resources.metadata import (
+    MetadataAllCountsResource,
+    MetadataFilteredCountsResource,
+    MetadataSamplesInStudies,
+    MetadataSearch,
+    MetadataFields
+)
 
 
 
@@ -43,3 +49,4 @@ app.add_route('/metadata/all_counts', MetadataAllCountsResource())
 app.add_route('/metadata/filtered_counts', MetadataFilteredCountsResource())
 app.add_route('/metadata/samples_in_studies', MetadataSamplesInStudies())
 app.add_route('/metadata/search', MetadataSearch())
+app.add_route('/metadata/fields', MetadataFields())

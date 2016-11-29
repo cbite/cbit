@@ -86,3 +86,12 @@ CREATE TABLE fact_processed_datum (
   ,FOREIGN KEY (sample_id) REFERENCES dim_sample (id)
   --,FOREIGN KEY (file_id) REFERENCES dim_file (id)
 );
+
+-- Metadata for metadata
+DROP TABLE IF EXISTS dim_meta_meta CASCADE ;
+CREATE TABLE dim_meta_meta (
+   field_name VARCHAR PRIMARY KEY
+  ,description VARCHAR
+);
+
+--INSERT INTO dim_meta_meta (field_name, description) VALUES ('Array or chip design', 'The design of the array or chip');

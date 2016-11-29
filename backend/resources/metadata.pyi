@@ -11,6 +11,9 @@ class MetadataFilteredCountsResource(object):
 class MetadataSamplesInStudies(object):
     def on_post(self, req: Request, resp: Response): ...
 
+class MetadataFields(object):
+    def on_post(self, req: Request, resp: Response): ...
+
 
 class ESQueryPieces(object):
     def __init__(self, shouldClauses: list[dict], mustClause: dict[str, dict], mustNotClause: dict[str, dict]): ...

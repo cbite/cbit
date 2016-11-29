@@ -3,7 +3,7 @@ import {
   AfterViewChecked
 } from "@angular/core";
 import {FiltersService, FilterMode} from "../services/filters.service";
-import {NULL_CATEGORY_NAME} from "../services/study.service";
+import {NULL_CATEGORY_NAME, StudyService} from "../services/study.service";
 import * as $ from 'jquery';
 
 // TODO: Move all usages of this to backend
@@ -47,7 +47,8 @@ enum GlobalCheckboxState {
             <input class="globalCheckbox" type="checkbox" [name]="category" value=""
                    [disabled]="!anyEnabled()"
                    (click)="clickGlobalCheckbox($event)">
-            <a href="javascript:void(0)" (click)="isVisible = !isVisible">
+            <a href="javascript:void(0)" (click)="isVisible = !isVisible"
+               [tooltipHtml]="description" tooltipPlacement="right" [tooltipAppendToBody]="true">
               {{ categoryRealName }}
             </a>
           </label>
@@ -127,9 +128,13 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   } = {}
   categoryRealName: string;
 
+  description: string = "Fetching description...";
+
   constructor(
     private _filtersService: FiltersService,
-    private _elemRef: ElementRef
+    private _studyService: StudyService,
+    private _elemRef: ElementRef,
+    private _changeDetectorRef: ChangeDetectorRef
   ) { }
 
   get isVisible(): boolean {
@@ -147,6 +152,13 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.categoryRealName = (this.category.substr(0, 1) == '*' ? this.category.substr(1) : this.category);
     this.jqElem = $(this._elemRef.nativeElement);
+
+    let fieldMetaPromise = this._studyService.getFieldMeta(this.category);
+    fieldMetaPromise.then(fieldMeta => {
+      this.description = fieldMeta.description || "No description available";
+
+      this._changeDetectorRef.detectChanges();
+    });
   }
 
   getGlobalCheckboxState(): GlobalCheckboxState {
