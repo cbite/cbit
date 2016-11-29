@@ -92,6 +92,9 @@ DROP TABLE IF EXISTS dim_meta_meta CASCADE ;
 CREATE TABLE dim_meta_meta (
    field_name VARCHAR PRIMARY KEY
   ,description VARCHAR
+  ,category VARCHAR
+  ,data_type VARCHAR
 );
 
---INSERT INTO dim_meta_meta (field_name, description) VALUES ('Array or chip design', 'The design of the array or chip');
+--INSERT INTO dim_meta_meta (field_name, description, category, data_type)
+--VALUES ('Array or chip design', 'The design of the array or chip', 'Technical', 'string');

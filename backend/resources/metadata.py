@@ -27,7 +27,22 @@ HIDDEN_SAMPLE_FILTER_LABELS = frozenset((
   'Compound',
   'Compound abbreviation',
 ))
+
 NULL_CATEGORY_NAME = '<None>'
+
+VALID_CATEGORIES = frozenset((
+    "Technical",
+    "Biological",
+    "Material > General",
+    "Material > Chemical",
+    "Material > Physical",
+    "Material > Mechanical",
+))
+
+VALID_DATA_TYPES = frozenset((
+    'string',
+    'double',
+))
 
 class MetadataAllCountsResource(object):
     def on_get(self, req, resp):
@@ -354,6 +369,31 @@ class MetadataSearch(object):
         resp.body = json.dumps(result, indent=2, sort_keys=True)
 
 
+def get_fields_metadata(db, field_names):
+    with db.cursor() as cur:
+        cur.execute(
+            """
+            SELECT
+              field_name, description, category, data_type
+            FROM dim_meta_meta
+            WHERE field_name IN %s
+            """,
+            (tuple(field_names),))
+        dbResults = cur.fetchall()
+
+    results = {
+        fieldName: { "exists": False }
+        for fieldName in field_names
+    }
+    for (fieldName, description, category, data_type) in dbResults:
+        results[fieldName]['exists'] = True
+        results[fieldName]['description'] = description
+        results[fieldName]['category'] = category
+        results[fieldName]['data_type'] = data_type
+
+    return results
+
+
 class MetadataFields(object):
     def on_post(self, req, resp):
         """
@@ -371,7 +411,10 @@ class MetadataFields(object):
         =============
         {
           "FieldNameA": {
-            "description": "A very A-type field"
+            "exists": true,
+            "description": "A very A-type field",
+            "category": "Technical",
+            "data_type": "string"
           },
           "FieldNameB": {
             ...
@@ -383,19 +426,159 @@ class MetadataFields(object):
         fieldNames = json.load(req.stream)
 
         db_conn = req.context['db']
-        with db_conn.cursor() as cur:
-            cur.execute("SELECT field_name, description FROM dim_meta_meta WHERE field_name IN %s",
-                        (tuple(fieldNames),))
-            dbResults = cur.fetchall()
+        results = get_fields_metadata(db_conn, fieldNames)
         db_conn.commit()
-
-        results = {fieldName: {} for fieldName in fieldNames}
-        for (fieldName, description) in dbResults:
-            results[fieldName]['description'] = description
 
         resp.status = falcon.HTTP_OK
         resp.body = json.dumps(results, indent=2, sort_keys=True)
 
+
+class MetadataField(object):
+    def on_get(self, req, resp, field_name):
+        """
+        Return metadata about a field
+
+        Response data
+        =============
+        {
+          "description": "A very A-type field",
+          "category": "Technical",
+          "data_type": "string"
+        }
+        """
+
+        db_conn = req.context['db']
+        results = get_fields_metadata(db_conn, [field_name])
+        result = results[field_name]
+        db_conn.commit()
+
+        if result['exists']:
+            resp.status = falcon.HTTP_OK
+            resp.body = json.dumps(result, indent=2, sort_keys=True)
+        else:
+            raise falcon.HTTPNotFound(description="Field '{0}' doesn't exist".format(field_name))
+
+
+    def on_put(self, req, resp, field_name):
+        """
+        Create a field with the given metadata
+        (Note: field will only be created in ElasticSearch upon import of a
+         study with samples specifying such fields)
+
+        Request data
+        ============
+        All fields must be present
+
+        {
+          "description": "New description",
+          "category": "Biological",
+          "data_type": "string"
+        }
+
+        Response data
+        =============
+        - HTTP 200 (OK) if all went well
+        - HTTP 400 (Bad Request) if not all metadata is present in request data
+          or if any value (e.g., category) is invalid
+        - HTTP 409 (Conflict) if the field already exists
+        """
+
+        data = json.load(req.stream)
+
+        # 0. Check request data
+        # ---------------------
+        if not isinstance(data, dict):
+            raise falcon.HTTPBadRequest(description="Expected JSON object as payload")
+        if 'description' not in data:
+            raise falcon.HTTPBadRequest(description="Missing 'description'")
+        if 'category' not in data:
+            raise falcon.HTTPBadRequest(description="Missing 'category'")
+        if data['category'] not in VALID_CATEGORIES:
+            raise falcon.HTTPBadRequest(description="Invalid category, try one of these: {0}".format(VALID_CATEGORIES))
+        if 'data_type' not in data:
+            raise falcon.HTTPBadRequest(description="Missing 'data_type'")
+        if data['data_type'] not in VALID_DATA_TYPES:
+            raise falcon.HTTPBadRequest(description="Invalid data_type, try one of these: {0}".format(VALID_DATA_TYPES))
+
+        # 1. Effect change
+        # ----------------
+        db_conn = req.context['db']
+        with db_conn.cursor() as cur:
+            cur.execute("SELECT * FROM dim_meta_meta WHERE field_name = %s", (field_name,))
+            selectResult = cur.fetchall()
+
+            if selectResult:
+                raise falcon.HTTPConflict(description="A field named '{0}' already exists".format(field_name))
+
+            cur.execute("""
+            INSERT INTO dim_meta_meta (field_name, description, category, data_type)
+            VALUES (%s, %s, %s, %s)
+            """, (field_name, data['description'], data['category'], data['data_type']))
+        db_conn.commit()
+
+        resp.status = falcon.HTTP_OK
+
+
+    def on_post(self, req, resp, field_name):
+        """
+        Change metadata about a field
+
+        Request data
+        ============
+        All fields must be present (except data_type, which can't be changed
+        after the fact)
+
+        {
+          "description": "New description",
+          "category": "Biological"
+        }
+
+        Response data
+        =============
+        - HTTP 200 (OK) if all went well
+        - HTTP 400 (Bad Request) if not all metadata is present in request data
+          or if any value (e.g., category) is invalid
+        - HTTP 404 (Not Found) if field doesn't exist
+        """
+
+        data = json.load(req.stream)
+
+        # 0. Check request data
+        # ---------------------
+        if not isinstance(data, dict):
+            raise falcon.HTTPBadRequest(description="Expected JSON object as payload")
+        if 'description' not in data:
+            raise falcon.HTTPBadRequest(description="Missing 'description'")
+        if 'category' not in data:
+            raise falcon.HTTPBadRequest(description="Missing 'category'")
+        if data['category'] not in VALID_CATEGORIES:
+            raise falcon.HTTPBadRequest(description="Invalid category, try one of these: {0}".format(VALID_CATEGORIES))
+        if 'data_type' in data:
+            raise falcon.HTTPBadRequest(description="Cannot change 'data_type' of a field after creation")
+
+        # 1. Effect change
+        # ----------------
+        db_conn = req.context['db']
+        with db_conn.cursor() as cur:
+            cur.execute("SELECT * FROM dim_meta_meta WHERE field_name = %s", (field_name,))
+            selectResult = cur.fetchall()
+
+            if not selectResult:
+                raise falcon.HTTPNotFound(description="No field named '{0}'".format(field_name))
+
+            cur.execute("""
+            UPDATE dim_meta_meta
+            SET
+              description = %s,
+              category = %s
+            WHERE field_name = %s
+            """, (
+                data['description'], data['category'],
+                field_name
+            ))
+        db_conn.commit()
+
+        resp.status = falcon.HTTP_OK
 
 
 # HELPER FUNCTIONS
