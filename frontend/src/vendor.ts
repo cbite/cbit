@@ -13,5 +13,7 @@ import 'rxjs';
 // You can import js, ts, css, sass, ...
 import 'jquery';
 window.$ = window.jQuery = jQuery;  // Allow use of jQuery from developer console
+import * as _ from 'lodash';
+window._ = _;
 import 'bootstrap/less/bootstrap.less';
 import 'lodash';
