@@ -10,7 +10,10 @@ import {BrowserComponent} from "./browser.component";
 import {DownloadComponent} from "./download.component";
 import {UploadComponent} from "./uploader/upload.component";
 import {AppRoutingModule} from "./app-routing.module";
-import {FilterSidebarComponent} from "./filters/filter-sidebar.component";
+import {
+  FilterSidebarComponent, FilterSidebarCategoryComponent,
+  FilterSidebarAllULComponent
+} from "./filters/filter-sidebar.component";
 import {MapToIterablePipe} from "./common/mapToIterable.pipe";
 import {SampleFiltersComponent} from "./filters/sample-filters.component";
 import {PubmedLinksDirective} from "./study/pubmed-link.directive";
@@ -46,6 +49,8 @@ import {ModalModule, TooltipDirective, TooltipModule} from "ng2-bootstrap";
     PubmedLinksDirective,
     DOILinkDirective,
     FilterSidebarComponent,
+    FilterSidebarCategoryComponent,
+    FilterSidebarAllULComponent,
     SampleFiltersComponent,
     StudyComponent,
     MapToIterablePipe,

@@ -36,9 +36,11 @@ enum GlobalCheckboxState {
 @Component({
   selector: 'sample-filters',
   template: `
-    <li class="nav-header" *ngIf="!isTrivial()">
+    <li class="top-level-li" *ngIf="!isTrivial()">
       <div class="fullLabel">
-        <a href="javascript:void(0)" (click)="isVisible = !isVisible">
+        <a href="#" (click)="$event.preventDefault(); isVisible = !isVisible"
+           [class.disabled]="!anyEnabled()"
+        >
           <span *ngIf=" isVisible" class="glyphicon glyphicon-triangle-bottom"></span>
           <span *ngIf="!isVisible" class="glyphicon glyphicon-triangle-right"></span>
         </a>
@@ -47,7 +49,8 @@ enum GlobalCheckboxState {
             <input class="globalCheckbox" type="checkbox" [name]="category" value=""
                    [disabled]="!anyEnabled()"
                    (click)="clickGlobalCheckbox($event)">
-            <a href="javascript:void(0)" (click)="isVisible = !isVisible"
+            <a href="#" (click)="$event.preventDefault(); isVisible = !isVisible"
+               [class.disabled]="!anyEnabled()"
                [tooltipHtml]="description" tooltipPlacement="right" [tooltipAppendToBody]="true">
               {{ categoryRealName }}
             </a>
@@ -56,7 +59,7 @@ enum GlobalCheckboxState {
       </div>
   
       <div [collapse]="!isVisible">
-        <ul class="nav">
+        <ul>
           <li *ngFor="let kv of allCounts | mapToIterable" class="checkbox">
             <label [class.disabled]="!isEnabled(kv.key)">
               <input type="checkbox"
@@ -66,51 +69,65 @@ enum GlobalCheckboxState {
                      [checked]="isValIncluded(kv.key)"
                      (change)="updateFilters($event, kv.key)">
               {{ formatValueName(kv.key) }}
-              <div class="count">{{filteredCounts[kv.key] || 0}}</div>
             </label>
+            <div class="count"
+                 [class.disabled]="!isEnabled(kv.key)"
+            >
+              {{filteredCounts[kv.key] || 0}}
+            </div>
           </li>
         </ul>
       </div>
     </li>
   `,
   styles: [`
-    li.nav-header {
-      padding-bottom: 10px;
+    .top-level-li {
+      padding-top: 5px;
+      padding-bottom: 5px;
     }
     .fullLabel {
       margin-bottom: -10px;
     } 
-    li.nav-header > div.fullLabel > a {
+    .fullLabel > a {
       position: static;
       display: inline;
       padding: 0px;
-      font-weight: bold;
     }
-    li.nav-header > div.fullLabel > div.my-label {
+    .my-label {
       width: auto;
     }
-    li.nav-header > div.fullLabel > div.my-label > label > a {
+    .my-label a {
       padding: 10px 0;
-      font-weight: bold;
       text-decoration: none;
+      font-weight: normal;
     }
-    li.nav-header > div.fullLabel > div.my-label > label > a:hover {
+    .my-label a:hover {
       text-decoration: none;
     }
     
-    li.nav-header > div > ul {
-      padding-left: 40px;
+    ul {
+      padding-left: 30px;
+    }
+    
+    ul li {
+      position: relative;
+      margin-right: 10px;
+      width: 100%;
+    }
+    
+    ul li label {
+      margin-right: 40px;
     }
     
     .count {
       display: block;
       position: absolute;
       top: 0px;
-      right: 20px;
+      right: 0px;
+      width: 40px;
       font-style: italic;
       font-size: 80%;
       padding-top: 2px;
-      width: 100%;
       text-align: right;
     }
     .disabled {
