@@ -35,7 +35,10 @@
 //   }
 
 
-import { Directive, ElementRef, EventEmitter, HostBinding, Input, Output, Renderer } from '@angular/core';
+import {
+  Directive, ElementRef, EventEmitter, HostBinding, Input, Output, Renderer,
+  ChangeDetectorRef
+} from '@angular/core';
 import * as $ from 'jquery';
 
 enum State {
@@ -54,11 +57,23 @@ export class CollapseDirective {
   get isExpandingOrExpanded() { return this.state == State.Expanding || this.state == State.Expanded; }
   get isCollapsedOrCollapsing() { return this.state == State.Collapsing || this.state == State.Collapsed; }
 
+  /*@HostBinding('style.height')
+  private get height(): number {
+    let result: number;
+    if (this.isCollapsedOrCollapsing) {
+      result = 0;
+    } else {
+      result = this.jqElem[0].scrollHeight;
+    }
+    console.log(`calculating height as ${result}`);
+    //return result;
+  }*/
+
   @Output() public collapsed:EventEmitter<any> = new EventEmitter<any>(false);
   @Output() public expanded:EventEmitter<any> = new EventEmitter<any>(false);
 
   private jqElem: JQuery;
-  public constructor(private _el:ElementRef, private _renderer:Renderer) {
+  public constructor(private _el:ElementRef, private _renderer:Renderer, private _changeDetectorRef: ChangeDetectorRef) {
     this.jqElem = $(this._el.nativeElement);
   }
 
@@ -80,7 +95,7 @@ export class CollapseDirective {
       if (shouldBeCollapsed) {
         this.jqElem.addClass("collapse");
       } else {
-        this.jqElem.addClass("collapse in").height('auto');
+        this.jqElem.addClass("collapse in"); //.height('auto');
         //let that = this;
 
         // Change height on next tick so that scrollHeight is valid (and not 0)
@@ -101,15 +116,18 @@ export class CollapseDirective {
     if (this.isExpandingOrExpanded) {
 
       this.state = State.Collapsing;
-      this.jqElem.removeClass('collapse in').addClass('collapsing').height(0);
+      //this.jqElem.removeClass('collapse in').addClass('collapsing');
+      this.jqElem.removeClass('collapse in collapsing').addClass('collapse');
+      this._changeDetectorRef.detectChanges();
+      //.height(0);
 
-      setTimeout(function() {
+      /*setTimeout(function() {
         if (that.state == State.Collapsing) {
           that.state = State.Collapsed;
           that.jqElem.removeClass('collapsing').addClass('collapse');
           that.collapsed.emit(this);
         }
-      }, TRANSITION_DURATION);
+      }, TRANSITION_DURATION);*/
     }
   }
 
@@ -118,15 +136,18 @@ export class CollapseDirective {
     if (this.isCollapsedOrCollapsing) {
 
       this.state = State.Expanding;
-      this.jqElem.removeClass('collapse in').addClass('collapsing').height(this.jqElem[0].scrollHeight);
+      //this.jqElem.removeClass('collapse in').addClass('collapsing');
+      this.jqElem.removeClass('collapse in collapsing').addClass('collapse in');
+      this._changeDetectorRef.detectChanges();
+      //.height(this.jqElem[0].scrollHeight);
 
-      setTimeout(function() {
+      /*setTimeout(function() {
         if (that.state == State.Expanding) {
           that.state = State.Expanded;
           that.jqElem.removeClass('collapsing').addClass('collapse in');
           that.expanded.emit(this);
         }
-      }, TRANSITION_DURATION);
+      }, TRANSITION_DURATION);*/
     }
   }
 }
