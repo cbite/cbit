@@ -33,14 +33,14 @@
                   <h3 class="panel-title" style="float:left;width:80%">{{ studyMatch.study._source['STUDY']['Study Title'] }}</h3>
                 </a>
 
-                <div [ngSwitch]="studyMatchInCartState(studyMatch)" class="pull-right">
+                <div [ngSwitch]="studyMatchInCartState(studyMatch)" class="panel-heading-plus-minus-buttons">
 
                   <a *ngSwitchCase="'no'" href="#" class="btn btn-success btn-xs" role="button"
                      (click)="$event.preventDefault(); addStudyToCart(studyMatch)">
                     <span class="glyphicon glyphicon-plus"></span>
                   </a>
 
-                  <a *ngSwitchCase="'partial'" href="#" class="btn btn-warning btn-xs" role="button"
+                  <a *ngSwitchCase="'partial'" href="#" class="btn btn-success btn-xs" role="button"
                      (click)="$event.preventDefault(); addStudyToCart(studyMatch)">
                     <span class="glyphicon glyphicon-plus"></span>
                   </a>

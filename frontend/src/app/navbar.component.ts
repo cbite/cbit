@@ -76,13 +76,13 @@ import {DownloadSelectionService} from "./services/download-selection.service";
   }
   
   .cartLI {
-    background-color: #fcc;
+    background-color: #cfc;
   }
   .cartLI:hover, .cartLI:focus {
-    background-color: #daa;
+    background-color: #ada;
   }
   .navbar-default .navbar-nav > .cartLI.open > a, .navbar-default .navbar-nav > .cartLI.open > a:hover, .navbar-default .navbar-nav > .cartLI.open > a:focus {
-    background-color: #daa;
+    background-color: #ada;
   }
   `]
 })
