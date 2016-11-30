@@ -39,6 +39,13 @@ VALID_CATEGORIES = frozenset((
     "Material > Mechanical",
 ))
 
+VALID_VISIBILITIES = frozenset((
+    'hidden',
+    'main',
+    'additional',
+    'unit',
+))
+
 VALID_DATA_TYPES = frozenset((
     'string',
     'double',
@@ -374,7 +381,7 @@ def get_fields_metadata(db, field_names):
         cur.execute(
             """
             SELECT
-              field_name, description, category, data_type
+              field_name, description, category, visibility, data_type
             FROM dim_meta_meta
             WHERE field_name IN %s
             """,
@@ -385,10 +392,11 @@ def get_fields_metadata(db, field_names):
         fieldName: { "exists": False }
         for fieldName in field_names
     }
-    for (fieldName, description, category, data_type) in dbResults:
+    for (fieldName, description, category, visibility, data_type) in dbResults:
         results[fieldName]['exists'] = True
         results[fieldName]['description'] = description
         results[fieldName]['category'] = category
+        results[fieldName]['visibility'] = visibility
         results[fieldName]['data_type'] = data_type
 
     return results
@@ -414,6 +422,7 @@ class MetadataFields(object):
             "exists": true,
             "description": "A very A-type field",
             "category": "Technical",
+            "visibility": "main",
             "data_type": "string"
           },
           "FieldNameB": {
@@ -443,6 +452,7 @@ class MetadataField(object):
         {
           "description": "A very A-type field",
           "category": "Technical",
+            "visibility": "main",
           "data_type": "string"
         }
         """
@@ -472,6 +482,7 @@ class MetadataField(object):
         {
           "description": "New description",
           "category": "Biological",
+          "visibility": "main",
           "data_type": "string"
         }
 
@@ -487,14 +498,25 @@ class MetadataField(object):
 
         # 0. Check request data
         # ---------------------
+
         if not isinstance(data, dict):
             raise falcon.HTTPBadRequest(description="Expected JSON object as payload")
+
         if 'description' not in data:
             raise falcon.HTTPBadRequest(description="Missing 'description'")
+
         if 'category' not in data:
             raise falcon.HTTPBadRequest(description="Missing 'category'")
         if data['category'] not in VALID_CATEGORIES:
             raise falcon.HTTPBadRequest(description="Invalid category, try one of these: {0}".format(VALID_CATEGORIES))
+
+        if 'visibility' not in data:
+            raise falcon.HTTPBadRequest(description="Missing 'visibility'")
+        if data['visibility'] not in VALID_VISIBILITIES:
+            raise falcon.HTTPBadRequest(
+                description="Invalid visibility, try one of these: {0}".format(
+                    VALID_VISIBILITIES))
+
         if 'data_type' not in data:
             raise falcon.HTTPBadRequest(description="Missing 'data_type'")
         if data['data_type'] not in VALID_DATA_TYPES:
@@ -511,9 +533,9 @@ class MetadataField(object):
                 raise falcon.HTTPConflict(description="A field named '{0}' already exists".format(field_name))
 
             cur.execute("""
-            INSERT INTO dim_meta_meta (field_name, description, category, data_type)
-            VALUES (%s, %s, %s, %s)
-            """, (field_name, data['description'], data['category'], data['data_type']))
+            INSERT INTO dim_meta_meta (field_name, description, category, visibility, data_type)
+            VALUES (%s, %s, %s, %s, %s)
+            """, (field_name, data['description'], data['category'], data['visibility'], data['data_type']))
         db_conn.commit()
 
         resp.status = falcon.HTTP_OK
@@ -530,7 +552,8 @@ class MetadataField(object):
 
         {
           "description": "New description",
-          "category": "Biological"
+          "category": "Biological",
+          "visibility": "main"
         }
 
         Response data
@@ -545,14 +568,25 @@ class MetadataField(object):
 
         # 0. Check request data
         # ---------------------
+
         if not isinstance(data, dict):
             raise falcon.HTTPBadRequest(description="Expected JSON object as payload")
+
         if 'description' not in data:
             raise falcon.HTTPBadRequest(description="Missing 'description'")
+
         if 'category' not in data:
             raise falcon.HTTPBadRequest(description="Missing 'category'")
         if data['category'] not in VALID_CATEGORIES:
             raise falcon.HTTPBadRequest(description="Invalid category, try one of these: {0}".format(VALID_CATEGORIES))
+
+        if 'visibility' not in data:
+            raise falcon.HTTPBadRequest(description="Missing 'visibility'")
+        if data['visibility'] not in VALID_VISIBILITIES:
+            raise falcon.HTTPBadRequest(
+                description="Invalid visibility, try one of these: {0}".format(
+                    VALID_VISIBILITIES))
+
         if 'data_type' in data:
             raise falcon.HTTPBadRequest(description="Cannot change 'data_type' of a field after creation")
 
@@ -570,10 +604,11 @@ class MetadataField(object):
             UPDATE dim_meta_meta
             SET
               description = %s,
-              category = %s
+              category = %s,
+              visibility = %s
             WHERE field_name = %s
             """, (
-                data['description'], data['category'],
+                data['description'], data['category'], data['visibility'],
                 field_name
             ))
         db_conn.commit()
