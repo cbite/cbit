@@ -8,6 +8,8 @@ import falcon
 
 import config.config as cfg
 from data import importer
+from data.archive import read_archive
+from data import reader
 
 # Possible upload statuses
 UPLOAD_STATUS_UPLOADING = 'uploading'
@@ -48,6 +50,7 @@ class UploadsResource(object):
 
         # Now dump file into temporary space
         # TODO: Support multipart/form-data instead?
+        # TODO: Enforce maximum file size?
         os.makedirs(upload_dir)
         filepath = os.path.join(upload_dir, 'archive.zip')
         with open(filepath, 'wb') as f:
@@ -65,7 +68,49 @@ class UploadsResource(object):
                         (UPLOAD_STATUS_UPLOADED, upload_uuid))
         db_conn.commit()
 
-        # TODO: Check for metadata that we don't yet know about
+        # Check that archive is valid
+        try:
+            a = read_archive(filepath)
+        except Exception as e:
+            raise falcon.HTTPBadRequest(
+                description="Malformed archive: {0}".format(str(e))
+            )
+
+        # Enumerate all fields in upload
+        d = reader.apply_special_treatments_to_study_sample(
+            reader.join_study_sample_and_assay(
+                reader.clean_up_study_samples(a.study_sample),
+                reader.clean_up_assay(a.assay)
+            )
+        )
+
+        fieldNames = set(('Sample Name',))
+        for i, (k, v) in enumerate(d.iteritems()):
+            fieldNames = fieldNames.union(set(v.keys()))
+
+        # Check for which fields we don't yet have metadata
+        with db_conn.cursor() as cur:
+            cur.execute("""
+                SELECT field_name, description, category, visibility, data_type
+                FROM dim_meta_meta
+                WHERE field_name IN %s
+            """, (tuple(fieldNames),))
+            rawResults = cur.fetchall()
+
+            knownFields = {
+                field_name.decode('utf-8'): {
+                    'description': description.decode('utf-8'),
+                    'category': category,
+                    'visibility': visibility,
+                    'data_type': data_type
+                }
+                for (field_name, description, category, visibility, data_type) in rawResults
+            }
+
+        unknownFields = fieldNames.difference(set(knownFields.keys()))
+        print(repr(fieldNames))
+        print(repr(set(knownFields.keys())))
+        print(repr(unknownFields))
 
         # Final response
         resp.status = falcon.HTTP_CREATED
@@ -73,7 +118,10 @@ class UploadsResource(object):
         resp_json = {
             'upload_uuid': upload_uuid,
             'status': UPLOAD_STATUS_UPLOADED,
-            'location': cfg.URL_BASE + resp.location
+            'location': cfg.URL_BASE + resp.location,
+            'fieldNames': list(fieldNames),
+            'knownFields': knownFields,
+            'unknownFields': list(unknownFields)
         }
         resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 

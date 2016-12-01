@@ -8,7 +8,7 @@ import {StudyComponent}   from "./study/study.component";
 import {WelcomeComponent} from "./welcome.component";
 import {BrowserComponent} from "./browser.component";
 import {DownloadComponent} from "./download.component";
-import {UploadComponent} from "./uploader/upload.component";
+import {UploadComponent, FieldMetadataFormComponent} from "./uploader/upload.component";
 import {AppRoutingModule} from "./app-routing.module";
 import {
   FilterSidebarComponent, FilterSidebarCategoryComponent,
@@ -46,6 +46,7 @@ import {ModalModule, TooltipDirective, TooltipModule} from "ng2-bootstrap";
     BrowserComponent,
     DownloadComponent,
     UploadComponent,
+    FieldMetadataFormComponent,
     PubmedLinksDirective,
     DOILinkDirective,
     FilterSidebarComponent,

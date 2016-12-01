@@ -393,6 +393,9 @@ def get_fields_metadata(db, field_names):
         for fieldName in field_names
     }
     for (fieldName, description, category, visibility, data_type) in dbResults:
+        fieldName = fieldName.decode('utf-8')
+        description = description.decode('utf-8')
+
         results[fieldName]['exists'] = True
         results[fieldName]['description'] = description
         results[fieldName]['category'] = category
