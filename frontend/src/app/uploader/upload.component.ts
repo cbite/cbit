@@ -306,7 +306,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Sintering temperature": {
     "category": "Material > General",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Sintering temperature of the material in degree Celsius.",
     "visibility": "main"
   },
@@ -350,13 +350,13 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   // Material Properties > Chemical
   "Phase composition": {
     "category": "Material > Chemical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Percentage (%) of each phase in the material, separated by semi-colons, e.g.: TCP=80;HA=20",
     "visibility": "main"
   },
   "Phase composition Unit": {
     "category": "Material > Chemical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Phase composition unit. This should be percent: %",
     "visibility": "unit"
   },
@@ -368,7 +368,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Elements composition": {
     "category": "Material > Chemical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Element concentrations in material in parts per million (ppm) as measured by ICP-MS, separated by semi-colon, e.g.: Ca=800;P=400",
     "visibility": "main"
   },
@@ -428,7 +428,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Weight loss": {
     "category": "Material > Chemical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "The weight loss of the material per time Unit",
     "visibility": "main"
   },
@@ -442,7 +442,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   // Material Properties > Physical
   "Crystallinity": {
     "category": "Material > Physical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "The percentage (%) of amorphous/crystalline material",
     "visibility": "main"
   },
@@ -466,7 +466,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Porosity": {
     "category": "Material > Physical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "The percentage of porosity of the material",
     "visibility": "main"
   },
@@ -478,13 +478,13 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Porosity device": {
     "category": "Material > Physical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "The device used to measure the porosity, e.g. microCT, mercury intrusion",
     "visibility": "hidden"
   },
   "Pore size": {
     "category": "Material > Physical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Pore diameter size",
     "visibility": "main"
   },
@@ -502,7 +502,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Grain size": {
     "category": "Material > Physical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "The grain size of the material as measured by SEM.",
     "visibility": "main"
   },
@@ -556,7 +556,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Specific surface area": {
     "category": "Material > Physical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Specific surface area of the material",
     "visibility": "main"
   },
@@ -574,7 +574,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Wettability": {
     "category": "Material > Physical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Wettability of the material (contact angle in degrees) with a liquid measured with contact angle device.Write down as e.g. water=45;ethanol=60",
     "visibility": "main"
   },
@@ -586,7 +586,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Surface charge": {
     "category": "Material > Physical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "The surface charge of the material measured as zeta potential (in millivolt).",
     "visibility": "additional"
   },
@@ -610,7 +610,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Alignment of crystals": {
     "category": "Material > Physical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Alignment of crystals in a polymer as measured by SAXS/WAXS",
     "visibility": "main"
   },
@@ -628,7 +628,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Crosslinking degree": {
     "category": "Material > Physical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Degree of crosslinking (%)",
     "visibility": "main"
   },
@@ -654,7 +654,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   // Material Properties > Mechanical
   "Elasticity": {
     "category": "Material > Mechanical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Elasticity of the material (elastic modulus, average) in Pascal",
     "visibility": "main"
   },
@@ -678,7 +678,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Toughness": {
     "category": "Material > Mechanical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Toughness of the material as measured by Nanoindentator in Pascal",
     "visibility": "additional"
   },
@@ -690,7 +690,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Hardness": {
     "category": "Material > Mechanical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Knoop hardness as measured by Nanoindentator in Pascal",
     "visibility": "main"
   },
@@ -768,7 +768,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Shear stress": {
     "category": "Material > Mechanical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Shear stress in Pascal as measured by rheometer or mechanical tester.",
     "visibility": "additional"
   },
@@ -792,7 +792,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Bending strength": {
     "category": "Material > Mechanical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Bending strength as measured by mechanical tester in Pascal.",
     "visibility": "main"
   },
@@ -810,7 +810,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Stress rupture": {
     "category": "Material > Mechanical",
-    "data_type": "number",
+    "data_type": "double",
     "description": "Stress rupture as measued by mechanical tester in Pascal.",
     "visibility": "additional"
   },
