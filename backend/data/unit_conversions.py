@@ -1,3 +1,6 @@
+# NOTE: Sadly, all these unit conversions need to be duplicated in the
+# Python backend and the TypeScript frontend.  Keep them in sync!
+
 class UnitConverter(object):
     def __init__(self, unitsInCanonicalUnits, canonicalUnit=None):
         """
@@ -44,7 +47,9 @@ class UnitConverter(object):
         return value * self._normalizedInCanonicalUnits[self.normalizeUnitName(valueUnitStr)]
 
     def getPossibleUnits(self):
-        return list(set(self._inCanonicalUnits.keys()))
+        # Return units in order of largest to smallest unit
+        return sorted(list(set(self._inCanonicalUnits.keys())),
+                      lambda a, b: -(self._inCanonicalUnits[a] - self._inCanonicalUnits[b]))
 
     def fromCanonicalUnits(self, valueInCanonicalUnits, targetUnitStr):
         return valueInCanonicalUnits / float(self._normalizedInCanonicalUnits[self.normalizeUnitName(targetUnitStr)])
