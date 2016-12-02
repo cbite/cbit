@@ -7,6 +7,8 @@ import elasticsearch
 import json
 
 from data.filters import FiltersState, SampleFilter, FilterMode
+from data.unit_conversions import DimensionsRegister
+from data.fieldmeta import FieldMeta
 
 HIDDEN_SAMPLE_FILTER_LABELS = frozenset((
   'Barcode',
@@ -50,6 +52,8 @@ VALID_DATA_TYPES = frozenset((
     'string',
     'double',
 ))
+
+VALID_DIMENSIONS = frozenset(DimensionsRegister.keys())
 
 class MetadataAllCountsResource(object):
     def on_get(self, req, resp):
@@ -376,35 +380,6 @@ class MetadataSearch(object):
         resp.body = json.dumps(result, indent=2, sort_keys=True)
 
 
-def get_fields_metadata(db, field_names):
-    with db.cursor() as cur:
-        cur.execute(
-            """
-            SELECT
-              field_name, description, category, visibility, data_type
-            FROM dim_meta_meta
-            WHERE field_name IN %s
-            """,
-            (tuple(field_names),))
-        dbResults = cur.fetchall()
-
-    results = {
-        fieldName: { "exists": False }
-        for fieldName in field_names
-    }
-    for (fieldName, description, category, visibility, data_type) in dbResults:
-        fieldName = fieldName.decode('utf-8')
-        description = description.decode('utf-8')
-
-        results[fieldName]['exists'] = True
-        results[fieldName]['description'] = description
-        results[fieldName]['category'] = category
-        results[fieldName]['visibility'] = visibility
-        results[fieldName]['data_type'] = data_type
-
-    return results
-
-
 class MetadataFields(object):
     def on_post(self, req, resp):
         """
@@ -426,7 +401,8 @@ class MetadataFields(object):
             "description": "A very A-type field",
             "category": "Technical",
             "visibility": "main",
-            "data_type": "string"
+            "data_type": "string",
+            ...
           },
           "FieldNameB": {
             ...
@@ -436,10 +412,19 @@ class MetadataFields(object):
         """
 
         fieldNames = json.load(req.stream)
-
         db_conn = req.context['db']
-        results = get_fields_metadata(db_conn, fieldNames)
+        with db_conn.cursor() as cur:
+            fieldMetas = FieldMeta.from_db_multi(cur, "WHERE field_name IN %s", (tuple(fieldNames),))
         db_conn.commit()
+
+        results = {
+            fieldName: {"exists": False}
+            for fieldName in fieldNames
+        }
+        for f in fieldMetas:  # type: FieldMeta
+            d = results[f.fieldName]  # type: dict
+            d['exists'] = True
+            d.update(f.to_json())
 
         resp.status = falcon.HTTP_OK
         resp.body = json.dumps(results, indent=2, sort_keys=True)
@@ -461,13 +446,13 @@ class MetadataField(object):
         """
 
         db_conn = req.context['db']
-        results = get_fields_metadata(db_conn, [field_name])
-        result = results[field_name]
+        with db_conn.cursor() as cur:
+            fieldMetas = FieldMeta.from_db_multi(cur, "WHERE field_name = %s", (field_name,))
         db_conn.commit()
 
-        if result['exists']:
+        if fieldMetas:
             resp.status = falcon.HTTP_OK
-            resp.body = json.dumps(result, indent=2, sort_keys=True)
+            resp.body = json.dumps(fieldMetas[0].to_json(), indent=2, sort_keys=True)
         else:
             raise falcon.HTTPNotFound(description="Field '{0}' doesn't exist".format(field_name))
 
@@ -505,40 +490,24 @@ class MetadataField(object):
         if not isinstance(data, dict):
             raise falcon.HTTPBadRequest(description="Expected JSON object as payload")
 
-        if 'description' not in data:
-            raise falcon.HTTPBadRequest(description="Missing 'description'")
-
-        if 'category' not in data:
-            raise falcon.HTTPBadRequest(description="Missing 'category'")
-        if data['category'] not in VALID_CATEGORIES:
-            raise falcon.HTTPBadRequest(description="Invalid category, try one of these: {0}".format(VALID_CATEGORIES))
-
-        if 'visibility' not in data:
-            raise falcon.HTTPBadRequest(description="Missing 'visibility'")
-        if data['visibility'] not in VALID_VISIBILITIES:
-            raise falcon.HTTPBadRequest(
-                description="Invalid visibility, try one of these: {0}".format(
-                    VALID_VISIBILITIES))
-
-        if 'data_type' not in data:
-            raise falcon.HTTPBadRequest(description="Missing 'data_type'")
-        if data['data_type'] not in VALID_DATA_TYPES:
-            raise falcon.HTTPBadRequest(description="Invalid data_type, try one of these: {0}".format(VALID_DATA_TYPES))
+        try:
+            data['fieldName'] = field_name
+            fieldMeta = FieldMeta.from_json(data)
+        except ValueError as e:
+            raise falcon.HTTPBadRequest(description=e.message)
 
         # 1. Effect change
         # ----------------
         db_conn = req.context['db']
         with db_conn.cursor() as cur:
-            cur.execute("SELECT * FROM dim_meta_meta WHERE field_name = %s", (field_name,))
-            selectResult = cur.fetchall()
 
-            if selectResult:
+            cur.execute("SELECT COUNT(*) FROM dim_meta_meta WHERE field_name = %s", (field_name,))
+            ((count,),) = cur.fetchall()
+            if count > 0:
                 raise falcon.HTTPConflict(description="A field named '{0}' already exists".format(field_name))
 
-            cur.execute("""
-            INSERT INTO dim_meta_meta (field_name, description, category, visibility, data_type)
-            VALUES (%s, %s, %s, %s, %s)
-            """, (field_name, data['description'], data['category'], data['visibility'], data['data_type']))
+            FieldMeta.to_db_multi(cur, [fieldMeta], 'insert')
+
         db_conn.commit()
 
         resp.status = falcon.HTTP_OK
@@ -575,45 +544,24 @@ class MetadataField(object):
         if not isinstance(data, dict):
             raise falcon.HTTPBadRequest(description="Expected JSON object as payload")
 
-        if 'description' not in data:
-            raise falcon.HTTPBadRequest(description="Missing 'description'")
-
-        if 'category' not in data:
-            raise falcon.HTTPBadRequest(description="Missing 'category'")
-        if data['category'] not in VALID_CATEGORIES:
-            raise falcon.HTTPBadRequest(description="Invalid category, try one of these: {0}".format(VALID_CATEGORIES))
-
-        if 'visibility' not in data:
-            raise falcon.HTTPBadRequest(description="Missing 'visibility'")
-        if data['visibility'] not in VALID_VISIBILITIES:
-            raise falcon.HTTPBadRequest(
-                description="Invalid visibility, try one of these: {0}".format(
-                    VALID_VISIBILITIES))
-
-        if 'data_type' in data:
-            raise falcon.HTTPBadRequest(description="Cannot change 'data_type' of a field after creation")
+        try:
+            data['fieldName'] = field_name
+            fieldMeta = FieldMeta.from_json(data)
+        except ValueError as e:
+            raise falcon.HTTPBadRequest(description=e.message)
 
         # 1. Effect change
         # ----------------
         db_conn = req.context['db']
         with db_conn.cursor() as cur:
-            cur.execute("SELECT * FROM dim_meta_meta WHERE field_name = %s", (field_name,))
-            selectResult = cur.fetchall()
 
-            if not selectResult:
+            cur.execute("SELECT COUNT(*) FROM dim_meta_meta WHERE field_name = %s", (field_name,))
+            ((count,),) = cur.fetchall()
+            if count == 0:
                 raise falcon.HTTPNotFound(description="No field named '{0}'".format(field_name))
 
-            cur.execute("""
-            UPDATE dim_meta_meta
-            SET
-              description = %s,
-              category = %s,
-              visibility = %s
-            WHERE field_name = %s
-            """, (
-                data['description'], data['category'], data['visibility'],
-                field_name
-            ))
+            FieldMeta.to_db_multi(cur, [fieldMeta], 'update')
+
         db_conn.commit()
 
         resp.status = falcon.HTTP_OK

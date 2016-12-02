@@ -1,12 +1,23 @@
 /*
  NOTE: Sadly, all these unit conversions need to be duplicated in the
  Python backend and the TypeScript frontend.  Keep them in sync!
+
+ Unit conversions accept all relevant units from this ontology:
+ https://www.ebi.ac.uk/ols/ontologies/uo/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUO_0000000
  */
+
+interface SingleUnitConverter {
+  toCanonical:   (valueInThisUnit: number) => number,
+  fromCanonical: (valueInCanonicalUnits: number) => number,
+  sortingKey:    number,
+  isCanonical:   boolean
+};
 
 export class UnitConverter {
 
-  private _inCanonicalUnits: { [unitName: string]: number };
-  private _normalizedInCanonicalUnits: { [unitName: string]: number };
+  private _unitConverters:           { [unitName: string]: SingleUnitConverter };
+  private _normalizedUnitConverters: { [unitName: string]: SingleUnitConverter };
+  private _possibleUnits: string[];  // Cached to avoid creating duplicate objects that trigger Angular2's change detection
   public canonicalUnit: string;
 
   /*
@@ -14,31 +25,46 @@ export class UnitConverter {
    the equivalent quantity in canonical units.  The canonical unit
    should thus have a value of `1`.
 
+   Exceptionally, the values of the dictionary can also be a dictionary
+   of two functions, keyed by 'toCanonical' and 'fromCanonical', which
+   convert values in the given unit to the canonical units and vice versa.
+
    In case there is more than one name for the canonical unit, pass
    in the correct one in `canonicalUnit`
    */
-  constructor(unitsInCanonicalUnits: { [unitName: string]: number }, canonicalUnit?: string) {
+  constructor(unitsInCanonicalUnits: { [unitName: string]: (number | SingleUnitConverter) }, canonicalUnit?: string) {
 
-    this._inCanonicalUnits = unitsInCanonicalUnits;
-    this._normalizedInCanonicalUnits = {};
-    for (let unitName in this._inCanonicalUnits) {
-      this._normalizedInCanonicalUnits[this.normalizeUnitName(unitName)] = this._inCanonicalUnits[unitName];
+    /* Type-checking code from Python unnecessary in TypeScript */
+
+    this._unitConverters = {}
+    for (let unitName in unitsInCanonicalUnits) {
+      let v = unitsInCanonicalUnits[unitName];
+      if (typeof v === "number") {
+        this._unitConverters[unitName] = this.makeSimpleSingleUnitConverter(v);
+      } else {
+        this._unitConverters[unitName] = v;
+      }
+    }
+
+    this._normalizedUnitConverters = {};
+    for (let unitName in this._unitConverters) {
+      this._normalizedUnitConverters[this.normalizeUnitName(unitName)] = this._unitConverters[unitName];
     }
 
     if (canonicalUnit) {
-      if (!(canonicalUnit in this._inCanonicalUnits)) {
+      if (!(canonicalUnit in this._unitConverters)) {
         throw new Error("`canonicalUnit` not present in `unitsInCanonicalUnits`");
       } else {
         this.canonicalUnit = canonicalUnit;
       }
     } else {
       this.canonicalUnit = null;
-      for (let unitStr in this._inCanonicalUnits) {
-        if (this._inCanonicalUnits[unitStr] === 1) {
+      for (let unitName in this._unitConverters) {
+        if (this._unitConverters[unitName].isCanonical) {
           if (!this.canonicalUnit) {
-            this.canonicalUnit = unitStr;
+            this.canonicalUnit = unitName;
           } else {
-            throw new Error(`Ambiguous canonical unit (could be ${this.canonicalUnit} or ${unitStr}).  ` +
+            throw new Error(`Ambiguous canonical unit (could be ${this.canonicalUnit} or ${unitName}).  ` +
               "Pass in a disamibiguating choice in `canonicalUnit`");
           }
         }
@@ -47,6 +73,20 @@ export class UnitConverter {
         throw new Error("No canonical unit present in `unitsInCanonicalUnits`!");
       }
     }
+
+    // Order units in order of largest to smallest unit
+    this._possibleUnits =
+      Object.keys(this._unitConverters)
+        .sort((a: string, b: string) => -(this._unitConverters[a].sortingKey - this._unitConverters[b].sortingKey));
+  }
+
+  private makeSimpleSingleUnitConverter(unitInCanonicalUnits: number): SingleUnitConverter {
+    return {
+      toCanonical:   (valueInThisUnit: number) => (valueInThisUnit * unitInCanonicalUnits),
+      fromCanonical: (valueInCanonicalUnits: number) => (valueInCanonicalUnits / unitInCanonicalUnits),
+      sortingKey:    unitInCanonicalUnits,
+      isCanonical:   unitInCanonicalUnits === 1
+    };
   }
 
   normalizeUnitName(unitString: string): string {
@@ -54,21 +94,19 @@ export class UnitConverter {
   }
 
   isValidUnit(unitString: string): boolean {
-    return this.normalizeUnitName(unitString) in this._normalizedInCanonicalUnits;
+    return this.normalizeUnitName(unitString) in this._normalizedUnitConverters;
   }
 
-  toCanonicalUnit(value: number, valueUnitStr: string) {
-    return value * this._normalizedInCanonicalUnits[this.normalizeUnitName(valueUnitStr)];
+  toCanonicalUnit(value: number, valueUnitStr: string): number {
+    return this._normalizedUnitConverters[this.normalizeUnitName(valueUnitStr)].toCanonical(value);
   }
 
   getPossibleUnits(): string[] {
-    // Return units in order of largest to smallest unit
-    return Object.keys(this._inCanonicalUnits)
-      .sort((a: string, b: string) => -(this._inCanonicalUnits[a] - this._inCanonicalUnits[b]));
+    return this._possibleUnits;
   }
 
   fromCanonicalUnits(valueInCanonicalUnits: number, targetUnitStr: string): number {
-    return valueInCanonicalUnits / this._normalizedInCanonicalUnits[this.normalizeUnitName(targetUnitStr)];
+    return this._normalizedUnitConverters[this.normalizeUnitName(targetUnitStr)].fromCanonical(valueInCanonicalUnits);
   }
 }
 
@@ -76,6 +114,13 @@ export class UnitConverter {
 
 // Unit conversions accept all relevant units from this ontology:
 // https://www.ebi.ac.uk/ols/ontologies/uo/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUO_0000000
+
+
+// Special converter that does nothing
+export const NoneConverter = new UnitConverter({
+  'none': 1.
+});
+
 
 // unit -> time unit
 // Canonical unit: hours
@@ -135,6 +180,7 @@ export const AreaUnitConverter = new UnitConverter({
 });
 
 
+// Special-purpose unit for cBiT
 // % / [length unit]
 // Canonical unit: % / week
 export const WeightLossUnitConverter = new UnitConverter({
@@ -163,3 +209,76 @@ export const LengthUnitConverter = new UnitConverter({
   'angstrom':   1. / 10000000000.,
   'picometer':  1. / 1000000000000.,
 });
+
+// unit -> pressure unit
+// Canonical unit: pascal
+export const PressureConverter = new UnitConverter({
+  'pascal':                 1.,
+  'millimeters of mercury': 133.322387415  // https://en.wikipedia.org/wiki/Millimeter_of_mercury
+});
+
+
+// unit -> angle unit -> plane angle unit
+// Canonical unit: degree
+export const AngleConverter = new UnitConverter({
+  'degree': 1.,
+  'radian': 360. / (2 * Math.PI)
+});
+
+
+// Special-purpose unit for cBiT (the ontology units for percent are useless!)
+// Canonical unit: %
+export const PercentageConverter = new UnitConverter({
+  '%':       1.,
+  'percent': 1.,
+}, '%');  // '%' = canonicalUnit
+
+
+// unit -> dimensionless unit -> parts per notation unit
+// Canonical unit: parts per million
+export const PartsPerConverter = new UnitConverter({
+  'parts per hundred':       10000.,   // this is just a percentage: should we merge 'percentage' and 'parts_per' dimensions?
+  'parts per thousand':      1000.,
+  'parts per million':       1.,
+  'parts per billion':       1. / 1000.,
+  'parts per trillion':      1. / 1000000.,
+  'parts per quadrillion':   1. / 1000000000.,
+});
+
+
+// unit -> temperature unit
+// Canonical unit: degree Celsius
+// NOTE: Have to go to the extra mile to support temperature conversions
+// that aren't simply scaling factors
+export const TemperatureConverter = new UnitConverter({
+  'kelvin':         1.,
+  'degree Celsius': {
+    toCanonical:   (TinC: number) => (TinC - 273.15),
+    fromCanonical: (TinK: number) => (TinK + 273.15),
+    sortingKey:    10.,   // Larger values sort earlier
+    isCanonical:   false
+  },
+  'degree Fahrenheit':{
+    toCanonical:   (TinF: number) => ((TinF - 32) * 5./9. - 273.15),
+    fromCanonical: (TinK: number) => ((TinK + 273.15) * 9./5. + 32),
+    sortingKey:    5.,    // Larger values sort earlier
+    isCanonical:   false
+  },
+});
+
+
+// Global register of dimensions
+export const DimensionsRegister: {[dimensions: string]: UnitConverter} = {
+  'none':          NoneConverter,
+  'time':          TimeUnitConverter,
+  'concentration': ConcentrationUnitConverter,
+  'mass':          MassUnitConverter,
+  'area':          AreaUnitConverter,
+  'weight_loss':   WeightLossUnitConverter,
+  'length':        LengthUnitConverter,
+  'pressure':      PressureConverter,
+  'angle':         AngleConverter,
+  'percentage':    PercentageConverter,
+  'parts_per':     PartsPerConverter,
+  'temperature':   TemperatureConverter,
+};

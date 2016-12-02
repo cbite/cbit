@@ -5,7 +5,7 @@ export type FieldCategory = (
   "Material > Chemical" |
   "Material > Physical" |
   "Material > Mechanical"
-)
+);
 
 export type FieldVisibility = (
   "hidden" |
@@ -17,12 +17,30 @@ export type FieldVisibility = (
 export type FieldDataType = (
   "string" |
   "double"
-)
+);
+
+export type DimensionsType = (
+  'none' |
+  'time' |
+  'concentration' |
+  'mass' |
+  'area' |
+  'weight_loss' |
+  'length' |
+  'pressure' |
+  'angle' |
+  'percentage' |
+  'parts_per' |
+  'temperature'
+);
 
 export interface FieldMeta {
   exists?: boolean,
+  fieldName?: string,
   description?: string,
   category?: FieldCategory,
   visibility?: FieldVisibility,
-  data_type?: FieldDataType
+  dataType?: FieldDataType,
+  dimensions?: DimensionsType,
+  preferredUnit?: string
 };

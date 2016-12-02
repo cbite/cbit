@@ -10,15 +10,7 @@ import pandas as pd
 import re
 import numpy as np
 import config.config as cfg
-from unit_conversions import (
-    UnitConverter,
-    TimeUnitConverter,
-    ConcentrationUnitConverter,
-    MassUnitConverter,
-    AreaUnitConverter,
-    WeightLossUnitConverter,
-    LengthUnitConverter,
-)
+from unit_conversions import UnitConverter, DimensionsRegister
 
 def read_investigation(f):
     # An investigation file looks like this:
@@ -227,22 +219,23 @@ def clean_up_study_samples(df):
         for f in df.columns.values
     ]
 
-    unit_conversions = {
-        'Age':                    TimeUnitConverter,
-        'Attach Duration':        TimeUnitConverter,
-        'Culture Duration':       TimeUnitConverter,
-        'Dose Duration':          TimeUnitConverter,
-        'Dose':                   ConcentrationUnitConverter,
-        'Weight loss':            WeightLossUnitConverter,
-        'Pore size':              LengthUnitConverter,
-        'Grain size':             LengthUnitConverter,
-        'Specific surface area':  AreaUnitConverter,
+    # TODO: Move these to field metadata
+    unitful_column_dimensions = {
+        'Age':                   'time',
+        'Attach Duration':       'time',
+        'Culture Duration':      'time',
+        'Dose Duration':         'time',
+        'Dose':                  'concentration',
+        'Weight loss':           'weight_loss',
+        'Pore size':             'length',
+        'Grain size':            'length;',
+        'Specific surface area': 'area',
     }
 
     unit_colnames = {}
     for colname, dirty_colname in zip(clean_column_names, df.columns):
         if colname.endswith('Unit'):
-            unit_colnames[colname[:-len('Unit')]] = dirty_colname
+            unit_colnames[colname[:-len('Unit')].strip()] = dirty_colname
 
     all_results = {}
     for i, row in df.iterrows():
@@ -256,9 +249,10 @@ def clean_up_study_samples(df):
                 protocols.append(value)
             elif colname.endswith('Unit'):
                 pass
-            elif colname in unit_conversions:
-                unit_converter = unit_conversions[colname]  # type: UnitCoverter
-                result[u'{0} ({1})'.format(colname, unit_converter.canonicalUnit)] = (
+            elif colname in unitful_column_dimensions:
+                dimensions = unitful_column_dimensions[colname]
+                unit_converter = DimensionsRegister[dimensions]  # type: UnitCoverter
+                result[colname] = (
                     unit_converter.toCanonicalUnit(float(value), row[unit_colnames[colname]])
                 )
             else:
@@ -316,11 +310,11 @@ def apply_special_treatments_to_study_sample(d):
         result = sample.copy()
 
         break_out_composition_like_field(
-            'Phase composition', result, '*Phase composition - % {0}')
+            'Phase composition', result, '*Phase composition - {0}')
         break_out_composition_like_field(
-            'Elements composition', result, '*Elements composition - % {0}')
+            'Elements composition', result, '*Elements composition - {0}')
         break_out_composition_like_field(
-            'Wettability', result, u'*Wettability - {0} contact angle (°)')
+            'Wettability', result, u'*Wettability - {0} contact angle')
 
         merge(result, 'Material Name', 'Material abbreviation', '*Material')
         merge(result, 'Strain full name', 'Strain abbreviation', '*Strain')

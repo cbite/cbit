@@ -1,6 +1,23 @@
 import zipfile
 import reader
 from reader import read_investigation, read_study_sample, read_assay, read_annotations, read_processed_data
+import re
+from data.unit_conversions import DimensionsRegister
+
+class FieldAnalysisResults(object):
+    def __init__(self, fieldName, isUnitful, possibleDimensions, looksNumeric):
+        self.fieldName = fieldName
+        self.isUnitful = isUnitful
+        self.possibleDimensions = possibleDimensions
+        self.looksNumeric = looksNumeric
+
+    def to_json(self):
+        return {
+            'fieldName': self.fieldName,
+            'isUnitful': self.isUnitful,
+            'possibleDimensions': self.possibleDimensions,
+            'looksNumeric': self.looksNumeric
+        }
 
 class Archive(object):
     def __init__(self, investigation, study_samples, assay, processed_data_set, annotations):
@@ -10,8 +27,63 @@ class Archive(object):
         self.processed_data_set = processed_data_set
         self.annotations = annotations
 
+    def get_raw_field_names(self):
+        return self.study_sample.columns.values
 
-def read_archive(archive_filename):
+    def analyse_fields(self):
+        result = []
+
+        clean_column_names = {
+            f: re.sub(r'^Factor Value\[(.*)\]$', r'\1',
+                   re.sub(r'^Characteristics\[(.*)\]$', r'\1', f))
+            for f in self.get_raw_field_names()
+        }
+        reverse_clean_column_names = {v: k for (k,v) in clean_column_names.iteritems()}
+
+        for origName in self.study_sample.columns.values:
+
+            cleanName = clean_column_names[origName]
+
+            filterOut = (cleanName.startswith('Protocol REF') or cleanName.endswith('Unit')
+                         or self.study_sample[origName].isnull().values.all())
+
+            unit_col_origName = None
+            possible_unit_names = ['{0}Unit'.format(cleanName), '{0} Unit'.format(cleanName)]
+            for possible_unit_name in possible_unit_names:
+                if possible_unit_name in reverse_clean_column_names:
+                    unit_col_origName = reverse_clean_column_names[possible_unit_name]
+            isUnitful = unit_col_origName is not None
+
+            if not isUnitful:
+                possibleDimensions = []
+            else:
+                possibleDimensionsSet = set(DimensionsRegister.iterkeys())
+                for value in self.study_sample[unit_col_origName]:
+                    unitStr = str(value)
+                    if unitStr and unitStr.lower() not in ('n/a', 'nan'):
+                        thisValuePossibleDimensions = set()
+                        for dimensions, unit_converter in DimensionsRegister.iteritems():
+                            if unit_converter.isValidUnit(str(value)):
+                                thisValuePossibleDimensions.add(dimensions)
+                        possibleDimensionsSet = possibleDimensionsSet.intersection(thisValuePossibleDimensions)
+                pass
+                possibleDimensions = list(possibleDimensionsSet)
+
+            looksNumeric = True
+            for value in self.study_sample[origName]:
+                if str(value) not in ('n/a', 'nan'):
+                    try:
+                        float(str(value))
+                    except ValueError as e:
+                        looksNumeric = False
+
+            if not filterOut:
+                result.append(FieldAnalysisResults(cleanName, isUnitful, possibleDimensions, looksNumeric))
+
+        return result
+
+
+def read_archive(archive_filename, only_metadata=True):
     with zipfile.ZipFile(archive_filename, mode='r') as z:
         filenames = z.namelist()
 
@@ -80,7 +152,7 @@ def read_archive(archive_filename):
         with z.open(assay_file_name, 'r') as f:
             assay = read_assay(f)
 
-        if False:
+        if not only_metadata:
             # TODO: Reenable actual data ingestion!
 
             # TODO: Support multiple data set files per study

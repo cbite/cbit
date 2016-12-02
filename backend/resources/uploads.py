@@ -10,6 +10,7 @@ import config.config as cfg
 from data import importer
 from data.archive import read_archive
 from data import reader
+from data.fieldmeta import FieldMeta
 
 # Possible upload statuses
 UPLOAD_STATUS_UPLOADING = 'uploading'
@@ -70,7 +71,7 @@ class UploadsResource(object):
 
         # Check that archive is valid
         try:
-            a = read_archive(filepath)
+            a = read_archive(filepath, only_metadata=True)
         except Exception as e:
             raise falcon.HTTPBadRequest(
                 description="Malformed archive: {0}".format(str(e))
@@ -90,27 +91,13 @@ class UploadsResource(object):
 
         # Check for which fields we don't yet have metadata
         with db_conn.cursor() as cur:
-            cur.execute("""
-                SELECT field_name, description, category, visibility, data_type
-                FROM dim_meta_meta
-                WHERE field_name IN %s
-            """, (tuple(fieldNames),))
-            rawResults = cur.fetchall()
+            knownFields = FieldMeta.from_db_multi(
+                cur,
+                "WHERE field_name IN %s",
+                (tuple(fieldNames),)
+            )
 
-            knownFields = {
-                field_name.decode('utf-8'): {
-                    'description': description.decode('utf-8'),
-                    'category': category,
-                    'visibility': visibility,
-                    'data_type': data_type
-                }
-                for (field_name, description, category, visibility, data_type) in rawResults
-            }
-
-        unknownFields = fieldNames.difference(set(knownFields.keys()))
-        print(repr(fieldNames))
-        print(repr(set(knownFields.keys())))
-        print(repr(unknownFields))
+        unknownFields = fieldNames.difference([f.fieldName for f in knownFields])
 
         # Final response
         resp.status = falcon.HTTP_CREATED
@@ -120,8 +107,12 @@ class UploadsResource(object):
             'status': UPLOAD_STATUS_UPLOADED,
             'location': cfg.URL_BASE + resp.location,
             'fieldNames': list(fieldNames),
-            'knownFields': knownFields,
-            'unknownFields': list(unknownFields)
+            'knownFields': {
+                f.fieldName: f.to_json()
+                for f in knownFields
+            },
+            'unknownFields': list(unknownFields),
+            'fieldAnalyses': [f.to_json() for f in a.analyse_fields()]
         }
         resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 

@@ -91,11 +91,13 @@ CREATE TABLE fact_processed_datum (
 DROP TABLE IF EXISTS dim_meta_meta CASCADE ;
 CREATE TABLE dim_meta_meta (
    field_name VARCHAR PRIMARY KEY
-  ,description VARCHAR
-  ,category VARCHAR
-  ,visibility VARCHAR
-  ,data_type VARCHAR
+  ,description VARCHAR NOT NULL
+  ,category VARCHAR NOT NULL
+  ,visibility VARCHAR NOT NULL
+  ,data_type VARCHAR NOT NULL
+  ,dimensions VARCHAR NOT NULL
+  ,preferred_unit VARCHAR NOT NULL
 );
 
---INSERT INTO dim_meta_meta (field_name, description, category, visibility, data_type)
---VALUES ('Array or chip design', 'The design of the array or chip', 'Technical', 'main', 'string');
+--INSERT INTO dim_meta_meta (field_name, description, category, visibility, data_type, dimensions, preferred_unit)
+--VALUES ('Array or chip design', 'The design of the array or chip', 'Technical', 'main', 'string', 'none', 'none');

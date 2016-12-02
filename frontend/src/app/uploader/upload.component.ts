@@ -6,8 +6,10 @@ import {
 } from 'ng2-file-upload/ng2-file-upload';
 //import { FileItem } from 'ng2-file-upload/components/file-upload/file-item.class'
 import * as $ from 'jquery';
-import {FieldMeta} from "../common/field-meta.model";
+import {FieldMeta, DimensionsType} from "../common/field-meta.model";
 import {FormGroup, FormControl, Validators, RequiredValidator} from "@angular/forms";
+import * as _ from 'lodash';
+import {DimensionsRegister} from "../common/unit-conversions";
 
 // Heavily adapted from here:
 // http://valor-software.com/ng2-file-upload/
@@ -19,807 +21,1078 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   // Technical properties
   "Gene expression type": {
     "category": "Technical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Gene expression tehcnology used for the samples, e.g. Microarray, RNA sequencing. Use OBI term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Platform": {
     "category": "Technical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Type of platform used, e.g. Illumina, Affymetrix, Agilent. Use OBI term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Array or chip design": {
     "category": "Technical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The design of the microarray or RNAseq chip, e.g. Illumina HT12v4",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
 
   // Biological properties
   "Source Name": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The source is the study ID, i.e. the source where samples come from.",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Barcode": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Barcode of microarray or RNAseq chip, including location of array or lane the sample was placed on, e.g. 123456789-A is a microarray with code 123456789 where the sample was placed on position A.",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Study ID": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The Study ID (should be a number) that identifies the study.",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Group ID": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The group ID (should be a number) that identifies a group of samples receiving the same treatment within a study. E.g. all samples exposed to compound X at dose Y for time span Z.",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Biological Replicate": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Biological replicate ID. Put 1 for all samples if there are no biological replicates, otherwise use a number for each replicate group (required)",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Technical Replicate": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Technical replicate ID. Leave blank if there are no technical replicates, otherwise use a number for each technical replicate group.",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Sample ID": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The Sample ID describes each sample in a unique way within each study. It consists of a study ID, a group ID and a biological replicate ID (and when available, a technical replicate ID), separated by dashes. E.g.: 5-2-1 meaning study 5, group 2, bioreplicate 1.",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
 
   "Cell strain abbreviation": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Abbreviation of cell line name for cell line work or donor abbreviation (e.g. a human stem cell donor), CLO term when available (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Cell strain full name": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Full name of cell line name for cell line work or donor abbreviation (e.g. a human stem cell donor).",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Animal strain": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The name of the animal strain used for in vivo experiments.",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Cell type": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Type of cells (not cell line), e.g. bone marrow cells, osteosarcoma cells, etc.",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Tissue": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Type of tissue the sample comes from, choose between: epithelium, connective, muscular, or nervous.",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Organ": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Organ from which the sample originates, UBERON term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Organism": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Provide taxonomic information for the source sample, NCBITaxon term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Sex": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Sex (sex of original source, male/female). unknown if not known or when a pool of cells is used with multiple sexes.",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Age": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Age of animal or human subject in case of in vivo or ex vivo studies.",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Age Unit": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Age Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Passage number": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The passage number of the cell line at which the experiments took place (in case of in vitro experiments).",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Assay Type": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Type of assay (in vitro, in vivo or ex vivo) (required)",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Culture medium": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The type of culture medium used (use standard abbreviation, but no special characters).",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Attach Duration": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Time allowed for cell attachment before start of compound exposure and/or start of culture duration experiment.",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Attach Duration Unit": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Attachment time Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Control": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Control flag, is a sample a control or not (true or false) (required)",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Sample Match": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Sample name of the matching control sample (leave empty if no control is linked to this sample). The sample match does not necessarily mean that the matching control is paired (in the statistical sense). If it is paired, this is indicated in the field Paired sample.",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Paired sample": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Is the sample paired to another sample? (relevant for statistical purposes) A group (minimal of two samples) that is paired should be indicated with the same letter (e.g. A for the first group of paired samples, B for the second, etc.). Leave blank if samples are not paired.",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Compound": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Compound Name for exposure study, CHEBI term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Compound abbreviation": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Compound abbreviation",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "CAS number": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Compound CAS (Chemical Abstracts Service) number",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Dose": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Dose per administration",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Dose Unit": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Dose Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Dose Duration": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Duration of dose treatment; only for compound exposure study",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Dose Duration Unit": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Duration of dose treatment Unit; only for compound exposure study, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Dose Frequency": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Dose frequency; only for repeat dose toxicity study",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Vehicle": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Vehicle used to dilute the compound (water, dimethyl sulfoxide, etc.), CHEBI term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Route": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Administration route (gavage, injection, etc.), ERO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Culture Duration": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Culture time on biomaterial (after attachment) until isolation of cells",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Culture Duration Unit": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Culture time Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Biomaterial graphs file": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Name (or URI) of the file that contains the biomaterial characteristics displayed as a graph or image",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Protocol REF": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Internal ISAtab protocol references",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Sample Name": {
     "category": "Biological",
-    "data_type": "string",
+    "dataType": "string",
     "description": "A unique name for each of your samples after all treatments described here (required). The microarray barcode is the best option here.",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
 
   // Material Properties > General
   "Material Class": {
     "category": "Material > General",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Class of material. E.g.: ceramic, metal, polymer, composite, natural graft",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Material Name": {
     "category": "Material > General",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Full name of the type of material",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Material abbreviation": {
     "category": "Material > General",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Abbreviation of the type of material",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Material Shape": {
     "category": "Material > General",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The shape of the material. Choose from: flat (for polystyrene culture flasks/dishes/plates), particle, disc, cylinder, block, coating, paste/injectable, cement, hydrogel",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Sintering temperature": {
     "category": "Material > General",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Sintering temperature of the material in degree Celsius.",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Sintering temperature Unit": {
     "category": "Material > General",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Sintering temperature unit. Should be the UO term \"degree Celsius\".",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Manufacturer": {
     "category": "Material > General",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Manufacturer of the material",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Etching": {
     "category": "Material > General",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Type of etching process used on material",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Coating": {
     "category": "Material > General",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Type of coating applied on base material",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Clinically applied": {
     "category": "Material > General",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Has the material been clinically applied? (in this or other studies) yes/no",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Biologically degradable": {
     "category": "Material > General",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Is the material biologically degradable? yes/no",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
 
   // Material Properties > Chemical
   "Phase composition": {
     "category": "Material > Chemical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Percentage (%) of each phase in the material, separated by semi-colons, e.g.: TCP=80;HA=20",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Phase composition Unit": {
     "category": "Material > Chemical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Phase composition unit. This should be percent: %",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Phase composition device": {
     "category": "Material > Chemical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure the phase composition, e.g. XRD, EDS",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Elements composition": {
     "category": "Material > Chemical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Element concentrations in material in parts per million (ppm) as measured by ICP-MS, separated by semi-colon, e.g.: Ca=800;P=400",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Elements composition Unit": {
     "category": "Material > Chemical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Elements composition unit. Should be the UO term \"parts per million\".",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Elements composition device": {
     "category": "Material > Chemical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure the elements composition (e.g. ICP-MS or EDS).",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Elements composition graph": {
     "category": "Material > Chemical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Elements composition of the surface as measured by EDS: a graph plotting the intensity (counts) versus the energy (keV). Are data available yes/no?",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Molecular structure graph": {
     "category": "Material > Chemical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The molecular structure of the material as determined by FTIR (graph). Are data available yes/no?",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Degradation/ion release graph": {
     "category": "Material > Chemical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Degradation or ion release in for example SPS, SBF, PBS, water, medium (graph). Are data available yes/no?",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Degradation/ion release device": {
     "category": "Material > Chemical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure degradation/ion release, e.g. ICP-MS, colorimetric methods",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Molecular weight graph": {
     "category": "Material > Chemical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The distribution of molecular weight as measured by GPC (graph). Are data available yes/no?",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Corrosion graph": {
     "category": "Material > Chemical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The amount of oxide formed in SPS, SBF, PBS, water, medium (graph). Are data available yes/no?",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Corrosion device": {
     "category": "Material > Chemical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure corrosion, e.g. EDS, ICP-MS",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Weight loss": {
     "category": "Material > Chemical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "The weight loss of the material per time Unit",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Weight loss Unit": {
     "category": "Material > Chemical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Weight loss Unit, percentage/time Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
 
   // Material Properties > Physical
   "Crystallinity": {
     "category": "Material > Physical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "The percentage (%) of amorphous/crystalline material",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Crystallinity Unit": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Crystallinity unit. Should be percent: %",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Crystallinity device": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure the crystallinity, e.g. XRD, SAXS/WAXS",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Crystal structure": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Crystal structure (categorical), followed by lattice parameters (a,b,c), e.g.: hexagonal;(3,5,7)",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Porosity": {
     "category": "Material > Physical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "The percentage of porosity of the material",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Porosity Unit": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Porosity unit. Should be percent: %",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Porosity device": {
     "category": "Material > Physical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "The device used to measure the porosity, e.g. microCT, mercury intrusion",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Pore size": {
     "category": "Material > Physical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Pore diameter size",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Pore size Unit": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Pore size Unit, e.g. micrometer, nanometer, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Pore size device": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure the pore size, e.g. microCT, SEM, profilometer",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Grain size": {
     "category": "Material > Physical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "The grain size of the material as measured by SEM.",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Grain size Unit": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Grain size Unit, e.g. nanometer, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Grain size device": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure grain size, e.g. SEM, XRD",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Surface roughness Ra": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Surface roughness, average profile roughness parameter Ra in micrometers",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Surface roughness Ra Unit": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Surface roughness Ra unit, should probably be micrometer, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Surface roughness Sa": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Surface roughness, average area roughness parameter Sa in micrometers",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Surface roughness Sa Unit": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Surface roughness Sa unit, should probably be micrometer, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Surface roughness graph": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Surface roughness (graph). Are data available yes/no?",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Surface roughness device": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure surface roughness, e.g. microCT, profilometer",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Specific surface area": {
     "category": "Material > Physical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Specific surface area of the material",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Specific surface area Unit": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Specific surface area Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Specific surface area device": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure the specific surface area, e.g. BET, Gas absorption",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Wettability": {
     "category": "Material > Physical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Wettability of the material (contact angle in degrees) with a liquid measured with contact angle device.Write down as e.g. water=45;ethanol=60",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Wettability Unit": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Wettability unit. Should be \"degree\", UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Surface charge": {
     "category": "Material > Physical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "The surface charge of the material measured as zeta potential (in millivolt).",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Surface charge Unit": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Surface charge unit, probably millivolts, use UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Surface charge device": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure the surface charge, e.g. DLS, M3-PALS",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Density graph": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Distribution of densities as measured by microCT (graph). Are data available yes/no?",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Alignment of crystals": {
     "category": "Material > Physical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Alignment of crystals in a polymer as measured by SAXS/WAXS",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Alignment of crystals Unit": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Alignment of crystals unit. ",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Polymerization mechanism": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The mechanism of polymerization, e.g. condensation polymerization, addition (chain-growth) polymerization, ring opening polymerization, etc.",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Crosslinking degree": {
     "category": "Material > Physical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Degree of crosslinking (%)",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Crosslinking degree Unit": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Crosslinking degree unit, should be percent: %",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Crosslinking degree device": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure the degree of crosslinking, e.g. XRD, SAXS/WAXS, rheometer",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Homogeneity of ceramic distribution": {
     "category": "Material > Physical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Homogeneity of ceramic distribution in composite materials, i.e. are ceramic particles distributed homogenously or do they form aggregates? yes/no respectively",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
 
   // Material Properties > Mechanical
   "Elasticity": {
     "category": "Material > Mechanical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Elasticity of the material (elastic modulus, average) in Pascal",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Elasticity Unit": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Elasticity unit (elastic modulus, average), probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Elasticity distribution graph": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Distribution of stiffnesses (elastic modulus) (graph). Are data available yes/no?",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Elasticity device": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure elasticity, e.g. Nanoindentator, AFM, microCT",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Toughness": {
     "category": "Material > Mechanical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Toughness of the material as measured by Nanoindentator in Pascal",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Toughness Unit": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Toughness unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Hardness": {
     "category": "Material > Mechanical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Knoop hardness as measured by Nanoindentator in Pascal",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Hardness Unit": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Knoop hardness unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Compressive strength": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Compressive strength as measured by mechanical tester in Pascal",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Compressive strength Unit": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Compressive strength unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Compressive strength graph": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Compressive strength as measured by mechanical tester (graph). Are data available yes/no?",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Tensile strength": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Tensile strength as measured by mechanical tester in Pascal.",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Tensile strength Unit": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Tensile strength unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Tensile strength graph": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Tensile strength as measured by mechanical tester (graph). Are data available yes/no?",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Rheology": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Rheology (Reynolds number) as measured by rheometer (unitless measure).",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Rheology graph": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Rheology as measured by rheometer (graph). Are data available yes/no?",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Torsion": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Torsion in Pascal as measured by mechanical tester.",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Torsion Unit": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Torsion unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Torsion graph": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Torsion as measured by mechanical tester (graph). Are data available yes/no?",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Shear stress": {
     "category": "Material > Mechanical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Shear stress in Pascal as measured by rheometer or mechanical tester.",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Shear stress Unit": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Shear stress unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Shear stress graph": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Shear stress as measured by rheometer or mechanical tester (graph). Are data available yes/no?",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Shear stress device": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "The device used to measure shear, e.g. rheometer, mechanical tester",
-    "visibility": "hidden"
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Bending strength": {
     "category": "Material > Mechanical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Bending strength as measured by mechanical tester in Pascal.",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Bending strength Unit": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Bending strength unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Bending strength graph": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Bending strength as measured by mechanical tester. Are data available yes/no?",
-    "visibility": "main"
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Stress rupture": {
     "category": "Material > Mechanical",
-    "data_type": "double",
+    "dataType": "double",
     "description": "Stress rupture as measued by mechanical tester in Pascal.",
-    "visibility": "additional"
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
   "Stress rupture Unit": {
     "category": "Material > Mechanical",
-    "data_type": "string",
+    "dataType": "string",
     "description": "Stress rupture unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit"
+    "visibility": "unit",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
+};
+
+interface FieldAnalysisResults {
+  fieldName: string,
+  isUnitful: boolean,
+  looksNumeric: boolean,
+  possibleDimensions: string[]
 };
 
 interface UploadsResponse {
@@ -828,7 +1101,8 @@ interface UploadsResponse {
   location: string,
   fieldNames: string[],
   knownFields: { [fieldName: string]: FieldMeta },
-  unknownFields: string[]
+  unknownFields: string[],
+  fieldAnalyses: FieldAnalysisResults[]
 }
 
 @Component({
@@ -844,9 +1118,9 @@ interface UploadsResponse {
                [id]="'description-' + fieldName"
                type="textbox">
                
-        <label [attr.for]="'data_type-' + fieldName">Data Type</label>
-        <select [id]="'data_type-' + fieldName"
-                formControlName="data_type">
+        <label [attr.for]="dataType + fieldName">Data Type</label>
+        <select [id]="dataType + fieldName"
+                formControlName="dataType">
           <option value="string">String (text)</option>
           <option value="double">Number</option>
         </select>
@@ -870,14 +1144,33 @@ interface UploadsResponse {
           <option value="Biological">Biological Properties</option>
           <option value="Technical">Technical Properties</option>
         </select>
+        
+        <div *ngIf="fieldConfigs[fieldName].possibleDimensions.length > 0">
+          <label [attr.for]="'dimensions-' + fieldName">Dimensions</label>
+          <select [id]="'dimensions-' + fieldName" formControlName="dimensions">
+            <option *ngFor="let dimension of fieldConfigs[fieldName].possibleDimensions"
+                    [value]="dimension"
+                    >{{ dimension }}</option>
+          </select>
+          
+          <label [attr.for]="'preferredUnit-' + fieldName">Preferred Unit</label>
+          <select [id]="'preferredUnit-' + fieldName" formControlName="preferredUnit">
+            <option *ngFor="let unitName of possibleUnits(fieldName)"
+                    [value]="unitName"
+                    >{{ unitName }}</option>
+          </select>
+        </div>
       </div>
     </div>
   `
 })
 export class FieldMetadataFormComponent implements OnInit, OnChanges {
   @Input() fieldNames: string[] = []
+  @Input() fieldAnalyses: { [fieldName: string]: FieldAnalysisResults } = {};
   @Output() form = new EventEmitter<FormGroup>();
   _form: FormGroup;
+
+  fieldConfigs: {[fieldName: string]: any} = {};
 
   ngOnInit() {
     this._form = this.makeFormGroup();
@@ -889,32 +1182,64 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
     this.form.emit(this._form);
   }
 
+  possibleUnits(fieldName: string): string[] {
+    if (this.fieldAnalyses[fieldName]) {
+      return DimensionsRegister[(<FormGroup>this._form.controls[fieldName]).controls['dimensions'].value].getPossibleUnits();
+    } else {
+      return [];
+    }
+  }
+
   makeFormGroup(): FormGroup {
     let group: any = {};
+
+    this.fieldConfigs = {};
     for (let fieldName of this.fieldNames) {
       let defaults = this.fetchDefaults(fieldName);
 
       group[fieldName] = new FormGroup({
-        description: new FormControl(defaults.description, Validators.required),
-        data_type:   new FormControl(defaults.data_type),
-        visibility:  new FormControl(defaults.visibility),
-        category:    new FormControl(defaults.category)
+        description:   new FormControl(defaults.description, Validators.required),
+        dataType:      new FormControl(defaults.dataType),
+        visibility:    new FormControl(defaults.visibility),
+        category:      new FormControl(defaults.category),
+        dimensions:    new FormControl(defaults.dimensions || 'none'),
+        preferredUnit: new FormControl(defaults.preferredUnit || 'none')
       });
+
+      let fieldAnalysis = this.fieldAnalyses[fieldName];
+
+      let fieldConfig: any = this.fieldConfigs[fieldName] = {
+        possibleDimensions: (fieldAnalysis && fieldAnalysis.possibleDimensions) || []
+      };
     }
     return new FormGroup(group);
   }
 
   fetchDefaults(fieldName: string): FieldMeta {
-    if (fieldName in KNOWN_METADATA_FIELDS) {
-      return KNOWN_METADATA_FIELDS[fieldName];
-    } else {
-      return {
-        description: '',
-        data_type:   'string',
-        visibility:  'additional',
-        category:    'Technical'
+
+    let result: FieldMeta = {
+      description:   '',
+      dataType:      'string',
+      visibility:    'additional',
+      category:      'Technical',
+      dimensions:    'none',
+      preferredUnit: 'none'
+    };
+
+    let fieldAnalysis = this.fieldAnalyses[fieldName];
+    if (fieldAnalysis) {
+      result.dataType = fieldAnalysis.looksNumeric ? "double" : "string";
+      if (fieldAnalysis.isUnitful && fieldAnalysis.possibleDimensions) {
+        result.dimensions = <DimensionsType> fieldAnalysis.possibleDimensions[0];
+        result.preferredUnit = DimensionsRegister[result.dimensions].canonicalUnit;
       }
     }
+
+    if (fieldName in KNOWN_METADATA_FIELDS) {
+      result = _.merge(result, KNOWN_METADATA_FIELDS[fieldName]);
+    }
+
+    return result;
   }
 }
 
@@ -959,7 +1284,7 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
     </div>
     
     <div *ngIf="unknownFields">
-      <field-metadata-form [fieldNames]="unknownFields" (form)="metadataForm = $event"></field-metadata-form>
+      <field-metadata-form [fieldNames]="unknownFields" [fieldAnalyses]="fieldAnalyses" (form)="metadataForm = $event"></field-metadata-form>
     </div>
     
     <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">{{ confirmMetadataButtonName }}</button>
@@ -1001,6 +1326,7 @@ export class UploadComponent {
   fieldNames: string[] = []
   knownFields: {[fieldName: string]: FieldMeta} = {};
   unknownFields: string[] = [];
+  fieldAnalyses: {[fieldName: string]: FieldAnalysisResults} = {};
   metadataForm: FormGroup;
 
   constructor(
@@ -1028,7 +1354,7 @@ export class UploadComponent {
   }
 
   withoutStar(s: string): string {
-    if (s.substr(0, 1) == '*') {
+    if (s.substr(0, 1) === '*') {
       return s.substr(1);
     } else {
       return s;
@@ -1043,7 +1369,11 @@ export class UploadComponent {
     this.knownFields = jResponse.knownFields;
     this.unknownFields = jResponse.unknownFields.sort(
       (a: string, b:string) => this.withoutStar(a).localeCompare(this.withoutStar(b))
-    );
+    ).filter((a: string) => a.substr(0, 1) !== '*');
+    this.fieldAnalyses = {}
+    for (let fieldAnalysis of jResponse.fieldAnalyses) {
+      this.fieldAnalyses[fieldAnalysis.fieldName] = fieldAnalysis;
+    }
     this.step = 2;
   }
 
