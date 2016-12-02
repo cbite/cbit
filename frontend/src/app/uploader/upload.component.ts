@@ -982,55 +982,107 @@ interface UploadsResponse {
   template: `
     <div [formGroup]="_form">
     
-      <div *ngFor="let fieldName of fieldNames" [formGroupName]="fieldName">
-        <h4>{{ fieldName }}</h4>
+      <div *ngFor="let fieldName of fieldNames" [formGroupName]="fieldName" class="panel panel-primary">
+        <div class="panel-heading">
+          <h4>{{ fieldName }}</h4> 
+        </div>
         
-        <label [attr.for]="'description-' + fieldName">Description</label>
-        <input formControlName="description"
-               [id]="'description-' + fieldName"
-               type="textbox">
-               
-        <label [attr.for]="dataType + fieldName">Data Type</label>
-        <select [id]="dataType + fieldName"
-                formControlName="dataType">
-          <option value="string">String (text)</option>
-          <option value="double">Number</option>
-        </select>
-               
-        <label [attr.for]="'visibility-' + fieldName">Visibility</label>
-        <select [id]="'visibility-' + fieldName"
-                formControlName="visibility">
-          <option value="main">Main Filters</option>
-          <option value="additional">Additional Filters</option>
-          <option value="hidden">Hidden</option>
-          <option value="unit">Unit</option>
-        </select>
-               
-        <label [attr.for]="'category-' + fieldName">Category</label>
-        <select [id]="'category-' + fieldName"
-                formControlName="category">
-          <option value="Material > General">Material Properties - General</option>
-          <option value="Material > Chemical">Material Properties - Chemical</option>
-          <option value="Material > Physical">Material Properties - Physical</option>
-          <option value="Material > Mechanical">Material Properties - Mechanical</option>
-          <option value="Biological">Biological Properties</option>
-          <option value="Technical">Technical Properties</option>
-        </select>
-        
-        <div *ngIf="fieldConfigs[fieldName].possibleDimensions.length > 0">
-          <label [attr.for]="'dimensions-' + fieldName">Dimensions</label>
-          <select [id]="'dimensions-' + fieldName" formControlName="dimensions">
-            <option *ngFor="let dimension of fieldConfigs[fieldName].possibleDimensions"
-                    [value]="dimension"
-                    >{{ dimension }}</option>
-          </select>
-          
-          <label [attr.for]="'preferredUnit-' + fieldName">Preferred Unit</label>
-          <select [id]="'preferredUnit-' + fieldName" formControlName="preferredUnit">
-            <option *ngFor="let unitName of possibleUnits(fieldName)"
-                    [value]="unitName"
-                    >{{ unitName }}</option>
-          </select>
+        <div class="panel-body">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <label [attr.for]="'description-' + fieldName" class="col-sm-2 control-label">
+                Description
+              </label>
+              <div class="col-sm-10">
+                <textarea formControlName="description"
+                          [id]="'description-' + fieldName"
+                          class="form-control"
+                          rows="3">
+                </textarea>
+              </div>
+            </div>
+                  
+            <div class="form-group">
+              <label [attr.for]="dataType + fieldName" class="col-sm-2 control-label">
+                Data Type
+              </label>
+              <div class="col-sm-4">
+                <select [id]="dataType + fieldName"
+                        formControlName="dataType"
+                        class="form-control"
+                        >
+                  <option value="string">String (text)</option>
+                  <option value="double">Number</option>
+                </select>
+              </div>
+            </div>
+                   
+            <div class="form-group">
+              <label [attr.for]="'visibility-' + fieldName" class="col-sm-2 control-label">
+                Visibility
+              </label>
+              <div class="col-sm-4">
+                <select [id]="'visibility-' + fieldName"
+                        formControlName="visibility"
+                        class="form-control">
+                  <option value="main">Main Filters</option>
+                  <option value="additional">Additional Filters</option>
+                  <option value="hidden">Hidden</option>
+                  <option value="unit">Unit</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label [attr.for]="'category-' + fieldName" class="col-sm-2 control-label">
+                Category
+              </label>
+              <div class="col-sm-4">
+                <select [id]="'category-' + fieldName"
+                        formControlName="category"
+                        class="form-control">
+                  <option value="Material > General">Material Properties - General</option>
+                  <option value="Material > Chemical">Material Properties - Chemical</option>
+                  <option value="Material > Physical">Material Properties - Physical</option>
+                  <option value="Material > Mechanical">Material Properties - Mechanical</option>
+                  <option value="Biological">Biological Properties</option>
+                  <option value="Technical">Technical Properties</option>
+                </select>
+              </div>
+            </div>
+            
+            <div *ngIf="fieldConfigs[fieldName].possibleDimensions.length > 0">
+              <div class="form-group">
+                <label [attr.for]="'dimensions-' + fieldName" class="col-sm-2 control-label">
+                  Dimensions
+                </label>
+                <div class="col-sm-4">
+                  <select [id]="'dimensions-' + fieldName"
+                          formControlName="dimensions"
+                          class="form-control">
+                    <option *ngFor="let dimension of fieldConfigs[fieldName].possibleDimensions"
+                            [value]="dimension"
+                            >{{ dimension }}</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label [attr.for]="'preferredUnit-' + fieldName" class="col-sm-2 control-label">
+                  Preferred Unit
+                </label>
+                <div class="col-sm-4">
+                  <select [id]="'preferredUnit-' + fieldName"
+                          formControlName="preferredUnit"
+                          class="form-control col-sm-10">
+                    <option *ngFor="let unitName of possibleUnits(fieldName)"
+                            [value]="unitName"
+                            >{{ unitName }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1117,49 +1169,51 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
 
 @Component({
   template: `
-  <h1>Upload New Study</h1>
-  
-  <div [class.hidden]="step !== 1">
-    <h2>Step 1: Upload a .zip archive in ISAtab format</h2>
-    <div [class.disabled]="uploadFileChooserDisabled">
-      <div ng2FileDrop
-           [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-           (fileOver)="fileOverBase($event)"
-           [uploader]="uploader"
-           class="well my-drop-zone"
-           style="display: inline-block">
-           Drag a file here
-      </div>
-      or select a file here: <input type="file" ng2FileSelect [uploader]="uploader" [disabled]="uploadFileChooserDisabled"/>
-    </div>
-    <p>
-      <b>File to upload: </b>{{ uploadFileName }}
-    </p>
-    <div>
-      Then click here: <button type="button" (click)="doUpload()" [disabled]="!uploader.getNotUploadedItems().length">Upload</button>
-      <div>
-        Progress:
-        <div class="w3-progress-container">
-          <div class="w3-progressbar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
+  <div class="container">
+    <h1>Upload New Study</h1>
+    
+    <div [class.hidden]="step !== 1">
+      <h2>Step 1: Upload a .zip archive in ISAtab format</h2>
+      <div [class.disabled]="uploadFileChooserDisabled">
+        <div ng2FileDrop
+             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+             (fileOver)="fileOverBase($event)"
+             [uploader]="uploader"
+             class="well my-drop-zone"
+             style="display: inline-block">
+             Drag a file here
         </div>
-        <span *ngIf="status">Status: {{ status }}</span>
+        or select a file here: <input type="file" ng2FileSelect [uploader]="uploader" [disabled]="uploadFileChooserDisabled"/>
+      </div>
+      <p>
+        <b>File to upload: </b>{{ uploadFileName }}
+      </p>
+      <div>
+        Then click here: <button type="button" (click)="doUpload()" [disabled]="!uploader.getNotUploadedItems().length">Upload</button>
+        <div>
+          Progress:
+          <div class="w3-progress-container">
+            <div class="w3-progressbar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
+          </div>
+          <span *ngIf="status">Status: {{ status }}</span>
+        </div>
       </div>
     </div>
-  </div>
-  
-  <div [class.hidden]="step !== 2">
-    <h2>Step 2: Enter metadata for new fields</h2>
-    <p>Upload UUID: <code>{{ upload_uuid }}</code></p>
     
-    <div *ngIf="!unknownFields">
-      No new fields in this study
+    <div [class.hidden]="step !== 2">
+      <h2>Step 2: Enter metadata for new fields</h2>
+      <p>Upload UUID: <code>{{ upload_uuid }}</code></p>
+      
+      <div *ngIf="!unknownFields">
+        No new fields in this study
+      </div>
+      
+      <div *ngIf="unknownFields">
+        <field-metadata-form [fieldNames]="unknownFields" [fieldAnalyses]="fieldAnalyses" (form)="metadataForm = $event"></field-metadata-form>
+      </div>
+      
+      <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">{{ confirmMetadataButtonName }}</button>
     </div>
-    
-    <div *ngIf="unknownFields">
-      <field-metadata-form [fieldNames]="unknownFields" [fieldAnalyses]="fieldAnalyses" (form)="metadataForm = $event"></field-metadata-form>
-    </div>
-    
-    <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">{{ confirmMetadataButtonName }}</button>
   </div>
   `,
 
