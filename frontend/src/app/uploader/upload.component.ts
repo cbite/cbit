@@ -171,16 +171,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "string",
     "description": "Age of animal or human subject in case of in vivo or ex vivo studies.",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Age Unit": {
-    "category": "Biological",
-    "dataType": "string",
-    "description": "Age Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "time",
+    "preferredUnit": "year"
   },
   "Passage number": {
     "category": "Biological",
@@ -211,16 +203,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "string",
     "description": "Time allowed for cell attachment before start of compound exposure and/or start of culture duration experiment.",
     "visibility": "additional",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Attach Duration Unit": {
-    "category": "Biological",
-    "dataType": "string",
-    "description": "Attachment time Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "time",
+    "preferredUnit": "hour"
   },
   "Control": {
     "category": "Biological",
@@ -275,32 +259,16 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "string",
     "description": "Dose per administration",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Dose Unit": {
-    "category": "Biological",
-    "dataType": "string",
-    "description": "Dose Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "concentration",
+    "preferredUnit": "millimolar"
   },
   "Dose Duration": {
     "category": "Biological",
     "dataType": "string",
     "description": "Duration of dose treatment; only for compound exposure study",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Dose Duration Unit": {
-    "category": "Biological",
-    "dataType": "string",
-    "description": "Duration of dose treatment Unit; only for compound exposure study, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "time",
+    "preferredUnit": "hour"
   },
   "Dose Frequency": {
     "category": "Biological",
@@ -331,16 +299,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "string",
     "description": "Culture time on biomaterial (after attachment) until isolation of cells",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Culture Duration Unit": {
-    "category": "Biological",
-    "dataType": "string",
-    "description": "Culture time Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "time",
+    "preferredUnit": "hour"
   },
   "Biomaterial graphs file": {
     "category": "Biological",
@@ -405,16 +365,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Sintering temperature of the material in degree Celsius.",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Sintering temperature Unit": {
-    "category": "Material > General",
-    "dataType": "string",
-    "description": "Sintering temperature unit. Should be the UO term \"degree Celsius\".",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "temperature",
+    "preferredUnit": "degree Celsius"
   },
   "Manufacturer": {
     "category": "Material > General",
@@ -463,16 +415,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Percentage (%) of each phase in the material, separated by semi-colons, e.g.: TCP=80;HA=20",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Phase composition Unit": {
-    "category": "Material > Chemical",
-    "dataType": "double",
-    "description": "Phase composition unit. This should be percent: %",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "percentage",
+    "preferredUnit": "%"
   },
   "Phase composition device": {
     "category": "Material > Chemical",
@@ -487,16 +431,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Element concentrations in material in parts per million (ppm) as measured by ICP-MS, separated by semi-colon, e.g.: Ca=800;P=400",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Elements composition Unit": {
-    "category": "Material > Chemical",
-    "dataType": "string",
-    "description": "Elements composition unit. Should be the UO term \"parts per million\".",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "parts_per",
+    "preferredUnit": "parts per million"
   },
   "Elements composition device": {
     "category": "Material > Chemical",
@@ -567,16 +503,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "The weight loss of the material per time Unit",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Weight loss Unit": {
-    "category": "Material > Chemical",
-    "dataType": "string",
-    "description": "Weight loss Unit, percentage/time Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "weight_loss",
+    "preferredUnit": "% / week"
   },
 
   // Material Properties > Physical
@@ -585,16 +513,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "The percentage (%) of amorphous/crystalline material",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Crystallinity Unit": {
-    "category": "Material > Physical",
-    "dataType": "string",
-    "description": "Crystallinity unit. Should be percent: %",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "percentage",
+    "preferredUnit": "%"
   },
   "Crystallinity device": {
     "category": "Material > Physical",
@@ -617,16 +537,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "The percentage of porosity of the material",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Porosity Unit": {
-    "category": "Material > Physical",
-    "dataType": "string",
-    "description": "Porosity unit. Should be percent: %",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "percentage",
+    "preferredUnit": "%"
   },
   "Porosity device": {
     "category": "Material > Physical",
@@ -641,16 +553,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Pore diameter size",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Pore size Unit": {
-    "category": "Material > Physical",
-    "dataType": "string",
-    "description": "Pore size Unit, e.g. micrometer, nanometer, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "length",
+    "preferredUnit": "micrometer"
   },
   "Pore size device": {
     "category": "Material > Physical",
@@ -761,16 +665,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Wettability of the material (contact angle in degrees) with a liquid measured with contact angle device.Write down as e.g. water=45;ethanol=60",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Wettability Unit": {
-    "category": "Material > Physical",
-    "dataType": "string",
-    "description": "Wettability unit. Should be \"degree\", UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "angle",
+    "preferredUnit": "degree"
   },
   "Surface charge": {
     "category": "Material > Physical",
@@ -899,32 +795,16 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Toughness of the material as measured by Nanoindentator in Pascal",
     "visibility": "additional",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Toughness Unit": {
-    "category": "Material > Mechanical",
-    "dataType": "string",
-    "description": "Toughness unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "pressure",
+    "preferredUnit": "pascal"
   },
   "Hardness": {
     "category": "Material > Mechanical",
     "dataType": "double",
     "description": "Knoop hardness as measured by Nanoindentator in Pascal",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Hardness Unit": {
-    "category": "Material > Mechanical",
-    "dataType": "string",
-    "description": "Knoop hardness unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "pressure",
+    "preferredUnit": "pascal"
   },
   "Compressive strength": {
     "category": "Material > Mechanical",
@@ -955,16 +835,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "string",
     "description": "Tensile strength as measured by mechanical tester in Pascal.",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Tensile strength Unit": {
-    "category": "Material > Mechanical",
-    "dataType": "string",
-    "description": "Tensile strength unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "pressure",
+    "preferredUnit": "pascal"
   },
   "Tensile strength graph": {
     "category": "Material > Mechanical",
