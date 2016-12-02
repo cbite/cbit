@@ -59,11 +59,11 @@ class Archive(object):
             else:
                 possibleDimensionsSet = set(DimensionsRegister.iterkeys())
                 for value in self.study_sample[unit_col_origName]:
-                    unitStr = str(value)
+                    unitStr = unicode(value)
                     if unitStr and unitStr.lower() not in ('n/a', 'nan'):
                         thisValuePossibleDimensions = set()
                         for dimensions, unit_converter in DimensionsRegister.iteritems():
-                            if unit_converter.isValidUnit(str(value)):
+                            if unit_converter.isValidUnit(unicode(value)):
                                 thisValuePossibleDimensions.add(dimensions)
                         possibleDimensionsSet = possibleDimensionsSet.intersection(thisValuePossibleDimensions)
                 pass
@@ -71,9 +71,9 @@ class Archive(object):
 
             looksNumeric = True
             for value in self.study_sample[origName]:
-                if str(value) not in ('n/a', 'nan'):
+                if unicode(value) not in ('n/a', 'nan'):
                     try:
-                        float(str(value))
+                        float(unicode(value))
                     except ValueError as e:
                         looksNumeric = False
 
