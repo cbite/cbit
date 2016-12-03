@@ -68,9 +68,9 @@ class FieldMeta(object):
             raise ValueError("Invalid preferred unit in field metadata: {0}.  For a value with dimensions `{1}`, try one of these {2}"
                              .format(preferredUnit, dimensions, FieldMeta.validDimensions))
 
-        # Defensively decode UTF-8 encoded strings (harmless on already decoded unicode string)
-        self.fieldName = fieldName.decode('utf-8')
-        self.description = description.decode('utf-8')
+        # Defensively decode UTF-8 encoded strings
+        self.fieldName = fieldName.decode('utf-8') if isinstance(fieldName, str) else fieldName
+        self.description = description.decode('utf-8') if isinstance(description, str) else description
         self.category = category
         self.visibility = visibility
         self.dataType = dataType
@@ -130,11 +130,11 @@ class FieldMeta(object):
         if not fieldName.startswith('*'):
             return fieldName
         elif fieldName.startswith('*Phase composition - '):
-            return 'Phase composition'
+            return u'Phase composition'
         elif fieldName.startswith('*Elements composition - '):
-            return 'Elements composition'
+            return u'Elements composition'
         elif fieldName.startswith('*Wettability - '):
-            return 'Wettability'
+            return u'Wettability'
         else:
             # Don't mask the merged fields like '*Material', '*Cell strain' or '*Compound'
             # These really should have different metadata (e.g., the underlying fields could
@@ -157,11 +157,16 @@ class FieldMeta(object):
             """, (tuple(set(realFieldNames.values())),))
         dbResults = cur.fetchall()
 
-        print(dbResults)
+        rawRawResults = [
+            FieldMeta(fieldName, description, category, visibility,
+                      dataType, dimensions, preferredUnit)
+            for (fieldName, description, category, visibility, dataType,
+                 dimensions, preferredUnit) in dbResults
+        ]
 
         rawResults = {
-            rawFieldName: FieldMeta(rawFieldName, description, category, visibility, dataType, dimensions, preferredUnit)
-            for (rawFieldName, description, category, visibility, dataType, dimensions, preferredUnit) in dbResults
+            f.fieldName: f     # Gotta be careful here with UTF-8 decoding of raw fieldName from DB
+            for f in rawRawResults
         }
 
         expandedResults = {
