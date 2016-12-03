@@ -85,7 +85,8 @@ class UnitConverter(object):
     def getPossibleUnits(self):
         # Return units in order of largest to smallest unit
         return sorted(list(set(self._unitConverters.keys())),
-                      lambda a, b: -(self._unitConverters[a].sortingKey - self._unitConverters[b].sortingKey))
+                      key=lambda unitName: self._unitConverters[unitName].sortingKey,
+                      reverse=True)
 
     def fromCanonicalUnits(self, valueInCanonicalUnits, targetUnitStr):
         return self._normalizedUnitConverters[self.normalizeUnitName(targetUnitStr)].fromCanonical(valueInCanonicalUnits)
@@ -243,9 +244,6 @@ TemperatureConverter = UnitConverter({
         isCanonical =   False
     )
 })
-
-
-# STOPPED HERE: Study 90, from bottom-up stopped at Sintering Temperature
 
 
 # Global register of dimensions
