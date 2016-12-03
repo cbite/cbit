@@ -102,11 +102,19 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "preferredUnit": "none"
   },
 
+  "*Cell strain": {
+    "category": "Biological",
+    "dataType": "string",
+    "description": "Cell line name for cell line work or donor abbreviation (e.g. a human stem cell donor).",
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
+  },
   "Cell strain abbreviation": {
     "category": "Biological",
     "dataType": "string",
     "description": "Abbreviation of cell line name for cell line work or donor abbreviation (e.g. a human stem cell donor), CLO term when available (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "main",
+    "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
   },
@@ -114,7 +122,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "category": "Biological",
     "dataType": "string",
     "description": "Full name of cell line name for cell line work or donor abbreviation (e.g. a human stem cell donor).",
-    "visibility": "main",
+    "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
   },
@@ -230,11 +238,19 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dimensions": "none",
     "preferredUnit": "none"
   },
+  "*Compound": {
+    "category": "Biological",
+    "dataType": "string",
+    "description": "Compound Name for exposure study",
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
+  },
   "Compound": {
     "category": "Biological",
     "dataType": "string",
     "description": "Compound Name for exposure study, CHEBI term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "main",
+    "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
   },
@@ -242,7 +258,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "category": "Biological",
     "dataType": "string",
     "description": "Compound abbreviation",
-    "visibility": "main",
+    "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
   },
@@ -336,11 +352,19 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dimensions": "none",
     "preferredUnit": "none"
   },
+  "*Material": {
+    "category": "Material > General",
+    "dataType": "string",
+    "description": "Type of material",
+    "visibility": "main",
+    "dimensions": "none",
+    "preferredUnit": "none"
+  },
   "Material Name": {
     "category": "Material > General",
     "dataType": "string",
     "description": "Full name of the type of material",
-    "visibility": "main",
+    "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
   },
@@ -348,7 +372,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "category": "Material > General",
     "dataType": "string",
     "description": "Abbreviation of the type of material",
-    "visibility": "main",
+    "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
   },
@@ -1295,7 +1319,7 @@ export class UploadComponent {
     this.knownFields = jResponse.knownFields;
     this.unknownFields = jResponse.unknownFields.sort(
       (a: string, b:string) => this.withoutStar(a).localeCompare(this.withoutStar(b))
-    ).filter((a: string) => a.substr(0, 1) !== '*');
+    );//.filter((a: string) => a.substr(0, 1) !== '*');
     this.fieldAnalyses = {}
     for (let fieldAnalysis of jResponse.fieldAnalyses) {
       this.fieldAnalyses[fieldAnalysis.fieldName] = fieldAnalysis;

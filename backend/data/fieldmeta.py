@@ -118,24 +118,74 @@ class FieldMeta(object):
             "preferredUnit": self.preferredUnit,
         }
 
+    def copy_with_new_name(self, newFieldName):
+        return FieldMeta(newFieldName, self.description,
+                         self.category, self.visibility, self.dataType,
+                         self.dimensions, self.preferredUnit)
+
+    # For derived fields, we synthesize field metadata from the underlying fields
+    # See reader.apply_special_treatments_to_study_sample for details
     @staticmethod
-    def from_db_multi(cur, where_clause="", where_params=()):
+    def map_derived_field_name_to_underlying_field(fieldName):
+        if not fieldName.startswith('*'):
+            return fieldName
+        elif fieldName.startswith('*Phase composition - '):
+            return 'Phase composition'
+        elif fieldName.startswith('*Elements composition - '):
+            return 'Elements composition'
+        elif fieldName.startswith('*Wettability - '):
+            return 'Wettability'
+        else:
+            # Don't mask the merged fields like '*Material', '*Cell strain' or '*Compound'
+            # These really should have different metadata (e.g., the underlying fields could
+            # be hidden but the merged field is visible)
+            return fieldName
+
+    @staticmethod
+    def from_db_multi(cur, fieldNames):
+
+        realFieldNames = {
+            fieldName: FieldMeta.map_derived_field_name_to_underlying_field(fieldName)
+            for fieldName in fieldNames
+        }
+
         cur.execute(
             """
             SELECT field_name, description, category, visibility, data_type, dimensions, preferred_unit
             FROM dim_meta_meta
-            {0}
-            """.format(where_clause),
-            where_params)
+            WHERE field_name IN %s
+            """, (tuple(set(realFieldNames.values())),))
         dbResults = cur.fetchall()
 
         print(dbResults)
 
-        return [FieldMeta(fieldName, description, category, visibility, dataType, dimensions, preferredUnit)
-                for (fieldName, description, category, visibility, dataType, dimensions, preferredUnit) in dbResults]
+        rawResults = {
+            rawFieldName: FieldMeta(rawFieldName, description, category, visibility, dataType, dimensions, preferredUnit)
+            for (rawFieldName, description, category, visibility, dataType, dimensions, preferredUnit) in dbResults
+        }
+
+        expandedResults = {
+            fieldName: rawResults[realFieldNames[fieldName]]
+            for fieldName in fieldNames
+            if realFieldNames[fieldName] in rawResults
+        }
+
+        # Have to mask the identity of synthesized fields
+        results = {
+            fieldName: rawFieldMeta if fieldName == rawFieldMeta.fieldName else rawFieldMeta.copy_with_new_name(fieldName)
+            for fieldName, rawFieldMeta in expandedResults.iteritems()
+        }
+
+        return results.values()
 
     @staticmethod
     def to_db_multi(cur, fieldMetas, insertOrUpdate='insert'):
+
+        # Disallow setting metadata of synthetic fields directly
+        for f in fieldMetas:  # type: FieldMeta
+            if f.fieldName != FieldMeta.map_derived_field_name_to_underlying_field(f.fieldName):
+                raise ValueError('Cannot set field metadata of synthetic field {0}'.format(f.fieldName))
+
         if insertOrUpdate == 'insert':
             cur.executemany(
                 """

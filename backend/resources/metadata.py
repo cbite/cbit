@@ -414,7 +414,7 @@ class MetadataFields(object):
         fieldNames = json.load(req.stream)
         db_conn = req.context['db']
         with db_conn.cursor() as cur:
-            fieldMetas = FieldMeta.from_db_multi(cur, "WHERE field_name IN %s", (tuple(fieldNames),))
+            fieldMetas = FieldMeta.from_db_multi(cur, fieldNames)
         db_conn.commit()
 
         results = {
@@ -447,7 +447,7 @@ class MetadataField(object):
 
         db_conn = req.context['db']
         with db_conn.cursor() as cur:
-            fieldMetas = FieldMeta.from_db_multi(cur, "WHERE field_name = %s", (field_name,))
+            fieldMetas = FieldMeta.from_db_multi(cur, [field_name])
         db_conn.commit()
 
         if fieldMetas:

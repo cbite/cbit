@@ -289,8 +289,8 @@ def apply_special_treatments_to_study_sample(d):
         Break out fields like phase composition
         e.g. given a sample with 'Phase composition' TCP=80;HA=20,
         add two extra fields:
-        * 'Phase composition - % TCP': 80
-        * 'Phase composition - % HA': 20
+        * 'Phase composition - TCP': 80
+        * 'Phase composition - HA': 20
         """
         if inValueName in outResult:
             for entry in outResult[inValueName].split(';'):
@@ -317,7 +317,7 @@ def apply_special_treatments_to_study_sample(d):
             'Wettability', result, u'*Wettability - {0} contact angle')
 
         merge(result, 'Material Name', 'Material abbreviation', '*Material')
-        merge(result, 'Strain full name', 'Strain abbreviation', '*Strain')
+        merge(result, 'Cell strain full name', 'Cell strain abbreviation', '*Cell strain')
         merge(result, 'Compound', 'Compound abbreviation', '*Compound')
 
         all_results[sampleName] = result

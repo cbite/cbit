@@ -31,6 +31,8 @@ class Archive(object):
         return self.study_sample.columns.values
 
     def analyse_fields(self):
+        # TODO: Produce analysis for merged fields (e.g., '*Material') if one of the
+        # underlying component fields is present
         result = []
 
         clean_column_names = {
@@ -79,6 +81,23 @@ class Archive(object):
 
             if not filterOut:
                 result.append(FieldAnalysisResults(cleanName, isUnitful, possibleDimensions, looksNumeric))
+
+        # Synthesize analysis for merged fields
+        # TODO: Refactor all this stuff so that merged fields and synthetic fields
+        # are defined in exactly one place
+        merged_fields = {
+            '*Material':    ('Material abbrevation',     'Material Name'),
+            '*Cell strain': ('Cell strain abbreviation', 'Cell strain full name'),
+            '*Compound':    ('Compound abbreviation',    'Compound'),
+        }
+        for mergedFieldName, (firstFieldName, secondFieldName) in merged_fields.iteritems():
+            if firstFieldName in reverse_clean_column_names or secondFieldName in reverse_clean_column_names:
+                result.append(FieldAnalysisResults(
+                    fieldName=mergedFieldName,
+                    isUnitful=False,
+                    possibleDimensions=[],
+                    looksNumeric=False
+                ))
 
         return result
 

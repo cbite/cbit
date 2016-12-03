@@ -78,24 +78,24 @@ class UploadsResource(object):
             )
 
         # Enumerate all fields in upload
-        d = reader.apply_special_treatments_to_study_sample(
-            reader.join_study_sample_and_assay(
-                reader.clean_up_study_samples(a.study_sample),
-                reader.clean_up_assay(a.assay)
-            )
-        )
+        #d = reader.apply_special_treatments_to_study_sample(
+        #    reader.join_study_sample_and_assay(
+        #        reader.clean_up_study_samples(a.study_sample),
+        #        reader.clean_up_assay(a.assay)
+        #    )
+        #)
+        #
+        #fieldNames = set(('Sample Name',))
+        #for i, (k, v) in enumerate(d.iteritems()):
+        #    fieldNames = fieldNames.union(set(v.keys()))
 
-        fieldNames = set(('Sample Name',))
-        for i, (k, v) in enumerate(d.iteritems()):
-            fieldNames = fieldNames.union(set(v.keys()))
+        # Analyze fields
+        fieldAnalyses = a.analyse_fields()
+        fieldNames = set([f.fieldName for f in fieldAnalyses])
 
         # Check for which fields we don't yet have metadata
         with db_conn.cursor() as cur:
-            knownFields = FieldMeta.from_db_multi(
-                cur,
-                "WHERE field_name IN %s",
-                (tuple(fieldNames),)
-            )
+            knownFields = FieldMeta.from_db_multi(cur, fieldNames)
 
         unknownFields = fieldNames.difference([f.fieldName for f in knownFields])
 
@@ -112,7 +112,7 @@ class UploadsResource(object):
                 for f in knownFields
             },
             'unknownFields': list(unknownFields),
-            'fieldAnalyses': [f.to_json() for f in a.analyse_fields()]
+            'fieldAnalyses': [f.to_json() for f in fieldAnalyses]
         }
         resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 

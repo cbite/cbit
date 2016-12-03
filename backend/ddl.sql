@@ -101,3 +101,6 @@ CREATE TABLE dim_meta_meta (
 
 --INSERT INTO dim_meta_meta (field_name, description, category, visibility, data_type, dimensions, preferred_unit)
 --VALUES ('Array or chip design', 'The design of the array or chip', 'Technical', 'main', 'string', 'none', 'none');
+
+--INSERT INTO dim_meta_meta (field_name, description, category, visibility, data_type, dimensions, preferred_unit)
+--VALUES ('Phase composition', 'Phase composition tooltip', 'Material > Physical', 'main', 'double', 'percentage', '%');
