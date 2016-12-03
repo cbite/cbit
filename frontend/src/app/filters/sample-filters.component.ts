@@ -5,6 +5,7 @@ import {
 import {FiltersService, FilterMode} from "../services/filters.service";
 import {NULL_CATEGORY_NAME, StudyService} from "../services/study.service";
 import * as $ from 'jquery';
+import {DimensionsRegister} from "../common/unit-conversions";
 
 // TODO: Move all usages of this to backend
 export const HIDDEN_SAMPLE_FILTER_LABELS = {
@@ -57,10 +58,15 @@ enum GlobalCheckboxState {
           </label>
         </div>
       </div>
+      <div class="units" *ngIf="dimensions != 'none'">
+        Units: (<select id="unitChooser" [(ngModel)]="chosenUnit">
+                  <option *ngFor="let unit of units()" [value]="unit">{{unit}}</option>
+                </select>)
+      </div>
   
       <div [collapse]="!isVisible">
         <ul>
-          <li *ngFor="let kv of allCounts | mapToIterable" class="checkbox">
+          <li *ngFor="let kv of allCountSorted" class="checkbox">
             <label [class.disabled]="!isEnabled(kv.key)">
               <input type="checkbox"
                      [name]="category"
@@ -104,6 +110,12 @@ enum GlobalCheckboxState {
     .my-label a:hover {
       text-decoration: none;
     }
+    .units {
+      font-size: 90%;
+      font-style: oblique;
+      padding-left: 38px;
+      padding-top: 5px;
+    }
     
     ul {
       padding-left: 30px;
@@ -140,12 +152,20 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   @Input() allCounts: {
     [value: string]: number   // Free-form mapping of values to counts
   } = {}
+  allCountSorted: Array<{ key: string, val: any }> = [];
   @Input() filteredCounts: {
     [value: string]: number   // Free-form mapping of values to counts
   } = {}
   categoryRealName: string;
 
   description: string = "Fetching description...";
+  dimensions: string = "none";
+  chosenUnit: string = "none";
+  dataType: string = "string";
+  units(): string[] {
+    let unitConverter = DimensionsRegister[this.dimensions];
+    return (unitConverter ? unitConverter.getPossibleUnits() : []);
+  }
 
   constructor(
     private _filtersService: FiltersService,
@@ -173,9 +193,45 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
     let fieldMetaPromise = this._studyService.getFieldMeta(this.category);
     fieldMetaPromise.then(fieldMeta => {
       this.description = fieldMeta.description || "No description available";
+      this.dimensions = fieldMeta.dimensions;
+      this.chosenUnit = fieldMeta.preferredUnit;
+      this.dataType = fieldMeta.dataType;
+      this.updateAllCountsSorted();
 
       this._changeDetectorRef.detectChanges();
     });
+
+    this.updateAllCountsSorted();
+  }
+
+  updateAllCountsSorted(): void {
+
+    // allCountsSorted is like allCounts | mapToIterable, but the sort order is different for
+    // numeric quantities
+    let hasNullCategory = NULL_CATEGORY_NAME in this.allCounts;
+    let saveNullCount = this.allCounts[NULL_CATEGORY_NAME];
+
+    var a: Array<{ key: string, val: any }> = [];
+    for (var key in this.allCounts) {
+      if (this.allCounts.hasOwnProperty(key) && key !== NULL_CATEGORY_NAME) {
+        a.push({key: key, val: this.allCounts[key]});
+      }
+    }
+
+    let partialResult: Array<{ key: string, val: any }>;
+    switch (this.dataType) {
+      case "double":
+        partialResult = a.sort((x, y) => (+x.key) - (+y.key));  // Convert to numbers before sorting
+        break;
+
+      case "string":
+      default:
+        partialResult = a.sort((x, y) => x.key.trim().localeCompare(y.key.trim()));  // Prevent leading spaces from jumbling up items
+        break;
+    }
+
+    // Add <None> at the top if needed
+    this.allCountSorted = (hasNullCategory ? [{key: NULL_CATEGORY_NAME, val: saveNullCount}] : []).concat(partialResult);
   }
 
   getGlobalCheckboxState(): GlobalCheckboxState {
@@ -287,15 +343,27 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   }
 
   formatValueName(s: string): string {
+    // Don't reformat or convert units of "<None>"
+    if (s === NULL_CATEGORY_NAME) {
+      return s;
+    }
+
+    let unitConverter = DimensionsRegister[this.dimensions];
+    let convert = (
+      (this.dimensions == 'none' || !unitConverter)
+        ? (x: any) => x
+        : (x: any) => unitConverter.fromCanonicalUnits(+x, this.chosenUnit)
+    );
+
     switch (this.category) {
       case 'Phase composition':
-        return this.decodePhaseCompositionLike(s, (component, percentage) => `${percentage}% ${component}`);
+        return this.decodePhaseCompositionLike(s, (component, percentage) => `${convert(percentage)} ${component}`);
       case 'Elements composition':
-        return this.decodePhaseCompositionLike(s, (element, percentage) => `${percentage}% ${element}`);
+        return this.decodePhaseCompositionLike(s, (element, percentage) => `${convert(percentage)} ${element}`);
       case 'Wettability':
-        return this.decodePhaseCompositionLike(s, (liquid, contactAngle) => `${contactAngle}° with ${liquid}`);
+        return this.decodePhaseCompositionLike(s, (liquid, contactAngle) => `${convert(contactAngle)} with ${liquid}`);
       default:
-        return s;
+        return convert(s);
     }
   }
 
