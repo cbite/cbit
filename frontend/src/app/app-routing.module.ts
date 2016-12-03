@@ -6,6 +6,7 @@ import {BrowserComponent} from "./browser.component";
 import {StudyComponent} from "./study/study.component";
 import {DownloadComponent} from "./download.component";
 import {UploadComponent} from "./uploader/upload.component";
+import {MetadataComponent} from "./metadata.component";
 
 const routes: Routes = [
   { path: '',           redirectTo: '/welcome', pathMatch: 'full' },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'browse',     component: BrowserComponent },
   { path: 'download',   component: DownloadComponent },
   { path: 'upload',     component: UploadComponent },
+  { path: 'metadata',   component: MetadataComponent },
   { path: 'study/:id',  component: StudyComponent }
 ];
 

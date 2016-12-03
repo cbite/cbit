@@ -381,6 +381,38 @@ class MetadataSearch(object):
 
 
 class MetadataFields(object):
+    def on_get(self, req, resp):
+        """
+        Return a list of all known fields with metadata
+
+        Request data
+        ============
+        -- none --
+
+        Reponse data
+        ============
+        [
+          "FieldNameA",
+          "FieldNameB",
+          ...
+        ]
+        """
+
+        db_conn = req.context['db']
+        with db_conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT field_name
+                FROM dim_meta_meta
+                """
+            )
+            dbResults = cur.fetchall()
+        fieldNames = [rawFieldName.decode('utf-8') for (rawFieldName,) in dbResults]
+
+        resp.status = falcon.HTTP_OK
+        resp.body = json.dumps(fieldNames, indent=2, sort_keys=True)
+
+
     def on_post(self, req, resp):
         """
         Return metadata about fields

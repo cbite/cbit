@@ -68,6 +68,31 @@ export class StudyService {
     return this.fieldMetaRequester.get(fieldName);
   }
 
+  getAllFieldNames(): Promise<string[]> {
+    return new Promise(resolve => {
+      $.ajax({
+        type: 'GET',
+        url: 'http://localhost:23456/metadata/fields',
+        contentType: 'application/json',
+        success: function(data: string[]) {
+          resolve(data);
+        }
+      })
+    });
+  }
+
+  getAllFieldMetas(fieldNames: string[]): Promise<{[fieldName: string]: FieldMeta}> {
+    let self = this;
+
+    let allPromises = fieldNames.map(fieldName => {
+      return self.getFieldMeta(fieldName).then(fieldMeta => {
+        return { [fieldName]: fieldMeta };
+      });
+    });
+
+    return Promise.all(allPromises).then(allFieldMetaObjects => _.merge.apply(null, [{}].concat(allFieldMetaObjects)));
+  }
+
   getAllCountsAsync(): Promise<ManySampleCounts> {
     const URL = 'http://localhost:23456/metadata/all_counts';
     return new Promise(function (resolve) {

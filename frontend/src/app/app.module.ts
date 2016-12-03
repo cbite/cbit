@@ -28,6 +28,7 @@ import {DropdownDirective} from "./common/dropdown.directive";
 import {DropdownMenuDirective} from "./common/dropdown-menu.directive";
 import {DropdownToggleDirective} from "./common/dropdown-toggle.directive";
 import {ModalModule, TooltipDirective, TooltipModule} from "ng2-bootstrap";
+import {MetadataComponent, FieldMetadataEditorComponent} from "./metadata.component";
 
 
 @NgModule({
@@ -47,6 +48,8 @@ import {ModalModule, TooltipDirective, TooltipModule} from "ng2-bootstrap";
     DownloadComponent,
     UploadComponent,
     FieldMetadataFormComponent,
+    MetadataComponent,
+    FieldMetadataEditorComponent,
     PubmedLinksDirective,
     DOILinkDirective,
     FilterSidebarComponent,

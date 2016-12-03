@@ -286,7 +286,7 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
       .then(unfilteredCounts => {
         console.log(`unfilteredCounts = ${JSON.stringify(unfilteredCounts)}`);
         this.unfilteredPropNamesAndValueCounts = unfilteredCounts;
-        return this.getAllFieldMetas(Object.keys(unfilteredCounts));
+        return this._studyService.getAllFieldMetas(Object.keys(unfilteredCounts));
       })
       .then(allFieldMetas => {
         console.log(`allFieldMetas = ${JSON.stringify(allFieldMetas)}`);
@@ -311,18 +311,6 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
     } else {
       return s;
     }
-  }
-
-  getAllFieldMetas(fieldNames: string[]): Promise<{[fieldName: string]: FieldMeta}> {
-    let self = this;
-
-    let allPromises = fieldNames.map(fieldName => {
-      return self._studyService.getFieldMeta(fieldName).then(fieldMeta => {
-        return { [fieldName]: fieldMeta };
-      });
-    });
-
-    return Promise.all(allPromises).then(allFieldMetaObjects => _.merge.apply(null, [{}].concat(allFieldMetaObjects)));
   }
 
   calcVisiblePropNames(fieldMetas: {[fieldName: string]: FieldMeta}): string[] {

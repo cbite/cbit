@@ -34,6 +34,9 @@ import {DownloadSelectionService} from "./services/download-selection.service";
             <li [class.active]="isCurrentRoute('/upload')">
               <a routerLink="/upload"  ><span class="glyphicon glyphicon-cloud-upload"></span> Upload (admin!)</a>
             </li>
+            <li [class.active]="isCurrentRoute('/metadata')">
+              <a routerLink="/metadata"  ><span class="glyphicon glyphicon-wrench"></span> Edit Field Metadata (admin!)</a>
+            </li>
             
           </ul>
           
