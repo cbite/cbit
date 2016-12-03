@@ -190,7 +190,7 @@ class FieldMeta(object):
             cur.executemany(
                 """
                 INSERT INTO dim_meta_meta
-                (field_name, description, category, visibility, data_type, dimensions, preferredUnit)
+                (field_name, description, category, visibility, data_type, dimensions, preferred_unit)
                 VALUES
                 (%s, %s, %s, %s, %s, %s, %s)
                 """,
@@ -213,7 +213,7 @@ class FieldMeta(object):
                 WHERE field_name = %s
                 """,
                 [
-                    (f.description, f.category, f.visibility, f.dataType, f.dimensions, f.preferredUnit,
+                    (f.description, f.category, f.visibility, f.dataType, f.dimensions, f.preferred_unit,
 
                     f.fieldName)
                     for f in fieldMetas
