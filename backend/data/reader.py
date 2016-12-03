@@ -314,7 +314,7 @@ def apply_special_treatments_to_study_sample(d):
         break_out_composition_like_field(
             'Elements composition', result, '*Elements composition - {0}')
         break_out_composition_like_field(
-            'Wettability', result, u'*Wettability - {0} contact angle')
+            'Wettability', result, u'*Wettability - {0}')
 
         merge(result, 'Material Name', 'Material abbreviation', '*Material')
         merge(result, 'Cell strain full name', 'Cell strain abbreviation', '*Cell strain')
