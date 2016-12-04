@@ -1074,12 +1074,13 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
       let defaults = this.fetchDefaults(fieldName);
 
       group[fieldName] = new FormGroup({
+        fieldName:     new FormControl(fieldName),
         description:   new FormControl(defaults.description, Validators.required),
-        dataType:      new FormControl(defaults.dataType),
-        visibility:    new FormControl(defaults.visibility),
         category:      new FormControl(defaults.category),
+        visibility:    new FormControl(defaults.visibility),
+        dataType:      new FormControl(defaults.dataType),
         dimensions:    new FormControl(defaults.dimensions || 'none'),
-        preferredUnit: new FormControl(defaults.preferredUnit || 'none')
+        preferredUnit: new FormControl(defaults.preferredUnit || 'none'),
       });
 
       let fieldAnalysis = this.fieldAnalyses[fieldName];
@@ -1154,7 +1155,6 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
     
     <div [class.hidden]="step !== 2">
       <h2>Step 2: Enter metadata for new fields</h2>
-      <p>Upload UUID: <code>{{ upload_uuid }}</code></p>
       
       <div *ngIf="!unknownFields">
         No new fields in this study
@@ -1165,6 +1165,18 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
       </div>
       
       <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">{{ confirmMetadataButtonName }}</button>
+    </div>
+    
+    <div *ngIf="step === 3">
+      <h2>Upload succeeded!</h2>
+      <study [studyId]="upload_uuid" [showTitle]="true"></study>
+    </div>
+    
+    <div *ngIf="step === 4">
+      <h2>Upload failed!</h2>
+      <div class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
     </div>
   </div>
   `,
@@ -1206,6 +1218,7 @@ export class UploadComponent {
   unknownFields: string[] = [];
   fieldAnalyses: {[fieldName: string]: FieldAnalysisResults} = {};
   metadataForm: FormGroup;
+  errorMessage: string = "";
 
   constructor(
     private _router: Router,
@@ -1262,31 +1275,28 @@ export class UploadComponent {
   doConfirmMetadata() {
     let that = this;
 
-    let newMetadata = this.metadataForm.value;
+    let newMetadata = Object.values(this.metadataForm.value);
     let metadataInsertionPromise: Promise<null>;
-    if (!newMetadata) {
+    if (!newMetadata || newMetadata.length === 0) {
       metadataInsertionPromise = Promise.resolve([]);
     } else {
-      let promises: Promise<null>[] = [];
-      for (let fieldName in newMetadata) {
-        let promise = new Promise((resolve, reject) => {
-          $.ajax({
-            type: 'PUT',
-            url: `http://localhost:23456/metadata/fields/${fieldName}`,
-            contentType: 'application/json',
-            data: JSON.stringify(newMetadata[fieldName]),
-            success: function(response) {
-              resolve();
-            },
-            error: function(jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
-              console.log(`Failed to update metadata for ${fieldName}: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`);
-              reject();
-            }
-          });
-        });
-        promises.push(promise);
-      }
-      metadataInsertionPromise = Promise.all(promises);
+      metadataInsertionPromise = new Promise((resolve, reject) => {
+        $.ajax({
+          type: 'PUT',
+          url: 'http://localhost:23456/metadata/fields/_multi',
+          data: JSON.stringify(newMetadata),
+          dataType: 'json',
+          success: function(response) {
+            resolve();
+          },
+          error: function(jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
+            that.errorMessage = `Failed to create new fields: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
+            that.step = 4;
+            that.changeDetectorRef.detectChanges();
+            reject();
+          }
+        })
+      });
     }
 
     metadataInsertionPromise.then(() => {
@@ -1294,13 +1304,15 @@ export class UploadComponent {
         type: 'PUT',
         url: this.confirm_upload_url,
         contentType: 'text/plain',  // TODO: Use JSON when sending metadata confirmations
-        error: function(jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
-          that.status = `Confirmation Error!  Details ${JSON.stringify({textStatus, errorThrown})}`;
+        success: function(data:any, textStatus:string, jqXHR: XMLHttpRequest) {
+          that.step = 3;
           that.changeDetectorRef.detectChanges();
         },
-        success: function(data:any, textStatus:string, jqXHR: XMLHttpRequest) {
-          that._router.navigate(['/study', that.upload_uuid]);
-        }
+        error: function(jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
+          that.errorMessage = `Details ${JSON.stringify({textStatus, errorThrown})}`;
+          that.step = 4;
+          that.changeDetectorRef.detectChanges();
+        },
       });
     });
 

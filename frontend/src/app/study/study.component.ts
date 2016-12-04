@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 })
 export class StudyComponent implements OnInit {
   @Input() studyId: string;
+  @Input() showTitle: boolean = false;
   study: Study;
   studyCategoryMap: RawStudy;
   samples: Sample[];
