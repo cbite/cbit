@@ -176,7 +176,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Age": {
     "category": "Biological",
-    "dataType": "string",
+    "dataType": "double",
     "description": "Age of animal or human subject in case of in vivo or ex vivo studies.",
     "visibility": "main",
     "dimensions": "time",
@@ -208,7 +208,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Attach Duration": {
     "category": "Biological",
-    "dataType": "string",
+    "dataType": "double",
     "description": "Time allowed for cell attachment before start of compound exposure and/or start of culture duration experiment.",
     "visibility": "additional",
     "dimensions": "time",
@@ -272,7 +272,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Dose": {
     "category": "Biological",
-    "dataType": "string",
+    "dataType": "double",
     "description": "Dose per administration",
     "visibility": "main",
     "dimensions": "concentration",
@@ -280,7 +280,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Dose Duration": {
     "category": "Biological",
-    "dataType": "string",
+    "dataType": "double",
     "description": "Duration of dose treatment; only for compound exposure study",
     "visibility": "main",
     "dimensions": "time",
@@ -312,7 +312,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Culture Duration": {
     "category": "Biological",
-    "dataType": "string",
+    "dataType": "double",
     "description": "Culture time on biomaterial (after attachment) until isolation of cells",
     "visibility": "main",
     "dimensions": "time",
@@ -566,7 +566,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Porosity device": {
     "category": "Material > Physical",
-    "dataType": "double",
+    "dataType": "string",
     "description": "The device used to measure the porosity, e.g. microCT, mercury intrusion",
     "visibility": "hidden",
     "dimensions": "none",
@@ -593,16 +593,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "The grain size of the material as measured by SEM.",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Grain size Unit": {
-    "category": "Material > Physical",
-    "dataType": "string",
-    "description": "Grain size Unit, e.g. nanometer, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "length",
+    "preferredUnit": "nanometer"
   },
   "Grain size device": {
     "category": "Material > Physical",
@@ -665,16 +657,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Specific surface area of the material",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Specific surface area Unit": {
-    "category": "Material > Physical",
-    "dataType": "string",
-    "description": "Specific surface area Unit, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "area",
+    "preferredUnit": "square millimeter"
   },
   "Specific surface area device": {
     "category": "Material > Physical",
@@ -697,16 +681,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "The surface charge of the material measured as zeta potential (in millivolt).",
     "visibility": "additional",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Surface charge Unit": {
-    "category": "Material > Physical",
-    "dataType": "string",
-    "description": "Surface charge unit, probably millivolts, use UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "electric_potential_difference",
+    "preferredUnit": "millivolt"
   },
   "Surface charge device": {
     "category": "Material > Physical",
@@ -729,16 +705,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Alignment of crystals in a polymer as measured by SAXS/WAXS",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Alignment of crystals Unit": {
-    "category": "Material > Physical",
-    "dataType": "string",
-    "description": "Alignment of crystals unit. ",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "none",    // TODO: FIXME
+    "preferredUnit": "none"  // TODO: FIXME
   },
   "Polymerization mechanism": {
     "category": "Material > Physical",
@@ -753,16 +721,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Degree of crosslinking (%)",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Crosslinking degree Unit": {
-    "category": "Material > Physical",
-    "dataType": "string",
-    "description": "Crosslinking degree unit, should be percent: %",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "percentage",
+    "preferredUnit": "%"
   },
   "Crosslinking degree device": {
     "category": "Material > Physical",
@@ -787,16 +747,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Elasticity of the material (elastic modulus, average) in Pascal",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Elasticity Unit": {
-    "category": "Material > Mechanical",
-    "dataType": "string",
-    "description": "Elasticity unit (elastic modulus, average), probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "pressure",
+    "preferredUnit": "pascal"
   },
   "Elasticity distribution graph": {
     "category": "Material > Mechanical",
@@ -856,7 +808,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Tensile strength": {
     "category": "Material > Mechanical",
-    "dataType": "string",
+    "dataType": "double",
     "description": "Tensile strength as measured by mechanical tester in Pascal.",
     "visibility": "main",
     "dimensions": "pressure",
@@ -915,16 +867,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Shear stress in Pascal as measured by rheometer or mechanical tester.",
     "visibility": "additional",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Shear stress Unit": {
-    "category": "Material > Mechanical",
-    "dataType": "string",
-    "description": "Shear stress unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "pressure",
+    "preferredUnit": "pascal"
   },
   "Shear stress graph": {
     "category": "Material > Mechanical",
@@ -947,16 +891,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Bending strength as measured by mechanical tester in Pascal.",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Bending strength Unit": {
-    "category": "Material > Mechanical",
-    "dataType": "string",
-    "description": "Bending strength unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "pressure",
+    "preferredUnit": "pascal"
   },
   "Bending strength graph": {
     "category": "Material > Mechanical",
@@ -971,16 +907,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dataType": "double",
     "description": "Stress rupture as measued by mechanical tester in Pascal.",
     "visibility": "additional",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Stress rupture Unit": {
-    "category": "Material > Mechanical",
-    "dataType": "string",
-    "description": "Stress rupture unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "pressure",
+    "preferredUnit": "pascal"
   },
 };
 

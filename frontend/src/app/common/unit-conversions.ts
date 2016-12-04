@@ -267,18 +267,32 @@ export const TemperatureConverter = new UnitConverter({
 });
 
 
+// unit -> electric potential difference unit
+// Canonical unit: volt
+export const ElectricPotentialDifferenceConverter = new UnitConverter({
+  'megavolt':  1e6,
+  'kilovolt':  1e3,
+  'volt':      1.,
+  'millivolt': 1e-3,
+  'microvolt': 1e-6,
+  'nanovolt':  1e-9,
+  'picovolt':  1e-12,
+});
+
+
 // Global register of dimensions
 export const DimensionsRegister: {[dimensions: string]: UnitConverter} = {
-  'none':          NoneConverter,
-  'time':          TimeUnitConverter,
-  'concentration': ConcentrationUnitConverter,
-  'mass':          MassUnitConverter,
-  'area':          AreaUnitConverter,
-  'weight_loss':   WeightLossUnitConverter,
-  'length':        LengthUnitConverter,
-  'pressure':      PressureConverter,
-  'angle':         AngleConverter,
-  'percentage':    PercentageConverter,
-  'parts_per':     PartsPerConverter,
-  'temperature':   TemperatureConverter,
+  'none':                           NoneConverter,
+  'time':                           TimeUnitConverter,
+  'concentration':                  ConcentrationUnitConverter,
+  'mass':                           MassUnitConverter,
+  'area':                           AreaUnitConverter,
+  'weight_loss':                    WeightLossUnitConverter,
+  'length':                         LengthUnitConverter,
+  'pressure':                       PressureConverter,
+  'angle':                          AngleConverter,
+  'percentage':                     PercentageConverter,
+  'parts_per':                      PartsPerConverter,
+  'temperature':                    TemperatureConverter,
+  'electric_potential_difference':  ElectricPotentialDifferenceConverter,
 };
