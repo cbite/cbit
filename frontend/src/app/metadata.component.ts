@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef} from '@angular/core';
 import {FieldMeta} from "./common/field-meta.model";
 import {StudyService} from "./services/study.service";
 import {FormGroup, FormControl, Validators, Form} from "@angular/forms";
@@ -134,10 +134,11 @@ export class FieldMetadataEditorComponent implements OnInit, OnChanges {
     for (let fieldName in this.fieldMetas) {
       let fieldMeta = this.fieldMetas[fieldName];
       group[fieldName] = new FormGroup({
+        fieldName:     new FormControl(fieldName),
         description:   new FormControl(fieldMeta.description, Validators.required),
-        dataType:      new FormControl(fieldMeta.dataType),
-        visibility:    new FormControl(fieldMeta.visibility),
         category:      new FormControl(fieldMeta.category),
+        visibility:    new FormControl(fieldMeta.visibility),
+        dataType:      new FormControl(fieldMeta.dataType),
         dimensions:    new FormControl(fieldMeta.dimensions),
         preferredUnit: new FormControl(fieldMeta.preferredUnit)
       });
@@ -189,7 +190,8 @@ export class MetadataComponent implements OnInit {
   saveError = '';
 
   constructor(
-    private _studyService : StudyService
+    private _studyService : StudyService,
+    private _changeDetectorRef : ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -207,15 +209,28 @@ export class MetadataComponent implements OnInit {
   }
 
   saveChanges() {
+    let self = this;
+
     this.savingChanges = true;
     this.saveDone = false;
     this.saveError = '';
-    console.log(JSON.stringify(this.form.value));
 
-    setTimeout(() => {
-      this.savingChanges = false;
-      this.saveDone = true;
-      this.saveError = "Can't change data type of `hello`";
-    }, 1000);
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:23456/metadata/fields/_multi',
+      data: JSON.stringify(Object.values(this.form.value)),
+      dataType: 'json',
+      success: function(response) {
+        self.savingChanges = false;
+        self.saveDone = true;
+        self._changeDetectorRef.detectChanges();
+      },
+      error: function(jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
+        self.savingChanges = false;
+        self.saveDone = true;
+        self.saveError = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
+        self._changeDetectorRef.detectChanges();
+      }
+    })
   }
 }
