@@ -32,29 +32,6 @@ HIDDEN_SAMPLE_FILTER_LABELS = frozenset((
 
 NULL_CATEGORY_NAME = '<None>'
 
-VALID_CATEGORIES = frozenset((
-    "Technical",
-    "Biological",
-    "Material > General",
-    "Material > Chemical",
-    "Material > Physical",
-    "Material > Mechanical",
-))
-
-VALID_VISIBILITIES = frozenset((
-    'hidden',
-    'main',
-    'additional',
-    'unit',
-))
-
-VALID_DATA_TYPES = frozenset((
-    'string',
-    'double',
-))
-
-VALID_DIMENSIONS = frozenset(DimensionsRegister.keys())
-
 class MetadataAllCountsResource(object):
     def on_get(self, req, resp):
         """
