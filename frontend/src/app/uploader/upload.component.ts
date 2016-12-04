@@ -606,35 +606,19 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Surface roughness Ra": {
     "category": "Material > Physical",
-    "dataType": "string",
+    "dataType": "double",
     "description": "Surface roughness, average profile roughness parameter Ra in micrometers",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Surface roughness Ra Unit": {
-    "category": "Material > Physical",
-    "dataType": "string",
-    "description": "Surface roughness Ra unit, should probably be micrometer, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "length",
+    "preferredUnit": "micrometer"
   },
   "Surface roughness Sa": {
     "category": "Material > Physical",
-    "dataType": "string",
+    "dataType": "double",
     "description": "Surface roughness, average area roughness parameter Sa in micrometers",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Surface roughness Sa Unit": {
-    "category": "Material > Physical",
-    "dataType": "string",
-    "description": "Surface roughness Sa unit, should probably be micrometer, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "length",
+    "preferredUnit": "micrometer"
   },
   "Surface roughness graph": {
     "category": "Material > Physical",
@@ -784,19 +768,11 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Compressive strength": {
     "category": "Material > Mechanical",
-    "dataType": "string",
+    "dataType": "double",
     "description": "Compressive strength as measured by mechanical tester in Pascal",
     "visibility": "main",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Compressive strength Unit": {
-    "category": "Material > Mechanical",
-    "dataType": "string",
-    "description": "Compressive strength unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "pressure",
+    "preferredUnit": "pascal"
   },
   "Compressive strength graph": {
     "category": "Material > Mechanical",
@@ -840,19 +816,11 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
   "Torsion": {
     "category": "Material > Mechanical",
-    "dataType": "string",
+    "dataType": "double",
     "description": "Torsion in Pascal as measured by mechanical tester.",
     "visibility": "additional",
-    "dimensions": "none",
-    "preferredUnit": "none"
-  },
-  "Torsion Unit": {
-    "category": "Material > Mechanical",
-    "dataType": "string",
-    "description": "Torsion unit, probably pascal, UO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
-    "visibility": "unit",
-    "dimensions": "none",
-    "preferredUnit": "none"
+    "dimensions": "pressure",
+    "preferredUnit": "pascal"
   },
   "Torsion graph": {
     "category": "Material > Mechanical",
