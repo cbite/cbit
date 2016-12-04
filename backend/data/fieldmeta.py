@@ -14,7 +14,6 @@ class FieldMeta(object):
         'hidden',
         'main',
         'additional',
-        'unit',
     ))
 
     validDataTypes = frozenset((

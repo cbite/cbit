@@ -948,7 +948,6 @@ interface UploadsResponse {
                   <option value="main">Main Filters</option>
                   <option value="additional">Additional Filters</option>
                   <option value="hidden">Hidden</option>
-                  <option value="unit">Unit</option>
                 </select>
               </div>
             </div>
