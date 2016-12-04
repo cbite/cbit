@@ -205,6 +205,9 @@ class FieldMeta(object):
                 ]
             )
         elif insertOrUpdate == 'update':
+
+            # NOTE: Neither dataType nor dimensions can be changed for an existing
+            # field, so we don't even pass the update through to the DB level
             cur.executemany(
                 """
                 UPDATE dim_meta_meta
@@ -212,13 +215,11 @@ class FieldMeta(object):
                     description = %s,
                     category = %s,
                     visibility = %s,
-                    data_type = %s,
-                    dimensions = %s,
                     preferred_unit = %s
                 WHERE field_name = %s
                 """,
                 [
-                    (f.description, f.category, f.visibility, f.dataType, f.dimensions, f.preferred_unit,
+                    (f.description, f.category, f.visibility, f.preferredUnit,
 
                     f.fieldName)
                     for f in fieldMetas
