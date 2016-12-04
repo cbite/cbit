@@ -31,7 +31,8 @@ export type DimensionsType = (
   'angle' |
   'percentage' |
   'parts_per' |
-  'temperature'
+  'temperature' |
+  'electric_potential_difference'
 );
 
 export interface FieldMeta {
