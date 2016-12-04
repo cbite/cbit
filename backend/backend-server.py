@@ -14,6 +14,7 @@ from resources.metadata import (
     MetadataSamplesInStudies,
     MetadataSearch,
     MetadataFields,
+    MetadataFieldsMulti,
     MetadataField
 )
 
@@ -51,4 +52,5 @@ app.add_route('/metadata/filtered_counts', MetadataFilteredCountsResource())
 app.add_route('/metadata/samples_in_studies', MetadataSamplesInStudies())
 app.add_route('/metadata/search', MetadataSearch())
 app.add_route('/metadata/fields', MetadataFields())
+app.add_route('/metadata/fields/_multi', MetadataFieldsMulti())
 app.add_route('/metadata/fields/{field_name}', MetadataField())

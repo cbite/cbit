@@ -462,6 +462,128 @@ class MetadataFields(object):
         resp.body = json.dumps(results, indent=2, sort_keys=True)
 
 
+class MetadataFieldsMulti(object):
+    def on_put(self, req, resp):
+        """
+        Create multiple field with the given metadata
+        (Note: fields will only be created in ElasticSearch upon import of a
+         study with samples specifying such fields)
+
+        Request data
+        ============
+        All fields must be present
+
+        [
+            {
+              "fieldName": "FieldNameA",
+              "description": "New description",
+              "category": "Biological",
+              "visibility": "main",
+              ...
+            },
+            {
+              "fieldName": "FieldNameB",
+              "description": "New description",
+              "category": "Biological",
+              "visibility": "main",
+              ...
+            },
+            ...
+        ]
+
+        Response data
+        =============
+        - HTTP 200 (OK) if all went well
+        - HTTP 400 (Bad Request) if not all metadata is present in request data,
+          or if any value (e.g., category) is invalid.
+        - HTTP 409 (Conflict) if the field already exists
+        """
+
+        data = json.load(req.stream)
+
+        # 0. Check request data
+        # ---------------------
+
+        if not isinstance(data, list):
+            raise falcon.HTTPBadRequest(description="Expected JSON array as payload")
+
+        try:
+            fieldMetas = [FieldMeta.from_json(item) for item in data]  # type: List[FieldMeta]
+        except ValueError as e:
+            raise falcon.HTTPBadRequest(description=e.message)
+
+        # 1. Effect change
+        # ----------------
+        db_conn = req.context['db']
+        do_put_field_metas(db_conn, fieldMetas)  # Any errors are raised as exceptions
+        db_conn.commit()
+
+        resp.status = falcon.HTTP_OK
+        resp.body = "{}"   # Empty JSON body
+
+
+    def on_post(self, req, resp):
+        """
+        Post updates to multiple metadata fields in one request
+        Change metadata about a field
+
+        Request data
+        ============
+        All fields must be present
+
+        [
+            {
+              "fieldName": "FieldNameA",
+              "description": "New description",
+              "category": "Biological",
+              "visibility": "main",
+              ...
+            },
+            {
+              "fieldName": "FieldNameB",
+              "description": "New description",
+              "category": "Biological",
+              "visibility": "main",
+              ...
+            },
+            ...
+        ]
+
+        Response data
+        =============
+        - HTTP 200 (OK) if all went well
+        - HTTP 400 (Bad Request) if not all metadata is present in request data,
+          or if any value (e.g., category) is invalid, or if any attempt is made
+          to change the value of a readonly value (e.g., dataType, dimensions).
+        - HTTP 404 (Not Found) if at least one of the fields doesn't exist
+        """
+
+        data = json.load(req.stream)
+
+        # 0. Check request data
+        # ---------------------
+
+        if not isinstance(data, list):
+            raise falcon.HTTPBadRequest(
+                description="Expected JSON array as payload")
+
+        try:
+            fieldMetas = [FieldMeta.from_json(item) for item in
+                          data]  # type: List[FieldMeta]
+        except ValueError as e:
+            raise falcon.HTTPBadRequest(description=e.message)
+
+        # 1. Effect change
+        # ----------------
+        db_conn = req.context['db']
+        do_post_field_metas(db_conn,
+                            fieldMetas)  # Any errors are raised as exceptions
+        db_conn.commit()
+
+        resp.status = falcon.HTTP_OK
+        resp.body = "{}"   # Empty JSON body
+
+
 class MetadataField(object):
     def on_get(self, req, resp, field_name):
         """
@@ -523,26 +645,22 @@ class MetadataField(object):
             raise falcon.HTTPBadRequest(description="Expected JSON object as payload")
 
         try:
-            data['fieldName'] = field_name
             fieldMeta = FieldMeta.from_json(data)
         except ValueError as e:
             raise falcon.HTTPBadRequest(description=e.message)
 
+        if fieldMeta.fieldName != field_name:
+            raise falcon.HTTPBadRequest(description="Field names in URL and payload do not match")
+
+
         # 1. Effect change
         # ----------------
         db_conn = req.context['db']
-        with db_conn.cursor() as cur:
-
-            cur.execute("SELECT COUNT(*) FROM dim_meta_meta WHERE field_name = %s", (field_name,))
-            ((count,),) = cur.fetchall()
-            if count > 0:
-                raise falcon.HTTPConflict(description="A field named '{0}' already exists".format(field_name))
-
-            FieldMeta.to_db_multi(cur, [fieldMeta], 'insert')
-
+        do_put_field_metas(db_conn, [fieldMeta])
         db_conn.commit()
 
         resp.status = falcon.HTTP_OK
+        resp.body = "{}"   # Empty JSON body
 
 
     def on_post(self, req, resp, field_name):
@@ -551,10 +669,10 @@ class MetadataField(object):
 
         Request data
         ============
-        All fields must be present (except data_type, which can't be changed
-        after the fact)
+        All fields must be present
 
         {
+          "fieldName": "FieldNameA",         # Should match name in URL
           "description": "New description",
           "category": "Biological",
           "visibility": "main"
@@ -563,8 +681,9 @@ class MetadataField(object):
         Response data
         =============
         - HTTP 200 (OK) if all went well
-        - HTTP 400 (Bad Request) if not all metadata is present in request data
-          or if any value (e.g., category) is invalid
+        - HTTP 400 (Bad Request) if not all metadata is present in request data,
+          or if any value (e.g., category) is invalid, or if any attempt is made
+          to change the value of a readonly value (e.g., dataType, dimensions).
         - HTTP 404 (Not Found) if field doesn't exist
         """
 
@@ -577,26 +696,84 @@ class MetadataField(object):
             raise falcon.HTTPBadRequest(description="Expected JSON object as payload")
 
         try:
-            data['fieldName'] = field_name
-            fieldMeta = FieldMeta.from_json(data)
+            fieldMeta = FieldMeta.from_json(data)  # type: FieldMeta
         except ValueError as e:
             raise falcon.HTTPBadRequest(description=e.message)
+
+        if fieldMeta.fieldName != field_name:
+            raise falcon.HTTPBadRequest(description="Field names in URL and payload do not match")
 
         # 1. Effect change
         # ----------------
         db_conn = req.context['db']
-        with db_conn.cursor() as cur:
-
-            cur.execute("SELECT COUNT(*) FROM dim_meta_meta WHERE field_name = %s", (field_name,))
-            ((count,),) = cur.fetchall()
-            if count == 0:
-                raise falcon.HTTPNotFound(description="No field named '{0}'".format(field_name))
-
-            FieldMeta.to_db_multi(cur, [fieldMeta], 'update')
-
+        do_post_field_metas(db_conn, [fieldMeta])  # Any errors are raised as exceptions
         db_conn.commit()
 
         resp.status = falcon.HTTP_OK
+        resp.body = "{}"   # Empty JSON body
+
+
+def do_put_field_metas(db_conn, newFieldMetas):
+    """
+    Code shared between POST /metadata/fields/{field_name} and /metadata/fields/_multi
+    """
+
+    with db_conn.cursor() as cur:
+        oldFieldMetas = FieldMeta.from_db_multi(cur, [f.fieldName for f in newFieldMetas])
+
+        if oldFieldMetas:
+            raise falcon.HTTPConflict(
+                description="The following fields already exist '{0}'".format([f.fieldName for f in oldFieldMetas]))
+
+        FieldMeta.to_db_multi(cur, newFieldMetas, 'insert')
+
+
+def do_post_field_metas(db_conn, newFieldMetas):
+    """
+    Code shared between POST /metadata/fields/{field_name} and /metadata/fields/_multi
+    """
+
+    with db_conn.cursor() as cur:
+        oldFieldMetas = FieldMeta.from_db_multi(cur, [f.fieldName for f in newFieldMetas])
+
+        newFieldNames = set(f.fieldName for f in newFieldMetas)
+        oldFieldNames = set(f.fieldName for f in oldFieldMetas)
+        if newFieldNames != oldFieldNames:
+            missingFieldMetas = newFieldNames.difference(oldFieldNames)
+            raise falcon.HTTPNotFound(
+                description="The following fields do not exist '{0}'".format(missingFieldMetas))
+
+        newFieldMetasDict = {
+            f.fieldName: f
+            for f in newFieldMetas
+        }
+
+        oldFieldMetasDict = {
+            f.fieldName: f
+            for f in oldFieldMetas
+        }
+
+        for fieldName in newFieldNames:
+            oldFieldMeta = oldFieldMetasDict[fieldName]
+            newFieldMeta = newFieldMetasDict[fieldName]
+
+            if oldFieldMeta.dataType != newFieldMeta.dataType:
+                raise falcon.HTTPBadRequest(
+                    description=(
+                        "Cannot change dataType of field {0} from {1} to {2}"
+                            .format(fieldName, oldFieldMeta.dataType, newFieldMeta.dataType)
+                    )
+                )
+
+            if oldFieldMeta.dimensions != newFieldMeta.dimensions:
+                raise falcon.HTTPBadRequest(
+                    description=(
+                        "Cannot change dimensions of existing field {0} from {1} to {2}"
+                            .format(fieldName, oldFieldMeta.dimensions, newFieldMeta.dimensions)
+                    )
+                )
+
+        FieldMeta.to_db_multi(cur, newFieldMetas, 'update')
 
 
 # HELPER FUNCTIONS
