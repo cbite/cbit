@@ -86,7 +86,7 @@ class MetadataAllCountsResource(object):
 
         sample_mapping = es.indices.get_mapping(index='cbit',
                                                 doc_type='sample')
-        properties = sample_mapping['cbit']['mappings']['sample']['properties']
+        properties = sample_mapping['cbit']['mappings']['sample'].get('properties', {})
 
         aggs_to_query = {
             propName: {
@@ -112,7 +112,7 @@ class MetadataAllCountsResource(object):
                 bucketEntry['key']: bucketEntry['doc_count']
                 for bucketEntry in propAgg['buckets']
                 }
-            for propName, propAgg in result['aggregations'].iteritems()
+            for propName, propAgg in result.get('aggregations', {}).iteritems()
         }
 
         resp.status = falcon.HTTP_OK
