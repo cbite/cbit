@@ -284,17 +284,14 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
     this._studyService
       .getAllCountsAsync()
       .then(unfilteredCounts => {
-        console.log(`unfilteredCounts = ${JSON.stringify(unfilteredCounts)}`);
         this.unfilteredPropNamesAndValueCounts = unfilteredCounts;
         return this._studyService.getAllFieldMetas(Object.keys(unfilteredCounts));
       })
       .then(allFieldMetas => {
-        console.log(`allFieldMetas = ${JSON.stringify(allFieldMetas)}`);
         this.allFieldMetas = allFieldMetas;
         this.visiblePropNames = this.calcVisiblePropNames(allFieldMetas);
 
         this.classifiedProperties = this.classifyProperties(allFieldMetas);
-        console.log(`classifiedProperties = ${JSON.stringify(this.classifiedProperties)}`);
 
         this.changeDetectorRef.detectChanges();
         this.startListening();
