@@ -16,7 +16,10 @@ def set_up_elasticsearch():
         hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
     print("- Deleting existing index")
-    es.indices.delete(index=cfg.ES_INDEX)
+    try:
+        es.indices.delete(index=cfg.ES_INDEX)
+    except elasticsearch.exceptions.NotFoundError:
+        pass  # If it's not there, that's fine!
 
     # cfg.ES_STUDY_DOCTYPE and cfg.ES_SAMPLE_DOCTYPE need to live in the same index to set up a parent-child relationship
     print("- Creating mappings for cbit index")
