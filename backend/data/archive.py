@@ -27,9 +27,6 @@ class Archive(object):
         self.processed_data_set = processed_data_set
         self.annotations = annotations
 
-    def get_raw_field_names(self):
-        return self.study_sample.columns.values
-
     def analyse_fields(self):
         # TODO: Produce analysis for merged fields (e.g., '*Material') if one of the
         # underlying component fields is present
@@ -38,10 +35,11 @@ class Archive(object):
         clean_column_names = {
             f: re.sub(r'^Factor Value\[(.*)\]$', r'\1',
                    re.sub(r'^Characteristics\[(.*)\]$', r'\1', f))
-            for f in self.get_raw_field_names()
+            for f in self.study_sample.columns.values
         }
         reverse_clean_column_names = {v: k for (k,v) in clean_column_names.iteritems()}
 
+        # Fields in study_sample
         for origName in self.study_sample.columns.values:
 
             cleanName = clean_column_names[origName]
@@ -81,6 +79,50 @@ class Archive(object):
 
             if not filterOut:
                 result.append(FieldAnalysisResults(cleanName, isUnitful, possibleDimensions, looksNumeric))
+
+        # Special 'Protocols' field that coalesces all Protocol.REFs
+        result.append(FieldAnalysisResults(fieldName='Protocols', isUnitful=False, possibleDimensions=[], looksNumeric=False))
+
+        # Fields in assay
+        clean_column_names = {
+            f: re.sub(r'^Parameter Value\[(.*)\]$', r'\1',
+                   re.sub(r'^Comment\[(.*)\]$', r'\1', f))
+            for f in self.assay.columns.values
+        }
+
+        for origName in self.assay.columns.values:
+
+            cleanName = clean_column_names[origName]
+
+            # Skip empty values or anything that just references the sample
+            # again (such references are artifacts of how ISAcreator works)
+            # And dump all info about the protocols...
+            # And references to external files...
+            filterOut = (cleanName.startswith('Protocol REF') or
+                         cleanName == 'Sample Name' or
+                         (self.assay[origName] == self.assay['Sample Name']).all() or
+                         self.assay[origName].isnull().values.all() or
+                         cleanName in ('Annotation file',
+                                       'Array Data Matrix File',
+                                       'Array Design REF',
+                                       'Derived Array Data Matrix File'))
+
+            finalName = u'Transcriptomics Assay Detail: {0}'.format(cleanName)
+
+
+            isUnitful = False
+            possibleDimensions = []
+
+            looksNumeric = True
+            for value in self.assay[origName]:
+                if unicode(value) not in ('n/a', 'nan'):
+                    try:
+                        float(unicode(value))
+                    except ValueError as e:
+                        looksNumeric = False
+
+            if not filterOut:
+                result.append(FieldAnalysisResults(finalName, isUnitful, possibleDimensions, looksNumeric))
 
         # Synthesize analysis for merged fields
         # TODO: Refactor all this stuff so that merged fields and synthetic fields
