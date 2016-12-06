@@ -11,6 +11,8 @@ import re
 import numpy as np
 import config.config as cfg
 from unit_conversions import UnitConverter, DimensionsRegister
+from data.fieldmeta import FieldMeta
+import json
 
 def read_investigation(f):
     # An investigation file looks like this:
@@ -204,14 +206,8 @@ def read_study_sample(f):
     return df
 
 
-def clean_up_study_samples(df):
-    """
-    Unit conversions accept all relevant units from this ontology:
-    https://www.ebi.ac.uk/ols/ontologies/uo/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUO_0000000
-
-    :param df:
-    :return:
-    """
+def clean_up_study_samples(df, db_conn):
+    # TODO: Really have to refactor this to not use the REST backend DB connection directly
 
     clean_column_names = [
         re.sub(r'^Factor Value\[(.*)\]$', r'\1',
@@ -219,18 +215,11 @@ def clean_up_study_samples(df):
         for f in df.columns.values
     ]
 
-    # TODO: Move these to field metadata
-    unitful_column_dimensions = {
-        'Age':                   'time',
-        'Attach Duration':       'time',
-        'Culture Duration':      'time',
-        'Dose Duration':         'time',
-        'Dose':                  'concentration',
-        'Weight loss':           'weight_loss',
-        'Pore size':             'length',
-        'Grain size':            'length;',
-        'Specific surface area': 'area',
-    }
+    with db_conn.cursor() as cur:
+        fieldMetas = {
+            f.fieldName: f
+            for f in FieldMeta.from_db_multi(cur, clean_column_names)
+        }  # type: dict[str, FieldMeta]
 
     unit_colnames = {}
     for colname, dirty_colname in zip(clean_column_names, df.columns):
@@ -249,8 +238,14 @@ def clean_up_study_samples(df):
                 protocols.append(value)
             elif colname.endswith('Unit'):
                 pass
-            elif colname in unitful_column_dimensions:
-                dimensions = unitful_column_dimensions[colname]
+
+            # TODO: REALLY, REALLY need to refactor the broken-down fields
+            elif (colname not in (u'Phase composition', u'Elements composition', u'Wettability') and
+                  colname in fieldMetas and
+                  fieldMetas[colname].dimensions != 'none' and
+                  fieldMetas[colname].dimensions in DimensionsRegister):
+
+                dimensions = fieldMetas[colname].dimensions
                 unit_converter = DimensionsRegister[dimensions]  # type: UnitCoverter
                 result[colname] = (
                     unit_converter.toCanonicalUnit(float(value), row[unit_colnames[colname]])
