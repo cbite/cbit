@@ -276,3 +276,6 @@ DimensionsRegister = {
     'temperature':                    TemperatureConverter,
     'electric_potential_difference':  ElectricPotentialDifferenceConverter,
 }
+
+# Rogue value to signal that a field is unitful but that the units are not recognized
+INVALID_DIMENSIONS = 'invalid'

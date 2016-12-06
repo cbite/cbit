@@ -296,3 +296,6 @@ export const DimensionsRegister: {[dimensions: string]: UnitConverter} = {
   'temperature':                    TemperatureConverter,
   'electric_potential_difference':  ElectricPotentialDifferenceConverter,
 };
+
+// Rogue value to signal that a field is unitful but that the units are not recognized
+export const INVALID_DIMENSIONS = 'invalid';

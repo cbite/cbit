@@ -9,7 +9,7 @@ import * as $ from 'jquery';
 import {FieldMeta, DimensionsType} from "../common/field-meta.model";
 import {FormGroup, FormControl, Validators, RequiredValidator} from "@angular/forms";
 import * as _ from 'lodash';
-import {DimensionsRegister} from "../common/unit-conversions";
+import {DimensionsRegister, INVALID_DIMENSIONS} from "../common/unit-conversions";
 
 // Heavily adapted from here:
 // http://valor-software.com/ng2-file-upload/
@@ -1246,11 +1246,28 @@ export class UploadComponent {
     for (let fieldAnalysis of jResponse.fieldAnalyses) {
       this.fieldAnalyses[fieldAnalysis.fieldName] = fieldAnalysis;
     }
+
+    // Reject archives with invalid units
+    let fieldsWithUnrecognizedUnits: string[] = [];
+    for (let fieldName in this.fieldAnalyses) {
+      let fieldAnalysis = this.fieldAnalyses[fieldName];
+      if (fieldAnalysis.possibleDimensions.length === 1 && fieldAnalysis.possibleDimensions[0] === INVALID_DIMENSIONS) {
+        fieldsWithUnrecognizedUnits.push(fieldName);
+      }
+    }
+    if (fieldsWithUnrecognizedUnits.length > 0) {
+      this.step = 4;
+      this.errorMessage = `The following fields have unrecognized units: ${JSON.stringify(fieldsWithUnrecognizedUnits)}`;
+      return;
+    }
+
+    // Otherwise, move onto next step
     this.step = 2;
   }
 
   onUploadFailure(response: string, status: number, headers: ParsedResponseHeaders): void {
-    this.status = `Upload failed!  [Technical details: status=${status}, response='${response}'`;
+    this.step = 4;
+    this.errorMessage = `[Technical details: status=${status}, response='${response}'`;
   }
 
   doConfirmMetadata() {

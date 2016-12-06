@@ -2,7 +2,7 @@ import zipfile
 import reader
 from reader import read_investigation, read_study_sample, read_assay, read_annotations, read_processed_data
 import re
-from data.unit_conversions import DimensionsRegister
+from data.unit_conversions import DimensionsRegister, INVALID_DIMENSIONS
 
 class FieldAnalysisResults(object):
     def __init__(self, fieldName, isUnitful, possibleDimensions, looksNumeric):
@@ -68,6 +68,10 @@ class Archive(object):
                         possibleDimensionsSet = possibleDimensionsSet.intersection(thisValuePossibleDimensions)
                 pass
                 possibleDimensions = list(possibleDimensionsSet)
+
+                # Reject archives with unitful quantities but unrecognized units
+                if not possibleDimensions:
+                    possibleDimensions = [INVALID_DIMENSIONS]
 
             looksNumeric = True
             for value in self.study_sample[origName]:
