@@ -880,6 +880,18 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
 };
 
+function isTranscriptomicsAssayDetail(fieldName: string): boolean {
+  return fieldName.startsWith("Transcriptomics Assay Detail: ")
+}
+const TRANSCRIPTOMIC_ASSY_DETAIL_DEFAULT_METADATA: FieldMeta = {
+  description: "",
+  visibility: "main",
+  category: "Technical",
+  dataType: "string",
+  dimensions: "none",
+  preferredUnit: "none"
+};
+
 interface FieldAnalysisResults {
   fieldName: string,
   isUnitful: boolean,
@@ -1081,6 +1093,8 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
 
     if (fieldName in KNOWN_METADATA_FIELDS) {
       result = _.merge(result, KNOWN_METADATA_FIELDS[fieldName]);
+    } else if (isTranscriptomicsAssayDetail(fieldName)) {
+      result = _.merge(result, TRANSCRIPTOMIC_ASSY_DETAIL_DEFAULT_METADATA);
     }
 
     return result;
