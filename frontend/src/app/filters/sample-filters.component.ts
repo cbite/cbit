@@ -344,9 +344,9 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   }
 
   formatValueName(s: string): string {
-    // Don't reformat or convert units of "<None>"
+    // Don't reformat or convert units of missing data, but do show it in the UI as "<None>"
     if (s === NULL_CATEGORY_NAME) {
-      return s;
+      return '<None>';
     }
 
     let unitConverter = DimensionsRegister[this.dimensions];

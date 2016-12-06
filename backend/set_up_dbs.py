@@ -50,12 +50,12 @@ def set_up_elasticsearch():
 
         "mappings": {
             cfg.ES_STUDY_DOCTYPE: {
-                # Prevent creation of dynamic fields
-                # (when adding studies with new fields, these should be presented to the
-                #  user for explicit typing)
-                # "dynamic": "strict",
-                # TODO: For the moment, though, allow dynamic mapping, just ensure that
-                # everything is mapped as a string below
+                # Allow creation of dynamic fields, mapped as string
+                # (study metadata proved far less important than sample metadata,
+                # and except for a few fields subject to full-text search,
+                # irrelevant for filtering.  since we don't have to support range
+                # queries here, it doesn't matter whether we store values as
+                # numbers or as strings).
                 "dynamic": True,
 
                 "dynamic_templates": [
@@ -129,31 +129,9 @@ def set_up_elasticsearch():
                 },
 
                 # Prevent creation of dynamic fields
-                # (when adding studies with new fields, these should be presented to the
+                # (when adding samples with new fields, these should be presented to the
                 #  user for explicit typing)
-                # "dynamic": "strict",
-                # TODO: For the moment, though, allow dynamic mapping, just ensure that
-                # everything is mapped as a string below
-                "dynamic": True,
-
-                "dynamic_templates": [
-                    {
-                        # Everything sample metadata is full-text searchable
-                        "default": {
-                            "match": "*",
-                            "mapping": {
-                                # Everything is a string for now (improve this during Sprint #3)
-                                "type": "string",
-
-                                # Make sure that all matches are done by exact content
-                                # (full-text search is done against the _all field, which *is* analyzed)
-                                "index": "not_analyzed",
-
-                                "include_in_all": True
-                            }
-                        }
-                    }
-                ],
+                "dynamic": "strict",
 
                 "_all": {
                     # Do analyze everything in the study metadata that can be searched by

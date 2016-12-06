@@ -1,4 +1,6 @@
 from data.unit_conversions import DimensionsRegister
+import config.config as cfg
+import elasticsearch
 
 class FieldMeta(object):
     validCategories = frozenset((
@@ -122,6 +124,11 @@ class FieldMeta(object):
                          self.category, self.visibility, self.dataType,
                          self.dimensions, self.preferredUnit)
 
+    def copy_with_new_data_type(self, newDataType):
+        return FieldMeta(self.fieldName, self.description,
+                         self.category, self.visibility, newDataType,
+                         self.dimensions, self.preferredUnit)
+
     # For derived fields, we synthesize field metadata from the underlying fields
     # See reader.apply_special_treatments_to_study_sample for details
     @staticmethod
@@ -224,3 +231,34 @@ class FieldMeta(object):
                     for f in fieldMetas
                 ]
             )
+
+    @staticmethod
+    def to_es(es, fieldMetas):
+        """
+        Add fields to cfg.ES_SAMPLE_DOCTYPE mapping
+        """
+
+        assert isinstance(es, elasticsearch.Elasticsearch)
+
+        esDataType = {
+            # FieldMeta.dataType -> ES data type mapping
+            'string': 'string',
+            'double': 'double',
+        }
+
+        # WARNING!  See also importer.import_archive (really, really need to refactor all this stuff!)
+        es.indices.put_mapping(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, body={
+            "properties": {
+                f.fieldName: {
+                    "type": esDataType[f.dataType],
+
+                    # Need this for full-text search (see rest of cfg.ES_SAMPLE_DOCTYPE mapping in backend/set_up_dbs.py)
+                    "include_in_all": True,
+
+                    # Make sure that all matches are done by exact content
+                    # (full-text search is done against the _all field, which *is* analyzed)
+                    "index": "not_analyzed",
+                }
+                for f in fieldMetas
+            }
+        })

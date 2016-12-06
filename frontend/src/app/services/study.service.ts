@@ -11,7 +11,10 @@ import * as $ from 'jquery';
 import {CacheableBulkRequester} from "../common/cacheable-bulk-request";
 import {FieldMeta} from "../common/field-meta.model";
 
-export const NULL_CATEGORY_NAME = '<None>';
+// Should be a parseable number to play nicely with numeric fields
+// and it should survive a round-trip conversion in ES from string to double to string
+// (hence the '.0')
+export const NULL_CATEGORY_NAME = '-123456.0';
 
 export const STUDY_METADATA_SEARCH_FIELDS = new Set<string>([
   'Study Researchers Involved',

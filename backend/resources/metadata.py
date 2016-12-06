@@ -30,7 +30,10 @@ HIDDEN_SAMPLE_FILTER_LABELS = frozenset((
   'Compound abbreviation',
 ))
 
-NULL_CATEGORY_NAME = '<None>'
+# Should be a parseable number to play nicely with numeric fields
+# and it should survive a round-trip conversion in ES from string to double to string
+# (hence the '.0')
+NULL_CATEGORY_NAME = '-123456.0'
 
 class MetadataAllCountsResource(object):
     def on_get(self, req, resp):
@@ -69,7 +72,7 @@ class MetadataAllCountsResource(object):
             propName: {
                 "terms": {
                     "field": propName,
-                    "missing": "<None>",
+                    "missing": NULL_CATEGORY_NAME,
                     "size": 10000,  # TODO: Think this through better
                     "order": {"_term": "asc"}
                 }
@@ -492,7 +495,11 @@ class MetadataFieldsMulti(object):
         # 1. Effect change
         # ----------------
         db_conn = req.context['db']
-        do_put_field_metas(db_conn, fieldMetas)  # Any errors are raised as exceptions
+        es = elasticsearch.Elasticsearch(
+            hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
+
+        do_put_field_metas(db_conn, es, fieldMetas)  # Any errors are raised as exceptions
+
         db_conn.commit()
 
         resp.status = falcon.HTTP_OK
@@ -633,7 +640,11 @@ class MetadataField(object):
         # 1. Effect change
         # ----------------
         db_conn = req.context['db']
-        do_put_field_metas(db_conn, [fieldMeta])
+        es = elasticsearch.Elasticsearch(
+            hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
+
+        do_put_field_metas(db_conn, es, [fieldMeta])
+
         db_conn.commit()
 
         resp.status = falcon.HTTP_OK
@@ -690,9 +701,9 @@ class MetadataField(object):
         resp.body = "{}"   # Empty JSON body
 
 
-def do_put_field_metas(db_conn, newFieldMetas):
+def do_put_field_metas(db_conn, es, newFieldMetas):
     """
-    Code shared between POST /metadata/fields/{field_name} and /metadata/fields/_multi
+    Code shared between PUT /metadata/fields/{field_name} and /metadata/fields/_multi
     """
 
     with db_conn.cursor() as cur:
@@ -703,6 +714,18 @@ def do_put_field_metas(db_conn, newFieldMetas):
                 description="The following fields already exist '{0}'".format([f.fieldName for f in oldFieldMetas]))
 
         FieldMeta.to_db_multi(cur, newFieldMetas, 'insert')
+
+    # Before we commit the metadata to the DB, add the fields to the ElasticSearch mapping.
+    # If this fails, the DB changes will be rolled back
+
+    # Have to treat fields like 'Phase composition', 'Elements composition' and 'Wettability'
+    # specially: the broken-down field (e.g., "Wettability - water") are numbers, but the
+    # aggregate fields (e.g., "Wettability") are strings for the purposes of ElasticSearch
+    esFieldMetas = {
+        f.copy_with_new_data_type(f.dataType if f.fieldName not in (u'Phase composition', u'Elements composition', u'Wettability') else 'string')
+        for f in newFieldMetas
+    }
+    FieldMeta.to_es(es, esFieldMetas)
 
 
 def do_post_field_metas(db_conn, newFieldMetas):

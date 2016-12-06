@@ -44,6 +44,30 @@ def import_archive(db_conn, es, archive_filename, study_uuid):
         vv['_parent'] = str(study_uuid)
         result.append(vv)
 
+    # First add mappings for all the synthetic fields that may come in (really, really need to refactor all of this stuff)
+    newFieldNames = set()
+    for sample in result:
+        for name in sample.iterkeys():
+            if name.startswith(u'*Phase composition -') or name.startswith(u'*Elements composition -') or name.startswith(u'*Wettability -'):
+                newFieldNames.add(name)
+
+    if newFieldNames:
+        es.indices.put_mapping(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, body={
+            "properties": {
+                name: {
+                    "type": 'double',
+
+                    # Need this for full-text search (see rest of cfg.ES_SAMPLE_DOCTYPE mapping in backend/set_up_dbs.py)
+                    "include_in_all": True,
+
+                    # Make sure that all matches are done by exact content
+                    # (full-text search is done against the _all field, which *is* analyzed)
+                    "index": "not_analyzed",
+                }
+                for name in newFieldNames
+            }
+        })
+
     num_docs_added, errors = helpers.bulk(es, index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE,
                                           refresh='wait_for',
                                           actions=result)
