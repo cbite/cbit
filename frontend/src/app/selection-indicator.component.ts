@@ -5,10 +5,10 @@ import {Subject} from "rxjs";
 @Component({
   selector: 'selection-indicator',
   template: `
-    <div class="shoppingCartIcon"><span class="glyphicon glyphicon-shopping-cart"></span></div>
+    <div class="icon"><span class="glyphicon glyphicon-inbox"></span></div>
     <div class="mainInfoArea">
-      {{ numStudiesInCart }} studies<br/>
-      {{ numSamplesInCart }} samples
+      {{ numSelectedStudies }} studies<br/>
+      {{ numSelectedSamples }} samples
     </div>
   `,
   styles: [`
@@ -16,7 +16,7 @@ import {Subject} from "rxjs";
     display: inline-block;
     vertical-align: middle;
   }
-  .shoppingCartIcon {
+  .icon {
     float: left;
     font-size: 200%;
     padding: 5px;
@@ -28,8 +28,8 @@ import {Subject} from "rxjs";
   `]
 })
 export class SelectionIndicatorComponent implements OnInit, OnDestroy {
-  numStudiesInCart: number = 0;
-  numSamplesInCart: number = 0;
+  numSelectedStudies: number = 0;
+  numSelectedSamples: number = 0;
   stopStream = new Subject<string>();
 
   constructor(
@@ -56,9 +56,9 @@ export class SelectionIndicatorComponent implements OnInit, OnDestroy {
   updateDownloadSelectionStats() {
     let curSelection = this._downloadSelectionService.getSelection();
 
-    this.numStudiesInCart = Object.keys(curSelection.inCart).length;
-    this.numSamplesInCart = (
-      Object.values(curSelection.inCart)
+    this.numSelectedStudies = Object.keys(curSelection.selection).length;
+    this.numSelectedSamples = (
+      Object.values(curSelection.selection)
         .reduce((soFar, sampleIdsObj) => soFar + Object.keys(sampleIdsObj).length, 0)
     );
   }

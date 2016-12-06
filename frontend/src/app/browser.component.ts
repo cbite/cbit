@@ -36,10 +36,6 @@ export class BrowserComponent implements OnInit, OnDestroy {
   areSamplesShown: { [studyId: string]: boolean } = {};
   numMatchingStudies: number = 0;
   numMatchingSamples: number = 0;
-  numStudiesInCart: number = 0;
-  numSamplesInCart: number = 0;
-  numExcludedStudies: number = 0;
-  numExcludedSamples: number = 0;
   ready = false;
   stopStream = new Subject<string>();
 
@@ -50,11 +46,6 @@ export class BrowserComponent implements OnInit, OnDestroy {
     private _downloadSelectionService: DownloadSelectionService,
     private changeDetectorRef: ChangeDetectorRef
   ) { }
-
-  selectStudy(study: Study): void {
-    let link = ['/study', study._id];
-    this._router.navigate(link);
-  }
 
   ngOnInit(): void {
     // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
@@ -90,9 +81,6 @@ export class BrowserComponent implements OnInit, OnDestroy {
 
   updateDownloadSelectionStats() {
     let curSelection = this._downloadSelectionService.getSelection();
-
-    this.numExcludedStudies = Object.keys(curSelection.studiesExcludedFromAddToCart).length;
-    this.numExcludedSamples = Object.keys(curSelection.samplesExcludedFromAddToCart).length;
   }
 
   updateMatches(rawMatches: UnifiedMatch[]): void {
@@ -176,35 +164,7 @@ export class BrowserComponent implements OnInit, OnDestroy {
     return sampleMatches.sort((a, b) => (a._source['Sample Name'] + '').localeCompare((b._source['Sample Name'] + '')))
   }
 
-  isStudySelected(studyId: string) {
-    return !(studyId in this._downloadSelectionService.getSelection().studiesExcludedFromAddToCart);
-  }
-
-  updateStudySelection(e: any, studyId: string) {
-    this._downloadSelectionService.setStudySelected(studyId, e.target.checked);
-  }
-
-  isSampleSelected(sampleId: string) {
-    return !(sampleId in this._downloadSelectionService.getSelection().samplesExcludedFromAddToCart);
-  }
-
-  //updateSampleSelection(e: any, sampleId: string) {
-  //  this._downloadSelectionService.setSampleSelected(sampleId, e.target.checked);
-  //}
-
-  toggleSampleSelection(sampleId: string) {
-    this._downloadSelectionService.setSampleSelected(sampleId, !this.isSampleSelected(sampleId));
-  }
-
-  clearExclusions() {
-    this._downloadSelectionService.clearExclusions();
-  }
-
-  clearCart() {
-    this._downloadSelectionService.clearCart();
-  }
-
-  addCurrentSelectionToCart() {
+  addAllResultsToSelection() {
     // Reduce matches to study & sample ids (probably should be working with that as our primitive data anyway)
     let allToAdd:  { [studyId: string]: { [sampleId: string]: boolean } } = {};
 
@@ -218,69 +178,69 @@ export class BrowserComponent implements OnInit, OnDestroy {
     console.log(JSON.stringify(allToAdd));
 
     // Filtering for excluded studies / samples is done in DownloadSelectionService
-    this._downloadSelectionService.addToCart(allToAdd);
+    this._downloadSelectionService.addToSelection(allToAdd);
   }
 
-  addStudyToCart(match: UnifiedMatch): void {
+  selectStudy(match: UnifiedMatch): void {
     let toAdd = { [match.study._id]: {} };
     for (let sampleMatch of match.sampleMatches) {
       toAdd[match.study._id][sampleMatch._id] = true;
     }
-    this._downloadSelectionService.addToCart(toAdd);
+    this._downloadSelectionService.addToSelection(toAdd);
   }
 
-  removeStudyFromCart(match: UnifiedMatch): void {
+  deselectStudy(match: UnifiedMatch): void {
     let toRemove = { [match.study._id]: {} };
     for (let sampleMatch of match.sampleMatches) {
       toRemove[match.study._id][sampleMatch._id] = true;
     }
-    this._downloadSelectionService.removeFromCart(toRemove);
+    this._downloadSelectionService.removeFromSelection(toRemove);
   }
 
-  countMatchingSamplesInCart(match: UnifiedMatch): number {
+  countMatchingSamplesInSelection(match: UnifiedMatch): number {
     let studyId = match.study._id;
-    let cart = this._downloadSelectionService.getSelection().inCart;
+    let selection = this._downloadSelectionService.getSelection().selection;
 
-    let numSamplesInCart = 0;
-    if (studyId in cart) {
+    let numSelectedSamples = 0;
+    if (studyId in selection) {
       for (let sampleMatch of match.sampleMatches) {
-        if (sampleMatch._id in cart[studyId]) {
-          numSamplesInCart++;
+        if (sampleMatch._id in selection[studyId]) {
+          numSelectedSamples++;
         }
       }
     }
-    return numSamplesInCart
+    return numSelectedSamples
   }
 
   // Returns either 'yes', 'no', or 'partial'
-  studyMatchInCartState(match: UnifiedMatch): string {
+  studySelectedState(match: UnifiedMatch): string {
     let numSampleMatches = match.sampleMatches.length;
-    let numSamplesInCart = this.countMatchingSamplesInCart(match);
+    let numSelectedSamples = this.countMatchingSamplesInSelection(match);
 
-    if (numSamplesInCart === 0) {
+    if (numSelectedSamples === 0) {
       return 'no';
-    } else if (numSamplesInCart === numSampleMatches) {
+    } else if (numSelectedSamples === numSampleMatches) {
       return 'yes';
     } else {
       return 'partial';
     }
   }
 
-  isSampleInCart(studyId: string, sampleId: string): boolean {
-    let cart = this._downloadSelectionService.getSelection().inCart;
-    return (studyId in cart) && (sampleId in cart[studyId]);
+  isSampleSelected(studyId: string, sampleId: string): boolean {
+    let selection = this._downloadSelectionService.getSelection().selection;
+    return (studyId in selection) && (sampleId in selection[studyId]);
   }
 
-  addSampleToCart(studyId: string, sampleId: string): void {
-    this._downloadSelectionService.addToCart({
+  selectSample(studyId: string, sampleId: string): void {
+    this._downloadSelectionService.addToSelection({
       [studyId]: {
         [sampleId]: true
       }
     });
   }
 
-  removeSampleFromCart(studyId: string, sampleId: string): void {
-    this._downloadSelectionService.removeFromCart({
+  deselectSample(studyId: string, sampleId: string): void {
+    this._downloadSelectionService.removeFromSelection({
       [studyId]: {
         [sampleId]: true
       }

@@ -3,14 +3,6 @@ import {BehaviorSubject, Observable} from "rxjs";
 
 import * as _ from 'lodash';
 
-export interface StudiesExcludedFromAddToCart {
-  [studyId: string]: boolean
-}
-
-export interface SamplesExcludedFromAddToCart {
-  [sampleId: string]: boolean
-}
-
 export interface StudyAndSampleIds {
   [studyId: string]: {
     [sampleId: string]: boolean
@@ -18,15 +10,11 @@ export interface StudyAndSampleIds {
 }
 
 export interface DownloadSelection {
-  inCart: StudyAndSampleIds;
-  studiesExcludedFromAddToCart: StudiesExcludedFromAddToCart,
-  samplesExcludedFromAddToCart: SamplesExcludedFromAddToCart
+  selection: StudyAndSampleIds;
 }
 
 export const EMPTY_DOWNLOAD_SELECTION: DownloadSelection = {
-  inCart: {},
-  studiesExcludedFromAddToCart: {},
-  samplesExcludedFromAddToCart: {}
+  selection: {}
 }
 
 // For inspiration, see: http://blog.angular-university.io/how-to-build-angular2-apps-using-rxjs-observable-data-services-pitfalls-to-avoid/
@@ -47,89 +35,44 @@ export class DownloadSelectionService {
     this._selection.next(EMPTY_DOWNLOAD_SELECTION);
   }
 
-  clearCart(): void {
-    this.setInCart({});
+  clearSelection(): void {
+    this.setSelection({});
   }
 
-  setInCart(newInCart: StudyAndSampleIds): void {
+  setSelection(newSelection: StudyAndSampleIds): void {
     this._selection.next(Object.assign({}, this._selection.getValue(), {
-      inCart: newInCart
+      selection: newSelection
     }))
   }
 
-  clearExclusions(): void {
-    this._selection.next(Object.assign({}, this._selection.getValue(), {
-      studiesExcludedFromAddToCart: {},
-      samplesExcludedFromAddToCart: {}
-    }))
-  }
-
-  setStudiesExcludedFromAddToCart(newStudiesExcludedFromAddToCart: StudiesExcludedFromAddToCart): void {
-    this._selection.next(Object.assign({}, this._selection.getValue(), {
-      studiesExcludedFromAddToCart: newStudiesExcludedFromAddToCart
-    }))
-  }
-
-  setStudySelected(studyId: string, include: boolean): void {
-    let curStudies: StudiesExcludedFromAddToCart = _.cloneDeep(this.getSelection().studiesExcludedFromAddToCart);
-    if (!include) {
-      curStudies[studyId] = true;
-    } else {
-      delete curStudies[studyId];
-    }
-    this.setStudiesExcludedFromAddToCart(curStudies);
-  }
-
-  setSamplesExcludedFromAddToCart(newSamplesExcludedFromAddToCart: SamplesExcludedFromAddToCart): void {
-    this._selection.next(Object.assign({}, this._selection.getValue(), {
-      samplesExcludedFromAddToCart: newSamplesExcludedFromAddToCart
-    }))
-  }
-
-  setSampleSelected(sampleId: string, include: boolean): void {
-    let curSamples: SamplesExcludedFromAddToCart = _.cloneDeep(this.getSelection().samplesExcludedFromAddToCart);
-    if (!include) {
-      curSamples[sampleId] = true;
-    } else {
-      delete curSamples[sampleId];
-    }
-    this.setSamplesExcludedFromAddToCart(curSamples);
-  }
-
-  addToCart(studiesAndSampleIds: StudyAndSampleIds): void {
-    let excludedStudies = this.getSelection().studiesExcludedFromAddToCart;
-    let excludedSamples = this.getSelection().samplesExcludedFromAddToCart;
-    let newCart = _.cloneDeep(this.getSelection().inCart);
+  addToSelection(studiesAndSampleIds: StudyAndSampleIds): void {
+    let newSelection = _.cloneDeep(this.getSelection().selection);
     for (let studyId in studiesAndSampleIds) {
-      if (!(studyId in excludedStudies)) {
-        let newCartStudy = (newCart[studyId] || {});
-        for (let sampleId in studiesAndSampleIds[studyId]) {
-          if (!(sampleId in excludedSamples)) {
-            newCartStudy[sampleId] = true;
-          }
-        }
-        newCart[studyId] = newCartStudy;
+      let newSelectionStudy = (newSelection[studyId] || {});
+      for (let sampleId in studiesAndSampleIds[studyId]) {
+        newSelectionStudy[sampleId] = true;
       }
+      newSelection[studyId] = newSelectionStudy;
     }
 
-    this.setInCart(newCart);
+    this.setSelection(newSelection);
   }
 
-  removeFromCart(studiesAndSampleIds: StudyAndSampleIds): void {
-    let newCart = _.cloneDeep(this.getSelection().inCart);
+  removeFromSelection(studiesAndSampleIds: StudyAndSampleIds): void {
+    let newSelection = _.cloneDeep(this.getSelection().selection);
     for (let studyIdToRemove in studiesAndSampleIds) {
-      if (studyIdToRemove in newCart) {
+      if (studyIdToRemove in newSelection) {
         for (let sampleIdToRemove in studiesAndSampleIds[studyIdToRemove]) {
-          if (sampleIdToRemove in newCart[studyIdToRemove]) {
-            delete newCart[studyIdToRemove][sampleIdToRemove];
+          if (sampleIdToRemove in newSelection[studyIdToRemove]) {
+            delete newSelection[studyIdToRemove][sampleIdToRemove];
           }
         }
 
-        if (Object.keys(newCart[studyIdToRemove]).length === 0) {
-          delete newCart[studyIdToRemove];
+        if (Object.keys(newSelection[studyIdToRemove]).length === 0) {
+          delete newSelection[studyIdToRemove];
         }
       }
     }
-    this.setInCart(newCart);
+    this.setSelection(newSelection);
   }
 }

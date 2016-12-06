@@ -5,9 +5,9 @@ import {Study} from "./common/study.model";
 
 @Component({
   template: `
-  <h1>Download Studies in Cart</h1>
+  <h1>Download Selected Studies</h1>
   <p>
-    In Cart: {{ numSamplesInCart }} samples from {{ numStudiesInCart }} studies. 
+    Selected {{ numSelectedSamples }} samples from {{ numSelectedStudies }} studies. 
   </p>
   <p>
   For the moment, can only download study archives in full and individually.
@@ -21,8 +21,8 @@ import {Study} from "./common/study.model";
   `
 })
 export class DownloadComponent implements OnInit {
-  numStudiesInCart: number = 0;
-  numSamplesInCart: number = 0;
+  numSelectedStudies: number = 0;
+  numSelectedSamples: number = 0;
   studies: Study[] = [];
 
   constructor(
@@ -32,10 +32,10 @@ export class DownloadComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    let studyIds = Object.keys(this._downloadSelectionService.getSelection().inCart);
-    this.numStudiesInCart = studyIds.length;
-    this.numSamplesInCart =
-      Object.values(this._downloadSelectionService.getSelection().inCart)
+    let studyIds = Object.keys(this._downloadSelectionService.getSelection().selection);
+    this.numSelectedStudies = studyIds.length;
+    this.numSelectedSamples =
+      Object.values(this._downloadSelectionService.getSelection().selection)
         .reduce((soFar, samples) => soFar + Object.keys(samples).length, 0);
 
     Promise.all(studyIds.map(studyId => this._studyService.getStudy(studyId)))

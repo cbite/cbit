@@ -41,21 +41,21 @@ import {DownloadSelectionService} from "./services/download-selection.service";
           </ul>
           
           <ul class="nav navbar-nav navbar-right">
-            <li dropdown class="dropdown" [class.cartLI]="!isCartEmpty">
-              <a dropdownToggle class="cartLink">
+            <li dropdown class="dropdown" [class.selectionLI]="!isSelectionEmpty">
+              <a dropdownToggle class="selectionLink">
                 <selection-indicator></selection-indicator>
                 <span class="caret"></span>
               </a>
               
               <ul dropdownMenu class="dropdown-menu">
-                <li [class.disabled]="isCartEmpty">
-                  <a href="#" (click)="$event.preventDefault(); clearCart()">
+                <li [class.disabled]="isSelectionEmpty">
+                  <a href="#" (click)="$event.preventDefault(); clearSelection()">
                     <span class="glyphicon glyphicon-ban-circle"></span> 
-                    Clear Cart
+                    Clear Selection
                   </a>
                 </li>
                 
-                <li [class.disabled]="isCartEmpty">
+                <li [class.disabled]="isSelectionEmpty">
                   <a href="#" (click)="$event.preventDefault(); proceedToDownload()">
                     <span class="glyphicon glyphicon-download-alt"></span>
                     Download
@@ -71,27 +71,27 @@ import {DownloadSelectionService} from "./services/download-selection.service";
     </nav>
   `,
   styles: [`
-  .cartLink {
+  .selectionLink {
     display: table-cell;
     padding-top: 5px;
     padding-bottom: 5px;
     vertical-align: middle;
   }
   
-  .cartLI {
+  .selectionLI {
     background-color: #cfc;
   }
-  .cartLI:hover, .cartLI:focus {
+  .selectionLI:hover, .selectionLI:focus {
     background-color: #ada;
   }
-  .navbar-default .navbar-nav > .cartLI.open > a, .navbar-default .navbar-nav > .cartLI.open > a:hover, .navbar-default .navbar-nav > .cartLI.open > a:focus {
+  .navbar-default .navbar-nav > .selectionLI.open > a, .navbar-default .navbar-nav > .selectionLI.open > a:hover, .navbar-default .navbar-nav > .selectionLI.open > a:focus {
     background-color: #ada;
   }
   `]
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   navBarCollapsed = true;
-  isCartEmpty = true;
+  isSelectionEmpty = true;
   stopStream = new Subject<string>();
 
   constructor(
@@ -118,7 +118,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   updateDownloadSelectionStats() {
     let curSelection = this._downloadSelectionService.getSelection();
-    this.isCartEmpty = (Object.keys(curSelection.inCart).length === 0);
+    this.isSelectionEmpty = (Object.keys(curSelection.selection).length === 0);
   }
 
   isCurrentRoute(route : string) : boolean {
@@ -126,8 +126,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
     return this._router.isActive(route, isExact);
   }
 
-  clearCart() {
-    this._downloadSelectionService.clearCart();
+  clearSelection() {
+    this._downloadSelectionService.clearSelection();
   }
 
   proceedToDownload() {

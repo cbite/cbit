@@ -8,8 +8,8 @@
       <div class="h1">
         Results
         <spinner *ngIf="!ready"></spinner>
-        <button class="btn btn-success addAllResultsButton" (click)="addCurrentSelectionToCart()">
-          <span class="glyphicon glyphicon-plus"></span> Add All Results To Cart
+        <button class="btn btn-success addAllResultsButton" (click)="addAllResultsToSelection()">
+          <span class="glyphicon glyphicon-plus"></span> Select All Results
         </button>
       </div>
       <div class="resultsCounts">
@@ -23,9 +23,9 @@
           <div class="col-md-4">
 
             <div class="panel"
-                 [class.panel-default]="studyMatchInCartState(studyMatch) === 'no'"
-                 [class.panel-success]="studyMatchInCartState(studyMatch) === 'yes'"
-                 [class.panel-warning]="studyMatchInCartState(studyMatch) === 'partial'"
+                 [class.panel-default]="studySelectedState(studyMatch) === 'no'"
+                 [class.panel-success]="studySelectedState(studyMatch) === 'yes'"
+                 [class.panel-warning]="studySelectedState(studyMatch) === 'partial'"
             >
               <div class="panel-heading">
 
@@ -33,24 +33,24 @@
                   <h3 class="panel-title" style="float:left;width:80%">{{ studyMatch.study._source['STUDY']['Study Title'] }}</h3>
                 </a>
 
-                <div [ngSwitch]="studyMatchInCartState(studyMatch)" class="panel-heading-plus-minus-buttons">
+                <div [ngSwitch]="studySelectedState(studyMatch)" class="panel-heading-plus-minus-buttons">
 
                   <a *ngSwitchCase="'no'" href="#" class="btn btn-success btn-xs" role="button"
-                     (click)="$event.preventDefault(); addStudyToCart(studyMatch)">
+                     (click)="$event.preventDefault(); selectStudy(studyMatch)">
                     <span class="glyphicon glyphicon-plus"></span>
                   </a>
 
                   <a *ngSwitchCase="'partial'" href="#" class="btn btn-success btn-xs" role="button"
-                     (click)="$event.preventDefault(); addStudyToCart(studyMatch)">
+                     (click)="$event.preventDefault(); selectStudy(studyMatch)">
                     <span class="glyphicon glyphicon-plus"></span>
                   </a>
                   <a *ngSwitchCase="'partial'" href="#" class="btn btn-danger btn-xs" role="button"
-                     (click)="$event.preventDefault(); removeStudyFromCart(studyMatch)">
+                     (click)="$event.preventDefault(); deselectStudy(studyMatch)">
                     <span class="glyphicon glyphicon-minus"></span>
                   </a>
 
                   <a *ngSwitchCase="'yes'" href="#" class="btn btn-danger btn-xs" role="button"
-                     (click)="$event.preventDefault(); removeStudyFromCart(studyMatch)">
+                     (click)="$event.preventDefault(); deselectStudy(studyMatch)">
                     <span class="glyphicon glyphicon-minus"></span>
                   </a>
 
@@ -64,7 +64,7 @@
                   <span *ngIf=" !areSamplesShown[studyMatch.study._id]" class="glyphicon glyphicon-triangle-right"></span>
                   <span *ngIf="!!areSamplesShown[studyMatch.study._id]" class="glyphicon glyphicon-triangle-bottom"></span>
                   {{ studyMatch.sampleMatches.length }} matching samples
-                  ({{ countMatchingSamplesInCart(studyMatch) }} in cart)
+                  ({{ countMatchingSamplesInSelection(studyMatch) }} selected)
                 </a>
 
                 <div [collapse]="!areSamplesShown[studyMatch.study._id]">
@@ -72,15 +72,15 @@
                     <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
                       <div class="showonhover">
 
-                        <a *ngIf="!isSampleInCart(studyMatch.study._id, sampleMatch._id)" href="#"
+                        <a *ngIf="!isSampleSelected(studyMatch.study._id, sampleMatch._id)" href="#"
                            class="btn btn-success btn-xs" role="button"
-                           (click)="$event.preventDefault(); addSampleToCart(studyMatch.study._id, sampleMatch._id)">
+                           (click)="$event.preventDefault(); selectSample(studyMatch.study._id, sampleMatch._id)">
                           <span class="glyphicon glyphicon-plus"></span>
                         </a>
 
-                        <a *ngIf="isSampleInCart(studyMatch.study._id, sampleMatch._id)" href="#"
+                        <a *ngIf="isSampleSelected(studyMatch.study._id, sampleMatch._id)" href="#"
                            class="btn btn-danger btn-xs" role="button"
-                           (click)="$event.preventDefault(); removeSampleFromCart(studyMatch.study._id, sampleMatch._id)">
+                           (click)="$event.preventDefault(); deselectSample(studyMatch.study._id, sampleMatch._id)">
                           <span class="glyphicon glyphicon-minus"></span>
                         </a>
 
