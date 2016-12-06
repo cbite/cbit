@@ -16,6 +16,9 @@ UPLOAD_STALE_INTERVAL = '24 hour'
 
 ES_HOST = "localhost"
 ES_PORT = 9200
+ES_INDEX = 'cbit'
+ES_STUDY_DOCTYPE = 'study'
+ES_SAMPLE_DOCTYPE = 'sample'
 
 FQDN = 'localhost:23456'  # TODO: In production, should be cbit.maastrichtuniversity.nl
 URL_BASE = 'http://{0}'.format(FQDN)

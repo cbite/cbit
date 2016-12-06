@@ -221,7 +221,7 @@ class UploadResource(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
-        if not es.indices.exists('cbit'):
+        if not es.indices.exists(cfg.ES_INDEX):
             raise falcon.HTTPInternalServerError(description='ElasticSearch database not ready.  Have you run set_up_dbs.py?')
 
         importer.import_archive(db_conn, es, filename, study_uuid)

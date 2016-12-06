@@ -18,9 +18,9 @@ def set_up_elasticsearch():
     print("- Deleting all existing indices")
     es.indices.delete(index='*')
 
-    # "study" and "sample" need to live in the same index to set up a parent-child relationship
+    # cfg.ES_STUDY_DOCTYPE and cfg.ES_SAMPLE_DOCTYPE need to live in the same index to set up a parent-child relationship
     print("- Creating mappings for cbit index")
-    es.indices.create(index='cbit', body={
+    es.indices.create(index=cfg.ES_INDEX, body={
         "settings": {
             # Set up indexing to support efficient search-as-you-type
             # (see https://www.elastic.co/guide/en/elasticsearch/guide/current/_index_time_search_as_you_type.html)
@@ -46,7 +46,7 @@ def set_up_elasticsearch():
         },
 
         "mappings": {
-            "study": {
+            cfg.ES_STUDY_DOCTYPE: {
                 # Prevent creation of dynamic fields
                 # (when adding studies with new fields, these should be presented to the
                 #  user for explicit typing)
@@ -118,11 +118,11 @@ def set_up_elasticsearch():
                 },
             },
 
-            "sample": {
+            cfg.ES_SAMPLE_DOCTYPE: {
 
-                # Set up parent-child relationship with `study`
+                # Set up parent-child relationship with cfg.ES_STUDY_DOCTYPE
                 "_parent": {
-                    "type": "study"
+                    "type": cfg.ES_STUDY_DOCTYPE
                 },
 
                 # Prevent creation of dynamic fields

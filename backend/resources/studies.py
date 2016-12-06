@@ -31,7 +31,7 @@ class StudiesResource(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
-        rawResults = es.search(index='cbit', doc_type='study', body={
+        rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, body={
             "size": len(studyIds),
             "query": {
                 "ids": {

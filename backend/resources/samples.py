@@ -31,7 +31,7 @@ class SamplesResource(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
-        rawResults = es.search(index='cbit', doc_type='sample', body={
+        rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, body={
             "size": len(sampleIds),
             "query": {
                 "ids": {

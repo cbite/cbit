@@ -58,12 +58,12 @@ class MetadataAllCountsResource(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
-        if not es.indices.exists('cbit'):
+        if not es.indices.exists(cfg.ES_INDEX):
             raise falcon.HTTPInternalServerError(description='ElasticSearch database not ready.  Have you run set_up_dbs.py?')
 
-        sample_mapping = es.indices.get_mapping(index='cbit',
-                                                doc_type='sample')
-        properties = sample_mapping['cbit']['mappings']['sample'].get('properties', {})
+        sample_mapping = es.indices.get_mapping(index=cfg.ES_INDEX,
+                                                doc_type=cfg.ES_SAMPLE_DOCTYPE)
+        properties = sample_mapping[cfg.ES_INDEX]['mappings'][cfg.ES_SAMPLE_DOCTYPE].get('properties', {})
 
         aggs_to_query = {
             propName: {
@@ -79,7 +79,7 @@ class MetadataAllCountsResource(object):
             if propName not in HIDDEN_SAMPLE_FILTER_LABELS
         }
 
-        result = es.search(index='cbit', doc_type='sample', body={
+        result = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, body={
             "size": 0,
             "aggs": aggs_to_query
         })
@@ -216,7 +216,7 @@ class MetadataFilteredCountsResource(object):
                 }
             }
 
-        rawAggs = es.search(index="cbit", doc_type="sample", body={
+        rawAggs = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, body={
             "query": {
                 "bool": {
                     "should": q.shouldClauses
@@ -268,11 +268,11 @@ class MetadataSamplesInStudies(object):
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
         rawResults = es.search(
-            index='cbit', doc_type='sample', _source=["_id"], body={
+            index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, _source=["_id"], body={
                 "size": 1000 * len(studyIds),  # TODO: Think this through
                 "query": {
                     "has_parent": {
-                        "parent_type": "study",
+                        "parent_type": cfg.ES_STUDY_DOCTYPE,
                         "query": {
                             "ids": {
                                 "values": studyIds
@@ -330,7 +330,7 @@ class MetadataSearch(object):
         controlIds = fetchControlsMatchingFilters(es, filters)
 
         q = buildESQueryPieces(filters, controlIds)  # type: ESQueryPieces
-        rawResults = es.search(index='cbit', doc_type='sample', _source=False, body={
+        rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, _source=False, body={
             "query": {
                 "bool": {
                     "should": [
@@ -779,7 +779,7 @@ def buildESQueryPieces(filters, controlStudyIds = []):
             },
             {
                 "has_parent": {
-                    "type": "study",
+                    "type": cfg.ES_STUDY_DOCTYPE,
                     "query": {
                         "match_phrase": {
                             "_all": filters.searchText
@@ -865,7 +865,7 @@ def extractControlIdsFromResultOfESQueryEnumerateControls(esResult):
 
 def fetchControlsMatchingFilters(es, filters):
     if filters.includeControls:
-        rawControls = es.search(index='cbit', doc_type='sample',
+        rawControls = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE,
                                 body=buildESQueryEnumerateControls(filters))
         return extractControlIdsFromResultOfESQueryEnumerateControls(rawControls)
     else:

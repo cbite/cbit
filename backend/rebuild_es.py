@@ -20,6 +20,16 @@ import config.config as cfg
 import data.reader
 import json
 
+import sys
+sys.stderr.write(
+"""ERROR: This file is now obsolete!  Run ./set_up_dbs.py to wipe and prepare the databases,
+then use the upload functionality in the web UI to upload new studies.
+
+The file is preserved in case the source code is ever useful during a refactor later,
+but will be removed before the end of the project.
+""")
+raise SystemExit
+
 # 0. Connect to DB
 es = elasticsearch.Elasticsearch(hosts=[{'host': 'localhost', 'port': 9200}])
 
@@ -27,8 +37,8 @@ es = elasticsearch.Elasticsearch(hosts=[{'host': 'localhost', 'port': 9200}])
 es.indices.delete(index='*')
 
 # 2. Set up mappings
-# "study" and "sample" need to live in the same index to set up a parent-child relationship
-es.indices.create(index='cbit', body={
+# cfg.ES_STUDY_DOCTYPE and cfg.ES_SAMPLE_DOCTYPE need to live in the same index to set up a parent-child relationship
+es.indices.create(index=cfg.ES_INDEX, body={
     "settings": {
         # Set up indexing to support efficient search-as-you-type
         # (see https://www.elastic.co/guide/en/elasticsearch/guide/current/_index_time_search_as_you_type.html)
@@ -54,7 +64,7 @@ es.indices.create(index='cbit', body={
     },
 
     "mappings": {
-        "study": {
+        cfg.ES_STUDY_DOCTYPE: {
             # Prevent creation of dynamic fields
             # (when adding studies with new fields, these should be presented to the
             #  user for explicit typing)
@@ -126,11 +136,11 @@ es.indices.create(index='cbit', body={
             },
         },
 
-        "sample": {
+        cfg.ES_SAMPLE_DOCTYPE: {
 
-            # Set up parent-child relationship with `study`
+            # Set up parent-child relationship with cfg.ES_STUDY_DOCTYPE
             "_parent": {
-                "type": "study"
+                "type": cfg.ES_STUDY_DOCTYPE
             },
 
             # Prevent creation of dynamic fields
@@ -187,7 +197,7 @@ result = reader.conform_investigation_to_schema(
 # Add fake download URL for now
 result['*Archive URL'] = "http://localhost:12345/StudyID_01_archive.zip"
 
-response = es.index(index='cbit', doc_type='study', body=result)
+response = es.index(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, body=result)
 study1_id = response['_id']
 print("Study 1 ID is '{0}'".format(study1_id))
 
@@ -204,7 +214,7 @@ result = reader.conform_investigation_to_schema(
 # Add fake download URL for now
 result['*Archive URL'] = "http://localhost:12345/StudyID_02_archive.zip"
 
-response = es.index(index='cbit', doc_type='study', body=result)
+response = es.index(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, body=result)
 study2_id = response['_id']
 print("Study 2 ID is '{0}'".format(study2_id))
 
@@ -232,6 +242,6 @@ for i, (k, v) in enumerate(d2.iteritems()):
     vv['_parent'] = study2_id
     result.append(vv)
 
-num_docs_added, errors = helpers.bulk(es, index='cbit', doc_type='sample', actions=result)
+num_docs_added, errors = helpers.bulk(es, index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, actions=result)
 print("Metadata ingested for {0} samples".format(num_docs_added))
 
