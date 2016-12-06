@@ -205,12 +205,12 @@ AngleConverter = UnitConverter({
 })
 
 
-# Special-purpose unit for cBiT (the ontology units for percent are useless!)
+# Special-purpose unit for cBiT
+# NOTE: the ontology units for percent are useless!  I've removed them
 # Canonical unit: %
 PercentageConverter = UnitConverter({
     '%':       1.,
-    'percent': 1.,
-}, canonicalUnit='%')
+})
 
 
 # unit -> dimensionless unit -> parts per notation unit
