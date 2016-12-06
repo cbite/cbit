@@ -864,7 +864,15 @@ def buildESQueryEnumerateControls(filters):
         "bool": {
           "should": queryPieces.shouldClauses,
           "must": [
-              { "exists": { "field": "Sample Match" } }
+              {
+                  "bool": {
+                      "should": [
+                          {"exists": {"field": "Sample Match"}},
+                          {"exists": {"field": "Paired sample"}}
+                      ],
+                      "minimum_should_match": 1
+                  }
+              }
           ] + extraMustClauses,
           "must_not": extraMustNotClauses,
           "minimum_should_match": 1
@@ -876,14 +884,25 @@ def buildESQueryEnumerateControls(filters):
             "field": "Sample Match",
             "size": 10000   # TODO: Think harder about upper limits
           }
-        }
+        },
+          "paired_samples": {
+              "terms": {
+                  "field": "Paired sample",
+                  "size": 10000  # TODO: Think harder about upper limits
+              }
+          },
       }
     }
 
 
 def extractControlIdsFromResultOfESQueryEnumerateControls(esResult):
-    return [bucket["key"]
-            for bucket in esResult["aggregations"]["controls"]["buckets"]]
+    return list(
+        set(bucket["key"]
+            for bucket in esResult["aggregations"]["controls"]["buckets"])
+        .union(set(bucket["key"]
+                   for bucket in
+                   esResult["aggregations"]["paired_samples"]["buckets"]))
+    )
 
 
 def fetchControlsMatchingFilters(es, filters):
