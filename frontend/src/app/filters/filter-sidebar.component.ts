@@ -162,7 +162,7 @@ export class FilterSidebarAllULComponent {
         <filter-sidebar-all-ul [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
                                [classifiedProperties]="classifiedProperties.main || {}"
-                               [initCollapsed]="false"
+                               [initCollapsed]="true"
         ></filter-sidebar-all-ul>
       </li>
       

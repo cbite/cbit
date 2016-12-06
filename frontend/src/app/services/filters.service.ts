@@ -126,7 +126,7 @@ export class FiltersService {
     if (this.filterVisibility.hasOwnProperty(category)) {
       return this.filterVisibility[category];
     } else {
-      return true;
+      return false;
     }
   }
 }

@@ -58,13 +58,14 @@ enum GlobalCheckboxState {
           </label>
         </div>
       </div>
-      <div class="units" *ngIf="dimensions != 'none'">
-        Units: (<select id="unitChooser" [(ngModel)]="chosenUnit">
-                  <option *ngFor="let unit of units()" [value]="unit">{{unit}}</option>
-                </select>)
-      </div>
   
       <div [collapse]="!isVisible">
+      
+        <div class="units" *ngIf="dimensions !== 'none'">
+          Units: <select id="unitChooser" [(ngModel)]="chosenUnit">
+                    <option *ngFor="let unit of units()" [value]="unit">{{unit}}</option>
+                  </select>
+        </div>
         <ul>
           <li *ngFor="let kv of allCountSorted" class="checkbox">
             <label [class.disabled]="!isEnabled(kv.key)">
