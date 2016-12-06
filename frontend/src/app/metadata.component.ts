@@ -229,6 +229,10 @@ export class MetadataComponent implements OnInit {
         self.saveDone = true;
         self.saveError = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
         self._changeDetectorRef.detectChanges();
+      },
+      complete: function() {
+        // Whatever happened, caches are stale now
+        self._studyService.flushCaches();
       }
     })
   }
