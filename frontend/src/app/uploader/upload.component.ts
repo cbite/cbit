@@ -988,13 +988,17 @@ interface UploadsResponse {
                   Dimensions
                 </label>
                 <div class="col-sm-4">
-                  <select [id]="'dimensions-' + fieldName"
+                  <select *ngIf="fieldConfigs[fieldName].possibleDimensions.length !== 1"
+                          [id]="'dimensions-' + fieldName"
                           formControlName="dimensions"
                           class="form-control">
                     <option *ngFor="let dimension of fieldConfigs[fieldName].possibleDimensions"
                             [value]="dimension"
                             >{{ dimension }}</option>
                   </select>
+                  <p *ngIf="fieldConfigs[fieldName].possibleDimensions.length === 1" class="form-control-static">
+                    {{ fieldConfigs[fieldName].possibleDimensions[0] }}
+                  </p>
                 </div>
               </div>
               
@@ -1003,13 +1007,17 @@ interface UploadsResponse {
                   Preferred Unit
                 </label>
                 <div class="col-sm-4">
-                  <select [id]="'preferredUnit-' + fieldName"
+                  <select *ngIf="possibleUnits(fieldName).length !== 1"
+                          [id]="'preferredUnit-' + fieldName"
                           formControlName="preferredUnit"
-                          class="form-control col-sm-10">
+                          class="form-control">
                     <option *ngFor="let unitName of possibleUnits(fieldName)"
                             [value]="unitName"
                             >{{ uiUnitName(fieldName, unitName) }}</option>
                   </select>
+                  <p *ngIf="possibleUnits(fieldName).length === 1" class="form-control-static">
+                    {{ uiUnitName(fieldName, possibleUnits(fieldName)[0]) }}
+                  </p>
                 </div>
               </div>
             </div>

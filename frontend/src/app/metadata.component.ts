@@ -91,13 +91,17 @@ import {DimensionsRegister} from "./common/unit-conversions";
                   Preferred Unit
                 </label>
                 <div class="col-sm-4">
-                  <select [id]="'preferredUnit-' + kv.key"
+                  <select *ngIf="possibleUnits(kv.key).length !== 1"
+                          [id]="'preferredUnit-' + kv.key"
                           formControlName="preferredUnit"
                           class="form-control col-sm-10">
                     <option *ngFor="let unitName of possibleUnits(kv.key)"
                             [value]="unitName"
                             >{{ uiUnitName(kv.key, unitName) }}</option>
                   </select>
+                  <p *ngIf="possibleUnits(kv.key).length === 1" class="form-control-static">
+                    {{ uiUnitName(kv.key, possibleUnits(kv.key)[0]) }}
+                  </p>
                 </div>
               </div>
             </div>
