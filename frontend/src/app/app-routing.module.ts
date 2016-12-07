@@ -7,6 +7,7 @@ import {StudyComponent} from "./study/study.component";
 import {DownloadComponent} from "./download.component";
 import {UploadComponent} from "./uploader/upload.component";
 import {MetadataComponent} from "./metadata.component";
+import {StudyManagementComponent} from "./study-management.component";
 
 const routes: Routes = [
   { path: '',           redirectTo: '/welcome', pathMatch: 'full' },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'download',   component: DownloadComponent },
   { path: 'upload',     component: UploadComponent },
   { path: 'metadata',   component: MetadataComponent },
+  { path: 'studies',    component: StudyManagementComponent },
   { path: 'study/:id',  component: StudyComponent }
 ];
 

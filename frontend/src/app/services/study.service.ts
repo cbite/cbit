@@ -84,6 +84,19 @@ export class StudyService {
     });
   }
 
+  getAllStudyIds(): Promise<string[]> {
+    return new Promise(resolve => {
+      $.ajax({
+        type: 'GET',
+        url: 'http://localhost:23456/studies',
+        contentType: 'application/json',
+        success: function(data: string[]) {
+          resolve(data);
+        }
+      })
+    });
+  }
+
   getAllFieldMetas(fieldNames: string[]): Promise<{[fieldName: string]: FieldMeta}> {
     let self = this;
 
