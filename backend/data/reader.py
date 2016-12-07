@@ -14,6 +14,17 @@ from unit_conversions import UnitConverter, DimensionsRegister
 from data.fieldmeta import FieldMeta
 import json
 
+# Explicit list of NA-like values.  We'd originally talked about rejecting
+# any blank fields (to require "N/A", "None" or "unknown"), but this turns out
+# to be a bad idea.  Pandas simply changes the type of the column to "string"
+# to accomodate empty strings, which causes type-conversion issues downstream.
+# So we'll accept blanks after all and treat them as N/A.
+#
+# This list extends pandas' built-in list with cBiT-specific values
+NA_VALUES = set([
+    'N/A', 'None', 'none', 'Unknown', 'unknown'
+])
+
 def read_investigation(f):
     # An investigation file looks like this:
     #
@@ -202,7 +213,7 @@ def read_study_sample(f):
     #
     # It describes each sample used in a study (material properties,
     # cell types, reference to control sample, etc.)
-    df = pd.read_table(f, encoding=cfg.FILE_ENCODING)
+    df = pd.read_table(f, encoding=cfg.FILE_ENCODING, na_values=NA_VALUES)
     return df
 
 
@@ -323,7 +334,7 @@ def apply_special_treatments_to_study_sample(d):
 def read_assay(f):
     # A transcription_micro file describes the technology used to measure
     # gene expression levels in each sample
-    df = pd.read_table(f, encoding=cfg.FILE_ENCODING)
+    df = pd.read_table(f, encoding=cfg.FILE_ENCODING, na_values=NA_VALUES)
     return df
 
 
