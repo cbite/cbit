@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # NOTE: Sadly, all these unit conversions need to be duplicated in the
 # Python backend and the TypeScript frontend.  Keep them in sync!
 #
@@ -8,13 +10,14 @@ import math
 
 
 class SingleUnitConverter(object):
-    def __init__(self, fromCanonical, toCanonical, sortingKey, isCanonical=False):
+    def __init__(self, uiName, fromCanonical, toCanonical, sortingKey, isCanonical=False):
 
         if not callable(fromCanonical):
             raise ValueError('`fromCanonical` is not callable')
         if not callable(toCanonical):
             raise ValueError('`toCanonical` is not callable')
 
+        self.uiName = uiName
         self.fromCanonical = fromCanonical
         self.toCanonical = toCanonical
         self.sortingKey = sortingKey
@@ -65,8 +68,11 @@ class UnitConverter(object):
             if not self.canonicalUnit:
                 raise ValueError("No canonical unit present in `unitsInCanonicalUnits`!")
 
-    def _makeSimpleSingleUnitConverter(self, unitInCanonicalUnits):
+    def _makeSimpleSingleUnitConverter(self, unitDescription):
+        uiName = unitDescription['uiName']
+        unitInCanonicalUnits = unitDescription['value']
         return SingleUnitConverter(
+            uiName=uiName,
             toCanonical=(lambda valueInThisUnit: valueInThisUnit * unitInCanonicalUnits),
             fromCanonical=(lambda valueInCanonicalUnits: valueInCanonicalUnits / unitInCanonicalUnits),
             sortingKey=unitInCanonicalUnits,
@@ -91,42 +97,45 @@ class UnitConverter(object):
     def fromCanonicalUnits(self, valueInCanonicalUnits, targetUnitStr):
         return self._normalizedUnitConverters[self.normalizeUnitName(targetUnitStr)].fromCanonical(valueInCanonicalUnits)
 
+    def getUnitUIName(self, unitName):
+        return self._normalizedUnitConverters[self.normalizeUnitName(unitName)].uiName
+
 
 # Unit conversions accept all relevant units from this ontology:
 # https://www.ebi.ac.uk/ols/ontologies/uo/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUO_0000000
 
 # Special converter that does nothing
 NoneConverter = UnitConverter({
-    'none': 1.
+    'none': { 'uiName': u'none', 'value': 1. }
 })
 
 # unit -> time unit
 # Canonical unit: hours
 TimeUnitConverter = UnitConverter({
-    'century':     100 * 365 * 24,
-    'year':        365 * 24,
-    'month':       (365. / 12.) * 24,   # approximate
-    'week':        7 * 24,
-    'day':         24,
-    'hour':        1,
-    'minute':      1 / 60.0,
-    'second':      1 / 60.0 / 60.0,
-    'millisecond': 1 / 1000. / 60. / 60.,
-    'microsecond': 1 / 1000000. / 60. / 60.,
-    'nanosecond':  1 / 1000000000. / 60. / 60.,
-    'picosecond':  1 / 1000000000000. / 60. / 60.,
+    'century':     { 'uiName': u'century', 'value': 100 * 365 * 24 },
+    'year':        { 'uiName': u'yr',      'value': 365 * 24 },
+    'month':       { 'uiName': u'mon',     'value': (365. / 12.) * 24 },   # approximate
+    'week':        { 'uiName': u'wk',      'value': 7 * 24 },
+    'day':         { 'uiName': u'd',       'value': 24 },
+    'hour':        { 'uiName': u'h',       'value': 1 },
+    'minute':      { 'uiName': u'm',       'value': 1 / 60.0 },
+    'second':      { 'uiName': u's',       'value': 1 / 60.0 / 60.0 },
+    'millisecond': { 'uiName': u'ms',      'value': 1 / 1000. / 60. / 60. },
+    'microsecond': { 'uiName': u'µs',      'value': 1 / 1000000. / 60. / 60. },
+    'nanosecond':  { 'uiName': u'ns',      'value': 1 / 1000000000. / 60. / 60. },
+    'picosecond':  { 'uiName': u'ps',      'value': 1 / 1000000000000. / 60. / 60. },
 })
 
 
 # unit -> concentration unit -> unit of molarity
 # Canonical unit: mM
 ConcentrationUnitConverter = UnitConverter({
-    'molar':      1000.0,
-    'millimolar': 1,
-    'micromolar': 1 / 1000.0,
-    'nanomolar':  1 / 1000000.0,
-    'picomolar':  1 / 1000000000.0,
-    'femtomolar': 1 / 1000000000000.0,
+    'molar':      { 'uiName': u'M',  'value': 1000.0 },
+    'millimolar': { 'uiName': u'mM', 'value': 1 },
+    'micromolar': { 'uiName': u'µM', 'value': 1 / 1000.0 },
+    'nanomolar':  { 'uiName': u'nM', 'value': 1 / 1000000.0 },
+    'picomolar':  { 'uiName': u'pM', 'value': 1 / 1000000000.0 },
+    'femtomolar': { 'uiName': u'fM', 'value': 1 / 1000000000000.0 },
 })
 
 
@@ -136,25 +145,25 @@ nAvogadro = 6.022140857e23  # http://physics.nist.gov/cgi-bin/cuu/Value?na
 daltonInG = 12.0 / nAvogadro  # nAvogadro atoms of 12C have a mass of exactly 12g
 
 MassUnitConverter = UnitConverter({
-    'kilogram':   1000,
-    'gram':       1,
-    'milligram':  1 / 1000.,
-    'microgram':  1 / 1000000.,
-    'nanogram':   1 / 1000000000.,
-    'picogram':   1 / 1000000000000.,
-    'femtogram':  1 / 1000000000000000.,
+    'kilogram':   { 'uiName': u'kg',  'value': 1000 },
+    'gram':       { 'uiName': u'g',   'value': 1 },
+    'milligram':  { 'uiName': u'mg',  'value': 1 / 1000. },
+    'microgram':  { 'uiName': u'µg',  'value': 1 / 1000000. },
+    'nanogram':   { 'uiName': u'ng',  'value': 1 / 1000000000. },
+    'picogram':   { 'uiName': u'pg',  'value': 1 / 1000000000000. },
+    'femtogram':  { 'uiName': u'fg',  'value': 1 / 1000000000000000. },
 
-    'dalton':     daltonInG,
-    'kilodalton': 1000 * daltonInG,
+    'dalton':     { 'uiName': u'Da',  'value': daltonInG },
+    'kilodalton': { 'uiName': u'kDa', 'value': 1000 * daltonInG },
 })
 
 # unit -> area unit
 # Canonical unit: m^2
 AreaUnitConverter = UnitConverter({
-    'square meter':      1,
-    'square centimeter': 1 / (100. ** 2),
-    'square millimeter': 1 / (1000. ** 2),
-    'square angstrom':   1 / (10000000000. ** 2),
+    'square meter':      { 'uiName': u'm²',  'value': 1 },
+    'square centimeter': { 'uiName': u'cm²', 'value': 1 / (100. ** 2) },
+    'square millimeter': { 'uiName': u'mm²', 'value': 1 / (1000. ** 2) },
+    'square angstrom':   { 'uiName': u'Å²',  'value': 1 / (10000000000. ** 2) },
 })
 
 
@@ -162,46 +171,46 @@ AreaUnitConverter = UnitConverter({
 # % / [length unit]
 # Canonical unit: % / week
 WeightLossUnitConverter = UnitConverter({
-    '% / century':     (1. / (100 * 365 * 24)) / (1. / (7 * 24)),
-    '% / year':        (1. / (365 * 24)) / (1. / (7 * 24)),
-    '% / month':       (1. / ((365. / 12.) * 24)) / (1. / (7 * 24)),  # approximate
-    '% / week':        1,   # (1. / (7 * 24)) / (1. / (7 * 24)),
-    '% / day':         (1. / (24)) / (1. / (7 * 24)),
-    '% / hour':        (1. / (1)) / (1. / (7 * 24)),
-    '% / minute':      (1. / (1 / 60.0)) / (1. / (7 * 24)),
-    '% / second':      (1. / (1 / 60.0 / 60.0)) / (1. / (7 * 24)),
-    '% / millisecond': (1. / (1 / 1000. / 60. / 60.)) / (1. / (7 * 24)),
-    '% / microsecond': (1. / (1 / 1000000. / 60. / 60.)) / (1. / (7 * 24)),
-    '% / nanosecond':  (1. / (1 / 1000000000. / 60. / 60.)) / (1. / (7 * 24)),
-    '% / picosecond':  (1. / (1 / 1000000000000. / 60. / 60.)) / (1. / (7 * 24)),
+    '% / century':     { 'uiName': u'% / century', 'value': (1. / (100 * 365 * 24)) / (1. / (7 * 24)) },
+    '% / year':        { 'uiName': u'% / yr',      'value': (1. / (365 * 24)) / (1. / (7 * 24)) },
+    '% / month':       { 'uiName': u'% / mon',     'value': (1. / ((365. / 12.) * 24)) / (1. / (7 * 24)) },  # approximate
+    '% / week':        { 'uiName': u'% / wk',      'value': 1 },   # (1. / (7 * 24)) / (1. / (7 * 24)),
+    '% / day':         { 'uiName': u'% / d',       'value': (1. / (24)) / (1. / (7 * 24)) },
+    '% / hour':        { 'uiName': u'% / h',       'value': (1. / (1)) / (1. / (7 * 24)) },
+    '% / minute':      { 'uiName': u'% / m',       'value': (1. / (1 / 60.0)) / (1. / (7 * 24)) },
+    '% / second':      { 'uiName': u'% / s',       'value': (1. / (1 / 60.0 / 60.0)) / (1. / (7 * 24)) },
+    '% / millisecond': { 'uiName': u'% / ms',      'value': (1. / (1 / 1000. / 60. / 60.)) / (1. / (7 * 24)) },
+    '% / microsecond': { 'uiName': u'% / µs',      'value': (1. / (1 / 1000000. / 60. / 60.)) / (1. / (7 * 24)) },
+    '% / nanosecond':  { 'uiName': u'% / ns',      'value': (1. / (1 / 1000000000. / 60. / 60.)) / (1. / (7 * 24)) },
+    '% / picosecond':  { 'uiName': u'% / ps',      'value': (1. / (1 / 1000000000000. / 60. / 60.)) / (1. / (7 * 24)) },
 })
 
 # unit -> length unit, excluding centiMorgan, centiRay
 # Canonical unit: m
 LengthUnitConverter = UnitConverter({
-    'meter':      1.,
-    'centimeter': 1. / 100.,
-    'millimeter': 1. / 1000.,
-    'micrometer': 1. / 1000000.,
-    'nanometer':  1. / 1000000000.,
-    'angstrom':   1. / 10000000000.,
-    'picometer':  1. / 1000000000000.,
+    'meter':      { 'uiName': u'm',  'value': 1. },
+    'centimeter': { 'uiName': u'cm', 'value': 1. / 100. },
+    'millimeter': { 'uiName': u'mm', 'value': 1. / 1000. },
+    'micrometer': { 'uiName': u'µm', 'value': 1. / 1000000. },
+    'nanometer':  { 'uiName': u'nm', 'value': 1. / 1000000000. },
+    'angstrom':   { 'uiName': u'Å',  'value': 1. / 10000000000. },
+    'picometer':  { 'uiName': u'pm', 'value': 1. / 1000000000000. },
 })
 
 
 # unit -> pressure unit
 # Canonical unit: pascal
 PressureConverter = UnitConverter({
-    'pascal':                 1.,
-    'millimeters of mercury': 133.322387415  # https://en.wikipedia.org/wiki/Millimeter_of_mercury
+    'pascal':                 { 'uiName': u'Pa',    'value': 1. },
+    'millimeters of mercury': { 'uiName': u'mm Hg', 'value': 133.322387415 }  # https://en.wikipedia.org/wiki/Millimeter_of_mercury
 })
 
 
 # unit -> angle unit -> plane angle unit
 # Canonical unit: degree
 AngleConverter = UnitConverter({
-    'degree': 1.,
-    'radian': 360. / (2 * math.pi)
+    'degree': { 'uiName': u'°',   'value': 1. },
+    'radian': { 'uiName': u'rad', 'value': 360. / (2 * math.pi) }
 })
 
 
@@ -209,19 +218,20 @@ AngleConverter = UnitConverter({
 # NOTE: the ontology units for percent are useless!  I've removed them
 # Canonical unit: %
 PercentageConverter = UnitConverter({
-    '%':       1.,
+    '%':       { 'uiName': u'%', 'value': 1. },
 })
 
 
 # unit -> dimensionless unit -> parts per notation unit
 # Canonical unit: parts per million
+# See https://en.wikipedia.org/wiki/Parts-per_notation for notes on abbreviations
 PartsPerConverter = UnitConverter({
-    'parts per hundred':       10000.,   # this is just a percentage: should we merge 'percentage' and 'parts_per' dimensions?
-    'parts per thousand':      1000.,
-    'parts per million':       1.,
-    'parts per billion':       1. / 1000.,
-    'parts per trillion':      1. / 1000000.,
-    'parts per quadrillion':   1. / 1000000000.,
+    'parts per hundred':       { 'uiName': u'%',                  'value': 10000. },
+    'parts per thousand':      { 'uiName': u'parts per thousand', 'value': 1000. },
+    'parts per million':       { 'uiName': u'ppm',                'value': 1. },
+    'parts per billion':       { 'uiName': u'ppb',                'value': 1. / 1000. },
+    'parts per trillion':      { 'uiName': u'ppt',                'value': 1. / 1000000. },
+    'parts per quadrillion':   { 'uiName': u'ppq',                'value': 1. / 1000000000. },
 })
 
 
@@ -230,14 +240,16 @@ PartsPerConverter = UnitConverter({
 # NOTE: Have to go to the extra mile to support temperature conversions
 # that aren't simply scaling factors
 TemperatureConverter = UnitConverter({
-    'kelvin':            1.,
+    'kelvin':            { 'uiName': 'K', 'value': 1. },
     'degree Celsius':    SingleUnitConverter(
+        uiName =         u'°C',
         toCanonical =   (lambda TinC: TinC - 273.15),
         fromCanonical = (lambda TinK: TinK + 273.15),
         sortingKey =    10.,   # Larger values sort earlier
         isCanonical =   False
     ),
     'degree Fahrenheit': SingleUnitConverter(
+        uiName =         u'°F',
         toCanonical =   (lambda TinF: (TinF - 32) * 5./9. - 273.15),
         fromCanonical = (lambda TinK: (TinK + 273.15) * 9./5. + 32),
         sortingKey =    5.,    # Larger values sort earlier
@@ -249,13 +261,13 @@ TemperatureConverter = UnitConverter({
 # unit -> electric potential difference unit
 # Canonical unit: volt
 ElectricPotentialDifferenceConverter = UnitConverter({
-    'megavolt':  1e6,
-    'kilovolt':  1e3,
-    'volt':      1.,
-    'millivolt': 1e-3,
-    'microvolt': 1e-6,
-    'nanovolt':  1e-9,
-    'picovolt':  1e-12,
+    'megavolt':  { 'uiName': u'MV', 'value': 1e6 },
+    'kilovolt':  { 'uiName': u'kV', 'value': 1e3 },
+    'volt':      { 'uiName': u'V',  'value': 1. },
+    'millivolt': { 'uiName': u'mV', 'value': 1e-3 },
+    'microvolt': { 'uiName': u'µV', 'value': 1e-6 },
+    'nanovolt':  { 'uiName': u'nV', 'value': 1e-9 },
+    'picovolt':  { 'uiName': u'pV', 'value': 1e-12 },
 })
 
 

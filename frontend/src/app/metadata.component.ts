@@ -96,7 +96,7 @@ import {DimensionsRegister} from "./common/unit-conversions";
                           class="form-control col-sm-10">
                     <option *ngFor="let unitName of possibleUnits(kv.key)"
                             [value]="unitName"
-                            >{{ unitName }}</option>
+                            >{{ uiUnitName(kv.key, unitName) }}</option>
                   </select>
                 </div>
               </div>
@@ -125,6 +125,11 @@ export class FieldMetadataEditorComponent implements OnInit, OnChanges {
   possibleUnits(fieldName: string): string[] {
     let unitConverter = DimensionsRegister[this.fieldMetas[fieldName].dimensions];
     return (unitConverter ? unitConverter.getPossibleUnits() : []);
+  }
+
+  uiUnitName(fieldName: string, unitName: string): string {
+    let unitConverter = DimensionsRegister[this.fieldMetas[fieldName].dimensions];
+    return (unitConverter ? unitConverter.getUnitUIName(unitName) : unitName);
   }
 
   makeFormGroup(): FormGroup {

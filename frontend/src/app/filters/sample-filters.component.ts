@@ -63,9 +63,9 @@ enum GlobalCheckboxState {
       
         <div class="units" *ngIf="dimensions !== 'none'">
           Units: <select *ngIf="units().length > 1" id="unitChooser" [(ngModel)]="chosenUnit">
-                    <option *ngFor="let unit of units()" [value]="unit">{{unit}}</option>
+                    <option *ngFor="let unit of units()" [value]="unit">{{ uiUnitName(dimensions, unit) }}</option>
                   </select>
-                  <span *ngIf="units().length === 1">{{ units()[0] }}</span>
+                  <span *ngIf="units().length === 1">{{ uiUnitName(dimensions, units()[0]) }}</span>
         </div>
         <ul>
           <li *ngFor="let kv of allCountSorted" class="checkbox">
@@ -167,6 +167,10 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   units(): string[] {
     let unitConverter = DimensionsRegister[this.dimensions];
     return (unitConverter ? unitConverter.getPossibleUnits() : []);
+  }
+
+  uiUnitName(dimensions: string, unitName: string): string {
+    return DimensionsRegister[dimensions].getUnitUIName(unitName);
   }
 
   constructor(
@@ -356,16 +360,21 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
         ? (x: any) => x
         : (x: any) => unitConverter.fromCanonicalUnits(+x, this.chosenUnit)
     );
+    let unitUIName = (
+      (this.dimensions == 'none' || !unitConverter)
+        ? ''
+        : unitConverter.getUnitUIName(this.chosenUnit)
+    )
 
     switch (this.category) {
       case 'Phase composition':
-        return this.decodePhaseCompositionLike(s, (component, percentage) => `${convert(percentage)} ${component}`);
+        return this.decodePhaseCompositionLike(s, (component, percentage) => `${convert(percentage)}${unitUIName} ${component}`);
       case 'Elements composition':
-        return this.decodePhaseCompositionLike(s, (element, percentage) => `${convert(percentage)} ${element}`);
+        return this.decodePhaseCompositionLike(s, (element, percentage) => `${convert(percentage)}${unitUIName} ${element}`);
       case 'Wettability':
-        return this.decodePhaseCompositionLike(s, (liquid, contactAngle) => `${convert(contactAngle)} with ${liquid}`);
+        return this.decodePhaseCompositionLike(s, (liquid, contactAngle) => `${convert(contactAngle)}${unitUIName} with ${liquid}`);
       default:
-        return convert(s);
+        return `${convert(s)} ${unitUIName}`;
     }
   }
 

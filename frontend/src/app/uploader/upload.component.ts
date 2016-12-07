@@ -1008,7 +1008,7 @@ interface UploadsResponse {
                           class="form-control col-sm-10">
                     <option *ngFor="let unitName of possibleUnits(fieldName)"
                             [value]="unitName"
-                            >{{ unitName }}</option>
+                            >{{ uiUnitName(fieldName, unitName) }}</option>
                   </select>
                 </div>
               </div>
@@ -1039,9 +1039,19 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
 
   possibleUnits(fieldName: string): string[] {
     if (this.fieldAnalyses[fieldName]) {
-      return DimensionsRegister[(<FormGroup>this._form.controls[fieldName]).controls['dimensions'].value].getPossibleUnits();
+      let dimensions = (<FormGroup>this._form.controls[fieldName]).controls['dimensions'].value;
+      return DimensionsRegister[dimensions].getPossibleUnits();
     } else {
       return [];
+    }
+  }
+
+  uiUnitName(fieldName: string, unitName: string): string {
+    if (this.fieldAnalyses[fieldName]) {
+      let dimensions = (<FormGroup>this._form.controls[fieldName]).controls['dimensions'].value;
+      return DimensionsRegister[dimensions].getUnitUIName(unitName);
+    } else {
+      return unitName;
     }
   }
 
