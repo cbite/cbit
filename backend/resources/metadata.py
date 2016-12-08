@@ -242,6 +242,54 @@ class MetadataFilteredCountsResource(object):
         resp.body = json.dumps(result, indent=2, sort_keys=2)
 
 
+class MetadataStudiesResource(object):
+    def on_post(self, req, resp):
+        """
+        Alter study metadata in one go
+
+        Request Data
+        ============
+        [
+          {
+            "studyId": "20823668-8773-42e9-b005-6c51f9eb357b",
+            "publicationDate": "2016-12-07",
+            "visible": false
+          },
+          ...
+        ]
+
+        Response Data
+        =============
+        {}
+        """
+
+        data = json.load(req.stream)
+        if not isinstance(data, list):
+            raise falcon.HTTPBadRequest(description="Expected JSON list as payload")
+
+        bulk_operations = []
+        for studyChangeDesc in data:
+            bulk_operations.append({
+                "_op_type": "update",
+                "_id": studyChangeDesc['studyId'],
+                "doc": {
+                    "*Publication Date": studyChangeDesc['publicationDate'],
+                    "*Visible": studyChangeDesc['visible']
+                }
+            })
+
+        es = elasticsearch.Elasticsearch(
+            hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
+
+        num_docs_added, errors = helpers.bulk(
+            es, index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, refresh='wait_for',
+            actions=bulk_operations
+        )
+
+        resp.status = falcon.HTTP_OK
+        resp.body = json.dumps({}, indent=2, sort_keys=True)
+
+
 class MetadataSamplesInStudies(object):
     def on_post(self, req, resp):
         """

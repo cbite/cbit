@@ -15,16 +15,21 @@ def connect_to_postgres():
 
 
 
-def import_archive(db_conn, es, archive_filename, study_uuid):
+def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, visible):
     a = read_archive(archive_filename)
 
     # Import metadata into ElasticSearch
     result = a.investigation
+
     # Add download URL for now
     result['*Archive URL'] = "http://{fqdn}/studies/{study_uuid}/archive".format(
         fqdn=cfg.FQDN,
         study_uuid=study_uuid
     )
+
+    # Add extra metadata
+    result['*Publication Date'] = publicationDate
+    result['*Visible'] = visible
 
     response = es.index(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, id=str(study_uuid), refresh=True, body=result)
 

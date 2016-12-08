@@ -19,7 +19,7 @@ enum StudyState {
         <thead>
           <tr>
             <th>Study Title</th>
-            <th>Sorting Date</th>
+            <th>Publication Date</th>
             <th>Visible</th>
             <th>Delete?</th>
           </tr>
@@ -33,9 +33,8 @@ enum StudyState {
               </div>
             </td>
             <td>
-              <input type="text" formControlName="sortingDate"
-               [attr.disabled]="isDeleted(kv.key)"
-               [class.deletedStudySortingDate]="isDeleted(kv.key)">
+              <input type="text" formControlName="publicationDate"
+               [class.deletedStudyPublicationDate]="isDeleted(kv.key)">
             </td>
             <td style="align-content: center">
               <input type="checkbox" formControlName="visible">
@@ -58,7 +57,7 @@ enum StudyState {
     .deletedStudyLabel {
       text-decoration: line-through;
     }
-    .deletedStudySortingDate {
+    .deletedStudyPublicationDate {
       text-decoration: line-through;
       background-color: #eee;
       color: #888;
@@ -167,8 +166,9 @@ export class StudyManagementComponent implements OnInit {
     for (let studyId in this.studies) {
       let study = this.studies[studyId];
       group[studyId] = new FormGroup({
-        sortingDate:   new FormControl('blahblah'),
-        visible:       new FormControl(true)
+        studyId:         new FormControl(studyId),
+        publicationDate: new FormControl(study._source['*Publication Date']),
+        visible:         new FormControl(study._source['*Visible'])
       });
     }
     return new FormGroup(group);
@@ -179,6 +179,7 @@ export class StudyManagementComponent implements OnInit {
 
     this.studyState[studyId] = StudyState.Deleting;
     delete self.studySpecificErrorMessage[studyId];
+    (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].disable();
     (<FormGroup>this.form.controls[studyId]).controls['visible'].disable();
 
     $.ajax({
@@ -190,6 +191,7 @@ export class StudyManagementComponent implements OnInit {
       },
       error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
         self.studyState[studyId] = StudyState.Present;
+        (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].enable();
         (<FormGroup>this.form.controls[studyId]).controls['visible'].enable();
         self.studySpecificErrorMessage[studyId] = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
       },
@@ -208,7 +210,7 @@ export class StudyManagementComponent implements OnInit {
 
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:23456/studies/_multi',
+      url: 'http://localhost:23456/metadata/studies',
       data: JSON.stringify(Object.values(this.form.value)),
       dataType: 'json',
       success: function(response) {
@@ -226,6 +228,6 @@ export class StudyManagementComponent implements OnInit {
         // Whatever happened, caches are stale now
         self._studyService.flushCaches();
       }
-    })
+    });
   }
 }

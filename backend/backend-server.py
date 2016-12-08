@@ -50,6 +50,7 @@ app.add_route('/studies/{study_uuid}/archive', StudyArchiveResource())
 
 app.add_route('/metadata/all_counts', MetadataAllCountsResource())
 app.add_route('/metadata/filtered_counts', MetadataFilteredCountsResource())
+app.add_route('/metadata/studies', MetadataStudiesResource())
 app.add_route('/metadata/samples_in_studies', MetadataSamplesInStudies())
 app.add_route('/metadata/search', MetadataSearch())
 app.add_route('/metadata/fields', MetadataFields())

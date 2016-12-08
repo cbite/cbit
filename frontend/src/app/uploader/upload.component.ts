@@ -1153,14 +1153,35 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
     </div>
     
     <div [class.hidden]="step !== 2">
-      <h2>Step 2: Enter metadata for new fields</h2>
+      <h2>Step 2: Enter metadata</h2>
+      
+      <h3>Study Metadata</h3>
+      <div class="form-inline">
+        <div class="row">
+          <div class="form-group col-sm-5 col-sm-offset-1">
+            <label for="studyPublicationDate">Publication Date</label>
+            <input type="text" id="studyPublicationDate" [(ngModel)]="studyPublicationDate" class="form-control">
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="checkbox col-sm-5 col-sm-offset-1">
+            <label for="studyInitiallyVisible">
+              <input type="checkbox" id="studyInitiallyVisible" [(ngModel)]="studyInitiallyVisible">
+              Visible
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <h3>New Fields</h3>
       
       <div *ngIf="!unknownFields">
         No new fields in this study
       </div>
       
       <div *ngIf="unknownFields">
-        <field-metadata-form [fieldNames]="unknownFields" [fieldAnalyses]="fieldAnalyses" (form)="metadataForm = $event"></field-metadata-form>
+        <field-metadata-form [fieldNames]="unknownFields" [fieldAnalyses]="fieldAnalyses" (form)="fieldMetadataForm = $event"></field-metadata-form>
       </div>
       
       <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">{{ confirmMetadataButtonName }}</button>
@@ -1216,8 +1237,11 @@ export class UploadComponent {
   knownFields: {[fieldName: string]: FieldMeta} = {};
   unknownFields: string[] = [];
   fieldAnalyses: {[fieldName: string]: FieldAnalysisResults} = {};
-  metadataForm: FormGroup;
+  fieldMetadataForm: FormGroup;
   errorMessage: string = "";
+
+  studyPublicationDate: string = (new Date()).toISOString().substring(0, 10);  // YYYY-MM-DD
+  studyInitiallyVisible: boolean = true;
 
   constructor(
     private _router: Router,
@@ -1291,16 +1315,16 @@ export class UploadComponent {
   doConfirmMetadata() {
     let that = this;
 
-    let newMetadata = Object.values(this.metadataForm.value);
+    let newFieldMetadata = Object.values(this.fieldMetadataForm.value);
     let metadataInsertionPromise: Promise<null>;
-    if (!newMetadata || newMetadata.length === 0) {
+    if (!newFieldMetadata || newFieldMetadata.length === 0) {
       metadataInsertionPromise = Promise.resolve([]);
     } else {
       metadataInsertionPromise = new Promise((resolve, reject) => {
         $.ajax({
           type: 'PUT',
           url: 'http://localhost:23456/metadata/fields/_multi',
-          data: JSON.stringify(newMetadata),
+          data: JSON.stringify(newFieldMetadata),
           dataType: 'json',
           success: function(response) {
             resolve();
@@ -1319,6 +1343,11 @@ export class UploadComponent {
       $.ajax({
         type: 'PUT',
         url: this.confirm_upload_url,
+        data: JSON.stringify({
+          publicationDate: that.studyPublicationDate,
+          visible: that.studyInitiallyVisible
+        }),
+        dataType: 'json',
         contentType: 'text/plain',  // TODO: Use JSON when sending metadata confirmations
         success: function(data:any, textStatus:string, jqXHR: XMLHttpRequest) {
           that.step = 3;

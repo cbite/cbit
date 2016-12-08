@@ -91,3 +91,7 @@ div.panel-heading-plus-minus-buttons {
   top: 10px;
   right: 10px;
 }
+
+div.panel-heading embargo {
+  font-style: italic;
+}

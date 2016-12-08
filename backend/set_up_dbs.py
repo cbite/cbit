@@ -50,6 +50,30 @@ def set_up_elasticsearch():
 
         "mappings": {
             cfg.ES_STUDY_DOCTYPE: {
+
+                # Some metadata fields are always present
+                "properties": {
+
+                    "*Archive URL": {
+                        "type": "string",
+                        "index": "not_analyzed",
+                        "include_in_all": False
+                    },
+
+                    "*Publication Date": {
+                        "type": "date",
+                        "index": "not_analyzed",
+                        "include_in_all": False
+                    },
+
+                    "*Visible": {
+                        "type": "boolean",
+                        "index": "not_analyzed",
+                        "include_in_all": False
+                    },
+
+                },
+
                 # Allow creation of dynamic fields, mapped as string
                 # (study metadata proved far less important than sample metadata,
                 # and except for a few fields subject to full-text search,

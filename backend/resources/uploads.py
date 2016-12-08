@@ -142,7 +142,24 @@ class UploadResource(object):
 
 
     def on_put(self, req, resp, upload_uuid):
-        """Kick off ingestion of uploaded file & provide typing info for new metadata"""
+        """
+        Kick off ingestion of uploaded file & provide typing info for new metadata
+
+        Request data
+        ============
+        {
+          "publicationDate": "2016-12-01",
+          "visible": true
+        }
+        """
+
+        # 0. Get payload
+        data = json.load(req.stream)
+        if not isinstance(data, dict):
+            raise falcon.HTTPBadRequest(description="Expected JSON object as payload")
+
+        publicationDate = data['publicationDate']
+        visible = data['visible']
 
         # 1. Check that upload exists and it's status is 'uploaded'
         db_conn = req.context['db']
@@ -175,7 +192,7 @@ class UploadResource(object):
         # 3. Ingest archive into DBs
         uploaded_archive_path = os.path.join(cfg.UPLOADS_PATH, upload_uuid, 'archive.zip')
         try:
-            self._ingest_archive(uploaded_archive_path, db_conn, upload_uuid)
+            self._ingest_archive(uploaded_archive_path, db_conn, upload_uuid, publicationDate, visible)
         except ValueError as e:
             import traceback
             tb = traceback.format_exc()
@@ -217,12 +234,12 @@ class UploadResource(object):
         resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 
 
-    def _ingest_archive(self, filename, db_conn, study_uuid):
+    def _ingest_archive(self, filename, db_conn, study_uuid, publicationDate, visible):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
         if not es.indices.exists(cfg.ES_INDEX):
             raise falcon.HTTPInternalServerError(description='ElasticSearch database not ready.  Have you run set_up_dbs.py?')
 
-        importer.import_archive(db_conn, es, filename, study_uuid)
+        importer.import_archive(db_conn, es, filename, study_uuid, publicationDate, visible)
 

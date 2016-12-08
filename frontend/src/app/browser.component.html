@@ -32,6 +32,7 @@
                 <a (click)="$event.preventDefault(); detailModal.show()" href="#">
                   <h3 class="panel-title" style="float:left;width:80%">{{ studyMatch.study._source['STUDY']['Study Title'] }}</h3>
                 </a>
+                <div *ngIf="!studyMatch.study._source['*Visible']" class="embargo">[Invisible to public!]</div>
 
                 <div [ngSwitch]="studySelectedState(studyMatch)" class="panel-heading-plus-minus-buttons">
 
