@@ -27,9 +27,14 @@ class StudiesResource(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
+        if req.context["isAdmin"]:
+            query_body = { "match_all": {} }
+        else:
+            query_body = { "term": { "*Visible": True } }
+
         rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, _source=None, body={
             "size": 10000,  # TODO: Think about large sizes
-            "query": { "match_all": {} }
+            "query": query_body
         })
 
         result = []
@@ -66,11 +71,26 @@ class StudiesResource(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
+        mustClauses = [
+            {
+                "ids": {
+                    "values": studyIds
+                }
+            }
+        ]
+
+        if not req.context["isAdmin"]:
+            mustClauses.append({
+                "term": {
+                    "*Visible": True
+                }
+            })
+
         rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, body={
             "size": len(studyIds),
             "query": {
-                "ids": {
-                    "values": studyIds
+                "bool": {
+                    "must": mustClauses
                 }
             }
         })
@@ -85,6 +105,12 @@ class StudiesResource(object):
 
 class StudyResource(object):
     def on_delete(self, req, resp, study_uuid):
+        """
+        Status of 403 (Forbidden) if the request is not made as an admin
+        """
+
+        if not req.context["isAdmin"]:
+            raise falcon.HTTPForbidden(description="Only admins can perform this action")
 
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])

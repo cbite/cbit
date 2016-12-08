@@ -4,6 +4,7 @@ import falcon
 from middleware.clean_old_uploads import CleanOldUploadsMiddleware
 from middleware.cors import CORSMiddleware
 from middleware.database_session import DatabaseSessionMiddleware
+from middleware.authentication import AuthenticationMiddleware
 from resources.uploads import UploadResource, UploadsResource
 from resources.samples import SamplesResource
 from resources.studies import StudiesResource, StudyResource
@@ -36,7 +37,8 @@ if ES_TRACE_LOGGING:
 app = falcon.API(middleware=[
     CORSMiddleware(),
     DatabaseSessionMiddleware(),
-    CleanOldUploadsMiddleware()
+    CleanOldUploadsMiddleware(),
+    AuthenticationMiddleware()
 ])
 
 app.add_route('/uploads', UploadsResource())

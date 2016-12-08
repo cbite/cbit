@@ -32,9 +32,16 @@ class UploadsResource(object):
     - GET /uploads/{{uuid}} returns status of ingestion and should be queried repeatedly
       - when done, response body will include study ID as returned by ElasticSearch
     - After 24 hours, old uploads will be cleared from DB and disk
+
+    Status of 403 (Forbidden) if the request is not made as an admin
     """
 
     def on_post(self, req, resp):
+
+        if not req.context["isAdmin"]:
+            raise falcon.HTTPForbidden(
+                description="Only admins can perform this action")
+
         upload_uuid = '{upload_uuid}'.format(upload_uuid=uuid.uuid4())
         upload_dir = os.path.join(cfg.UPLOADS_PATH, upload_uuid)
 
@@ -121,6 +128,10 @@ class UploadResource(object):
     def on_get(self, req, resp, upload_uuid):
         """Get info about a particular upload"""
 
+        if not req.context["isAdmin"]:
+            raise falcon.HTTPForbidden(
+                description="Only admins can perform this action")
+
         db_conn = req.context['db']
         with db_conn.cursor() as cur:
             cur.execute("SELECT status FROM uploads WHERE uuid = %s",
@@ -152,6 +163,10 @@ class UploadResource(object):
           "visible": true
         }
         """
+
+        if not req.context["isAdmin"]:
+            raise falcon.HTTPForbidden(
+                description="Only admins can perform this action")
 
         # 0. Get payload
         data = json.load(req.stream)

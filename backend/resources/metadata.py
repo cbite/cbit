@@ -4,6 +4,7 @@ from collections import defaultdict
 import config.config as cfg
 import falcon
 import elasticsearch
+from elasticsearch import helpers
 import json
 
 from data.filters import FiltersState, SampleFilter, FilterMode
@@ -68,6 +69,9 @@ class MetadataAllCountsResource(object):
                                                 doc_type=cfg.ES_SAMPLE_DOCTYPE)
         properties = sample_mapping[cfg.ES_INDEX]['mappings'][cfg.ES_SAMPLE_DOCTYPE].get('properties', {})
 
+        # Don't include hidden studies unless logged in as admin
+        invisibleStudyIds = fetchInvisibleStudyIds(es, req.context["isAdmin"])
+
         aggs_to_query = {
             propName: {
                 "terms": {
@@ -82,8 +86,28 @@ class MetadataAllCountsResource(object):
             if propName not in HIDDEN_SAMPLE_FILTER_LABELS
         }
 
+        if not invisibleStudyIds:
+            query_body = { "match_all": {} }
+        else:
+            query_body = {
+                "bool": {
+                    "must_not": {
+                        "has_parent": {
+                            "parent_type": cfg.ES_STUDY_DOCTYPE,
+                            "query": {
+                                "ids": {
+                                    "type": cfg.ES_STUDY_DOCTYPE,
+                                    "values": invisibleStudyIds
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         result = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, body={
             "size": 0,
+            "query": query_body,
             "aggs": aggs_to_query
         })
 
@@ -150,7 +174,10 @@ class MetadataFilteredCountsResource(object):
 
         controlIds = fetchControlsMatchingFilters(es, filters)
 
-        q = buildESQueryPieces(filters, controlIds)
+        # Don't include hidden studies unless logged in as admin
+        invisibleStudyIds = fetchInvisibleStudyIds(es, req.context["isAdmin"])
+
+        q = buildESQueryPieces(filters, controlIds, invisibleStudyIds)  # type: ESQueryPieces
         aggs = {}
 
         allFiltersAggs = {}
@@ -222,7 +249,8 @@ class MetadataFilteredCountsResource(object):
         rawAggs = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, body={
             "query": {
                 "bool": {
-                    "should": q.shouldClauses
+                    "should": q.shouldClauses,
+                    "must_not": q.globalMustNotClauses
                 }
             },
             "size": 0,     # TODO: Think about sizes
@@ -261,7 +289,12 @@ class MetadataStudiesResource(object):
         Response Data
         =============
         {}
+
+        Status of 403 (Forbidden) if the request is not made as an admin
         """
+
+        if not req.context["isAdmin"]:
+            raise falcon.HTTPForbidden(description="Only admins can perform this action")
 
         data = json.load(req.stream)
         if not isinstance(data, list):
@@ -318,15 +351,31 @@ class MetadataSamplesInStudies(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
+        invisibleStudyIds = fetchInvisibleStudyIds(es, req.context["isAdmin"])
+
         rawResults = es.search(
             index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, _source=["_id"], body={
                 "size": 1000 * len(studyIds),  # TODO: Think this through
                 "query": {
-                    "has_parent": {
-                        "parent_type": cfg.ES_STUDY_DOCTYPE,
-                        "query": {
-                            "ids": {
-                                "values": studyIds
+                    "bool": {
+                        "must": {
+                            "has_parent": {
+                                "parent_type": cfg.ES_STUDY_DOCTYPE,
+                                "query": {
+                                    "ids": {
+                                        "values": studyIds
+                                    }
+                                }
+                            }
+                        },
+                        "must_not": {
+                            "has_parent": {
+                                "parent_type": cfg.ES_STUDY_DOCTYPE,
+                                "query": {
+                                    "ids": {
+                                        "values": invisibleStudyIds
+                                    }
+                                }
                             }
                         }
                     }
@@ -379,8 +428,9 @@ class MetadataSearch(object):
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
         controlIds = fetchControlsMatchingFilters(es, filters)
+        invisibleStudyIds = fetchInvisibleStudyIds(es, req.context["isAdmin"])
 
-        q = buildESQueryPieces(filters, controlIds)  # type: ESQueryPieces
+        q = buildESQueryPieces(filters, controlIds, invisibleStudyIds)  # type: ESQueryPieces
         rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, _source=False, body={
             "query": {
                 "bool": {
@@ -394,7 +444,8 @@ class MetadataSearch(object):
                                 "minimum_should_match": 1
                             }
                         }
-                    ]
+                    ],
+                    "must_not": q.globalMustNotClauses
                 }
             },
             "size": 10000   # TODO: Think about sizes
@@ -524,8 +575,12 @@ class MetadataFieldsMulti(object):
         - HTTP 200 (OK) if all went well
         - HTTP 400 (Bad Request) if not all metadata is present in request data,
           or if any value (e.g., category) is invalid.
+        - HTTP 403 (Forbidden) unless request is executed as an admin
         - HTTP 409 (Conflict) if the field already exists
         """
+
+        if not req.context["isAdmin"]:
+            raise falcon.HTTPForbidden(description="Only admins can perform this action")
 
         data = json.load(req.stream)
 
@@ -587,8 +642,12 @@ class MetadataFieldsMulti(object):
         - HTTP 400 (Bad Request) if not all metadata is present in request data,
           or if any value (e.g., category) is invalid, or if any attempt is made
           to change the value of a readonly value (e.g., dataType, dimensions).
+        - HTTP 403 (Forbidden) unless request is executed as an admin
         - HTTP 404 (Not Found) if at least one of the fields doesn't exist
         """
+
+        if not req.context["isAdmin"]:
+            raise falcon.HTTPForbidden(description="Only admins can perform this action")
 
         data = json.load(req.stream)
 
@@ -665,8 +724,12 @@ class MetadataField(object):
         - HTTP 200 (OK) if all went well
         - HTTP 400 (Bad Request) if not all metadata is present in request data
           or if any value (e.g., category) is invalid
+        - HTTP 403 (Forbidden) unless request is executed as an admin
         - HTTP 409 (Conflict) if the field already exists
         """
+
+        if not req.context["isAdmin"]:
+            raise falcon.HTTPForbidden(description="Only admins can perform this action")
 
         data = json.load(req.stream)
 
@@ -720,8 +783,12 @@ class MetadataField(object):
         - HTTP 400 (Bad Request) if not all metadata is present in request data,
           or if any value (e.g., category) is invalid, or if any attempt is made
           to change the value of a readonly value (e.g., dataType, dimensions).
+        - HTTP 403 (Forbidden) unless request is executed as an admin
         - HTTP 404 (Not Found) if field doesn't exist
         """
+
+        if not req.context["isAdmin"]:
+            raise falcon.HTTPForbidden(description="Only admins can perform this action")
 
         data = json.load(req.stream)
 
@@ -829,17 +896,19 @@ def do_post_field_metas(db_conn, newFieldMetas):
 
 
 class ESQueryPieces(object):
-    def __init__(self, shouldClauses, mustClause, mustNotClause):
+    def __init__(self, shouldClauses, mustClause, mustNotClause, globalMustNotClauses):
         self.shouldClauses = shouldClauses
         self.mustClause = mustClause
         self.mustNotClause = mustNotClause
+        self.globalMustNotClauses = globalMustNotClauses
 
 
-def buildESQueryPieces(filters, controlStudyIds = []):
+def buildESQueryPieces(filters, controlStudyIds = [], invisibleStudyIds = []):
 
-    shouldClauses = []  # type: list[dict]
-    mustClause = {}     # type: dict[str, dict]
-    mustNotClause = {}  # type: dict[str, dict]
+    shouldClauses = []        # type: list[dict]
+    globalMustNotClauses = [] # type: list[dict]
+    mustClause = {}           # type: dict[str, dict]
+    mustNotClause = {}        # type: dict[str, dict]
 
     if filters.searchText:
         shouldClauses = [
@@ -873,6 +942,19 @@ def buildESQueryPieces(filters, controlStudyIds = []):
             }
         })
 
+    if invisibleStudyIds:
+        globalMustNotClauses.append({
+            "has_parent": {
+                "parent_type": cfg.ES_STUDY_DOCTYPE,
+                "query": {
+                    "ids": {
+                        "type": cfg.ES_STUDY_DOCTYPE,
+                        "values": invisibleStudyIds
+                    }
+                }
+            }
+        })
+
     for category, sampleFilter in filters.sampleFilters.iteritems():
         queryClause = {
             "terms": {
@@ -895,7 +977,7 @@ def buildESQueryPieces(filters, controlStudyIds = []):
         elif sampleFilter.mode == FilterMode.OnlyThese:
             mustClause[category] = queryClause
 
-    return ESQueryPieces(shouldClauses, mustClause, mustNotClause)
+    return ESQueryPieces(shouldClauses, mustClause, mustNotClause, globalMustNotClauses)
 
 
 def buildESQueryEnumerateControls(filters):
@@ -960,3 +1042,19 @@ def fetchControlsMatchingFilters(es, filters):
         return extractControlIdsFromResultOfESQueryEnumerateControls(rawControls)
     else:
         return []
+
+
+def fetchInvisibleStudyIds(es, isAdmin):        # Don't include hidden studies unless logged in as admin
+    if isAdmin:
+        return []
+    else:
+        rawInvisibleStudies = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, _source=None, body={
+            "size": 10000,  # TODO: Think this through better
+            "query": {
+                "term": {
+                    "*Visible": False
+                }
+            }
+        })
+        return [hit['_id'] for hit in rawInvisibleStudies['hits']['hits']]
+

@@ -3,6 +3,7 @@ import config.config as cfg
 import falcon
 import elasticsearch
 import json
+from resources.metadata import fetchInvisibleStudyIds
 
 class SamplesResource(object):
     def on_post(self, req, resp):
@@ -31,11 +32,28 @@ class SamplesResource(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
+        invisibleStudyIds = fetchInvisibleStudyIds(es, req.context["isAdmin"])
+
         rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, body={
             "size": len(sampleIds),
             "query": {
-                "ids": {
-                    "values": sampleIds
+                "bool": {
+                    "must": {
+                        "ids": {
+                            "values": sampleIds
+                        }
+                    },
+                    "must_not": {
+                        "has_parent": {
+                            "type": cfg.ES_STUDY_DOCTYPE,
+                            "query": {
+                                "ids": {
+                                    "type": cfg.ES_STUDY_DOCTYPE,
+                                    "values": invisibleStudyIds
+                                }
+                            }
+                        }
+                    }
                 }
             }
         })
