@@ -4,6 +4,7 @@ import falcon
 import elasticsearch
 from elasticsearch import helpers
 import json
+import shutil
 
 class StudiesResource(object):
     def on_get(self, req, resp):
@@ -90,7 +91,7 @@ class StudyResource(object):
 
         # Check that study exists
         if not es.exists(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, id=study_uuid):
-            raise falcon.HTTPNotFound('Study {0} does not exist'.format(study_uuid))
+            raise falcon.HTTPNotFound(description='Study {0} does not exist'.format(study_uuid))
 
         # Get all sample IDs for the given study ID
         rawResults = es.search(
@@ -132,6 +133,9 @@ class StudyResource(object):
         num_docs_added, errors = helpers.bulk(es, index=cfg.ES_INDEX,
                                               refresh='wait_for',
                                               actions=bulk_items)
+
+        study_path = os.path.join(cfg.FILES_PATH, study_uuid)
+        shutil.rmtree(study_path)
 
         resp.status = falcon.HTTP_OK
         resp.body = json.dumps({

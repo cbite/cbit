@@ -3,11 +3,17 @@ import {StudyService} from "./services/study.service";
 import {FormGroup, FormControl, Validators} from "@angular/forms";
 import {Study} from "./common/study.model";
 
+enum StudyState {
+  Present,
+  Deleting,
+  Deleted
+};
+
 // TODO: Refactor this component and the uploader's field-metadata-form into a single metadata editor
 @Component({
   selector: 'study-metadata-editor',
   template: `
-    <div [formGroup]="_form">
+    <div *ngIf="form" [formGroup]="form">
     
       <table class="table table-striped">
         <thead>
@@ -22,6 +28,9 @@ import {Study} from "./common/study.model";
           <tr *ngFor="let kv of studies | mapToIterable" [formGroupName]="kv.key">
             <td [class.deletedStudyLabel]="isDeleted(kv.key)">
               {{ kv.val._source['STUDY']['Study Title'] }}
+              <div *ngIf="studySpecificErrorMessage[kv.key]" class="alert alert-danger">
+                {{ studySpecificErrorMessage[kv.key] }}
+              </div>
             </td>
             <td>
               <input type="text" formControlName="sortingDate"
@@ -29,8 +38,7 @@ import {Study} from "./common/study.model";
                [class.deletedStudySortingDate]="isDeleted(kv.key)">
             </td>
             <td style="align-content: center">
-              <input type="checkbox" formControlName="visible"
-                [disabled]="isDeleted(kv.key)">
+              <input type="checkbox" formControlName="visible">
             </td>
             <td>
               <div *ngIf="!isDeletingStudy(kv.key)">
@@ -57,47 +65,24 @@ import {Study} from "./common/study.model";
     }
   `]
 })
-export class StudyMetadataEditorComponent implements OnInit, OnChanges {
+export class StudyMetadataEditorComponent {
   @Input() studies: { [studyId: string]: Study } = {};
-  @Input() deletedStudies: { [studyId: string]: boolean } = {};
-  deletingStudies: { [studyId: string]: boolean } = {};
-  @Output() form = new EventEmitter<FormGroup>();
+  @Input() form: FormGroup;
+  @Input() studyState: { [studyId: string]: StudyState } = {};
+  @Input() studySpecificErrorMessage: { [studyId: string]: string } = {};
+
   @Output() deleteStudy = new EventEmitter<string>();
-  _form: FormGroup;
-
-  ngOnInit() {
-    this._form = this.makeFormGroup();
-    this.form.emit(this._form);
-  }
-
-  ngOnChanges() {
-    this._form = this.makeFormGroup();
-    this.form.emit(this._form);
-  }
 
   isDeleted(studyId: string) {
-    return studyId in this.deletedStudies;
+    return this.studyState[studyId] === StudyState.Deleted;
+  }
+
+  isDeletingStudy(studyId: string) {
+    return this.studyState[studyId] === StudyState.Deleting;
   }
 
   doDeleteStudy(studyId: string) {
-    this.deletingStudies[studyId] = true;
     this.deleteStudy.emit(studyId);
-  }
-  isDeletingStudy(studyId: string) {
-    return (studyId in this.deletingStudies) && !(studyId in this.deletedStudies);
-  }
-
-  makeFormGroup(): FormGroup {
-    let group: any = {};
-
-    for (let studyId in this.studies) {
-      let study = this.studies[studyId];
-      group[studyId] = new FormGroup({
-        sortingDate:   new FormControl('blahblah'),
-        visible:       new FormControl(true)
-      });
-    }
-    return new FormGroup(group);
   }
 }
 
@@ -113,8 +98,9 @@ export class StudyMetadataEditorComponent implements OnInit, OnChanges {
   <div *ngIf="ready" class="container">
     <study-metadata-editor
       [studies]="studies"
-      [deletedStudies]="deletedStudies"
-      (form)="updateForm($event)"
+      [studyState]="studyState"
+      [studySpecificErrorMessage]="studySpecificErrorMessage"
+      [form]="form"
       (deleteStudy)="deleteStudy($event)"
       ></study-metadata-editor>
     <div class="row">
@@ -143,8 +129,10 @@ export class StudyMetadataEditorComponent implements OnInit, OnChanges {
 export class StudyManagementComponent implements OnInit {
   ready = false;
   studies: { [studyId: string]: Study } = {};
-  deletedStudies: { [studyId: string]: boolean } = {};
+  studyState: { [studyId: string]: StudyState } = {};
+  studySpecificErrorMessage: { [studyId: string]: string } = {};
   form: FormGroup;
+
   savingChanges = false;
   saveDone = false;
   saveError = '';
@@ -164,19 +152,51 @@ export class StudyManagementComponent implements OnInit {
       .then(studyList => {
         for (let study of studyList) {
           self.studies[study._id] = study;
-          //self.deletedStudies[study._id] = true;
+          self.studyState[study._id] = StudyState.Present;
         }
+        self.form = self.makeFormGroup();
         self.ready = true;
+        self._changeDetectorRef.detectChanges();
       });
     ;
   }
 
-  updateForm(form: FormGroup) {
-    this.form = form;
+  makeFormGroup(): FormGroup {
+    let group: any = {};
+
+    for (let studyId in this.studies) {
+      let study = this.studies[studyId];
+      group[studyId] = new FormGroup({
+        sortingDate:   new FormControl('blahblah'),
+        visible:       new FormControl(true)
+      });
+    }
+    return new FormGroup(group);
   }
 
   deleteStudy(studyId: string) {
-    console.log(`Deleting study ${studyId}`);
+    let self = this;
+
+    this.studyState[studyId] = StudyState.Deleting;
+    delete self.studySpecificErrorMessage[studyId];
+    (<FormGroup>this.form.controls[studyId]).controls['visible'].disable();
+
+    $.ajax({
+      type: 'DELETE',
+      url: `http://localhost:23456/studies/${studyId}`,
+      contentType: 'application/json',
+      success: (data: string[]) => {
+        self.studyState[studyId] = StudyState.Deleted;
+      },
+      error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
+        self.studyState[studyId] = StudyState.Present;
+        (<FormGroup>this.form.controls[studyId]).controls['visible'].enable();
+        self.studySpecificErrorMessage[studyId] = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
+      },
+      complete: () => {
+        self._changeDetectorRef.detectChanges();
+      }
+    })
   }
 
   saveChanges() {
