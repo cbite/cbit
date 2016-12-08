@@ -40,7 +40,7 @@ class UploadsResource(object):
 
         # Check for existence out of paranoia
         if os.path.exists(upload_dir):
-            raise falcon.HTTPInternalServerError("UUID conflict, try again")
+            raise falcon.HTTPInternalServerError(description="UUID conflict, try again")
 
         # First note upload in database
         db_conn = req.context['db']
