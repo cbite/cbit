@@ -4,6 +4,17 @@ import {StudyService} from "./services/study.service";
 import {Study} from "./common/study.model";
 import {ModalDirective} from "ng2-bootstrap";
 
+interface DownloadPostResponse {
+  download_uuid: string,
+  location: string,
+  progressUrl: string
+}
+
+interface DownloadProgressResponse {
+  status: string,
+  progress: number
+}
+
 @Component({
   selector: 'download-checkout',
   template: `
@@ -33,10 +44,20 @@ import {ModalDirective} from "ng2-bootstrap";
           <button *ngIf="!preparingDownload" type="button" class="btn btn-primary" (click)="kickOffDownload()">Download</button>
           <button *ngIf=" preparingDownload" type="button" class="btn btn-primary" disabled>Download</button>
           
+          <div *ngIf="errorMessage" class="pull-left" style="width: 70%">
+            <div class="alert alert-danger" style="text-align: left;">
+              {{ errorMessage }}
+            </div>
+          </div>
+          
           <div *ngIf="preparingDownload" class="pull-left" style="width: 50%;">
             <label class="prepLabel">Preparing download:</label>
             <div class="progress">
-              <div class="progress-bar progress-bar-striped active" role="progressbar" [style.width.%]="preparationProgress">
+              <div class="progress-bar"
+               [class.progress-bar-striped]="!downloadReady"
+               [class.active]="!downloadReady"
+               [class.progress-bar-success]="downloadReady"
+               role="progressbar" [style.width.%]="preparationProgress">
               </div>
             </div>
           </div>
@@ -61,8 +82,14 @@ export class DownloadComponent {
   numSelectedSamples: number = 0;
   studies: Study[] = [];
 
+  errorMessage: string = '';
   preparingDownload: boolean = false;
   preparationProgress: number = 0;
+  downloadReady: boolean = false;
+
+  download_uuid: string;
+  downloadLocation: string;
+  progressUrl: string;
 
   constructor(
     private _studyService: StudyService,
@@ -83,22 +110,82 @@ export class DownloadComponent {
         this.changeDetectorRef.detectChanges();
       })
 
+    this.errorMessage = '';
     this.preparingDownload = false;
     this.preparationProgress = 0;
+    this.downloadReady = false;
   }
 
   kickOffDownload(): void {
     let self = this;
 
+    this.errorMessage = '';
     this.preparingDownload = true;
-    let intervalId = setInterval(() => {
-      self.preparationProgress += 5;
-      self.changeDetectorRef.detectChanges();
+    this.preparationProgress = 0;
+    this.downloadReady = false;
 
-      if (self.preparationProgress === 100) {
-        clearInterval(intervalId);
-        setTimeout(() => { self.modal.hide(); }, 200);
+    let selection = this._downloadSelectionService.getSelection().selection;
+    let sampleIds: string[] = [];
+    for (let studyId in selection) {
+      for (let sampleId in selection[studyId]) {
+        sampleIds.push(sampleId);
       }
-    }, 500);
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:23456/downloads',
+      data: JSON.stringify(sampleIds),
+      dataType: 'json',
+      success: (data: DownloadPostResponse) => {
+        self.download_uuid = data.download_uuid;
+        self.downloadLocation = data.location;
+        self.progressUrl = data.progressUrl;
+
+        self.schedulePollForProgress();
+      },
+      error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
+        self.errorMessage = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
+        self.preparingDownload = false;
+        self.changeDetectorRef.detectChanges();
+      }
+    });
+  }
+
+  schedulePollForProgress() {
+    let self = this;
+    const POLLING_INTERVAL_MS = 1000;
+    setTimeout(() => self.doProgressPoll(), POLLING_INTERVAL_MS);
+  }
+
+  doProgressPoll() {
+    let self = this;
+
+    $.ajax({
+      type: 'GET',
+      url: this.progressUrl,
+      dataType: 'json',
+      success: (result: DownloadProgressResponse) => {
+        self.preparationProgress = result.progress;
+
+        if (result.status === 'ready') {
+          self.downloadReady = true;
+          setTimeout(() => { self.modal.hide(); }, 1000);
+
+          // Kick off download
+          window.location.href = self.downloadLocation;
+
+        } else {
+          self.schedulePollForProgress();
+        }
+      },
+      error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
+        self.errorMessage = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
+        self.preparingDownload = false;
+      },
+      complete: () => {
+        self.changeDetectorRef.detectChanges();
+      }
+    })
   }
 }

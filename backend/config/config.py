@@ -6,13 +6,15 @@ DB_NAME = "cbit"
 
 FILE_ENCODING = "cp1252"  # All files are coming from Windows and ISAcreator uses this encoding for output (!)
 
-# Delete temporary uploads after this much time
-# (completed uploads are deleted as soon as ingested into the database,
-# this interval only applies to stale partial uploads)
+# Delete temporary uploads and downloads after this much time.
+# This interval only applies to stale partial uploads/downloads.  In the common case:
+# - completed uploads are deleted as soon as ingested into the database,
+# - completed downloads are deleted immediately after download
 
 # NOTE: Should be compatible with Postgres INTERVAL syntax:
 # https://www.postgresql.org/docs/9.5/static/functions-datetime.html
 UPLOAD_STALE_INTERVAL = '24 hour'
+DOWNLOAD_STALE_INTERVAL = '24 hour'
 
 ES_HOST = "localhost"
 ES_PORT = 9200
@@ -24,4 +26,5 @@ FQDN = 'localhost:23456'  # TODO: In production, should be cbit.maastrichtuniver
 URL_BASE = 'http://{0}'.format(FQDN)
 
 UPLOADS_PATH = 'uploads'
+DOWNLOADS_PATH = 'downloads'
 FILES_PATH = 'files'

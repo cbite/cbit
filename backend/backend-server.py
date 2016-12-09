@@ -6,6 +6,11 @@ from middleware.cors import CORSMiddleware
 from middleware.database_session import DatabaseSessionMiddleware
 from middleware.authentication import AuthenticationMiddleware
 from resources.uploads import UploadResource, UploadsResource
+from resources.downloads import (
+    DownloadsResource,
+    DownloadResource,
+    DownloadProgressResource,
+)
 from resources.samples import SamplesResource
 from resources.studies import StudiesResource, StudyResource
 from resources.study_archive import StudyArchiveResource
@@ -44,6 +49,10 @@ app = falcon.API(middleware=[
 
 app.add_route('/uploads', UploadsResource())
 app.add_route('/uploads/{upload_uuid}', UploadResource())
+
+app.add_route('/downloads', DownloadsResource())
+app.add_route('/downloads/{download_uuid}', DownloadResource())
+app.add_route('/downloads/{download_uuid}/_progress', DownloadProgressResource())
 
 app.add_route('/samples', SamplesResource())
 
