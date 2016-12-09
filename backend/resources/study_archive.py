@@ -29,6 +29,7 @@ class StudyArchiveResource(object):
 
         if os.path.exists(ingested_archive_path):
             resp.content_type = 'application/zip'
+            resp.append_header("Content-Disposition", 'attachment; filename="study.zip"')
             resp.stream = open(ingested_archive_path, 'rb')
             resp.stream_len = os.path.getsize(ingested_archive_path)
         else:
