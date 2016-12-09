@@ -87,6 +87,24 @@ class DownloadsResource(object):
         for sample in result.itervalues():
             studyIds.add(sample["_parent"])
 
+        # 1.25 Fetch study metadata
+        rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, body={
+            "query": {
+                "ids": {
+                    "type": cfg.ES_STUDY_DOCTYPE,
+                    "values": list(studyIds)
+                }
+            },
+            "_source": ["STUDY.Study Title"]
+        })
+        studyInfos = {}
+        for hit in rawResults['hits']['hits']:
+            studyInfos[hit['_id']] = {
+                "STUDY": {
+                    "Study Title": hit['_source']['STUDY']['Study Title']
+                }
+            }
+
         # 1.5 Organize sample and study IDs in a nice hierarchy
         sampleIdsByStudy = defaultdict(list)
         for sample in result.itervalues():
@@ -110,7 +128,8 @@ class DownloadsResource(object):
 
         # Now dump bundle creation config into temporary space
         downloadConfig = {
-            'targetData': sampleIdsByStudy
+            'targetData': sampleIdsByStudy,
+            'studyInfos': studyInfos
         }
         os.makedirs(download_dir)
         configFilepath = os.path.join(download_dir, 'config.json')
