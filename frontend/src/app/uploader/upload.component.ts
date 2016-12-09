@@ -222,10 +222,10 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dimensions": "none",
     "preferredUnit": "none"
   },
-  "Sample Match": {
+  "Group Match": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Sample name of the matching control sample (leave empty if no control is linked to this sample). The sample match does not necessarily mean that the matching control is paired (in the statistical sense). If it is paired, this is indicated in the field Paired sample.",
+    "description": "Group ID number of the matching control group for a given sample (when empty, no control group is linked to this sample).",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -233,7 +233,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Paired sample": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Is the sample paired to another sample? (relevant for statistical purposes) A group (minimal of two samples) that is paired should be indicated with the same letter (e.g. A for the first group of paired samples, B for the second, etc.). Leave blank if samples are not paired.",
+    "description": "Is the sample paired to a control sample or other type of paired sample? (relevant for statistical purposes) If a sample is paired to another sample (e.g. a measurement in a mouse on day 5 compared to day 0 in that same mouse), the sample barcode of the paired control sample is shown. Control samples themselves are not shown as paired.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"

@@ -20,7 +20,7 @@ HIDDEN_SAMPLE_FILTER_LABELS = frozenset((
   'Study ID',
   'Group ID',
   'Protocols',
-  'Sample Match',
+  'Group Match',
 
   # Fields that have been merged in backend
   'Material Name',
@@ -185,7 +185,7 @@ class MetadataFilteredCountsResource(object):
             "filter": {
                 "bool": {
                     "should": [
-                        { "terms": { "Sample Name": controlIds } },   # Include controls no matter what
+                        { "ids": { "type": cfg.ES_SAMPLE_DOCTYPE, "values": controlIds } },   # Include controls no matter what
                         {
                             "bool": {
                                 "must": q.mustClause.values(),
@@ -221,7 +221,7 @@ class MetadataFilteredCountsResource(object):
                     "filter": {
                         "bool": {
                             "should": [
-                                { "terms": { "Sample Name": controlIds } },  # Include controls no matter what
+                                { "ids": { "type": cfg.ES_SAMPLE_DOCTYPE, "values": controlIds } },   # Include controls no matter what
                                 {
                                     "bool": {
                                         "must": theseMustClauses,
@@ -435,7 +435,7 @@ class MetadataSearch(object):
             "query": {
                 "bool": {
                     "should": [
-                        { "terms": { "Sample Name": controlIds } },  # Include controls no matter what
+                        { "ids": { "type": cfg.ES_SAMPLE_DOCTYPE, "values": controlIds } },   # Include controls no matter what
                         {
                             "bool": {
                                 "should": q.shouldClauses,
@@ -937,8 +937,9 @@ def buildESQueryPieces(filters, controlStudyIds = [], invisibleStudyIds = []):
 
     if controlStudyIds:
         shouldClauses.append({
-            "terms": {
-                "Sample Name": controlStudyIds
+            "ids": {
+                "type": cfg.ES_SAMPLE_DOCTYPE,
+                "values": controlStudyIds
             }
         })
 
@@ -980,66 +981,99 @@ def buildESQueryPieces(filters, controlStudyIds = [], invisibleStudyIds = []):
     return ESQueryPieces(shouldClauses, mustClause, mustNotClause, globalMustNotClauses)
 
 
-def buildESQueryEnumerateControls(filters):
-    # Relevant controls are listed in the results under
-    # results.aggregations.controls.buckets[*].key
-
-    queryPieces = buildESQueryPieces(filters)  # type: ESQueryPieces
-    extraMustClauses = queryPieces.mustClause.values()
-    extraMustNotClauses = queryPieces.mustNotClause.values()
-
-    return {
-      "size": 0,  # We only care about the aggregation below
-      "query": {
-        "bool": {
-          "should": queryPieces.shouldClauses,
-          "must": [
-              {
-                  "bool": {
-                      "should": [
-                          {"exists": {"field": "Sample Match"}},
-                          {"exists": {"field": "Paired sample"}}
-                      ],
-                      "minimum_should_match": 1
-                  }
-              }
-          ] + extraMustClauses,
-          "must_not": extraMustNotClauses,
-          "minimum_should_match": 1
-        }
-      },
-      "aggs": {
-        "controls": {
-          "terms": {
-            "field": "Sample Match",
-            "size": 10000   # TODO: Think harder about upper limits
-          }
-        },
-          "paired_samples": {
-              "terms": {
-                  "field": "Paired sample",
-                  "size": 10000  # TODO: Think harder about upper limits
-              }
-          },
-      }
-    }
-
-
-def extractControlIdsFromResultOfESQueryEnumerateControls(esResult):
-    return list(
-        set(bucket["key"]
-            for bucket in esResult["aggregations"]["controls"]["buckets"])
-        .union(set(bucket["key"]
-                   for bucket in
-                   esResult["aggregations"]["paired_samples"]["buckets"]))
-    )
-
-
 def fetchControlsMatchingFilters(es, filters):
     if filters.includeControls:
-        rawControls = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE,
-                                body=buildESQueryEnumerateControls(filters))
-        return extractControlIdsFromResultOfESQueryEnumerateControls(rawControls)
+
+        queryPieces = buildESQueryPieces(filters)  # type: ESQueryPieces
+        extraMustClauses = queryPieces.mustClause.values()
+        extraMustNotClauses = queryPieces.mustNotClause.values()
+
+        query1 = {
+            "size": 0,  # We only care about the aggregation below
+            "query": {
+                "bool": {
+                    "should": queryPieces.shouldClauses,
+                    "must": [
+                                {
+                                    "bool": {
+                                        "should": [
+                                            {"exists": {
+                                                "field": "Group Match"}},
+                                            {"exists": {
+                                                "field": "Paired sample"}}
+                                        ],
+                                        "minimum_should_match": 1
+                                    }
+                                }
+                            ] + extraMustClauses,
+                    "must_not": extraMustNotClauses,
+                    "minimum_should_match": 1
+                }
+            },
+            "aggs": {
+                "studies": {
+                    "terms": {
+                        "field": "_parent",
+                        "size": 10000  # TODO: Think harder about upper limits
+                    },
+                    "aggs": {
+                        "controls": {
+                            "terms": {
+                                "field": "Group Match",
+                                "size": 10000
+                            # TODO: Think harder about upper limits
+                            },
+                            "aggs": {
+                                "paired_samples": {
+                                    "terms": {
+                                        "field": "Paired sample",
+                                        "missing": "*",
+                                        "size": 10000
+                                        # TODO: Think harder about upper limits
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        initialResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE,
+                                   body=query1)
+
+        shouldClauses = []
+        for studyIdBucket in initialResults["aggregations"]["studies"]["buckets"]:
+            studyId = studyIdBucket['key']
+            for groupMatchBucket in studyIdBucket["controls"]["buckets"]:
+                groupId = groupMatchBucket['key']
+                for pairedSampleBucket in groupMatchBucket["paired_samples"]["buckets"]:
+                    pairedSampleName = pairedSampleBucket['key']
+
+                    mustClauses = [
+                        {"term": {"_parent": studyId}},
+                        {"term": {"Group ID": groupId}},
+                    ]
+                    if pairedSampleName != '*':
+                        mustClauses.append({ "term": {"Sample Name": pairedSampleName} })
+
+                    shouldClauses.append({ "bool": { "must": mustClauses } })
+
+        followUpQuery = {
+            "query": {
+                "bool": {
+                    "should": shouldClauses,
+                    "minimum_should_match": 1
+                }
+            },
+            "size": 10000,   # TODO: Think this through better
+        }
+
+        followUpResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE,
+                                    _source=None,  # Just care about IDs
+                                    body=followUpQuery)
+
+        return [hit['_id'] for hit in followUpResults['hits']['hits']]
     else:
         return []
 

@@ -17,7 +17,7 @@ export const HIDDEN_SAMPLE_FILTER_LABELS = {
   'Study ID': true,
   'Group ID': true,
   'Protocols': true,
-  'Sample Match': true,
+  'Group Match': true,
 
   // Fields that have been merged in backend
   'Material Name': true,
