@@ -1,10 +1,11 @@
 import {
   Component, OnInit, animate, transition, style, state, trigger, OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef, EventEmitter, Output, ViewChild
 } from '@angular/core';
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {DownloadSelectionService} from "./services/download-selection.service";
+import {DownloadComponent} from "./download.component";
 
 @Component({
   selector: 'navbar',
@@ -31,15 +32,27 @@ import {DownloadSelectionService} from "./services/download-selection.service";
             <li [class.active]="isCurrentRoute('/browse')">
               <a routerLink="/browse"  >Browse</a>
             </li>
-            <li [class.active]="isCurrentRoute('/upload')">
-              <a routerLink="/upload"  ><span class="glyphicon glyphicon-cloud-upload"></span> Upload (admin!)</a>
+            
+            <li dropdown class="dropdown">
+              <a dropdownToggle>
+                <span class="glyphicon glyphicon-wrench"></span>
+                Admin
+                <span class="caret"></span>
+              </a>
+              
+              <ul dropdownMenu class="dropdown-menu">
+                <li [class.active]="isCurrentRoute('/upload')">
+                  <a routerLink="/upload"  ><span class="glyphicon glyphicon-cloud-upload"></span> Upload Study</a>
+                </li>
+                <li [class.active]="isCurrentRoute('/studies')">
+                  <a routerLink="/studies"  ><span class="glyphicon glyphicon-list-alt"></span> Manage Studies</a>
+                </li>
+                <li [class.active]="isCurrentRoute('/metadata')">
+                  <a routerLink="/metadata"  ><span class="glyphicon glyphicon-wrench"></span> Edit Field Metadata</a>
+                </li>
+              </ul>
             </li>
-            <li [class.active]="isCurrentRoute('/metadata')">
-              <a routerLink="/metadata"  ><span class="glyphicon glyphicon-wrench"></span> Edit Field Metadata (admin!)</a>
-            </li>
-            <li [class.active]="isCurrentRoute('/studies')">
-              <a routerLink="/studies"  ><span class="glyphicon glyphicon-list-alt"></span> Manage Studies (admin!)</a>
-            </li>
+            
             
           </ul>
           
@@ -59,7 +72,7 @@ import {DownloadSelectionService} from "./services/download-selection.service";
                 </li>
                 
                 <li [class.disabled]="isSelectionEmpty">
-                  <a href="#" (click)="$event.preventDefault(); proceedToDownload()">
+                  <a href="#" (click)="$event.preventDefault(); downloadModal.show()">
                     <span class="glyphicon glyphicon-download-alt"></span>
                     Download
                   </a>
@@ -72,6 +85,10 @@ import {DownloadSelectionService} from "./services/download-selection.service";
     
       </div>
     </nav>
+      
+    <div bsModal #downloadModal="bs-modal" class="modal fade" role="dialog" (onShow)="downloadCheckout.refresh()">
+      <download-checkout [modal]="downloadModal"></download-checkout>
+    </div>
   `,
   styles: [`
   .selectionLink {
@@ -96,6 +113,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   navBarCollapsed = true;
   isSelectionEmpty = true;
   stopStream = new Subject<string>();
+  @ViewChild(DownloadComponent) downloadCheckout: DownloadComponent;
 
   constructor(
     private _downloadSelectionService: DownloadSelectionService,
@@ -131,9 +149,5 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   clearSelection() {
     this._downloadSelectionService.clearSelection();
-  }
-
-  proceedToDownload() {
-    this._router.navigate(['/download']);
   }
 }
