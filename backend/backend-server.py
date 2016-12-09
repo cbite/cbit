@@ -12,6 +12,7 @@ from resources.study_archive import StudyArchiveResource
 from resources.metadata import (
     MetadataAllCountsResource,
     MetadataFilteredCountsResource,
+    MetadataStudiesResource,
     MetadataSamplesInStudies,
     MetadataSearch,
     MetadataFields,
