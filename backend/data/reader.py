@@ -213,7 +213,7 @@ def read_study_sample(f):
     #
     # It describes each sample used in a study (material properties,
     # cell types, reference to control sample, etc.)
-    df = pd.read_table(f, encoding=cfg.FILE_ENCODING, na_values=NA_VALUES)
+    df = pd.read_table(f, encoding=cfg.FILE_ENCODING, na_values=NA_VALUES, dtype=str)
     return df
 
 
@@ -237,13 +237,20 @@ def clean_up_study_samples(df, db_conn):
         if colname.endswith('Unit'):
             unit_colnames[colname[:-len('Unit')].strip()] = dirty_colname
 
+    def isFloaty(value):
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
+
     all_results = {}
     for i, row in df.iterrows():
         result = {}
         protocols = []
         for colname, value in zip(clean_column_names, row):
             if (colname == 'Sample Name'
-                or (isinstance(value, float) and np.isnan(value))):
+                or (colname in fieldMetas and fieldMetas[colname].dataType == 'double' and isFloaty(value) and np.isnan(float(value)))):
                 pass
             elif colname.startswith('Protocol REF'):
                 protocols.append(value)
@@ -261,8 +268,11 @@ def clean_up_study_samples(df, db_conn):
                 result[colname] = (
                     unit_converter.toCanonicalUnit(float(value), row[unit_colnames[colname]])
                 )
-            else:
-                result[colname] = value
+            elif not isFloaty(value) or not np.isnan(float(value)):
+                if colname in fieldMetas and fieldMetas[colname].dataType == 'double' and colname not in ('Phase composition', 'Elements composition', 'Wettability'):
+                    result[colname] = float(value)
+                else:
+                    result[colname] = value
 
         # Special columns
         result['Protocols'] = ', '.join(protocols)
@@ -334,7 +344,7 @@ def apply_special_treatments_to_study_sample(d):
 def read_assay(f):
     # A transcription_micro file describes the technology used to measure
     # gene expression levels in each sample
-    df = pd.read_table(f, encoding=cfg.FILE_ENCODING, na_values=NA_VALUES)
+    df = pd.read_table(f, encoding=cfg.FILE_ENCODING, na_values=NA_VALUES, dtype=str)
     return df
 
 
@@ -345,13 +355,20 @@ def clean_up_assay(a):
         for f in a.columns.values
         ]
 
+    def isFloaty(value):
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
+
     all_results = {}
     for i, row in a.iterrows():
         sampleName = row['Sample Name']
         result = {}
         for colname, value in zip(clean_column_names, row):
             if (colname == 'Sample Name'
-                or (isinstance(value, float) and np.isnan(value))
+                or (isFloaty(value) and np.isnan(float(value)))
                 or value == sampleName
                 or colname.startswith('Protocol REF')
                 ):
