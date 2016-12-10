@@ -2,6 +2,7 @@ import {Component, ViewContainerRef} from '@angular/core';
 import {StudyService} from "./services/study.service";
 import {FiltersService} from "./services/filters.service";
 import {DownloadSelectionService} from "./services/download-selection.service";
+import {AuthenticationService} from "./services/authentication.service";
 
 @Component({
   selector: 'cbit',
@@ -17,7 +18,7 @@ import {DownloadSelectionService} from "./services/download-selection.service";
       padding-top: 50px;
     }
   `],
-  providers: [StudyService, FiltersService, DownloadSelectionService]
+  providers: [StudyService, FiltersService, DownloadSelectionService, AuthenticationService]
 })
 export class CBiTComponent {
   // HACK FOR NG2-BOOTSTRAP MODALS!

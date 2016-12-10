@@ -10,6 +10,7 @@ import {FiltersState} from "./filters.service";
 import * as $ from 'jquery';
 import {CacheableBulkRequester} from "../common/cacheable-bulk-request";
 import {FieldMeta} from "../common/field-meta.model";
+import {AuthenticationService} from "./authentication.service";
 
 // Should be a parseable number to play nicely with numeric fields
 // and it should survive a round-trip conversion in ES from string to double to string
@@ -72,10 +73,12 @@ export class StudyService {
   }
 
   getAllFieldNames(): Promise<string[]> {
+    let self = this;
     return new Promise(resolve => {
       $.ajax({
         type: 'GET',
         url: 'http://localhost:23456/metadata/fields',
+        headers: self._auth.headers(),
         contentType: 'application/json',
         success: function(data: string[]) {
           resolve(data);
@@ -85,10 +88,12 @@ export class StudyService {
   }
 
   getAllStudyIds(): Promise<string[]> {
+    let self = this;
     return new Promise(resolve => {
       $.ajax({
         type: 'GET',
         url: 'http://localhost:23456/studies',
+        headers: self._auth.headers(),
         contentType: 'application/json',
         success: function(data: string[]) {
           resolve(data);
@@ -110,11 +115,13 @@ export class StudyService {
   }
 
   getAllCountsAsync(): Promise<ManySampleCounts> {
+    let self = this;
     const URL = 'http://localhost:23456/metadata/all_counts';
     return new Promise(function (resolve) {
       $.ajax({
         type: 'GET',
         url: URL,
+        headers: self._auth.headers(),
         success: function(data: ManySampleCounts) { resolve(data); }
         // TODO: Add error handling!
       });
@@ -122,11 +129,13 @@ export class StudyService {
   }
 
   getManySampleCountsAsync(filters: FiltersState, categories: string[]): Promise<ManySampleCounts> {
+    let self = this;
     const URL = 'http://localhost:23456/metadata/filtered_counts';
     return new Promise(resolve => {
       $.ajax({
         type: 'POST',
         url: URL,
+        headers: self._auth.headers(),
         contentType: 'application/json',
         data: JSON.stringify({
           filters: filters,
@@ -149,6 +158,7 @@ export class StudyService {
       $.ajax({
         type: 'POST',
         url: URL,
+        headers: self._auth.headers(),
         contentType: 'application/json',
         data: JSON.stringify({
           filters: filters
@@ -191,10 +201,13 @@ export class StudyService {
   private sampleIdsRequester: CacheableBulkRequester<string[]>;
   private fieldMetaRequester: CacheableBulkRequester<FieldMeta>;
 
-  constructor() {
+  constructor(
+    private _auth: AuthenticationService
+  ) {
     this.studyRequester = new CacheableBulkRequester<Study>(
       "study",
       'http://localhost:23456/studies',
+      this._auth,
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
     );
@@ -202,6 +215,7 @@ export class StudyService {
     this.sampleRequester = new CacheableBulkRequester<Sample>(
       "sample",
       'http://localhost:23456/samples',
+      this._auth,
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
     );
@@ -209,6 +223,7 @@ export class StudyService {
     this.sampleIdsRequester = new CacheableBulkRequester<string[]>(
       "idsOfSamplesInStudy",
       'http://localhost:23456/metadata/samples_in_studies',
+      this._auth,
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
     );
@@ -216,6 +231,7 @@ export class StudyService {
     this.fieldMetaRequester = new CacheableBulkRequester<FieldMeta>(
       "fieldMeta",
       'http://localhost:23456/metadata/fields',
+      this._auth,
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
     );

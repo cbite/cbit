@@ -1,3 +1,4 @@
+import {AuthenticationService} from "../services/authentication.service";
 /**
  * Allow bufferable requests to a REST end-point, caching responses.
  *
@@ -26,6 +27,7 @@ export class CacheableBulkRequester<T> {
   constructor(
     public readonly name: string,
     public readonly url: string,
+    private readonly _auth: AuthenticationService,
     public readonly cacheTimeMs: number,
     public readonly requestBufferTimeMs: number)
   { }
@@ -134,6 +136,7 @@ export class CacheableBulkRequester<T> {
     $.ajax({
       type: 'POST',
       url: this.url,
+      headers: this._auth.headers(),
       contentType: 'application/json',
       data: JSON.stringify(ids),
 

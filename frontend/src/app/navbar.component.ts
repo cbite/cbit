@@ -6,6 +6,8 @@ import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {DownloadSelectionService} from "./services/download-selection.service";
 import {DownloadComponent} from "./download.component";
+import {AuthenticationService} from "./services/authentication.service";
+import {LoginComponent} from "./login.component";
 
 @Component({
   selector: 'navbar',
@@ -33,7 +35,14 @@ import {DownloadComponent} from "./download.component";
               <a routerLink="/browse"  >Browse</a>
             </li>
             
-            <li dropdown class="dropdown">
+            <li *ngIf="!isAdmin()">
+              <a href="#" (click)="$event.preventDefault(); loginModal.show()">
+                <span class="glyphicon glyphicon-lock"></span>
+                Admin (login required)
+              </a>
+            </li>
+            
+            <li *ngIf="isAdmin()" dropdown class="dropdown">
               <a dropdownToggle>
                 <span class="glyphicon glyphicon-wrench"></span>
                 Admin
@@ -49,6 +58,9 @@ import {DownloadComponent} from "./download.component";
                 </li>
                 <li [class.active]="isCurrentRoute('/metadata')">
                   <a routerLink="/metadata"  ><span class="glyphicon glyphicon-wrench"></span> Edit Field Metadata</a>
+                </li>
+                <li>
+                  <a href="#" (click)="$event.preventDefault(); logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
                 </li>
               </ul>
             </li>
@@ -86,6 +98,10 @@ import {DownloadComponent} from "./download.component";
       </div>
     </nav>
       
+    <div bsModal #loginModal="bs-modal" class="modal fade" role="dialog" (onShow)="loginPopup.refresh()">
+      <login [modal]="loginModal"></login>
+    </div>
+    
     <div bsModal #downloadModal="bs-modal" class="modal fade" role="dialog" (onShow)="downloadCheckout.refresh()">
       <download-checkout [modal]="downloadModal"></download-checkout>
     </div>
@@ -114,8 +130,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
   isSelectionEmpty = true;
   stopStream = new Subject<string>();
   @ViewChild(DownloadComponent) downloadCheckout: DownloadComponent;
+  @ViewChild(LoginComponent) loginPopup: LoginComponent;
 
   constructor(
+    private _auth: AuthenticationService,
     private _downloadSelectionService: DownloadSelectionService,
     private changeDetectorRef: ChangeDetectorRef,
     private _router : Router
@@ -135,6 +153,18 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.stopStream.next('stop');
+  }
+
+  isAdmin() {
+    return !this._auth.isGuest;
+  }
+
+  logout() {
+    this._auth.logout();
+  }
+
+  adminRealName() {
+    return this._auth.realname;
   }
 
   updateDownloadSelectionStats() {

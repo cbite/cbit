@@ -3,6 +3,7 @@ import {FieldMeta} from "./common/field-meta.model";
 import {StudyService} from "./services/study.service";
 import {FormGroup, FormControl, Validators, Form} from "@angular/forms";
 import {DimensionsRegister} from "./common/unit-conversions";
+import {AuthenticationService} from "./services/authentication.service";
 
 
 // TODO: Refactor this component and the uploader's field-metadata-form into a single metadata editor
@@ -199,6 +200,7 @@ export class MetadataComponent implements OnInit {
 
   constructor(
     private _studyService : StudyService,
+    private _auth: AuthenticationService,
     private _changeDetectorRef : ChangeDetectorRef
   ) { }
 
@@ -226,6 +228,7 @@ export class MetadataComponent implements OnInit {
     $.ajax({
       type: 'POST',
       url: 'http://localhost:23456/metadata/fields/_multi',
+      headers: this._auth.headers(),
       data: JSON.stringify(Object.values(this.form.value)),
       dataType: 'json',
       success: function(response) {

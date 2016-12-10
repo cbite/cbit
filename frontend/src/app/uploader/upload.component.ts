@@ -2,7 +2,7 @@ import {Component, OnInit, ChangeDetectorRef, Input, Output, OnChanges, EventEmi
 import {Router} from "@angular/router";
 import {
   FileUploader, FileSelectDirective, FileDropDirective,
-  ParsedResponseHeaders, FileUploaderOptions
+  ParsedResponseHeaders, FileUploaderOptions, Headers
 } from 'ng2-file-upload/ng2-file-upload';
 //import { FileItem } from 'ng2-file-upload/components/file-upload/file-item.class'
 import * as $ from 'jquery';
@@ -10,6 +10,7 @@ import {FieldMeta, DimensionsType} from "../common/field-meta.model";
 import {FormGroup, FormControl, Validators, RequiredValidator} from "@angular/forms";
 import * as _ from 'lodash';
 import {DimensionsRegister, INVALID_DIMENSIONS} from "../common/unit-conversions";
+import {AuthenticationService} from "../services/authentication.service";
 
 // Heavily adapted from here:
 // http://valor-software.com/ng2-file-upload/
@@ -1221,7 +1222,8 @@ export class UploadComponent {
     url: URL,
     method: 'POST',
     queueLimit: 1,
-    disableMultipart: true  // Send the file body directly as request body, don't wrap it in any way
+    disableMultipart: true,  // Send the file body directly as request body, don't wrap it in any way
+    authToken: this._auth.headers()['Authorization']
   });
   public hasBaseDropZoneOver: boolean = false;
   uploadFileName: string = "<None>"
@@ -1245,6 +1247,7 @@ export class UploadComponent {
 
   constructor(
     private _router: Router,
+    private _auth: AuthenticationService,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
@@ -1324,6 +1327,7 @@ export class UploadComponent {
         $.ajax({
           type: 'PUT',
           url: 'http://localhost:23456/metadata/fields/_multi',
+          headers: that._auth.headers(),
           data: JSON.stringify(newFieldMetadata),
           dataType: 'json',
           success: function(response) {
@@ -1343,6 +1347,7 @@ export class UploadComponent {
       $.ajax({
         type: 'PUT',
         url: this.confirm_upload_url,
+        headers: this._auth.headers(),
         data: JSON.stringify({
           publicationDate: that.studyPublicationDate,
           visible: that.studyInitiallyVisible
@@ -1372,6 +1377,8 @@ class MyFileUploader extends FileUploader {
   }
 
   onAfterAddingFile(fileItem:any /*FileItem*/): any {
+    // Pass credentials even through cross-site requests
+    fileItem.withCredentials = true;
     this.component.onFileAdded(fileItem.file.name);
   }
 

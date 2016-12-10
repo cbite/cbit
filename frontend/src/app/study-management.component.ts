@@ -2,6 +2,7 @@ import {Component, OnInit, ChangeDetectorRef, OnChanges, Input, Output, EventEmi
 import {StudyService} from "./services/study.service";
 import {FormGroup, FormControl, Validators} from "@angular/forms";
 import {Study} from "./common/study.model";
+import {AuthenticationService} from "./services/authentication.service";
 
 enum StudyState {
   Present,
@@ -138,6 +139,7 @@ export class StudyManagementComponent implements OnInit {
 
   constructor(
     private _studyService : StudyService,
+    private _auth : AuthenticationService,
     private _changeDetectorRef : ChangeDetectorRef
   ) { }
 
@@ -185,6 +187,7 @@ export class StudyManagementComponent implements OnInit {
     $.ajax({
       type: 'DELETE',
       url: `http://localhost:23456/studies/${studyId}`,
+      headers: this._auth.headers(),
       contentType: 'application/json',
       success: (data: string[]) => {
         self.studyState[studyId] = StudyState.Deleted;
@@ -211,6 +214,7 @@ export class StudyManagementComponent implements OnInit {
     $.ajax({
       type: 'POST',
       url: 'http://localhost:23456/metadata/studies',
+      headers: this._auth.headers(),
       data: JSON.stringify(Object.values(this.form.value)),
       dataType: 'json',
       success: function(response) {

@@ -30,6 +30,7 @@ import {DropdownToggleDirective} from "./common/dropdown-toggle.directive";
 import {ModalModule, TooltipDirective, TooltipModule} from "ng2-bootstrap";
 import {MetadataComponent, FieldMetadataEditorComponent} from "./metadata.component";
 import {StudyMetadataEditorComponent, StudyManagementComponent} from "./study-management.component";
+import {LoginComponent} from "./login.component";
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import {StudyMetadataEditorComponent, StudyManagementComponent} from "./study-ma
   declarations: [
     CBiTComponent,
     NavBarComponent,
+    LoginComponent,
     WelcomeComponent,
     BrowserComponent,
     DownloadComponent,
