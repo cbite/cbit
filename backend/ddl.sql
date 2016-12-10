@@ -114,3 +114,17 @@ CREATE TABLE dim_meta_meta (
 
 --INSERT INTO dim_meta_meta (field_name, description, category, visibility, data_type, dimensions, preferred_unit)
 --VALUES ('Phase composition', 'Phase composition tooltip', 'Material > Physical', 'main', 'double', 'percentage', '%');
+
+-- Authentication (for admins)
+DROP TABLE IF EXISTS auth CASCADE;
+CREATE TABLE auth (
+  username VARCHAR PRIMARY KEY,
+  salt VARCHAR NOT NULL,
+  saltedHashedPassword VARCHAR NOT NULL,  -- SHA256(salt + pass).hexdigest()
+  realname VARCHAR NOT NULL
+);
+
+-- Create default 'admin' user with password 'admin'
+-- hashlib.sha256('12345' + 'admin').hexdigest() == 'a8e8f93dc9dfe306433c92589c82874cb9d7b2c7dc194d55907447bdcf794d6f'
+INSERT INTO auth (username, salt, saltedHashedPassword, realname)
+VALUES ('admin', '12345', 'a8e8f93dc9dfe306433c92589c82874cb9d7b2c7dc194d55907447bdcf794d6f', 'Administrator')
