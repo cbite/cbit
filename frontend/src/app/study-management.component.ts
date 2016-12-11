@@ -215,7 +215,7 @@ export class StudyManagementComponent implements OnInit {
       type: 'POST',
       url: 'http://localhost:23456/metadata/studies',
       headers: this._auth.headers(),
-      data: JSON.stringify(Object.values(this.form.value)),
+      data: JSON.stringify(Object.values(this.form.value).filter((info: { studyId: string }) => self.studyState[info.studyId] == StudyState.Present)),
       dataType: 'json',
       success: function(response) {
         self.savingChanges = false;
