@@ -44,7 +44,7 @@ import {ChangePasswordComponent} from "./change-password.component";
               </a>
             </li>
             
-            <li *ngIf="isAdmin()" dropdown class="dropdown">
+            <li *ngIf="isAdmin()" dropdown class="dropdown" [class.active]="isCurrentRoute('/upload') || isCurrentRoute('/studies') || isCurrentRoute('/metadata') || isCurrentRoute('/users')">
               <a dropdownToggle>
                 <span class="glyphicon glyphicon-wrench"></span>
                 Admin (logged in as {{ getRealname() }})
@@ -94,7 +94,7 @@ import {ChangePasswordComponent} from "./change-password.component";
                 </li>
                 
                 <li [class.disabled]="isSelectionEmpty">
-                  <a href="#" (click)="$event.preventDefault(); downloadModal.show()">
+                  <a href="#" (click)="$event.preventDefault(); isSelectionEmpty || downloadModal.show()">
                     <span class="glyphicon glyphicon-download-alt"></span>
                     Download
                   </a>
