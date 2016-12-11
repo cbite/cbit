@@ -41,6 +41,69 @@ class UserResource(object):
         resp.status = falcon.HTTP_OK
         resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 
+
+    def on_put(self, req, resp, username):
+        """
+        Create a new user
+
+        Request data
+        ============
+        {
+          "realname": "...",
+          "password": "..."
+        }
+
+        Response data
+        =============
+        {
+          "acknowledged": true
+        }
+
+        Errors
+        ======
+        400 Bad Request - Badly formed payload or empty password
+        403 Forbidden - Credentials aren't those of an admin
+        409 Conflict - User already exists
+        """
+
+        if not req.context["isAdmin"]:
+            raise falcon.HTTPForbidden(description="Only admins can perform this action")
+
+        info = json.load(req.stream)
+        if "realname" not in info:
+            raise falcon.HTTPBadRequest(description="Must specify real name (even if empty)")
+        realname = info["realname"]
+        password = info.get("password")
+        if not password:
+            raise falcon.HTTPBadRequest(description="Must specify password")
+
+        db_conn = req.context["db"]
+
+        with db_conn.cursor() as cur:
+            cur.execute("SELECT COUNT(*) FROM auth WHERE username = %s", (username,))
+            (count,) = cur.fetchone()
+
+        if count != 0:
+            raise falcon.HTTPConflict(description="User {0} already exists".format(username))
+
+        # Randomly salt password
+        salt = bcrypt.gensalt()
+        saltedAndHashedPassword = hashlib.sha256(salt + password).hexdigest()
+        with db_conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO auth (username, salt, saltedHashedPassword, realname)
+                VALUES (%s, %s, %s, %s)
+                """, (username, salt, saltedAndHashedPassword, realname,))
+
+        db_conn.commit()
+
+        resp_json = {
+            "acknowledged": True
+        }
+        resp.status = falcon.HTTP_OK
+        resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
+
+
     def on_post(self, req, resp, username):
         """
         Change info about a user.  For now, just the password.

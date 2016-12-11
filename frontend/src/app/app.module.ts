@@ -32,7 +32,7 @@ import {MetadataComponent, FieldMetadataEditorComponent} from "./metadata.compon
 import {StudyMetadataEditorComponent, StudyManagementComponent} from "./study-management.component";
 import {LoginComponent} from "./login.component";
 import {ChangePasswordComponent} from "./change-password.component";
-import {UserManagementComponent, UserEditorComponent} from "./user-management.component";
+import {UserManagementComponent, UserEditorComponent, AddUserComponent} from "./user-management.component";
 
 
 @NgModule({
@@ -51,6 +51,7 @@ import {UserManagementComponent, UserEditorComponent} from "./user-management.co
     ChangePasswordComponent,
     UserManagementComponent,
     UserEditorComponent,
+    AddUserComponent,
     WelcomeComponent,
     BrowserComponent,
     DownloadComponent,

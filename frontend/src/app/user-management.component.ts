@@ -119,6 +119,119 @@ export class UserEditorComponent {
 
 
 @Component({
+  selector: 'add-user',
+  template: `
+    <div class="modal-dialog">
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" (click)="modal.hide()">&times;</button>
+          <h2 class="modal-title">Add New User</h2>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <input type="text" name="username" class="form-control" placeholder="Username" [(ngModel)]="username">
+            </div>
+            <div class="form-group">
+              <input type="text" name="realname" class="form-control" placeholder="Real Name" [(ngModel)]="realname">
+            </div>
+            <div class="form-group">
+              <input type="password" name="pass1" class="form-control" placeholder="Password" [(ngModel)]="password">
+            </div>
+            <div class="form-group">
+              <input type="password" name="pass2" class="form-control" placeholder="Confirm Password" [(ngModel)]="passwordConfirmation">
+            </div>
+            
+            <div *ngIf="errorMessage">
+              <div class="alert alert-danger">
+                {{ errorMessage }}
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <input *ngIf="!adding" type="submit" name="login" class="btn btn-primary" (click)="addUser()" value="Add User">
+              <input *ngIf=" adding" type="submit" name="login" class="btn btn-primary" disabled value="Adding User...">
+            </div>
+				  </form>
+        </div>
+      </div>
+
+    </div>
+  `
+})
+export class AddUserComponent {
+  @Input() modal: ModalDirective;
+  username: string;
+  realname: string;
+  password: string;
+  passwordConfirmation: string;
+
+  @Output() userAdded = new EventEmitter<User>();
+
+  errorMessage: string;
+  adding: boolean;
+
+  constructor(
+    private _auth: AuthenticationService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) { }
+
+  refresh(): void {
+    this.username = '';
+    this.realname = '';
+    this.password = '';
+    this.passwordConfirmation = '';
+    this.errorMessage = '';
+    this.adding = false;
+  }
+
+  addUser(): void {
+    let self = this;
+
+    if (this.password === '') {
+      this.errorMessage = 'Please enter a password.';
+    } else if (this.password !== this.passwordConfirmation) {
+      this.errorMessage = 'Passwords do not match.  Check your inputs and try again.'
+    } else {
+      this.errorMessage = '';
+
+      this.adding = true;
+
+      // Capture a few variables for success action later
+      let addedUserName = this.username;
+      let addedRealName = this.realname;
+
+      $.ajax({
+        type: 'PUT',
+        url: `http://localhost:23456/users/${this.username}`,
+        headers: this._auth.headers(),
+        dataType: 'json',
+        data: JSON.stringify({
+          "realname": this.realname,
+          "password": this.password
+        }),
+        success: () => {
+          self.modal.hide();
+          self.userAdded.emit({
+            username: addedUserName,
+            realname: addedRealName
+          });
+        },
+        error: () => {
+          self.errorMessage = 'Failed to add new user!';
+          self.adding = false;
+        },
+        complete: () => {
+          self.changeDetectorRef.detectChanges();
+        }
+      })
+    }
+  }
+}
+
+
+@Component({
   template: `
   <h2>Manage Users</h2>
 
@@ -136,7 +249,11 @@ export class UserEditorComponent {
       ></user-editor>
     <div class="row">
 
-      <div class="col-xs-2">
+      <div class="col-xs-4">
+        <button type="submit" class="btn btn-success" (click)="addUserModal.show()">
+          <span class="glyphicon glyphicon-plus"></span> Add New User
+        </button>
+        
         <button type="submit" class="btn btn-primary" (click)="saveChanges()"
           [attr.disabled]="savingChanges || null">
           <span *ngIf="!savingChanges">Save Changes</span>
@@ -144,7 +261,7 @@ export class UserEditorComponent {
         </button>
       </div>
 
-      <div class="col-xs-10" *ngIf="!savingChanges && saveDone">
+      <div class="col-xs-8" *ngIf="!savingChanges && saveDone">
         <div *ngIf=" !saveError" class="alert alert-success" role="alert">Changes saved!</div>
         <div *ngIf="!!saveError" class="alert alert-danger" role="alert">Save failed: {{ saveError }}</div>
       </div>
@@ -155,9 +272,15 @@ export class UserEditorComponent {
       </div>
     </div>
   </div>
+    
+  <div bsModal #addUserModal="bs-modal" class="modal fade" role="dialog" (onShow)="addUserPopup.refresh()">
+    <add-user [modal]="addUserModal" (userAdded)="userAdded($event)"></add-user>
+  </div>
   `
 })
 export class UserManagementComponent implements OnInit {
+  @ViewChild(AddUserComponent) addUserPopup: AddUserComponent;
+
   ready = false;
   users: { [username: string]: User } = {};
   userState: { [username: string]: UserState } = {};
@@ -193,15 +316,27 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
+  userAdded(newUserInfo: User) {
+    let username = newUserInfo.username;
+    this.users = Object.assign(Object.assign({}, this.users), {[username]: newUserInfo});  // Important to create a new object for Angular2 change detection to be triggered
+    this.userState[username] = UserState.Present;
+    this.form.addControl(username, this.formGroupForUser(newUserInfo));
+    this._changeDetectorRef.detectChanges();
+  }
+
+  formGroupForUser(user: User): FormGroup {
+    return new FormGroup({
+      username:        new FormControl(user.username),
+      realname:        new FormControl(user.realname)
+    });
+  }
+
   makeFormGroup(): FormGroup {
     let group: any = {};
 
     for (let username in this.users) {
       let user = this.users[username];
-      group[username] = new FormGroup({
-        username:        new FormControl(user.username),
-        realname:        new FormControl(user.realname)
-      });
+      group[username] = this.formGroupForUser(user);
     }
     return new FormGroup(group);
   }
@@ -243,7 +378,7 @@ export class UserManagementComponent implements OnInit {
       type: 'POST',
       url: 'http://localhost:23456/users',
       headers: this._auth.headers(),
-      data: JSON.stringify(Object.values(this.form.value)),
+      data: JSON.stringify(Object.values(this.form.value).filter((info: User) => self.userState[info.username] == UserState.Present)),
       dataType: 'json',
       success: function(response) {
         self.savingChanges = false;
