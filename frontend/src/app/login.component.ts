@@ -4,6 +4,7 @@ import {StudyService} from "./services/study.service";
 import {Study} from "./common/study.model";
 import {ModalDirective} from "ng2-bootstrap";
 import {AuthenticationService} from "./services/authentication.service";
+import {FiltersService} from "./services/filters.service";
 
 interface GetUserResponse {
   realname: string
@@ -54,6 +55,7 @@ export class LoginComponent {
 
   constructor(
     private _auth: AuthenticationService,
+    private _filtersService: FiltersService,
     private changeDetectorRef: ChangeDetectorRef
   ) { }
 
@@ -77,6 +79,7 @@ export class LoginComponent {
       dataType: 'json',
       success: (data: GetUserResponse) => {
         self._auth.login(this.username, this.password, data.realname);
+        self._filtersService.pulse();
         self.modal.hide();
       },
       error: () => {

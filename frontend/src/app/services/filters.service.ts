@@ -71,6 +71,11 @@ export class FiltersService {
     }))
   }
 
+  // Force all components to reprocess filters (e.g., after logging in as an admin)
+  pulse(): void {
+    this._filters.next(this._filters.getValue());
+  }
+
   setSampleFilter(category: string, valueName: string, include: boolean): void {
     // Copy out relevant filters section, if any
     let curFilters: SampleFilters = _.cloneDeep(this.getFilters().sampleFilters);
