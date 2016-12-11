@@ -10,12 +10,14 @@ export class AuthenticationService {
 
   constructor() {
     this.logout();
+
+    // TODO: Remove this in production!
+    this.login("admin", "admin", "Administrator");
   }
 
   // jQuery `headers` for authentication
   // See http://stackoverflow.com/a/11960692
   headers(): { Authorization?: string } {
-    console.log(`Headers: ${this.username} ${this.password}`)
     if (this.isGuest) {
       return {};
     } else {

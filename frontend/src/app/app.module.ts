@@ -31,6 +31,8 @@ import {ModalModule, TooltipDirective, TooltipModule} from "ng2-bootstrap";
 import {MetadataComponent, FieldMetadataEditorComponent} from "./metadata.component";
 import {StudyMetadataEditorComponent, StudyManagementComponent} from "./study-management.component";
 import {LoginComponent} from "./login.component";
+import {ChangePasswordComponent} from "./change-password.component";
+import {UserManagementComponent, UserEditorComponent} from "./user-management.component";
 
 
 @NgModule({
@@ -46,6 +48,9 @@ import {LoginComponent} from "./login.component";
     CBiTComponent,
     NavBarComponent,
     LoginComponent,
+    ChangePasswordComponent,
+    UserManagementComponent,
+    UserEditorComponent,
     WelcomeComponent,
     BrowserComponent,
     DownloadComponent,

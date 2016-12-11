@@ -24,7 +24,7 @@ from resources.metadata import (
     MetadataFieldsMulti,
     MetadataField
 )
-from resources.user import UserResource
+from resources.user import UserResource, UsersResource
 
 
 
@@ -70,4 +70,5 @@ app.add_route('/metadata/fields', MetadataFields())
 app.add_route('/metadata/fields/_multi', MetadataFieldsMulti())
 app.add_route('/metadata/fields/{field_name}', MetadataField())
 
+app.add_route('/users', UsersResource())
 app.add_route('/users/{username}', UserResource())

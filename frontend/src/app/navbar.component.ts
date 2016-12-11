@@ -8,6 +8,8 @@ import {DownloadSelectionService} from "./services/download-selection.service";
 import {DownloadComponent} from "./download.component";
 import {AuthenticationService} from "./services/authentication.service";
 import {LoginComponent} from "./login.component";
+import {FiltersService} from "./services/filters.service";
+import {ChangePasswordComponent} from "./change-password.component";
 
 @Component({
   selector: 'navbar',
@@ -45,7 +47,7 @@ import {LoginComponent} from "./login.component";
             <li *ngIf="isAdmin()" dropdown class="dropdown">
               <a dropdownToggle>
                 <span class="glyphicon glyphicon-wrench"></span>
-                Admin
+                Admin (logged in as {{ getRealname() }})
                 <span class="caret"></span>
               </a>
               
@@ -59,6 +61,13 @@ import {LoginComponent} from "./login.component";
                 <li [class.active]="isCurrentRoute('/metadata')">
                   <a routerLink="/metadata"  ><span class="glyphicon glyphicon-wrench"></span> Edit Field Metadata</a>
                 </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a href="#" (click)="$event.preventDefault(); changePasswordModal.show()"><span class="glyphicon glyphicon-lock"></span> Change Password</a>
+                </li>
+                <li [class.active]="isCurrentRoute('/users')">
+                  <a routerLink="/users"  ><span class="glyphicon glyphicon-user"></span> Manage Users</a>
+                </li>
                 <li>
                   <a href="#" (click)="$event.preventDefault(); logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
                 </li>
@@ -69,6 +78,7 @@ import {LoginComponent} from "./login.component";
           </ul>
           
           <ul class="nav navbar-nav navbar-right">
+          
             <li dropdown class="dropdown" [class.selectionLI]="!isSelectionEmpty">
               <a dropdownToggle class="selectionLink">
                 <selection-indicator></selection-indicator>
@@ -101,6 +111,10 @@ import {LoginComponent} from "./login.component";
     <div bsModal #loginModal="bs-modal" class="modal fade" role="dialog" (onShow)="loginPopup.refresh()">
       <login [modal]="loginModal"></login>
     </div>
+      
+    <div bsModal #changePasswordModal="bs-modal" class="modal fade" role="dialog" (onShow)="changePasswordPopup.refresh()">
+      <change-password [modal]="changePasswordModal" [username]="_auth.username"></change-password>
+    </div>
     
     <div bsModal #downloadModal="bs-modal" class="modal fade" role="dialog" (onShow)="downloadCheckout.refresh()">
       <download-checkout [modal]="downloadModal"></download-checkout>
@@ -131,12 +145,14 @@ export class NavBarComponent implements OnInit, OnDestroy {
   stopStream = new Subject<string>();
   @ViewChild(DownloadComponent) downloadCheckout: DownloadComponent;
   @ViewChild(LoginComponent) loginPopup: LoginComponent;
+  @ViewChild(ChangePasswordComponent) changePasswordPopup: ChangePasswordComponent;
 
   constructor(
     private _auth: AuthenticationService,
     private _downloadSelectionService: DownloadSelectionService,
     private changeDetectorRef: ChangeDetectorRef,
-    private _router : Router
+    private _router : Router,
+    private _filtersService: FiltersService
   ) { }
 
   ngOnInit(): void {
@@ -159,8 +175,20 @@ export class NavBarComponent implements OnInit, OnDestroy {
     return !this._auth.isGuest;
   }
 
+  getRealname() {
+    if (this._auth.isGuest) {
+      return "Guest";
+    } else {
+      return this._auth.realname;
+    }
+  }
+
   logout() {
     this._auth.logout();
+    this._filtersService.pulse();
+
+    // Go to Browse pane in case we were in an admin-only screen
+    this._router.navigate(['/browse']);
   }
 
   adminRealName() {
