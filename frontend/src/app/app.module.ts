@@ -33,7 +33,8 @@ import {StudyMetadataEditorComponent, StudyManagementComponent} from "./study-ma
 import {LoginComponent} from "./login.component";
 import {ChangePasswordComponent} from "./change-password.component";
 import {UserManagementComponent, UserEditorComponent, AddUserComponent} from "./user-management.component";
-
+import {Ng2SliderComponent} from "./slider/ng2-slider.component";
+import {SlideAbleDirective} from "./slider/slideable.directive";
 
 @NgModule({
   imports: [
@@ -76,7 +77,10 @@ import {UserManagementComponent, UserEditorComponent, AddUserComponent} from "./
     SelectionIndicatorComponent,
     DropdownDirective,
     DropdownMenuDirective,
-    DropdownToggleDirective
+    DropdownToggleDirective,
+
+    Ng2SliderComponent,
+    SlideAbleDirective
   ],
   bootstrap: [ CBiTComponent ]
 })
