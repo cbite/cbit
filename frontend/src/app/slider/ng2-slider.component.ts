@@ -24,7 +24,7 @@ export enum RangeHandle {Start, End, Both}
 @Component({
   selector: 'ng2-slider',
   template: `
-    <div class="slider-input-block">
+    <!--<div class="slider-input-block">
       <input type="number"
              id="{{id + '-start-value'}}"
              name="{{id + '-start-value'}}"
@@ -48,7 +48,7 @@ export enum RangeHandle {Start, End, Both}
              (change)="valueChanged($event, 1)"
              #endInput
       />
-    </div>
+    </div>-->
     
     <div class="slider-container">
       <div #ribbon
@@ -217,8 +217,6 @@ export class Ng2SliderComponent {
   @ViewChild('startHandle') private startHandle: HorizontallySlidableDirective;
   @ViewChild('endHandle') private endHandle: HorizontallySlidableDirective;
 
-  private stepX: any;
-
   constructor(
     private CDR:ChangeDetectorRef,
     private _elementRef: ElementRef
@@ -242,9 +240,6 @@ export class Ng2SliderComponent {
 
     if (this.startHandle) this.valueChanged({}, RangeHandle.Start);
     if (this.endHandle) this.valueChanged({}, RangeHandle.End);
-
-    this.stepX = this.calculateStepX();
-
   }
 
   ngOnChanges() {
@@ -358,7 +353,7 @@ export class Ng2SliderComponent {
     this.onRangeChanging.emit([this.startValue, this.endValue]);
   }
 
-  calculateStepX(): number {
+  get stepX(): number {
     let boundingRect = this.ribbon.nativeElement.getBoundingClientRect();
     return this.stepValue * (boundingRect.right - boundingRect.left) / (this.max - this.min);
   }
