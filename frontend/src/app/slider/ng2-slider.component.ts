@@ -13,12 +13,10 @@ import {
   ElementRef,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  EventEmitter,
-  ViewContainerRef,
-  Renderer
+  EventEmitter
 } from '@angular/core'
 
-import {SlideAbleDirective, BoundingRectClass, IEventSlideAble} from './slideable.directive';
+import {HorizontallySlidableDirective} from './horizontally-slidable.directive';
 
 export enum RangeHandle {Start, End, Both}
 
@@ -57,28 +55,32 @@ export enum RangeHandle {Start, End, Both}
            id="{{id + '-ribbon'}}"
            class="range-ribbon">
       </div>
+      <div #ribbonInRange
+           id="{{id + '-ribbon-inrange'}}"
+           class="range-ribbon-inrange"
+           [style.left.px]="leftPx()"
+           [style.right.px]="rightPx()"
+           >
+      </div>
       <span #start
-            slideAble
-            #startHandler="slideable"
-            slideDirection="horisontal"
+            horizontallySlidable
+            #startHandle="slidable"
             boundElement="{{id + '-ribbon'}}"
             [dynamicRightLimit]="id + '-right-handle'"
-            (onStopSliding)="onStopSliding($event)"
-            (onSliding)="onSliding($event)"
+            (onStopSliding)="onStopSliding($event, 'start')"
+            (onSliding)="onSliding($event, 'start')"
             [id]="id + '-left-handle'"
-            [parent]="instance"
             [step]="stepX"
             class="slider-handle"
             tabindex="0"
             style="left: 0%;"></span>
       <span #end
-            slideAble
-            #endHandler="slideable"
-            slideDirection="horisontal"
+            horizontallySlidable
+            #endHandle="slidable"
             boundElement="{{id + '-ribbon'}}"
             [dynamicLeftLimit]="id + '-left-handle'"
-            (onStopSliding)="onStopSliding($event)"
-            (onSliding)="onSliding($event)"
+            (onStopSliding)="onStopSliding($event, 'end')"
+            (onSliding)="onSliding($event, 'end')"
             [id]="id + '-right-handle'"
             [step]="stepX"
             class="slider-handle"
@@ -87,6 +89,7 @@ export enum RangeHandle {Start, End, Both}
     </div>
   `,
   styles: [`
+    /* Default styles */
     .slider-container {
       position: relative;
       clear: both;
@@ -106,6 +109,17 @@ export enum RangeHandle {Start, End, Both}
       color: #333;
       top: 4px;
     }
+    .range-ribbon-inrange {
+      position: absolute;
+      height: 10px;
+      border: 1px solid #ddd;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      border-radius: 4px;
+      background: #337ab7 50% top repeat-x;
+      color: #333;
+      top: 4px;
+    }
     .slider-handle {
       box-sizing: content-box;
       position: absolute;
@@ -121,6 +135,39 @@ export enum RangeHandle {Start, End, Both}
     .slider-handle.sliding {
       border: 1px solid #fbcb09;
       background: #fdf5ce 50% 50% repeat-x;
+    }
+    
+    /* Spice things up */
+    .range-ribbon {
+      left: 0%;
+      width: 100%;
+      height: 4px;
+      border: solid 1px;
+      position: absolute;
+      top: 7px;
+    }
+    .range-ribbon-inrange {
+      left: 0%;
+      right: 0%;
+      height: 4px;
+      border: solid 1px;
+      position: absolute;
+      top: 7px;
+    }
+    .slider-handle {
+      width: 8px;
+      height: 18px;
+      border: solid 1px black;
+      position: absolute;
+      background-color: #337ab7;
+    }
+    .slider-handle.sliding {
+      width: 2px;
+      border: none;
+      background-color: #23527c;
+    }
+    .slider-input-block {
+      display: none;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -157,7 +204,8 @@ export class Ng2SliderComponent {
   }
   set endValueStr(value: string) { this.endValue = +value; }
 
-  @Output('onRangeChanged') rangeChangedEvent = new EventEmitter<Ng2SliderComponent>();
+  @Output() onRangeChanged = new EventEmitter<number[]>();
+  @Output() onRangeChanging = new EventEmitter<number[]>();
 
 
 
@@ -165,18 +213,16 @@ export class Ng2SliderComponent {
   private id: string;
 
   @ViewChild('ribbon') ribbon:ElementRef;
-  @ViewChild('startHandler') private startHandler: SlideAbleDirective;
-  @ViewChild('endHandler') private endHandler: SlideAbleDirective;
-
-  // Self-instance
-  public instance: Ng2SliderComponent;
+  @ViewChild('ribbonInRange') ribbonInRange:ElementRef;
+  @ViewChild('startHandle') private startHandle: HorizontallySlidableDirective;
+  @ViewChild('endHandle') private endHandle: HorizontallySlidableDirective;
 
   private stepX: any;
 
-  constructor(private CDR:ChangeDetectorRef, private _elementRef: ElementRef) {
-    // Create self instance as property for comfortable providing it to SlideAble directive
-    this.instance = this;
-  }
+  constructor(
+    private CDR:ChangeDetectorRef,
+    private _elementRef: ElementRef
+  ) { }
 
   ngOnInit() {
     this.ensureValidConfig();
@@ -194,16 +240,10 @@ export class Ng2SliderComponent {
       this.id = this._elementRef.nativeElement.id
     }
 
-    this.range = new Range({
-      element: this.ribbon.nativeElement,
-      min: this.min,
-      max: this.max
-    });
+    if (this.startHandle) this.valueChanged({}, RangeHandle.Start);
+    if (this.endHandle) this.valueChanged({}, RangeHandle.End);
 
-    if (this.startHandler) this.valueChanged({}, RangeHandle.Start);
-    if (this.endHandler) this.valueChanged({}, RangeHandle.End);
-
-    this.stepX = this.range.calculateStepX(this.stepValue);
+    this.stepX = this.calculateStepX();
 
   }
 
@@ -255,39 +295,18 @@ export class Ng2SliderComponent {
   valueChanged(el: any, handle:RangeHandle = RangeHandle.Both) {
 
     if (handle == RangeHandle.Both || handle == RangeHandle.Start) {
-      // Affixing start value to the step grid
-      this.startValue = this.pin(this.startValue);
 
-      // Check for case when the start value is over the end value
-      if (this.startValue > this.endValue) {
-        this.startValue = this.pin(this.endValue);
-      }
+      // Align to grid and ensure value is within range
+      this.startValue = Math.max(this.min, Math.min(this.endValue, this.startValue));
 
-      // Check for case when the start value is under the minimal value
-      if (this.startValue < this.min) {
-        this.startValue = this.pin(this.min);
-      }
-
-      // Force start handle to redrawing
-      this.startHandler.redraw(this.range.calculateXFromValue(this.startValue), 0);
+      this.startHandle.redraw(this.calculateXFromValue(this.startValue), 0);
     }
 
     if (handle == RangeHandle.Both || handle == RangeHandle.End) {
-      // Affixing end value to the step grid
-      this.endValue = this.pin(this.endValue);
+      // Align to grid and ensure value is within range
+      this.endValue = Math.max(this.startValue, Math.min(this.max, this.endValue));
 
-      // Check for case when the end value is under the start value
-      if (this.startValue > this.endValue) {
-        this.endValue = this.pin(this.endValue);
-      }
-
-      // Check for case when the end value is over the maximum value
-      if (this.endValue > this.max) {
-        this.endValue = this.pin(this.max);
-      }
-
-      // Force end handle to redrawing
-      this.endHandler.redraw(this.range.calculateXFromValue(this.endValue), 0);
+      this.endHandle.redraw(this.calculateXFromValue(this.endValue), 0);
     }
 
     this.CDR.markForCheck();
@@ -295,8 +314,20 @@ export class Ng2SliderComponent {
 
   }
 
+  leftPx(): number {
+    let zeroLeft = this.ribbonInRange.nativeElement.getBoundingClientRect().left - parseInt(getComputedStyle(this.ribbonInRange.nativeElement).left);
+    if (isNaN(zeroLeft)) zeroLeft = 0;
+    return this.calculateXFromValue(this.startValue) - zeroLeft;
+  }
+
+  rightPx(): number {
+    let zeroLeft = this.ribbonInRange.nativeElement.getBoundingClientRect().left - parseInt(getComputedStyle(this.ribbonInRange.nativeElement).left);
+    if (isNaN(zeroLeft)) zeroLeft = 0;
+    return this.calculateXFromValue(this.max - this.endValue) - zeroLeft;
+  }
+
   rangeChangedTrigger() {
-    this.rangeChangedEvent.emit(this);
+    this.onRangeChanged.emit([this.startValue, this.endValue]);
   }
 
   setStartValue(v: any) {
@@ -313,60 +344,27 @@ export class Ng2SliderComponent {
     this.CDR.markForCheck();
   }
 
-  onStopSliding(event: IEventSlideAble) {
+  onStopSliding(relativePercent: number, handleName: string) {
     this.rangeChangedTrigger();
   }
 
   // Handling 'onsliding' event from SlideAbleDirective
-  onSliding(event: IEventSlideAble) {
+  onSliding(relativePercent: number, handleName: string) {
     var handle = RangeHandle.Both;
-    if (event.elementId == this.id+'-left-handle') handle = RangeHandle.Start;
-    if (event.elementId == this.id+'-right-handle') handle = RangeHandle.End;
-    this.refreshInputBoxByPercent(event.relativePercentHorisontal, handle);
-  }
-}
+    if (handleName === 'start') handle = RangeHandle.Start;
+    if (handleName === 'end') handle = RangeHandle.End;
+    this.refreshInputBoxByPercent(relativePercent, handle);
 
-
-export class Range {
-
-  private boundingRect:BoundingRectClass;
-
-  constructor(private config:{element:any, min:any, max:any}) {
-    if (typeof(this.config.min == 'string')) this.config.min = parseFloat(this.config.min);
-    if (typeof(this.config.max == 'string')) this.config.max = parseFloat(this.config.max);
-    this.boundingRect = config.element.getBoundingClientRect();
+    this.onRangeChanging.emit([this.startValue, this.endValue]);
   }
 
-  // Calculate relative handle position (percent) from value
-  calculatePercentFromValue(value:number) {
-    return Math.round(100 * (value - this.config.min) / (this.config.max - this.config.min));
+  calculateStepX(): number {
+    let boundingRect = this.ribbon.nativeElement.getBoundingClientRect();
+    return this.stepValue * (boundingRect.right - boundingRect.left) / (this.max - this.min);
   }
 
-  calculateXFromValue(value:number) {
-    return  this.boundingRect.left +  Math.round((this.boundingRect.right - this.boundingRect.left) * (value - this.config.min) / (this.config.max - this.config.min));
+  calculateXFromValue(value: number): number {
+    let boundingRect = this.ribbon.nativeElement.getBoundingClientRect();
+    return boundingRect.left + (boundingRect.right - boundingRect.left) * (value - this.min) / (this.max - this.min);
   }
-
-  // Calculate relative handle position (percent) from his position coordinate
-  calculatePercentFromX(x:number) {
-    return Math.round(100 * (x - this.boundingRect.left) / (this.boundingRect.right - this.boundingRect.left));
-  }
-
-  // Calculate value from handle position coordinate
-  calculateValueFromX(x:number) {
-    return this.config.min + Math.round((this.config.max - this.config.min) * (x - this.boundingRect.left) / (this.boundingRect.right - this.boundingRect.left));
-  }
-
-  calculateStepX(step: any) {
-    return step * (this.boundingRect.right - this.boundingRect.left) / (this.config.max - this.config.min);
-  }
-
-
-  getLeftX() {
-    return this.boundingRect.left;
-  }
-
-  getRightX() {
-    return this.boundingRect.right;
-  }
-
 }

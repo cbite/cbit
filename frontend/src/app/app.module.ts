@@ -34,7 +34,7 @@ import {LoginComponent} from "./login.component";
 import {ChangePasswordComponent} from "./change-password.component";
 import {UserManagementComponent, UserEditorComponent, AddUserComponent} from "./user-management.component";
 import {Ng2SliderComponent} from "./slider/ng2-slider.component";
-import {SlideAbleDirective} from "./slider/slideable.directive";
+import {HorizontallySlidableDirective} from "./slider/horizontally-slidable.directive";
 
 @NgModule({
   imports: [
@@ -80,7 +80,7 @@ import {SlideAbleDirective} from "./slider/slideable.directive";
     DropdownToggleDirective,
 
     Ng2SliderComponent,
-    SlideAbleDirective
+    HorizontallySlidableDirective
   ],
   bootstrap: [ CBiTComponent ]
 })

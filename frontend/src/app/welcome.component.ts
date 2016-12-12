@@ -1,24 +1,33 @@
-import { Component } from '@angular/core';
+import {Component, ChangeDetectorRef} from '@angular/core';
 
 @Component({
   template: `
     <div>
       Video tutorial of cBiT here...
     
-      <!--
+      
       <div class="container">
-        <ng2-slider
-          min="0"
-          max="150"
-          startValue="0"
-          endValue="150"
-          (onRangeChanged)="rangeValueChanged($event, 'range_3_start', 'range_3_end')">
-        </ng2-slider>
-        <p class="value-box">
-          Values: <span class="value-span" id="range_3_start">0</span> - <span class="value-span" id="range_3_end">150</span>
-        </p>
+        <div class="row">
+          <div class="col-xs-4">
+            <ng2-slider
+              min="0"
+              max="150"
+              startValue="0"
+              endValue="150"
+              stepValue="10"
+              (onRangeChanged)="rangeValueChanged($event)"
+              (onRangeChanging)="rangeValueChanging($event)">
+            </ng2-slider>
+            <p>
+              Values (final): {{ startValue }} - {{ endValue }}
+            </p>
+            <p>
+              Values (changing): {{ startValueChanging }} - {{ endValueChanging }}
+            </p>
+          </div>
+        </div>
       </div>
-      -->
+      
     </div>
   `,
   styles: [`
@@ -48,20 +57,29 @@ import { Component } from '@angular/core';
   `]
 })
 export class WelcomeComponent {
-  rangeValueChanged(event: any, start:any, end:any) {
-    var start_el = this.getElement(start);
-    var end_el = this.getElement(end);
-    start_el.innerText = event.startValue;
-    end_el.innerText = event.endValue;
+
+  startValueChanging: number;
+  endValueChanging: number;
+  startValue: number;
+  endValue: number;
+
+  constructor(
+    private _cdr: ChangeDetectorRef
+  ) { }
+
+  rangeValueChanging(newRange: number[]) {
+    if (this.startValueChanging !== newRange[0] || this.endValueChanging !== newRange[1]) {
+      console.log(`Changing: ${JSON.stringify(newRange)}`);
+      [this.startValueChanging, this.endValueChanging] = newRange;
+      this._cdr.detectChanges();
+    }
   }
 
-  getElement(data:any): any {
-    if (typeof(data)=='string') {
-      return document.getElementById(data);
+  rangeValueChanged(newRange: number[]) {
+    if (this.startValue !== newRange[0] || this.endValue !== newRange[1]) {
+      console.log(`Changed: ${JSON.stringify(newRange)}`);
+      [this.startValue, this.endValue] = newRange;
+      this._cdr.detectChanges();
     }
-    if (typeof(data)=='object' && data instanceof Element) {
-      return data;
-    }
-    return null;
   }
 }
