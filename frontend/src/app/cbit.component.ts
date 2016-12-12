@@ -8,6 +8,7 @@ import {AuthenticationService} from "./services/authentication.service";
   selector: 'cbit',
   template: `
     <navbar></navbar>
+    <img id="bg" src="public/images/achtergrond_transp_v3.png">
     <main>
       <router-outlet></router-outlet>
     </main>
@@ -16,6 +17,16 @@ import {AuthenticationService} from "./services/authentication.service";
     /* Move down content because we have a fixed navbar that is 50px tall */
     main {
       padding-top: 50px;
+    }
+
+    #bg {
+      position: fixed; 
+      top: 60px; 
+      right: 10px;
+       
+      width: 500px;
+      z-index: -1;
+      /*opacity: 0.5;*/
     }
   `],
   providers: [StudyService, FiltersService, DownloadSelectionService, AuthenticationService]
