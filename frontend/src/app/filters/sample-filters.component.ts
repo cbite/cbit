@@ -67,7 +67,8 @@ enum GlobalCheckboxState {
                   </select>
                   <span *ngIf="units().length === 1">{{ uiUnitName(dimensions, units()[0]) }}</span>
         </div>
-        <ul>
+        
+        <ul class="contents" *ngIf="!shouldUseSlider">
           <li *ngFor="let kv of allCountSorted" class="checkbox">
             <label [class.disabled]="!isEnabled(kv.key)">
               <input type="checkbox"
@@ -85,6 +86,23 @@ enum GlobalCheckboxState {
             </div>
           </li>
         </ul>
+        
+        <div class="contents slider-box" *ngIf="shouldUseSlider">
+          <div class="actualRange">
+            From {{ formatValueName(startValue + '') }} to {{ formatValueName(endValue + '') }}
+          </div>
+          <ng2-slider *ngIf="dataType === 'double'"
+                [min]="minValue"
+                [max]="maxValue"
+                [startValue]="startValue"
+                [endValue]="endValue"
+                [stepValue]="stepValue"
+                (onRangeChanged)="rangeValueChanged($event)"
+                (onRangeChanging)="rangeValueChanging($event)">
+          </ng2-slider>
+          <div class="minValue">{{ formatValueName(minValue + '') }}</div>
+          <div class="maxValue">{{ formatValueName(maxValue + '') }}</div>
+        </div>
       </div>
     </li>
   `,
@@ -119,8 +137,8 @@ enum GlobalCheckboxState {
       padding-top: 5px;
     }
     
-    ul {
-      padding-left: 30px;
+    .contents {
+      margin-left: 30px;
     }
     
     ul li {
@@ -147,6 +165,32 @@ enum GlobalCheckboxState {
     .disabled {
       color: #c0c0c0;
     }
+    
+    .slider-box {
+      position: relative;
+      padding-top: 20px
+    }
+    
+    .slider-box > .actualRange {
+      position: absolute;
+      top: 7px;
+      left: 0;
+      width: 100%;
+      overflow: visible;
+      text-align: center;
+    }
+    
+    .slider-box > .minValue {
+      position: absolute;
+      left: 0px;
+      top: 50px;
+    } 
+    
+    .slider-box > .maxValue {
+      position: absolute;
+      right: 0px;
+      top: 50px;
+    } 
   `]
 })
 export class SampleFiltersComponent implements OnInit, AfterViewChecked {
@@ -164,6 +208,14 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   dimensions: string = "none";
   chosenUnit: string = "none";
   dataType: string = "string";
+  isNumerical: boolean = false;
+  shouldUseSlider: boolean = false;
+  minValue: number = 0;
+  maxValue: number = 100;
+  get stepValue(): number { return (this.maxValue - this.minValue) / 200; }  // TODO: Improve
+  startValue: number = 0;
+  endValue: number = 100;
+  tickSize: number = 1;
   units(): string[] {
     let unitConverter = DimensionsRegister[this.dimensions];
     return (unitConverter ? unitConverter.getPossibleUnits() : []);
@@ -202,6 +254,15 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
       this.dimensions = fieldMeta.dimensions;
       this.chosenUnit = fieldMeta.preferredUnit;
       this.dataType = fieldMeta.dataType;
+
+      this.isNumerical = (
+        this.dataType === 'double' &&
+        this.category !== 'Phase composition' &&
+        this.category !== 'Elements composition' &&
+        this.category !== 'Wettability'
+      );
+      this.shouldUseSlider = this.isNumerical;
+
       this.updateAllCountsSorted();
 
       this._changeDetectorRef.detectChanges();
@@ -225,15 +286,29 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
     }
 
     let partialResult: Array<{ key: string, val: any }>;
-    switch (this.dataType) {
-      case "double":
-        partialResult = a.sort((x, y) => (+x.key) - (+y.key));  // Convert to numbers before sorting
-        break;
+    if (this.isNumerical) {
+      partialResult = a.sort((x, y) => (+x.key) - (+y.key));  // Convert to numbers before sorting
+    } else {
+      partialResult = a.sort((x, y) => x.key.trim().localeCompare(y.key.trim()));  // Prevent leading spaces from jumbling up items
+    }
 
-      case "string":
-      default:
-        partialResult = a.sort((x, y) => x.key.trim().localeCompare(y.key.trim()));  // Prevent leading spaces from jumbling up items
-        break;
+    // Take advantage that partialResult guaranteed non-empty and is sorted to determine numerical ranges and precision
+    if (this.isNumerical) {
+      this.minValue = +(partialResult[0].key);
+      this.maxValue = +(partialResult[partialResult.length-1].key);
+
+      let range: number;
+      if (this.minValue == this.maxValue) {
+        range = Math.abs(this.maxValue);
+      } else {
+        range = this.maxValue - this.minValue;
+      }
+
+      // Ensure enough precision in numbers to distinguish 1/100th of range
+      this.tickSize = range / 100;
+
+      this.startValue = this.minValue;
+      this.endValue = this.maxValue;
     }
 
     // Add <None> at the top if needed
@@ -314,6 +389,24 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
     return !!(this.filteredCounts[valueName]);
   }
 
+  rangeValueChanging(newRange: number[]) {
+    if (this.startValue !== newRange[0] || this.endValue !== newRange[1]) {
+      console.log(`Changing: ${JSON.stringify(newRange)}`);
+      [this.startValue, this.endValue] = newRange;
+      this._changeDetectorRef.detectChanges();
+    }
+  }
+
+  rangeValueChanged(newRange: number[]) {
+    if (this.startValue !== newRange[0] || this.endValue !== newRange[1]) {
+      console.log(`Changing: ${JSON.stringify(newRange)}`);
+      [this.startValue, this.endValue] = newRange;
+      this._changeDetectorRef.detectChanges();
+
+      // TODO: Enact appropriate changes
+    }
+  }
+
   anyEnabled(): boolean {
     // Enabled if any valueName is present in counts and its value is not zero
     for (let valueName in this.filteredCounts) {
@@ -355,16 +448,23 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
     }
 
     let unitConverter = DimensionsRegister[this.dimensions];
-    let convert = (
-      (this.dimensions == 'none' || !unitConverter)
-        ? (x: any) => x
-        : (x: any) => unitConverter.fromCanonicalUnits(+x, this.chosenUnit)
-    );
-    let unitUIName = (
-      (this.dimensions == 'none' || !unitConverter)
-        ? ''
-        : unitConverter.getUnitUIName(this.chosenUnit)
-    )
+    let convert: (val: any) => string;
+    let unitUIName: string;
+    if (this.dimensions == 'none' || !unitConverter) {
+      convert = (x: any) => x + '';
+      unitUIName = '';
+    } else {
+
+      let rawConvert = (x: any) => unitConverter.fromCanonicalUnits(+x, this.chosenUnit);
+
+      // Convert numbers with enough precision to distinguish a change of size this.tickSize
+      let tickSizeInChosenUnits = rawConvert(this.tickSize) - rawConvert(0);
+      let fixedDigits = Math.max(0, Math.min(20, -Math.floor(Math.log10(tickSizeInChosenUnits))));
+      convert = (x: any) => rawConvert(x).toFixed(fixedDigits);
+
+      unitUIName = unitConverter.getUnitUIName(this.chosenUnit);
+    }
+
 
     switch (this.category) {
       case 'Phase composition':
