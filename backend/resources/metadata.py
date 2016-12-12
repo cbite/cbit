@@ -1080,21 +1080,24 @@ def fetchControlsMatchingFilters(es, filters):
 
                     shouldClauses.append({ "bool": { "must": mustClauses } })
 
-        followUpQuery = {
-            "query": {
-                "bool": {
-                    "should": shouldClauses,
-                    "minimum_should_match": 1
-                }
-            },
-            "size": 10000,   # TODO: Think this through better
-        }
+        if not shouldClauses:
+            return []
+        else:
+            followUpQuery = {
+                "query": {
+                    "bool": {
+                        "should": shouldClauses,
+                        "minimum_should_match": 1
+                    }
+                },
+                "size": 10000,   # TODO: Think this through better
+            }
 
-        followUpResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE,
-                                    _source=None,  # Just care about IDs
-                                    body=followUpQuery)
+            followUpResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE,
+                                        _source=False,  # Just care about IDs
+                                        body=followUpQuery)
 
-        return [hit['_id'] for hit in followUpResults['hits']['hits']]
+            return [hit['_id'] for hit in followUpResults['hits']['hits']]
     else:
         return []
 
