@@ -59,7 +59,7 @@ export enum RangeHandle {Start, End, Both}
            id="{{id + '-ribbon-inrange'}}"
            class="range-ribbon-inrange"
            [style.left.px]="leftPx()"
-           [style.right.px]="rightPx()"
+           [style.width.px]="widthPx()"
            >
       </div>
       <span #start
@@ -111,6 +111,7 @@ export enum RangeHandle {Start, End, Both}
     }
     .range-ribbon-inrange {
       position: absolute;
+      width: 100%;
       height: 10px;
       border: 1px solid #ddd;
       -webkit-border-radius: 4px;
@@ -148,7 +149,7 @@ export enum RangeHandle {Start, End, Both}
     }
     .range-ribbon-inrange {
       left: 0%;
-      right: 0%;
+      width: 100%;
       height: 4px;
       border: solid 1px;
       position: absolute;
@@ -254,6 +255,14 @@ export class Ng2SliderComponent {
     this.max = this.pin(this.max);
   }
 
+  refreshUI() {
+    this.CDR.markForCheck();
+    this.CDR.detectChanges();
+
+    if (this.startHandle) this.valueChanged({}, RangeHandle.Start);
+    if (this.endHandle) this.valueChanged({}, RangeHandle.End);
+  }
+
   // Pin a value to the nearest multiple of `stepValue` above `min`
   pin(value: number): number {
     return this.min + Math.round((value - this.min) / this.stepValue) * this.stepValue;
@@ -272,8 +281,8 @@ export class Ng2SliderComponent {
         break;
     }
 
-    this.CDR.detectChanges();
     this.CDR.markForCheck();
+    this.CDR.detectChanges();
 
     return value;
   }
@@ -312,13 +321,13 @@ export class Ng2SliderComponent {
   leftPx(): number {
     let zeroLeft = this.ribbonInRange.nativeElement.getBoundingClientRect().left - parseInt(getComputedStyle(this.ribbonInRange.nativeElement).left);
     if (isNaN(zeroLeft)) zeroLeft = 0;
-    return this.calculateXFromValue(this.startValue) - zeroLeft;
+    let result = this.calculateXFromValue(this.startValue) - zeroLeft;
+    return result;
   }
 
-  rightPx(): number {
-    let zeroLeft = this.ribbonInRange.nativeElement.getBoundingClientRect().left - parseInt(getComputedStyle(this.ribbonInRange.nativeElement).left);
-    if (isNaN(zeroLeft)) zeroLeft = 0;
-    return this.calculateXFromValue(this.max - this.endValue) - zeroLeft;
+  widthPx(): number {
+    let result = this.calculateXFromValue(this.endValue) - this.calculateXFromValue(this.startValue);
+    return result;
   }
 
   rangeChangedTrigger() {
@@ -355,7 +364,8 @@ export class Ng2SliderComponent {
 
   get stepX(): number {
     let boundingRect = this.ribbon.nativeElement.getBoundingClientRect();
-    return this.stepValue * (boundingRect.right - boundingRect.left) / (this.max - this.min);
+    let result = this.stepValue * (boundingRect.right - boundingRect.left) / (this.max - this.min);
+    return result;
   }
 
   calculateXFromValue(value: number): number {

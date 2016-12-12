@@ -6,6 +6,7 @@ import {FiltersService, FilterMode} from "../services/filters.service";
 import {NULL_CATEGORY_NAME, StudyService} from "../services/study.service";
 import * as $ from 'jquery';
 import {DimensionsRegister} from "../common/unit-conversions";
+import {Ng2SliderComponent} from "../slider/ng2-slider.component";
 
 // TODO: Move all usages of this to backend
 export const HIDDEN_SAMPLE_FILTER_LABELS = {
@@ -39,7 +40,7 @@ enum GlobalCheckboxState {
   template: `
     <li class="top-level-li" *ngIf="!isTrivial()">
       <div class="fullLabel">
-        <a href="#" (click)="$event.preventDefault(); isVisible = !isVisible"
+        <a href="#" (click)="$event.preventDefault(); toggleVisible()"
            [class.disabled]="!anyEnabled()"
         >
           <span *ngIf=" isVisible" class="glyphicon glyphicon-triangle-bottom"></span>
@@ -50,7 +51,7 @@ enum GlobalCheckboxState {
             <input class="globalCheckbox" type="checkbox" [name]="category" value=""
                    [disabled]="!anyEnabled()"
                    (click)="clickGlobalCheckbox($event)">
-            <a href="#" (click)="$event.preventDefault(); isVisible = !isVisible"
+            <a href="#" (click)="$event.preventDefault(); toggleVisible()"
                [class.disabled]="!anyEnabled()"
                [tooltipHtml]="description" tooltipPlacement="right" [tooltipAppendToBody]="true">
               {{ categoryRealName }}
@@ -91,7 +92,8 @@ enum GlobalCheckboxState {
           <div class="actualRange">
             From {{ formatValueName(startValue + '') }} to {{ formatValueName(endValue + '') }}
           </div>
-          <ng2-slider *ngIf="dataType === 'double'"
+          <ng2-slider 
+                #slider
                 [min]="minValue"
                 [max]="maxValue"
                 [startValue]="startValue"
@@ -203,6 +205,7 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
     [value: string]: number   // Free-form mapping of values to counts
   } = {}
   categoryRealName: string;
+  @ViewChild(Ng2SliderComponent) slider: Ng2SliderComponent;
 
   description: string = "Fetching description...";
   dimensions: string = "none";
@@ -237,6 +240,17 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   }
   set isVisible(value: boolean) {
     this._filtersService.setFilterVisibility(this.category, value);
+  }
+
+  toggleVisible() {
+    console.log(`Toggling visibility of ${this.category}`);
+    this.isVisible = !this.isVisible;
+    if (this.slider) {
+      setTimeout(() => {
+        console.log(`About to refresh UI for ${this.category}`);
+        this.slider.refreshUI();
+      }, 4);
+    }
   }
 
   isTrivial(): boolean {
@@ -307,8 +321,8 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
       // Ensure enough precision in numbers to distinguish 1/100th of range
       this.tickSize = range / 100;
 
-      this.startValue = this.minValue;
-      this.endValue = this.maxValue;
+      this.startValue = this.minValue + (1/3)*range;
+      this.endValue = this.minValue + (2/3)*range;
     }
 
     // Add <None> at the top if needed
@@ -364,7 +378,6 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
         globalCheckbox.prop({indeterminate: true});
         break;
     }
-
   }
 
   isValIncluded(valueName: string): boolean {

@@ -65,7 +65,7 @@ export class HorizontallySlidableDirective {
     private renderer: Renderer
   ) { }
 
-  private lastViewportX: number;
+  private lastViewportX: number = undefined;
 
   // Convert pixel coordinates (i.e., where (0,0) is the viewport's top-left corner) to local coordinates
   // (i.e., what you can directly set for styles "left" and "top")
@@ -95,9 +95,6 @@ export class HorizontallySlidableDirective {
     document.onmouseup = (event: any) => { this.slideStop(event); }
     document.ontouchend = (event: any) => { this.slideStop(event); }
 
-    let handleRect = this.recalcHandleRect();
-    this.lastViewportX = handleRect.left + Math.round(handleRect.width / 2);
-
     // Change styles
     this.renderer.setElementClass(this.el.nativeElement, 'sliding', true);
 
@@ -118,9 +115,9 @@ export class HorizontallySlidableDirective {
     if (pinnedViewportX !== this.lastViewportX) {
       let pinnedLocalX = this.viewportToLocalX(pinnedViewportX);
       this.el.nativeElement.style.left = pinnedLocalX - Math.round(handleRect.width / 2) + 'px';
-      this.lastViewportX = pinnedViewportX;
 
       if (emit) {
+        this.lastViewportX = pinnedViewportX;
         this.slidingEvent.emit(this.relativePercent());
       }
     }
@@ -132,6 +129,7 @@ export class HorizontallySlidableDirective {
     document.onmouseup = null;
     document.ontouchend = null;
 
+    this.lastViewportX = undefined;
     this.renderer.setElementClass(this.el.nativeElement, 'sliding', false);
 
     this.stopSlidingEvent.emit(this.relativePercent());
