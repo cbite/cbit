@@ -4,34 +4,47 @@ from enum import Enum
 class FilterMode(Enum):
     AllButThese = 0
     OnlyThese = 1
+    Range = 2
 
 
 class SampleFilter(object):
-    def __init__(self, mode, detail):
+    def __init__(self, mode, detail, rangeDetail):
         """
         Python wrapper object for the corresponding SampleFilter object:
 
         export interface SampleFilter {
           mode: FilterMode,
-          detail: {
+          detail?: {
             // If mode is AllButThese, include every value category except those listed below.
             // Otherwise, if mode is OnlyThese, only include the values below.
             [valueName: string]: boolean
+          },
+          rangeDetail?: {
+            // If mode is Range, include every value in the range below (inclusive),
+            // possibly including sample where the value is unspecified
+            startValue: number;
+            endValue: number;
+            includeUnspecified: boolean;
           }
         }
         """
         self.mode = mode
         self.detail = detail
+        self.rangeDetail = rangeDetail
 
     @staticmethod
     def from_json(jsObj):
-        return SampleFilter(mode=FilterMode(jsObj["mode"]), detail=jsObj["detail"])
+        return SampleFilter(mode=FilterMode(jsObj["mode"]), detail=jsObj.get("detail"), rangeDetail=jsObj.get("rangeDetail"))
 
     def to_json(self):
-        return {
+        result = {
             "mode": self.mode.value,
-            "detail": self.detail
         }
+        if self.detail:
+            result["detail"] = self.detail
+        if self.rangeDetail:
+            result["rangeDetail"] = self.rangeDetail
+        return result
 
 
 class FiltersState(object):

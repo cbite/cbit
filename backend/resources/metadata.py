@@ -957,13 +957,32 @@ def buildESQueryPieces(filters, controlStudyIds = [], invisibleStudyIds = []):
         })
 
     for category, sampleFilter in filters.sampleFilters.iteritems():
-        queryClause = {
-            "terms": {
-                category: [k for k in sampleFilter.detail.iterkeys() if k != NULL_CATEGORY_NAME]
-            }
-        }
 
-        if NULL_CATEGORY_NAME in sampleFilter.detail:
+        includeUnspecified = True
+
+        if sampleFilter.mode in (FilterMode.AllButThese, FilterMode.OnlyThese):
+            queryClause = {
+                "terms": {
+                    category: [k for k in sampleFilter.detail.iterkeys() if k != NULL_CATEGORY_NAME]
+                }
+            }
+            includeUnspecified = NULL_CATEGORY_NAME in sampleFilter.detail
+
+        elif sampleFilter.mode == FilterMode.Range:
+            queryClause = {
+                "range": {
+                    category: {
+                        "gte": sampleFilter.rangeDetail["startValue"],
+                        "lte": sampleFilter.rangeDetail["endValue"],
+                    }
+                }
+            }
+            includeUnspecified = sampleFilter.rangeDetail["includeUnspecified"]
+
+        else:
+            raise ValueError("Unrecognized filter mode {0}".format(sampleFilter.mode))
+
+        if includeUnspecified:
             queryClause = {
                 "bool": {
                     "should": [
@@ -975,8 +994,10 @@ def buildESQueryPieces(filters, controlStudyIds = [], invisibleStudyIds = []):
 
         if sampleFilter.mode == FilterMode.AllButThese:
             mustNotClause[category] = queryClause
-        elif sampleFilter.mode == FilterMode.OnlyThese:
+        elif sampleFilter.mode in (FilterMode.OnlyThese, FilterMode.Range):
             mustClause[category] = queryClause
+        else:
+            raise ValueError("Unrecognized filter mode {0}".format(sampleFilter.mode))
 
     return ESQueryPieces(shouldClauses, mustClause, mustNotClause, globalMustNotClauses)
 
