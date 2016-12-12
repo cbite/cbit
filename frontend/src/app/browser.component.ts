@@ -52,6 +52,7 @@ export class BrowserComponent implements OnInit, OnDestroy {
     this._filtersService.filters
       .switchMap(filters => {
         this.ready = false;
+        this.changeDetectorRef.detectChanges();
         return Observable.fromPromise(<Promise<UnifiedMatch[]>> this._studyService.getUnifiedMatchesAsync(filters));
       })
       .takeUntil(this.stopStream)
