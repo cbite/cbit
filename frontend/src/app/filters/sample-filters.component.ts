@@ -1,12 +1,13 @@
 import {
   Component, Input, OnInit, ChangeDetectorRef, OnChanges, DoCheck, ViewChild, ElementRef,
-  AfterViewChecked
+  AfterViewChecked, OnDestroy
 } from "@angular/core";
-import {FiltersService, FilterMode} from "../services/filters.service";
+import {FiltersService, FilterMode, FiltersState} from "../services/filters.service";
 import {NULL_CATEGORY_NAME, StudyService} from "../services/study.service";
 import * as $ from 'jquery';
 import {DimensionsRegister} from "../common/unit-conversions";
 import {Ng2SliderComponent} from "../slider/ng2-slider.component";
+import {Subject} from "rxjs";
 
 // TODO: Move all usages of this to backend
 export const HIDDEN_SAMPLE_FILTER_LABELS = {
@@ -90,20 +91,34 @@ enum GlobalCheckboxState {
         
         <div class="contents slider-box" *ngIf="shouldUseSlider">
           <div class="actualRange">
-            From {{ formatValueName(startValue + '') }} to {{ formatValueName(endValue + '') }}
+            From {{ formatValueName(displayStartValue + '') }} to {{ formatValueName(displayEndValue + '') }}
           </div>
           <ng2-slider 
                 #slider
                 [min]="minValue"
                 [max]="maxValue"
-                [startValue]="startValue"
-                [endValue]="endValue"
                 [stepValue]="stepValue"
                 (onRangeChanged)="rangeValueChanged($event)"
                 (onRangeChanging)="rangeValueChanging($event)">
           </ng2-slider>
           <div class="minValue">{{ formatValueName(minValue + '') }}</div>
           <div class="maxValue">{{ formatValueName(maxValue + '') }}</div>
+          <div *ngIf="hasNullValues()" class="checkbox">
+            <label [class.disabled]="!isEnabled(nullCategoryName)">
+              <input type="checkbox"
+                     [name]="category"
+                     [value]="nullCategoryName"
+                     [disabled]="!isEnabled(nullCategoryName)"
+                     [checked]="rangeIncludeUnspecified"
+                     (change)="toggleRangeFilterUnspecifieds($event)">
+              ...or unspecified
+            </label>
+            <div class="count"
+                 [class.disabled]="!isEnabled(nullCategoryName)"
+            >
+              {{filteredCounts[nullCategoryName] || 0}}
+            </div>
+          </div>
         </div>
       </div>
     </li>
@@ -136,7 +151,7 @@ enum GlobalCheckboxState {
       font-size: 90%;
       font-style: oblique;
       padding-left: 38px;
-      padding-top: 5px;
+      padding-top: 7px;
     }
     
     .contents {
@@ -170,7 +185,7 @@ enum GlobalCheckboxState {
     
     .slider-box {
       position: relative;
-      padding-top: 20px
+      padding-top: 20px;
     }
     
     .slider-box > .actualRange {
@@ -193,17 +208,25 @@ enum GlobalCheckboxState {
       right: 0px;
       top: 50px;
     } 
+    
+    .slider-box > ng2-slider {
+      display: block;
+    }
+    
+    .slider-box > .checkbox {
+      margin-top: 25px;
+    }
   `]
 })
-export class SampleFiltersComponent implements OnInit, AfterViewChecked {
+export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() category: string;
   @Input() allCounts: {
     [value: string]: number   // Free-form mapping of values to counts
-  } = {}
+  } = {};
   allCountSorted: Array<{ key: string, val: any }> = [];
   @Input() filteredCounts: {
     [value: string]: number   // Free-form mapping of values to counts
-  } = {}
+  } = {};
   categoryRealName: string;
   @ViewChild(Ng2SliderComponent) slider: Ng2SliderComponent;
 
@@ -216,8 +239,11 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   minValue: number = 0;
   maxValue: number = 100;
   get stepValue(): number { return (this.maxValue - this.minValue) / 200; }  // TODO: Improve
+  displayStartValue: number = 0;
+  displayEndValue: number = 100;
   startValue: number = 0;
-  endValue: number = 100;
+  endValue: number = 0;
+  rangeIncludeUnspecified: boolean = true;
   tickSize: number = 1;
   units(): string[] {
     let unitConverter = DimensionsRegister[this.dimensions];
@@ -227,6 +253,8 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   uiUnitName(dimensions: string, unitName: string): string {
     return DimensionsRegister[dimensions].getUnitUIName(unitName);
   }
+
+  stopStream = new Subject<string>();
 
   constructor(
     private _filtersService: FiltersService,
@@ -243,11 +271,11 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   }
 
   toggleVisible() {
-    console.log(`Toggling visibility of ${this.category}`);
     this.isVisible = !this.isVisible;
     if (this.slider) {
       setTimeout(() => {
-        console.log(`About to refresh UI for ${this.category}`);
+        // Needs to happen *after* visibility changes take effect for
+        // slider dimensions to be correctly calculated
         this.slider.refreshUI();
       }, 4);
     }
@@ -255,6 +283,12 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
 
   isTrivial(): boolean {
     return (Object.keys(this.allCounts).length <= 1);
+  }
+
+  // For use inside the component's template, where NULL_CATEGORY_NAME is undefined
+  nullCategoryName = NULL_CATEGORY_NAME;
+  hasNullValues(): boolean {
+    return NULL_CATEGORY_NAME in this.allCounts;
   }
 
   private jqElem: JQuery;
@@ -283,6 +317,15 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
     });
 
     this.updateAllCountsSorted();
+
+    // Ensure that external modifications to FiltersService are reflected in filters
+    this._filtersService.filters
+      .takeUntil(this.stopStream)
+      .subscribe(filters => this.updateUI(filters));
+  }
+
+  ngOnDestroy() {
+    this.stopStream.next('stop');
   }
 
   updateAllCountsSorted(): void {
@@ -321,8 +364,13 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
       // Ensure enough precision in numbers to distinguish 1/100th of range
       this.tickSize = range / 100;
 
-      this.startValue = this.minValue + (1/3)*range;
-      this.endValue = this.minValue + (2/3)*range;
+      this.startValue = this.displayStartValue = this.minValue;
+      this.endValue = this.displayEndValue = this.maxValue;
+
+      if (this.slider) {
+        this.slider.setStartValue(this.displayStartValue);
+        this.slider.setEndValue(this.displayEndValue);
+      }
     }
 
     // Add <None> at the top if needed
@@ -356,9 +404,40 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
           } else {
             return GlobalCheckboxState.Indeterminate;
           }
+
+        case FilterMode.Range:
+          let rangeDetail = categoryFilter.rangeDetail;
+          if (rangeDetail.startValue === rangeDetail.endValue && !rangeDetail.includeUnspecified) {
+            return GlobalCheckboxState.None;
+          } else if (rangeDetail.startValue <= this.minValue && rangeDetail.endValue >= this.maxValue && rangeDetail.includeUnspecified) {
+            return GlobalCheckboxState.All;
+          } else {
+            return GlobalCheckboxState.Indeterminate;
+          }
       }
     } else {
       return GlobalCheckboxState.All;   // If no filters specified, default to all values
+    }
+  }
+
+  updateUI(filters: FiltersState) {
+    // We only really need to update sliders if need be
+    if (this.shouldUseSlider) {
+      if (this.category in filters.sampleFilters) {
+        let rangeDetail = filters.sampleFilters[this.category].rangeDetail;
+        this.startValue = this.displayStartValue = rangeDetail.startValue;
+        this.endValue = this.displayEndValue = rangeDetail.endValue;
+        this.rangeIncludeUnspecified = rangeDetail.includeUnspecified;
+      } else {
+        this.startValue = this.displayStartValue = this.minValue;
+        this.endValue = this.displayEndValue = this.maxValue;
+        this.rangeIncludeUnspecified = true;
+      }
+
+      if (this.slider) {
+        this.slider.setStartValue(this.displayStartValue);
+        this.slider.setEndValue(this.displayEndValue);
+      }
     }
   }
 
@@ -391,6 +470,13 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
         case FilterMode.OnlyThese:
           // Checked if true, unchecked if false or absent
           return  (categoryFilter.detail[valueName] === true);
+        case FilterMode.Range:
+          // Checked if unspecified & including unspecifieds or if within range
+          if (valueName === NULL_CATEGORY_NAME) {
+            return categoryFilter.rangeDetail.includeUnspecified;
+          } else {
+            return +valueName >= categoryFilter.rangeDetail.startValue && +valueName <= categoryFilter.rangeDetail.endValue;
+          }
       }
     } else {
       return true;   // If no filters specified, default to all values
@@ -403,20 +489,19 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   }
 
   rangeValueChanging(newRange: number[]) {
-    if (this.startValue !== newRange[0] || this.endValue !== newRange[1]) {
-      console.log(`Changing: ${JSON.stringify(newRange)}`);
-      [this.startValue, this.endValue] = newRange;
+    if (this.displayStartValue !== newRange[0] || this.displayEndValue !== newRange[1]) {
+      [this.displayStartValue, this.displayEndValue] = newRange;
       this._changeDetectorRef.detectChanges();
     }
   }
 
   rangeValueChanged(newRange: number[]) {
     if (this.startValue !== newRange[0] || this.endValue !== newRange[1]) {
-      console.log(`Changing: ${JSON.stringify(newRange)}`);
+      console.log(`Changed: ${JSON.stringify(newRange)}`);
       [this.startValue, this.endValue] = newRange;
       this._changeDetectorRef.detectChanges();
 
-      // TODO: Enact appropriate changes
+      this.setSampleRangeFilter(this.startValue, this.endValue, this.rangeIncludeUnspecified);
     }
   }
 
@@ -432,6 +517,10 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
 
   updateFilters(e: any, valueName: string): void {
     this._filtersService.setSampleFilter(this.category, valueName, e.target.checked);
+  }
+
+  toggleRangeFilterUnspecifieds(e: any): void {
+    this.setSampleRangeFilter(this.startValue, this.endValue, e.target.checked);
   }
 
   decodePhaseCompositionLike(s: string, entryFormatter: (component: string, value: number) => string): string {
@@ -492,11 +581,42 @@ export class SampleFiltersComponent implements OnInit, AfterViewChecked {
   }
 
   selectAll(): void {
-    this._filtersService.setSampleFilterAll(this.category);
+    if (!this.shouldUseSlider) {
+      this._filtersService.setSampleFilterAll(this.category);
+    } else {
+      this._filtersService.clearSampleRangeFilter(this.category);
+    }
   }
 
   selectNone(): void {
-    this._filtersService.setSampleFilterNone(this.category);
+    if (!this.shouldUseSlider) {
+      this._filtersService.setSampleFilterNone(this.category);
+    } else {
+      let midValue = (this.minValue + this.maxValue) / 2;
+      this.setSampleRangeFilter(midValue, midValue, false);
+    }
+  }
+
+  setSampleRangeFilter(newStartValue: number, newEndValue: number, newIncludeUnspecified: boolean) {
+    // Avoid rounding errors near end of slider
+    if (this.minValue == this.maxValue) {
+      newStartValue = this.minValue;
+      newEndValue = this.maxValue;
+    } else {
+      let range = this.maxValue - this.minValue;
+      if (Math.abs(newStartValue - this.minValue) < 0.005*range) {
+        newStartValue = this.minValue;
+      }
+      if (Math.abs(newEndValue - this.maxValue) < 0.005*range) {
+        newEndValue = this.maxValue;
+      }
+    }
+
+    if (newStartValue == this.minValue && newEndValue == this.maxValue && newIncludeUnspecified) {
+      this._filtersService.clearSampleRangeFilter(this.category);
+    } else {
+      this._filtersService.setSampleRangeFilter(this.category, newStartValue, newEndValue, newIncludeUnspecified);
+    }
   }
 
   clickGlobalCheckbox(e: any): void {

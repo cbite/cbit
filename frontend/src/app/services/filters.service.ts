@@ -4,15 +4,23 @@ import * as _ from 'lodash';
 
 export const enum FilterMode {
   AllButThese = 0,
-  OnlyThese   = 1
+  OnlyThese   = 1,
+  Range       = 2
 }
 
 export interface SampleFilter {
   mode: FilterMode,
-  detail: {
+  detail?: {
     // If mode is AllButThese, include every value category except those listed below.
     // Otherwise, if mode is OnlyThese, only include the values below.
     [valueName: string]: boolean
+  },
+  rangeDetail?: {
+    // If mode is Range, include every value in the range below (inclusive),
+    // possibly including sample where the value is unspecified
+    startValue: number;
+    endValue: number;
+    includeUnspecified: boolean;
   }
 }
 
@@ -120,6 +128,25 @@ export class FiltersService {
       mode: FilterMode.OnlyThese,
       detail: {}
     }
+    this.setSampleFilters(curFilters);
+  }
+
+  setSampleRangeFilter(category: string, startValue: number, endValue: number, includeUnspecified: boolean) {
+    let curFilters = _.cloneDeep(this.getFilters().sampleFilters);
+    curFilters[category] = {
+      mode: FilterMode.Range,
+      rangeDetail: {
+        startValue: startValue,
+        endValue: endValue,
+        includeUnspecified: includeUnspecified
+      }
+    }
+    this.setSampleFilters(curFilters);
+  }
+
+  clearSampleRangeFilter(category: string) {
+    let curFilters = _.cloneDeep(this.getFilters().sampleFilters);
+    delete curFilters[category];
     this.setSampleFilters(curFilters);
   }
 
