@@ -24,7 +24,7 @@ import {ChangePasswordComponent} from "./change-password.component";
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">cBiT</a>
+          <a class="navbar-brand" href="#"><img src="public/images/cbit_logo.png"></a>
         </div>
     
         <div id="navbar" [collapse]="navBarCollapsed" class="navbar-collapse">
@@ -121,6 +121,16 @@ import {ChangePasswordComponent} from "./change-password.component";
     </div>
   `,
   styles: [`
+  /* See http://stackoverflow.com/a/30702646 */
+  .navbar-brand {
+    padding: 0px; /* firefox bug fix */
+  }
+  .navbar-brand>img {
+    height: 100%;
+    padding: 7px; /* firefox bug fix */
+    width: auto;
+  }
+
   .selectionLink {
     display: table-cell;
     padding-top: 5px;
