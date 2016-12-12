@@ -82,12 +82,12 @@ export class HorizontallySlidableDirective {
     document.ondragstart = () => false;
     document.body.onselectstart = () => false;
 
-    document.onmousemove = (event: any) => { this.redraw(event.clientX, event.clientY); }
+    document.onmousemove = (event: any) => { this.redraw(event.clientX, event.clientY, true); }
     document.ontouchmove = (event: any) => {
       var touches = event.changedTouches;
       for (var i = 0; i < touches.length; i++) {
         if (touches[i].target == this.el.nativeElement) {
-          this.redraw(touches[i].clientX, touches[i].clientY);
+          this.redraw(touches[i].clientX, touches[i].clientY, true);
         }
       }
     }
@@ -104,7 +104,7 @@ export class HorizontallySlidableDirective {
     this.startSlidingEvent.emit(this.relativePercent());
   }
 
-  redraw(viewportX: number, viewportY: number) {
+  redraw(viewportX: number, viewportY: number, emit?: boolean) {
 
     let handleRect = this.recalcHandleRect();
     let slidingDomainRect = this.recalcSlidingDomainRect();
@@ -120,7 +120,9 @@ export class HorizontallySlidableDirective {
       this.el.nativeElement.style.left = pinnedLocalX - Math.round(handleRect.width / 2) + 'px';
       this.lastViewportX = pinnedViewportX;
 
-      this.slidingEvent.emit(this.relativePercent());
+      if (emit) {
+        this.slidingEvent.emit(this.relativePercent());
+      }
     }
   }
 
@@ -145,7 +147,7 @@ export class HorizontallySlidableDirective {
   relativePercent(): number {
     let handleRect = this.recalcHandleRect();
     let slidingDomainRect = this.recalcSlidingDomainRect();
-    return 100 * (handleRect.left + (handleRect.width / 2) - slidingDomainRect.left) / (slidingDomainRect.right - slidingDomainRect.left);
+    return Math.min(100, Math.max(0, 100 * (handleRect.left + (handleRect.width / 2) - slidingDomainRect.left) / (slidingDomainRect.right - slidingDomainRect.left)));
   }
 
   recalcHandleRect(): ClientRect {
