@@ -245,6 +245,7 @@ export class Ng2SliderComponent {
 
   ngOnChanges() {
     this.ensureValidConfig();
+    this.refreshUI();
   }
 
   ensureValidConfig() {
