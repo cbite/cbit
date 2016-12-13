@@ -52,8 +52,11 @@
     owner: cbit
     group: nginx   # `cbit` can change, `nginx` can read, nobody else can do anything
 
-#- name: Build frontend bundle
-#  <local>  cd frontend; npm run build
+- name: frontend | Build frontend bundle (locally)
+  local_action: command npm run build
+  args:
+    chdir: "{{ playbook_dir }}/../frontend"
+  become: no
 
 - name: frontend | Copy over frontend bundle
   synchronize:
