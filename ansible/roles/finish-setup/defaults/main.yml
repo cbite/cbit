@@ -1,0 +1,2 @@
+---
+postgresql_service_name: "postgresql-{{ postgresql_version }}"  # From ANXS.postgresql, RedHat variant
