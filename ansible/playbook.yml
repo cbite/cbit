@@ -13,3 +13,4 @@
   - { role: finish-setup, become: yes }
 
   - { role: backend, become: yes }
+  - { role: frontend, become: yes }
