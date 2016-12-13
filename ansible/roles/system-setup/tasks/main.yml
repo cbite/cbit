@@ -20,11 +20,22 @@
    - "postgresql{{ postgresql_version_terse }}-devel"
    - python-devel
    - python-pip
+   - libselinux-python
 
 - name: Upgrade pip
   pip:
     name: pip
     state: latest
+
+- name: Disable SELinux (not even enabled in cBiT on-site machine)
+  selinux:
+    state: disabled
+  register: selinux_status
+
+- name: Prompt for restart if needed
+  pause:
+    prompt: Disabling SELinux completely requires full restart.  Please restart the machine and run this playbook again
+  when: selinux_status | changed
 
 - name: timezone | check current timezone
   shell: readlink -f /etc/localtime
