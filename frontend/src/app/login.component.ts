@@ -5,6 +5,7 @@ import {Study} from "./common/study.model";
 import {ModalDirective} from "ng2-bootstrap";
 import {AuthenticationService} from "./services/authentication.service";
 import {FiltersService} from "./services/filters.service";
+import {URLService} from "./services/url.service";
 
 interface GetUserResponse {
   realname: string
@@ -54,6 +55,7 @@ export class LoginComponent {
   loggingIn: boolean;
 
   constructor(
+    private _url: URLService,
     private _auth: AuthenticationService,
     private _filtersService: FiltersService,
     private changeDetectorRef: ChangeDetectorRef
@@ -72,7 +74,7 @@ export class LoginComponent {
     this.loggingIn = true;
     $.ajax({
       type: 'GET',
-      url: `http://localhost:23456/users/${this.username}`,
+      url: this._url.userResource(this.username),
       headers: {
         Authorization: `Basic ${btoa(`${this.username}:${this.password}`)}`
       },

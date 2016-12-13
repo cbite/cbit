@@ -5,6 +5,7 @@ import {Study} from "./common/study.model";
 import {AuthenticationService} from "./services/authentication.service";
 import {ChangePasswordComponent} from "./change-password.component";
 import {ModalDirective} from "ng2-bootstrap";
+import {URLService} from "./services/url.service";
 
 enum UserState {
   Present,
@@ -173,6 +174,7 @@ export class AddUserComponent {
   adding: boolean;
 
   constructor(
+    private _url: URLService,
     private _auth: AuthenticationService,
     private changeDetectorRef: ChangeDetectorRef
   ) { }
@@ -204,7 +206,7 @@ export class AddUserComponent {
 
       $.ajax({
         type: 'PUT',
-        url: `http://localhost:23456/users/${this.username}`,
+        url: this._url.userResource(this.username),
         headers: this._auth.headers(),
         dataType: 'json',
         data: JSON.stringify({
@@ -292,6 +294,7 @@ export class UserManagementComponent implements OnInit {
   saveError = '';
 
   constructor(
+    private _url : URLService,
     private _auth : AuthenticationService,
     private _changeDetectorRef : ChangeDetectorRef
   ) { }
@@ -301,7 +304,7 @@ export class UserManagementComponent implements OnInit {
 
     $.ajax({
       type: 'GET',
-      url: 'http://localhost:23456/users',
+      url: this._url.usersResource(),
       headers: this._auth.headers(),
       dataType: 'json',
       success: (userList: User[]) => {
@@ -350,7 +353,7 @@ export class UserManagementComponent implements OnInit {
 
     $.ajax({
       type: 'DELETE',
-      url: `http://localhost:23456/users/${username}`,
+      url: this._url.userResource(username),
       headers: this._auth.headers(),
       contentType: 'application/json',
       success: () => {
@@ -376,7 +379,7 @@ export class UserManagementComponent implements OnInit {
 
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:23456/users',
+      url: this._url.usersResource(),
       headers: this._auth.headers(),
       data: JSON.stringify(Object.values(this.form.value).filter((info: User) => self.userState[info.username] == UserState.Present)),
       dataType: 'json',

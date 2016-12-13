@@ -11,6 +11,7 @@ import * as $ from 'jquery';
 import {CacheableBulkRequester} from "../common/cacheable-bulk-request";
 import {FieldMeta} from "../common/field-meta.model";
 import {AuthenticationService} from "./authentication.service";
+import {URLService} from "./url.service";
 
 // Should be a parseable number to play nicely with numeric fields
 // and it should survive a round-trip conversion in ES from string to double to string
@@ -77,7 +78,7 @@ export class StudyService {
     return new Promise(resolve => {
       $.ajax({
         type: 'GET',
-        url: 'http://localhost:23456/metadata/fields',
+        url: self._url.metadataFieldsResource(),
         headers: self._auth.headers(),
         contentType: 'application/json',
         success: function(data: string[]) {
@@ -92,7 +93,7 @@ export class StudyService {
     return new Promise(resolve => {
       $.ajax({
         type: 'GET',
-        url: 'http://localhost:23456/studies',
+        url: self._url.studiesResource(),
         headers: self._auth.headers(),
         contentType: 'application/json',
         success: function(data: string[]) {
@@ -116,7 +117,7 @@ export class StudyService {
 
   getAllCountsAsync(): Promise<ManySampleCounts> {
     let self = this;
-    const URL = 'http://localhost:23456/metadata/all_counts';
+    const URL = this._url.metadataAllCountsResource();
     return new Promise(function (resolve) {
       $.ajax({
         type: 'GET',
@@ -130,7 +131,7 @@ export class StudyService {
 
   getManySampleCountsAsync(filters: FiltersState, categories: string[]): Promise<ManySampleCounts> {
     let self = this;
-    const URL = 'http://localhost:23456/metadata/filtered_counts';
+    const URL = this._url.metadataFilteredCountsResource();
     return new Promise(resolve => {
       $.ajax({
         type: 'POST',
@@ -153,7 +154,7 @@ export class StudyService {
     // TODO: Refactor usages of this method to not require full study and sample metadata as a result
     // (i.e., postpone calls to getStudy() and getSample() as long as possible)
     let self = this;
-    const URL = 'http://localhost:23456/metadata/search';
+    const URL = this._url.metadataSearchResource();
     return new Promise(resolve => {
       $.ajax({
         type: 'POST',
@@ -202,11 +203,12 @@ export class StudyService {
   private fieldMetaRequester: CacheableBulkRequester<FieldMeta>;
 
   constructor(
+    private _url: URLService,
     private _auth: AuthenticationService
   ) {
     this.studyRequester = new CacheableBulkRequester<Study>(
       "study",
-      'http://localhost:23456/studies',
+      this._url.studiesResource(),
       this._auth,
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
@@ -214,7 +216,7 @@ export class StudyService {
 
     this.sampleRequester = new CacheableBulkRequester<Sample>(
       "sample",
-      'http://localhost:23456/samples',
+      this._url.samplesResource(),
       this._auth,
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
@@ -222,7 +224,7 @@ export class StudyService {
 
     this.sampleIdsRequester = new CacheableBulkRequester<string[]>(
       "idsOfSamplesInStudy",
-      'http://localhost:23456/metadata/samples_in_studies',
+      this._url.metadataSamplesInStudiesResource(),
       this._auth,
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
@@ -230,7 +232,7 @@ export class StudyService {
 
     this.fieldMetaRequester = new CacheableBulkRequester<FieldMeta>(
       "fieldMeta",
-      'http://localhost:23456/metadata/fields',
+      this._url.metadataFieldsResource(),
       this._auth,
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS

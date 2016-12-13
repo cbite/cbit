@@ -3,6 +3,7 @@ import {StudyService} from "./services/study.service";
 import {FiltersService} from "./services/filters.service";
 import {DownloadSelectionService} from "./services/download-selection.service";
 import {AuthenticationService} from "./services/authentication.service";
+import {URLService} from "./services/url.service";
 
 @Component({
   selector: 'cbit',
@@ -29,7 +30,7 @@ import {AuthenticationService} from "./services/authentication.service";
       /*opacity: 0.5;*/
     }
   `],
-  providers: [StudyService, FiltersService, DownloadSelectionService, AuthenticationService]
+  providers: [URLService, StudyService, FiltersService, DownloadSelectionService, AuthenticationService]
 })
 export class CBiTComponent {
   // HACK FOR NG2-BOOTSTRAP MODALS!

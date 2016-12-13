@@ -11,11 +11,10 @@ import {FormGroup, FormControl, Validators, RequiredValidator} from "@angular/fo
 import * as _ from 'lodash';
 import {DimensionsRegister, INVALID_DIMENSIONS} from "../common/unit-conversions";
 import {AuthenticationService} from "../services/authentication.service";
+import {URLService} from "../services/url.service";
 
 // Heavily adapted from here:
 // http://valor-software.com/ng2-file-upload/
-
-const URL = 'http://localhost:23456/uploads';
 
 const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
 
@@ -1218,13 +1217,7 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
 })
 export class UploadComponent {
 
-  public uploader: MyFileUploader = new MyFileUploader(this, {
-    url: URL,
-    method: 'POST',
-    queueLimit: 1,
-    disableMultipart: true,  // Send the file body directly as request body, don't wrap it in any way
-    authToken: this._auth.headers()['Authorization']
-  });
+  public uploader: MyFileUploader;
   public hasBaseDropZoneOver: boolean = false;
   uploadFileName: string = "<None>"
   status = '';
@@ -1246,10 +1239,19 @@ export class UploadComponent {
   studyInitiallyVisible: boolean = true;
 
   constructor(
+    private _url: URLService,
     private _router: Router,
     private _auth: AuthenticationService,
     private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  ) {
+    this.uploader = new MyFileUploader(this, {
+      url: this._url.uploadsResource(),
+      method: 'POST',
+      queueLimit: 1,
+      disableMultipart: true,  // Send the file body directly as request body, don't wrap it in any way
+      authToken: this._auth.headers()['Authorization']
+    });
+  }
 
   fileOverBase(e:any):void {
     this.hasBaseDropZoneOver = e;
@@ -1326,7 +1328,7 @@ export class UploadComponent {
       metadataInsertionPromise = new Promise((resolve, reject) => {
         $.ajax({
           type: 'PUT',
-          url: 'http://localhost:23456/metadata/fields/_multi',
+          url: that._url.metadataFieldsMultiResource(),
           headers: that._auth.headers(),
           data: JSON.stringify(newFieldMetadata),
           dataType: 'json',

@@ -3,6 +3,7 @@ import {StudyService} from "./services/study.service";
 import {FormGroup, FormControl, Validators} from "@angular/forms";
 import {Study} from "./common/study.model";
 import {AuthenticationService} from "./services/authentication.service";
+import {URLService} from "./services/url.service";
 
 enum StudyState {
   Present,
@@ -138,6 +139,7 @@ export class StudyManagementComponent implements OnInit {
   saveError = '';
 
   constructor(
+    private _url: URLService,
     private _studyService : StudyService,
     private _auth : AuthenticationService,
     private _changeDetectorRef : ChangeDetectorRef
@@ -186,7 +188,7 @@ export class StudyManagementComponent implements OnInit {
 
     $.ajax({
       type: 'DELETE',
-      url: `http://localhost:23456/studies/${studyId}`,
+      url: this._url.studyResource(studyId),
       headers: this._auth.headers(),
       contentType: 'application/json',
       success: (data: string[]) => {
@@ -213,7 +215,7 @@ export class StudyManagementComponent implements OnInit {
 
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:23456/metadata/studies',
+      url: self._url.metadataStudiesResource(),
       headers: this._auth.headers(),
       data: JSON.stringify(Object.values(this.form.value).filter((info: { studyId: string }) => self.studyState[info.studyId] == StudyState.Present)),
       dataType: 'json',

@@ -4,6 +4,7 @@ import {StudyService} from "./services/study.service";
 import {Study} from "./common/study.model";
 import {ModalDirective} from "ng2-bootstrap";
 import {AuthenticationService} from "./services/authentication.service";
+import {URLService} from "./services/url.service";
 
 interface DownloadPostResponse {
   download_uuid: string,
@@ -93,6 +94,7 @@ export class DownloadComponent {
   progressUrl: string;
 
   constructor(
+    private _url: URLService,
     private _studyService: StudyService,
     private _auth: AuthenticationService,
     private _downloadSelectionService: DownloadSelectionService,
@@ -136,7 +138,7 @@ export class DownloadComponent {
 
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:23456/downloads',
+      url: this._url.downloadsResource(),
       headers: this._auth.headers(),
       data: JSON.stringify(sampleIds),
       dataType: 'json',

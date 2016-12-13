@@ -1,10 +1,7 @@
 import {Component, ChangeDetectorRef, OnInit, Input} from "@angular/core";
-import {DownloadSelectionService} from "./services/download-selection.service";
-import {StudyService} from "./services/study.service";
-import {Study} from "./common/study.model";
 import {ModalDirective} from "ng2-bootstrap";
 import {AuthenticationService} from "./services/authentication.service";
-import {FiltersService} from "./services/filters.service";
+import {URLService} from "./services/url.service";
 
 @Component({
   selector: 'change-password',
@@ -52,6 +49,7 @@ export class ChangePasswordComponent {
 
   constructor(
     private _auth: AuthenticationService,
+    private _url: URLService,
     private changeDetectorRef: ChangeDetectorRef
   ) { }
 
@@ -75,7 +73,7 @@ export class ChangePasswordComponent {
       this.changing = true;
       $.ajax({
         type: 'POST',
-        url: `http://localhost:23456/users/${this.username}`,
+        url: this._url.userResource(this.username),
         headers: this._auth.headers(),
         dataType: 'json',
         data: JSON.stringify({
