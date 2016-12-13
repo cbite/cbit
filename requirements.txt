@@ -13,7 +13,7 @@ entrypoints==0.2.2
 enum34==1.1.6
 et-xmlfile==1.0.1
 falcon==1.1.0
-falcon-cors==1.1.2
+falcon-cors==1.1.2-
 functools32==3.2.3.post2
 gevent==1.1.2
 greenlet==0.4.10
@@ -54,7 +54,7 @@ pycparser==2.16
 pycrypto==2.6.1
 Pygments==2.1.3
 python-dateutil==2.5.3
-python-irodsclient==0.5.0
+python-irodsclient==0.4.0
 python-mimeparse==1.6.0
 pytz==2016.7
 PyYAML==3.12

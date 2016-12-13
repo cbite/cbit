@@ -1,0 +1,12 @@
+---
+# Run this playbook as follows once for a brand new machine
+#
+#  ANSIBLE_SSH_PIPELINING=0 ansible-playbook playbook-PRERUN.yml
+
+- hosts: cbit2
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: disable requiretty in /etc/sudoers
+      replace: regexp="^Defaults\s+requiretty$" replace="# Defaults    requiretty" dest="/etc/sudoers"
+

@@ -1,12 +1,12 @@
 ---
-apt_cache_valid_time: 300    # Time between calls to `apt-get update`
-timezone: "Europe/Brussels"
+timezone: "Europe/Amsterdam"
 
 db_name: cbit
 db_user: cbit
 db_pass: 2076a675b6d813b582977189c13a3279cc9cf02a9aeab01389798d9167cf259c8b247aee9a2be149  # `openssl rand -hex 40`
 
 postgresql_version: 9.5
+postgresql_version_terse: "{{ postgresql_version | replace('.', '') }}"  # For use outside ANXS.postgresql role
 
 postgresql_databases:
   - name: "{{db_name}}"

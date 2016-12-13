@@ -1,39 +1,36 @@
 ---
 
-- name: Update APT cache
-  apt:
+- name: Install epel-release (extra packages for yum) and update yum cache
+  yum:
+    name: epel-release
+    state: present
     update_cache: yes
-    cache_valid_time: "{{ apt_cache_valid_time }}"
 
 - name: Install key packages
-  apt:
+  yum:
     name: "{{ item }}"
     state: present
   with_items:
    - git
-   - build-essential
-   - python-dev
+   - gcc
+   - openssl
+   - openssl-devel
+   - lsof
+   - emacs
+   - "postgresql{{ postgresql_version_terse }}-devel"
+   - python-devel
    - python-pip
 
-- name: Install repo for Java 8 in Ubuntu
-  apt_repository:
-    repo: 'ppa:openjdk-r/ppa'
-
+- name: Upgrade pip
+  pip:
+    name: pip
+    state: latest
 
 - name: timezone | check current timezone
-  shell: cat /etc/timezone
+  shell: readlink -f /etc/localtime
   changed_when: 0
   register: current_zone
 
 - name: timezone | Set timezone variables
-  copy:
-    content={{timezone}}
-    dest=/etc/timezone
-    owner=root
-    group=root
-    mode=0644
-  when: current_zone.stdout != timezone
-
-- name: timezone | Run dpkg-reconfigure to configure timezone
-  shell: dpkg-reconfigure --frontend noninteractive tzdata
-  when: current_zone.stdout != timezone
+  command: timedatectl set-timezone {{ timezone }}
+  when: current_zone.stdout != '/usr/share/zoneinfo/' + timezone

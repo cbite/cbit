@@ -1,0 +1,65 @@
+---
+
+- name: backend | Create cbit group
+  group:
+    name: cbit
+    state: present
+
+- name: backend | Create cbit user
+  user:
+    name: cbit
+    group: cbit
+    shell: /bin/bash
+
+- name: backend | Create backend directory
+  file:
+    path: /home/cbit/backend
+    state: directory
+    mode: 0700
+    owner: cbit
+    group: cbit
+
+- name: backend | Copy code to server
+  synchronize:
+    src: "{{ playbook_dir }}/../backend/"
+    dest: /home/cbit/backend
+    owner: no
+    group: no
+    recursive: yes
+    perms: no
+    times: yes
+    use_ssh_args: yes
+    rsync_opts:
+      - "--exclude /.ipynb_checkpoints"
+      - "--exclude /files"
+      - "--exclude /uploads"
+      - "--exclude /downloads"
+      - "--exclude /misc"
+      - "--exclude /*.log"
+      - "--exclude /pidfile.txt"
+      - "--exclude *.pyc"
+      - "--verbose"
+
+- name: backend | Fix permissions
+  file:
+    path: /home/cbit/backend
+    state: directory
+    owner: cbit
+    group: cbit
+    recurse: yes
+
+- name: backend | Update pip requirements.txt
+  copy:
+    src: "{{ playbook_dir }}/../requirements.txt"
+    dest: /home/cbit
+    owner: cbit
+    group: cbit
+    mode: 0700
+
+- name: backend | Ensure python requirements are satisfied
+  pip:
+    requirements: requirements.txt
+  args:
+    chdir: /home/cbit
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/pgsql-9.5/bin"

@@ -1,6 +1,6 @@
 ---
 
-- hosts: cbit
+- hosts: cbit2
   vars_files:
     - vars.yml
 
@@ -9,5 +9,6 @@
   - { role: ANXS.postgresql, become: yes }
 
   # TODO: Use this official role instead: https://github.com/elastic/ansible-elasticsearch
-  - { role: geerlingguy.java, become: yes, java_packages: [openjdk-8-jdk] }
-  - { role: geerlingguy.elasticsearch, become: yes }
+  - { role: geerlingguy.elasticsearch, become: yes, java_packages: [java-1.8.0-openjdk] }
+
+  - { role: backend, become: yes }
