@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 
 //const BASE_URL = "http://localhost:23456";   // Development
-const BASE_URL = "http://localhost:80/api";  // Pre-production
+const BASE_URL = "https://localhost/api";  // Pre-production
 //const BASE_URL = "/api";                     // Production
 
 /*
