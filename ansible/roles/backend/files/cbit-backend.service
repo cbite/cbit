@@ -1,0 +1,17 @@
+[Unit]
+Description=cBiT backend daemon
+Requires=cbit-backend.socket
+After=network.target
+
+[Service]
+PIDFile=/run/cbit-backend/pid
+User=cbit
+Group=cbit
+WorkingDirectory=/home/cbit/backend
+ExecStart=/bin/gunicorn -c /home/cbit/backend/config/gunicorn-config.py -w 4 backend-server:app
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

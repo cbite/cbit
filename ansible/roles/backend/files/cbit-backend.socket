@@ -1,0 +1,10 @@
+[Unit]
+Description=cBiT backend socket
+
+[Socket]
+ListenStream=/run/cbit-backend/socket
+ListenStream=127.0.0.1:23456
+ListenStream=[::1]:23456
+
+[Install]
+WantedBy=sockets.target

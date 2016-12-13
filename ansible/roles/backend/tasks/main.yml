@@ -11,6 +11,14 @@
     group: cbit
     shell: /bin/bash
 
+- name: backend | Tweak permissions of cbit user home folder
+  file:
+    path: /home/cbit
+    state: directory
+    mode: 0755
+    owner: cbit
+    group: cbit
+
 - name: backend | Create backend directory
   file:
     path: /home/cbit/backend
@@ -18,6 +26,12 @@
     mode: 0700
     owner: cbit
     group: cbit
+
+- name: backend | Ensure cbit backend is turned off
+  service:
+    name: cbit-backend
+    state: stopped
+  ignore_errors: yes
 
 - name: backend | Copy code to server
   synchronize:
@@ -63,3 +77,46 @@
     chdir: /home/cbit
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/pgsql-9.5/bin"
+
+- name: Set up DBs (once)
+  shell: ./set_up_dbs.py && rm -rf files/ uploads/ downloads/ && touch 00_DBS_CREATED_DO_NOT_REMOVE.txt
+  args:
+    chdir: /home/cbit/backend
+    creates: 00_DBS_CREATED_DO_NOT_REMOVE.txt
+
+# See gunicorn deployment instructions for details
+# http://docs.gunicorn.org/en/stable/deploy.html
+
+- name: backend | Install systemd service
+  copy:
+    src: cbit-backend.service
+    dest: /etc/systemd/system/cbit-backend.service
+    owner: root
+    group: root
+    mode: 0644
+  register: service
+
+- name: backend | Install systemd socket
+  copy:
+    src: cbit-backend.socket
+    dest: /etc/systemd/system/cbit-backend.socket
+    owner: root
+    group: root
+    mode: 0644
+  register: socket
+
+- name: backend | Install systemd tmpfiles descriptor
+  copy:
+    src: cbit-backend.conf
+    dest: /usr/lib/tmpfiles.d/cbit-backend.conf
+    owner: root
+    group: root
+    mode: 0644
+  register: tmpfiles
+
+- name: backend | Start and enable cbit-backend service
+  service:
+    name: cbit-backend
+    state: started
+    enabled: yes
+    daemon-reload: "{{ service|changed or socket|changed or tmpfiles|changed }}"
