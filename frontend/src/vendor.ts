@@ -12,8 +12,8 @@ import 'rxjs';
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...
 import 'jquery';
-window.$ = window.jQuery = jQuery;  // Allow use of jQuery from developer console
+//window.$ = window.jQuery = jQuery;  // Allow use of jQuery from developer console
 import * as _ from 'lodash';
-window._ = _;
+//window._ = _;
 import 'bootstrap/less/bootstrap.less';
 import 'lodash';

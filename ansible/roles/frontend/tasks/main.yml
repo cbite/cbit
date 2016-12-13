@@ -52,6 +52,44 @@
     owner: cbit
     group: nginx   # `cbit` can change, `nginx` can read, nobody else can do anything
 
+#- name: Build frontend bundle
+#  <local>  cd frontend; npm run build
+
+- name: frontend | Copy over frontend bundle
+  synchronize:
+    src: "{{ playbook_dir }}/../frontend/dist/"
+    dest: /home/cbit/frontend/public
+    owner: no
+    group: no
+    recursive: yes
+    perms: no
+    times: yes
+    use_ssh_args: yes
+
+- name: frontend | Copy over frontend public assets
+  synchronize:
+    src: "{{ playbook_dir }}/../frontend/public"
+    dest: /home/cbit/frontend/public
+    owner: no
+    group: no
+    recursive: yes
+    perms: no
+    times: yes
+    use_ssh_args: yes
+
+- name: frontend | Ensure proper ownership for front-end bundle
+  file:
+    path: /home/cbit/frontend/public
+    owner: cbit
+    group: cbit
+    recurse: yes
+
+- name: frontend | Ensure proper permissions for front-end files
+  command: find /home/cbit/frontend/public -type f -exec chmod 0644 {} \;
+
+- name: frontend | Ensure proper permissions for front-end directories
+  command: find /home/cbit/frontend/public -type d -exec chmod 0755 {} \;
+
 
 - name: frontend | Configure nginx
   template:
