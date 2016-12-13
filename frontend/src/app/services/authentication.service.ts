@@ -10,9 +10,6 @@ export class AuthenticationService {
 
   constructor() {
     this.logout();
-
-    // TODO: Remove this in production!
-    this.login("admin", "admin", "Administrator");
   }
 
   // jQuery `headers` for authentication
