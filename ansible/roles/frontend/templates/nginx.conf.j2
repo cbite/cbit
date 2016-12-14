@@ -84,6 +84,9 @@ http {
         }
 
         location / {
+          # Serve up /index.html when using any URI, so that
+          # Angular2 deep links like http://<cbithost>/browse work
+          try_files $uri /index.html;
         }
 
         error_page 404 /404.html;
