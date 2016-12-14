@@ -2,8 +2,7 @@ import {Injectable} from "@angular/core";
 
 let BASE_URL: string;
 if (process.env.ENV === 'production') {
-  BASE_URL = "https://localhost/api";    // Pre-production
-  //const BASE_URL = "/api";               // Production
+  BASE_URL = "/api";                     // Production
 } else {
   BASE_URL = "http://localhost:23456";   // Development
 }
