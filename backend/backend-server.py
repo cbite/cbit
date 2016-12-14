@@ -1,6 +1,7 @@
 #! /usr/bin/env gunicorn -c config/gunicorn-config.py -w 4 backend-server:app
 
 import falcon
+from config import config as cfg
 from middleware.clean_old_uploads import CleanOldUploadsMiddleware
 from middleware.cors import CORSMiddleware
 from middleware.database_session import DatabaseSessionMiddleware
@@ -41,12 +42,16 @@ if ES_TRACE_LOGGING:
 
 
 
-app = falcon.API(middleware=[
-    CORSMiddleware(),
+middleware = []
+if cfg.CORS_ENABLED:
+    middleware.append(CORSMiddleware())
+middleware.extend([
     DatabaseSessionMiddleware(),
     CleanOldUploadsMiddleware(),
     AuthenticationMiddleware()
 ])
+
+app = falcon.API(middleware=middleware)
 
 app.add_route('/uploads', UploadsResource())
 app.add_route('/uploads/{upload_uuid}', UploadResource())

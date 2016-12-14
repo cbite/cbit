@@ -24,6 +24,7 @@ ES_INDEX = 'cbit'
 ES_STUDY_DOCTYPE = 'study'
 ES_SAMPLE_DOCTYPE = 'sample'
 
+CORS_ENABLED = True                  # TODO: Disabled in production, where nginx proxies a URL tree in the same domain instead
 URL_BASE = 'http://localhost:23456'  # TODO: In production, should be https://cbit.maastrichtuniversity.nl/api
 
 UPLOADS_PATH = 'uploads'
