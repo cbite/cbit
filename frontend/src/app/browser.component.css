@@ -61,7 +61,6 @@
  */
 
 .main {
-  position: relative;
   padding-right: 20px;
   padding-left: 20px;
 }
@@ -78,17 +77,6 @@
 .addAllResultsButton {
   float: right;
   margin-top: 20px;
-}
-
-
-#bg3 {
-  position: fixed;
-  top: 400px;   /* FIgure out how to do really "bottom: 20px" */
-  left: 300px;  /* Figure out how to specify sidebar width */
-
-  width: 300px;
-  z-index: -1;
-  opacity: 0.3;
 }
 
 /*
