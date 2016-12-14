@@ -13,7 +13,7 @@ entrypoints==0.2.2
 enum34==1.1.6
 et-xmlfile==1.0.1
 falcon==1.1.0
-falcon-cors==1.1.2-
+falcon-cors==1.1.2
 functools32==3.2.3.post2
 gevent==1.1.2
 greenlet==0.4.10

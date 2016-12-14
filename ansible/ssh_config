@@ -30,19 +30,11 @@ Host cbit
 # Running CentOS 7.2 release 1602 (x86_64) - with Updates HVM - ami-9bf712f4
 # (full details: CentOS Linux 7 x86_64 HVM EBS 1602-b7ee8a69-ee97-4a49-9e68-afaee216db2e-ami-d7e1d2bd.3)
 # Rebuild from scratch using Ansible playbook
-#
-# Tunneling:
-# - 5432: postgres
-# - 9200: elasticsearch
-# - 23456: backend server
-# - 80: nginx
-# - 443: nginx
 # 
 Host cbit2
   HostName 35.156.223.86
   User centos
   IdentityFile /Users/pat/Work/VarillySciences/2016_UMaastricht/umaastricht-cbit.pem
-  Compression Yes
 
 
 # On-site VMWare machine, accessible only inside UMaastricht VPN

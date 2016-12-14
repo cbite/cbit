@@ -3,6 +3,7 @@
 import multiprocessing
 
 bind = [
+    # Note: these bind settings are overriden by systemd, see file/cbit-backend.socket
     "127.0.0.1:23456", # Proxied via Nginx, so we only expose a local connection for Nginx
 ]
 workers = multiprocessing.cpu_count() * 2 + 1

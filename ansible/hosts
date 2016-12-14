@@ -1,1 +1,2 @@
-cbit2 elasticsearch_node_name=cbit2
+#cbit2 elasticsearch_node_name=cbit2 ansible_user=centos
+realcbit elasticsearch_node_name=cbit ansible_user=pat

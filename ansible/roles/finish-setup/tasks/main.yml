@@ -1,5 +1,10 @@
 ---
 
+- name: finish-setup | Install postgresNN-devel package (once ANXS.postgresql sets up correct YUM repo)
+  yum:
+    name: "postgresql{{ postgresql_version_terse }}-devel"
+    state: present
+
 - name: finish-setup | Ensure postgres starts at boot time
   service:
     name: "{{ postgresql_service_name }}"

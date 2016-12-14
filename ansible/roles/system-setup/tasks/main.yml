@@ -17,7 +17,6 @@
    - openssl-devel
    - lsof
    - emacs
-   - "postgresql{{ postgresql_version_terse }}-devel"
    - python-devel
    - python-pip
    - libselinux-python
