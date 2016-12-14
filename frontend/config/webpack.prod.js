@@ -7,7 +7,7 @@ var helpers = require('./helpers');
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
 module.exports = webpackMerge(commonConfig, {
-  devtool: 'source-map',
+  // devtool: 'source-map',
 
   output: {
     path: helpers.root('dist'),
@@ -23,12 +23,13 @@ module.exports = webpackMerge(commonConfig, {
   plugins: [
     new webpack.NoErrorsPlugin(),
     new webpack.optimize.DedupePlugin(),
-    // TODO: Figure out why including this plugin breaks my deployment
-    //new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
-    //  mangle: {
-    //    keep_fnames: true
-    //  }
-    //}),
+    new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
+      mangle: false
+      /* mangle: {    // Looks like I'd have to be using Webpack2 for this finer-grained mangle to work
+        screw_ie8: true,
+        keep_fnames: true
+      }*/
+    }),
     new ExtractTextPlugin('[name].[hash].css'),
     new webpack.DefinePlugin({
       'process.env': {
