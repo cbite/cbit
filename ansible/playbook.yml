@@ -6,11 +6,11 @@
 
   roles:
 
-  - { role: system-setup, become: yes }
-  - { role: ANXS.postgresql, become: yes }
+  - { role: system-setup, become: yes, tags: [init] }
+  - { role: ANXS.postgresql, become: yes, tags: [init] }
   # TODO: Use this official role instead: https://github.com/elastic/ansible-elasticsearch
-  - { role: geerlingguy.elasticsearch, become: yes, java_packages: [java-1.8.0-openjdk] }
-  - { role: finish-setup, become: yes }
+  - { role: geerlingguy.elasticsearch, become: yes, java_packages: [java-1.8.0-openjdk], tags: [init] }
+  - { role: finish-setup, become: yes, tags: [init] }
 
-  - { role: backend, become: yes }
-  - { role: frontend, become: yes }
+  - { role: backend, become: yes, tags: [backend] }
+  - { role: frontend, become: yes, tags: [frontend] }
