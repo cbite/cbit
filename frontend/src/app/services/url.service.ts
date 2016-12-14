@@ -1,8 +1,12 @@
 import {Injectable} from "@angular/core";
 
-//const BASE_URL = "http://localhost:23456";   // Development
-const BASE_URL = "https://localhost/api";  // Pre-production
-//const BASE_URL = "/api";                     // Production
+let BASE_URL: string;
+if (process.env.ENV === 'production') {
+  BASE_URL = "https://localhost/api";    // Pre-production
+  //const BASE_URL = "/api";               // Production
+} else {
+  BASE_URL = "http://localhost:23456";   // Development
+}
 
 /*
   Central location for URLs to access back-end API
