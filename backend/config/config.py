@@ -22,8 +22,7 @@ ES_INDEX = 'cbit'
 ES_STUDY_DOCTYPE = 'study'
 ES_SAMPLE_DOCTYPE = 'sample'
 
-FQDN = 'localhost:23456'  # TODO: In production, should be cbit.maastrichtuniversity.nl
-URL_BASE = 'http://{0}'.format(FQDN)
+URL_BASE = 'http://localhost:23456'  # TODO: In production, should be https://cbit.maastrichtuniversity.nl/api
 
 UPLOADS_PATH = 'uploads'
 DOWNLOADS_PATH = 'downloads'

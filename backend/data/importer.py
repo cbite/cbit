@@ -22,8 +22,8 @@ def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, v
     result = a.investigation
 
     # Add download URL for now
-    result['*Archive URL'] = "http://{fqdn}/studies/{study_uuid}/archive".format(
-        fqdn=cfg.FQDN,
+    result['*Archive URL'] = "{url_base}/studies/{study_uuid}/archive".format(
+        url_base=cfg.URL_BASE,
         study_uuid=study_uuid
     )
 
