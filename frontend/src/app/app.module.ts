@@ -35,6 +35,7 @@ import {ChangePasswordComponent} from "./change-password.component";
 import {UserManagementComponent, UserEditorComponent, AddUserComponent} from "./user-management.component";
 import {Ng2SliderComponent} from "./slider/ng2-slider.component";
 import {HorizontallySlidableDirective} from "./slider/horizontally-slidable.directive";
+import {AboutComponent} from "./about.component";
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import {HorizontallySlidableDirective} from "./slider/horizontally-slidable.dire
     UserEditorComponent,
     AddUserComponent,
     WelcomeComponent,
+    AboutComponent,
     BrowserComponent,
     DownloadComponent,
     UploadComponent,

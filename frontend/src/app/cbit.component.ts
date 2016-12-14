@@ -10,6 +10,7 @@ import {URLService} from "./services/url.service";
   template: `
     <navbar></navbar>
     <img id="bg" src="public/images/achtergrond_transp_v3.png">
+    <img id="bg2" src="public/images/achtergrond 2_transp.png">
     <main>
       <router-outlet></router-outlet>
     </main>
@@ -27,7 +28,17 @@ import {URLService} from "./services/url.service";
        
       width: 500px;
       z-index: -1;
-      /*opacity: 0.5;*/
+      opacity: 0.3;
+    }
+
+    #bg2 {
+      position: fixed; 
+      top: 60px; 
+      left: 10px;
+       
+      width: 300px;
+      z-index: -1;
+      opacity: 0.3;
     }
   `],
   providers: [URLService, StudyService, FiltersService, DownloadSelectionService, AuthenticationService]

@@ -33,6 +33,9 @@ import {ChangePasswordComponent} from "./change-password.component";
             <li [class.active]="isCurrentRoute('/welcome')">
               <a routerLink="/welcome">Welcome</a>
             </li>
+            <li [class.active]="isCurrentRoute('/about')">
+              <a routerLink="/about">About</a>
+            </li>
             <li [class.active]="isCurrentRoute('/browse')">
               <a routerLink="/browse"  >Browse</a>
             </li>

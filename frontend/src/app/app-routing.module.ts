@@ -9,10 +9,12 @@ import {UploadComponent} from "./uploader/upload.component";
 import {MetadataComponent} from "./metadata.component";
 import {StudyManagementComponent} from "./study-management.component";
 import {UserManagementComponent} from "./user-management.component";
+import {AboutComponent} from "./about.component";
 
 const routes: Routes = [
   { path: '',           redirectTo: '/welcome', pathMatch: 'full' },
   { path: 'welcome',    component: WelcomeComponent },
+  { path: 'about',      component: AboutComponent },
   { path: 'browse',     component: BrowserComponent },
   { path: 'download',   component: DownloadComponent },
   { path: 'upload',     component: UploadComponent },
