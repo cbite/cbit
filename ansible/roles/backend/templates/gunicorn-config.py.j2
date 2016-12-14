@@ -1,0 +1,17 @@
+# NOTE: This file is used in production and replaces config file in backend sources
+
+import multiprocessing
+
+bind = [
+    "127.0.0.1:23456", # Proxied via Nginx, so we only expose a local connection for Nginx
+]
+workers = multiprocessing.cpu_count() * 2 + 1
+worker_class = 'sync'  # WARNING: if you change to gevent, patch psycopg2 to be gevent-safe: https://bitbucket.org/dvarrazzo/psycogreen/
+pidfile = 'pidfile.txt'
+reload = False
+#daemon = True   # TODO: Uncomment in production (maybe?  think about it, systemd already daemonizes this just fine...)
+user = 'cbit'
+group = 'cbit'
+
+accesslog = '/var/log/cbit-backend/access.log'
+errorlog = '/var/log/cbit-backend/error.log'

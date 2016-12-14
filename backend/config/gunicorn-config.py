@@ -1,3 +1,5 @@
+# NOTE: This file is only used in development!  See ansible deployment scripts for production
+
 import multiprocessing
 
 bind = [

@@ -1,4 +1,4 @@
-# NOTE: This file is only used in development!  See ansible deployment scripts for production
+# NOTE: This file is used in production and replaces config file in backend sources
 
 DB_HOST = "localhost"
 DB_PORT = 5432
@@ -24,7 +24,7 @@ ES_INDEX = 'cbit'
 ES_STUDY_DOCTYPE = 'study'
 ES_SAMPLE_DOCTYPE = 'sample'
 
-URL_BASE = 'http://localhost:23456'  # TODO: In production, should be https://cbit.maastrichtuniversity.nl/api
+URL_BASE = 'https://localhost/api'
 
 UPLOADS_PATH = 'uploads'
 DOWNLOADS_PATH = 'downloads'
