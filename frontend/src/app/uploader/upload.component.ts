@@ -684,14 +684,6 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dimensions": "none",
     "preferredUnit": "none"
   },
-  "Alignment of crystals": {
-    "category": "Material > Physical",
-    "dataType": "double",
-    "description": "Alignment of crystals in a polymer as measured by SAXS/WAXS",
-    "visibility": "main",
-    "dimensions": "none",    // TODO: FIXME
-    "preferredUnit": "none"  // TODO: FIXME
-  },
   "Polymerization mechanism": {
     "category": "Material > Physical",
     "dataType": "string",
