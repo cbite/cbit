@@ -24,7 +24,7 @@ import {ChangePasswordComponent} from "./change-password.component";
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><img src="public/images/cbit_logo.png"></a>
+          <a class="navbar-brand" href="#" (click)="$event.preventDefault()"><img src="public/images/cbit_logo.png"></a>
         </div>
     
         <div id="navbar" [collapse]="navBarCollapsed" class="navbar-collapse">
