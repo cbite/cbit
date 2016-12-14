@@ -1,44 +1,54 @@
 # SSH configuration file for UMaastricht cBiT project
-# Written by Patrick Varilly, 19 Oct 2016
+# Written by Patrick Varilly, 19 Oct - 16 Dec 2016
 
-# t2.micro instance in eu-central-1 AWS region, flushed every weekend
-# Running Ubuntu Server 14.04 LTS (HVM), SSD Volume Type - ami-26c43149
-# Rebuild from scratch using Ansible playbook
+
+# On-site VMWare machine, accessible only inside UMaastricht VPN
+# CentOS Linux release 7.2.1511 (Core)
 #
-# Tunneling:
+# Possibly useful SSH tunnels:
+# - 80: nginx, serving HTTP traffic
+# - 443: nginx, serving HTTPS traffic
 # - 5432: postgres
 # - 9200: elasticsearch
-# - 80: iRODS REST endpoint
+# - 8080: iRODS REST endpoint
 # - 1247: iRODS Jargon endpoint
 # - 8889: remote IPython Notebook
 #
 Host cbit
-  HostName 52.57.221.242
-  User ubuntu
-  IdentityFile /Users/pat/Work/VarillySciences/2016_UMaastricht/umaastricht-cbit.pem
-  LocalForward 5432 localhost:5432
-  LocalForward 9200 localhost:9200
-  # frontend.acc.rit.unimaas.nl can only be resolved inside the UMasstricht network, resolve it here directly,
-  # and then have a local alias in /etc/hosts from frontend.acc.rit.unimaas.nl to 127.0.0.1
-  LocalForward 80 137.120.31.79:80
-  LocalForward 1247 137.120.31.79:1247
-  LocalForward 8889 localhost:8888
-  Compression Yes
+  HostName 137.120.31.87
+  #LocalForward 80 localhost:80
+  #LocalForward 443 localhost:443
+  #LocalForward 5432 localhost:5432
+  #LocalForward 9200 localhost:9200
+  #LocalForward 8080 frontend.acc.rit.unimaas.nl:80
+  #LocalForward 1247 frontend.acc.rit.unimaas.nl:1247
+  #LocalForward 8889 localhost:8888
 
 
-# t2.micro instance in eu-central-1 AWS region, created in sprint #4 as a playground for the real deployment
+# t2.micro instance in eu-central-1 AWS region, mimics real on-site machine as closely as possible.
 # Running CentOS 7.2 release 1602 (x86_64) - with Updates HVM - ami-9bf712f4
 # (full details: CentOS Linux 7 x86_64 HVM EBS 1602-b7ee8a69-ee97-4a49-9e68-afaee216db2e-ami-d7e1d2bd.3)
 # Rebuild from scratch using Ansible playbook
-# 
-Host cbit2
+#
+# Possibly useful SSH tunnels:
+# - 80: nginx, serving HTTP traffic
+# - 443: nginx, serving HTTPS traffic
+# - 5432: postgres
+# - 9200: elasticsearch
+# - 8080: iRODS REST endpoint
+# - 1247: iRODS Jargon endpoint
+# - 8889: remote IPython Notebook
+#
+Host awscbit
   HostName 35.156.223.86
   User centos
   IdentityFile /Users/pat/Work/VarillySciences/2016_UMaastricht/umaastricht-cbit.pem
-
-
-# On-site VMWare machine, accessible only inside UMaastricht VPN
-# CentOS Linux release 7.2.1511 (Core) 
-Host realcbit
-  HostName 137.120.31.87
-  
+  #LocalForward 80 localhost:80
+  #LocalForward 443 localhost:443
+  #LocalForward 5432 localhost:5432
+  #LocalForward 9200 localhost:9200
+  ## frontend.acc.rit.unimaas.nl can only be resolved inside the UMasstricht network, resolve it here directly,
+  ## and then have a local alias in /etc/hosts from frontend.acc.rit.unimaas.nl to 127.0.0.1
+  #LocalForward 8080 137.120.31.79:80
+  #LocalForward 1247 137.120.31.79:1247
+  #LocalForward 8889 localhost:8888
