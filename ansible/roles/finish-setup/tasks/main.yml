@@ -3,5 +3,5 @@
 - name: finish-setup | Ensure postgres starts at boot time
   service:
     name: "{{ postgresql_service_name }}"
-    started: yes
+    state: started
     enabled: yes

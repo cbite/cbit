@@ -143,9 +143,12 @@
     mode: 0644
   register: tmpfiles
 
+- name: backend | Trigger systemd reload if needed
+  command: systemctl daemon-reload
+  when: service|changed or socket|changed or tmpfiles|changed
+
 - name: backend | Start and enable cbit-backend service
   service:
     name: cbit-backend
     state: started
     enabled: yes
-    daemon-reload: "{{ service|changed or socket|changed or tmpfiles|changed }}"
