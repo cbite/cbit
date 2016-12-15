@@ -1201,7 +1201,33 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
     <h1>Upload New Study</h1>
     
     <div [class.hidden]="step !== 1">
-      <h2>Step 1: Upload a .zip archive in ISAtab format</h2>
+      <h2>Step 1a: Upload a .zip archive in ISAtab format from RIT (iRODS)</h2>
+      <p>Click on an iRODS folder name to start upload:</p>
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2 well irods-list">
+          <div *ngIf="!iRODSListReady">
+            Fetching study list from iRODS... <spinner></spinner>
+          </div>
+          <div *ngIf="iRODSListReady">
+            <ul>
+              <li *ngFor="let iRODSStudyName of iRODSStudyNames">
+                <a href="#" (click)="$event.preventDefault(); kickOffIRODSUpload(iRODSStudyName)">
+                  {{ iRODSStudyName }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <span class="status" *ngIf="iRODSStatus">Status: {{ iRODSStatus }}</span>
+        </div>
+      </div>
+
+      <h1>OR...</h1>
+
+      <h2>Step 1b: Upload a .zip archive in ISAtab format from this computer</h2>
       <div [class.disabled]="uploadFileChooserDisabled">
         <div ng2FileDrop
              [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
@@ -1223,7 +1249,7 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
           <div class="w3-progress-container">
             <div class="w3-progressbar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
           </div>
-          <span *ngIf="status">Status: {{ status }}</span>
+          <span class="status" *ngIf="status">Status: {{ status }}</span>
         </div>
       </div>
     </div>
@@ -1289,6 +1315,17 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
     .disabled { color: rgb(128, 128, 128) }
     .disabled .well { background-color:#fcfcfc }
     .hidden { display: none }
+    
+    .status { color: red; }
+    .irods-list {
+      padding: 10px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .irods-list ul {
+      padding-left: 20px;
+      margin: 0;
+    }
   `]
 })
 export class UploadComponent {
@@ -1311,6 +1348,10 @@ export class UploadComponent {
   fieldMetadataForm: FormGroup;
   errorMessage: string = "";
 
+  iRODSListReady = false;
+  iRODSStudyNames: string[] = [];
+  iRODSStatus = '';
+
   studyPublicationDate: string = (new Date()).toISOString().substring(0, 10);  // YYYY-MM-DD
   studyInitiallyVisible: boolean = true;
 
@@ -1326,6 +1367,25 @@ export class UploadComponent {
       queueLimit: 1,
       disableMultipart: true,  // Send the file body directly as request body, don't wrap it in any way
       authToken: this._auth.headers()['Authorization']
+    });
+  }
+
+  ngOnInit() {
+    $.ajax({
+      type: 'GET',
+      url: this._url.iRODSListResource(),
+      headers: this._auth.headers(),
+      dataType: 'json',
+      success: (iRODSList: string[]) => {
+        this.iRODSStudyNames = iRODSList;
+      },
+      error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
+        this.iRODSStatus = `Failed to get list of studies from iRODS: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
+      },
+      complete: () => {
+        this.iRODSListReady = true;
+        this.changeDetectorRef.detectChanges();
+      }
     });
   }
 
@@ -1361,8 +1421,33 @@ export class UploadComponent {
     }
   }
 
+  kickOffIRODSUpload(iRODSStudyName: string) {
+    this.iRODSStatus = 'Working on it (this can take quite a while!)...';
+    $.ajax({
+      type: 'POST',
+      url: this._url.uploadsIRODSResource(iRODSStudyName),
+      headers: this._auth.headers(),
+      dataType: 'json',
+      success: (uploadsResponse: UploadsResponse) => {
+        this.proceedToUploadsStep2(uploadsResponse);
+      },
+      error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
+        this.step = 4;
+        this.errorMessage = `iRODS upload failed: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
+      },
+      complete: () => {
+        this.iRODSListReady = true;
+        this.changeDetectorRef.detectChanges();
+      }
+    })
+  }
+
   onUploadSuccess(response: string, status: number, headers: ParsedResponseHeaders): void {
     let jResponse: UploadsResponse = JSON.parse(response);
+    this.proceedToUploadsStep2(jResponse);
+  }
+
+  proceedToUploadsStep2(jResponse: UploadsResponse) {
     this.upload_uuid = jResponse.upload_uuid;
     this.confirm_upload_url = jResponse.location;
     this.fieldNames = jResponse.fieldNames;

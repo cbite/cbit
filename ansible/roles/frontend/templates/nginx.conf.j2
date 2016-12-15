@@ -81,6 +81,11 @@ http {
           # Trailing slash is important to remove the /api prefix,
           # see http://serverfault.com/a/444753
           proxy_pass http://app_server/;
+
+          proxy_connect_timeout       {{ request_timeout_s }};
+          proxy_send_timeout          {{ request_timeout_s }};
+          proxy_read_timeout          {{ request_timeout_s }};
+          send_timeout                {{ request_timeout_s }};
         }
 
         location / {

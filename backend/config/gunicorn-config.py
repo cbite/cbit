@@ -18,3 +18,5 @@ accesslog = 'access.log'  # TODO: Place somewhere more useful in production
 errorlog = 'error.log'    # TODO: Place somewhere more useful in production
 
 # TODO: When planning out deployment, go over this page: http://docs.gunicorn.org/en/stable/deploy.html
+
+timeout = 120

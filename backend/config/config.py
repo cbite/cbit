@@ -30,3 +30,9 @@ URL_BASE = 'http://localhost:23456'  # TODO: In production, should be https://cb
 UPLOADS_PATH = 'uploads'
 DOWNLOADS_PATH = 'downloads'
 FILES_PATH = 'files'
+
+IRODS_BASE_URL = "http://frontend.acc.rit.unimaas.nl/rest/"
+IRODS_BASE_DIR = "/nlmumc/projects/P000000003"
+# IRODS_USERNAME = "dataminded-service@maastrichtuniversity.nl";
+IRODS_USERNAME = "service-dataminded"
+IRODS_PASSWORD = "mrln2016?"

@@ -6,7 +6,9 @@ db_user: cbit
 db_pass: 2076a675b6d813b582977189c13a3279cc9cf02a9aeab01389798d9167cf259c8b247aee9a2be149  # `openssl rand -hex 40`
 
 postgresql_version: 9.5
-postgresql_version_terse: "{{ postgresql_version | replace('.', '') }}"  # For use outside ANXS.postgresql role
+
+# For use outside ANXS.postgresql role
+postgresql_version_terse: "{{ postgresql_version | replace('.', '') }}"
 
 postgresql_databases:
   - name: "{{db_name}}"
@@ -22,3 +24,6 @@ postgresql_user_privileges:
 
 
 elasticsearch_cluster_name: cbit.elasticsearch.cluster
+
+# Set up long timeouts to handle uploads of large files (direct or via iRODS)
+request_timeout_s: 120

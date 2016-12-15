@@ -79,4 +79,12 @@ export class URLService {
   uploadsResource(): string {
     return `${BASE_URL}/uploads`;
   }
+
+  uploadsIRODSResource(iRODSStudyName): string {
+    return `${BASE_URL}/uploads/_irods/${iRODSStudyName}`;
+  }
+
+  iRODSListResource(): string {
+    return `${BASE_URL}/irods/list`;
+  }
 }

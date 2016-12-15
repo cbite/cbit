@@ -6,7 +6,11 @@ from middleware.clean_old_uploads import CleanOldUploadsMiddleware
 from middleware.cors import CORSMiddleware
 from middleware.database_session import DatabaseSessionMiddleware
 from middleware.authentication import AuthenticationMiddleware
-from resources.uploads import UploadResource, UploadsResource
+from resources.uploads import (
+    UploadResource,
+    UploadsResource,
+    UploadsIRODSResource,
+)
 from resources.downloads import (
     DownloadsResource,
     DownloadResource,
@@ -26,7 +30,7 @@ from resources.metadata import (
     MetadataField
 )
 from resources.user import UserResource, UsersResource
-
+from resources.irods import IRODSListResource
 
 
 ES_TRACE_LOGGING = False
@@ -54,6 +58,7 @@ middleware.extend([
 app = falcon.API(middleware=middleware)
 
 app.add_route('/uploads', UploadsResource())
+app.add_route('/uploads/_irods/{folder_name}', UploadsIRODSResource())
 app.add_route('/uploads/{upload_uuid}', UploadResource())
 
 app.add_route('/downloads', DownloadsResource())
@@ -77,3 +82,5 @@ app.add_route('/metadata/fields/{field_name}', MetadataField())
 
 app.add_route('/users', UsersResource())
 app.add_route('/users/{username}', UserResource())
+
+app.add_route('/irods/list', IRODSListResource())
