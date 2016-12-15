@@ -82,10 +82,19 @@ class DownloadsResource(object):
         for hit in rawResults["hits"]["hits"]:
             result[hit["_id"]] = hit
 
+        sampleInfos = {}
+        for sample in result.itervalues():
+            sampleInfos[sample['_id']] = sample['_source']
+
         # 1. Extract study IDs
         studyIds = set()
         for sample in result.itervalues():
             studyIds.add(sample["_parent"])
+
+        # 1.5 Organize sample and study IDs in a nice hierarchy
+        sampleIdsByStudy = defaultdict(list)
+        for sample in result.itervalues():
+            sampleIdsByStudy[sample["_parent"]].append(sample["_id"])
 
         # 1.25 Fetch study metadata
         rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, body={
@@ -99,16 +108,7 @@ class DownloadsResource(object):
         })
         studyInfos = {}
         for hit in rawResults['hits']['hits']:
-            studyInfos[hit['_id']] = {
-                "STUDY": {
-                    "Study Title": hit['_source']['STUDY']['Study Title']
-                }
-            }
-
-        # 1.5 Organize sample and study IDs in a nice hierarchy
-        sampleIdsByStudy = defaultdict(list)
-        for sample in result.itervalues():
-            sampleIdsByStudy[sample["_parent"]].append(sample["_id"])
+            studyInfos[hit['_id']] = hit['_source']
 
         # 2. Create download folders / DB records, etc.
         download_uuid = '{download_uuid}'.format(download_uuid=uuid.uuid4())
@@ -129,7 +129,8 @@ class DownloadsResource(object):
         # Now dump bundle creation config into temporary space
         downloadConfig = {
             'targetData': sampleIdsByStudy,
-            'studyInfos': studyInfos
+            'studyInfos': studyInfos,
+            'sampleInfos': sampleInfos
         }
         os.makedirs(download_dir)
         configFilepath = os.path.join(download_dir, 'config.json')
@@ -158,7 +159,7 @@ class DownloadProgressResource(object):
         db_conn = req.context["db"]
         with db_conn.cursor() as cur:
             cur.execute("""
-                SELECT status, progress
+                SELECT status, progress, errorString
                 FROM downloads
                 WHERE uuid = %s
             """, (download_uuid,))
@@ -168,12 +169,13 @@ class DownloadProgressResource(object):
         if len(results) == 0:
             raise falcon.HTTPNotFound(description="Download ID {0} doesn't exist".format(download_uuid))
         else:
-            ((status, progress),) = results
+            ((status, progress, errorString),) = results
 
             resp.status = falcon.HTTP_OK
             resp_json = {
                 'status': status,
-                'progress': progress
+                'progress': progress,
+                'errorString': errorString
             }
             resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 

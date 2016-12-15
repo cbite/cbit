@@ -1,8 +1,15 @@
 import zipfile
 import reader
-from reader import read_investigation, read_study_sample, read_assay, read_annotations, read_processed_data
+from reader import (
+    read_investigation,
+    read_study_sample,
+    read_assay,
+    #read_annotations,
+    read_processed_data
+)
 import re
 from data.unit_conversions import DimensionsRegister, INVALID_DIMENSIONS
+import math
 
 class FieldAnalysisResults(object):
     def __init__(self, fieldName, isUnitful, possibleDimensions, looksNumeric):
@@ -20,7 +27,14 @@ class FieldAnalysisResults(object):
         }
 
 class Archive(object):
-    def __init__(self, investigation, study_samples, assay, processed_data_set, annotations):
+    def __init__(self, investigation_file_name, study_file_name, assay_file_name, processedDataFilename,
+                 investigation, study_samples, assay, processed_data_set, annotations):
+
+        self.investigation_file_name = investigation_file_name
+        self.study_file_name = study_file_name
+        self.assay_file_name = assay_file_name
+        self.processedDataFilename = processedDataFilename
+
         self.investigation = investigation
         self.study_sample = study_samples
         self.assay = assay
@@ -221,45 +235,63 @@ def read_archive(archive_filename, only_metadata=True):
             # TODO: Reenable actual data ingestion!
 
             # TODO: Support multiple data set files per study
-            if len(set(assay['Derived Array Data Matrix File'])) != 1:
+            # (for RNAseq files, where the derived data filename is in the column
+            # 'Derived Data File', each sample has one file; we treat these files
+            # as supplementary files, to be included if the sample is selected
+            # in a download)
+            assayFileNameColumn = None
+            if 'Derived Array Data Matrix File' in assay.columns:
+                assayFileNameColumn = 'Derived Array Data Matrix File'
+
+            if assayFileNameColumn and len(set(assay[assayFileNameColumn])) > 1:
                 raise NotImplementedError('Multiple data set files per study')
-            processedDataFilename = assay['Derived Array Data Matrix File'].iloc[0]
-            if processedDataFilename not in filenames:
-                raise IOError(
-                    'Processed data file "{0}" is missing from archive'.format(
-                        processedDataFilename))
-            with z.open(processedDataFilename, 'r') as f:
-                processed_data_set = read_processed_data(f)
+            else:
+                def isNaN(x):
+                    return x != x
+
+                processedDataFilename = assay[assayFileNameColumn].iloc[0] if assayFileNameColumn else None
+                if not processedDataFilename or isNaN(processedDataFilename):
+                    processed_data_set = None
+                elif processedDataFilename not in filenames:
+                    raise IOError(
+                        'Processed data file "{0}" is missing from archive'.format(
+                            processedDataFilename))
+                else:
+                    with z.open(processedDataFilename, 'r') as f:
+                        processed_data_set = read_processed_data(f)
 
             # Check that processed data file for a sample actually includes data for each sample
-            for sampleName in study_sample['Sample Name']:
-                if sampleName not in processed_data_set.columns:
-                    raise ValueError(
-                        "Sample {0} has no corresponding data in {1}".format(
-                            sampleName, processedDataFilename))
+            #for sampleName in study_sample['Sample Name']:
+            #    if sampleName not in processed_data_set.columns:
+            #        raise ValueError(
+            #            "Sample {0} has no corresponding data in {1}".format(
+            #                sampleName, processedDataFilename))
 
             # And check that every column in the processed data has an associated sample in the study
-            for sampleName in processed_data_set.columns:
-                if sampleName not in study_sample['Sample Name'].values:
-                    raise ValueError(
-                        "No sample metadata for sample {0} in {1}".format(
-                            sampleName, processedDataFilename))
+            #for sampleName in processed_data_set.columns:
+            #    if sampleName not in study_sample['Sample Name'].values:
+            #        raise ValueError(
+            #            "No sample metadata for sample {0} in {1}".format(
+            #                sampleName, processedDataFilename))
 
             # TODO: Support multiple annotation files per study
-            if len(set(assay['Comment[Annotation file]'])) != 1:
-                raise NotImplementedError('Multiple annotation files per study')
-            annotationFilename = assay['Comment[Annotation file]'].iloc[0]
-            if annotationFilename not in filenames:
-                raise IOError(
-                    'Annotations file "{0}" is missing from archive'.format(
-                        annotationFilename))
-            with z.open(annotationFilename, 'r') as f:
-                annotationData = read_annotations(f)
+            #if len(set(assay['Comment[Annotation file]'])) != 1:
+            #    raise NotImplementedError('Multiple annotation files per study')
+            #annotationFilename = assay['Comment[Annotation file]'].iloc[0]
+            #if annotationFilename not in filenames:
+            #    raise IOError(
+            #        'Annotations file "{0}" is missing from archive'.format(
+            #            annotationFilename))
+            #with z.open(annotationFilename, 'r') as f:
+            #    annotationData = read_annotations(f)
+            annotationData = None
 
         else:
             # Skip raw data for now
+            processedDataFilename = ''
             processed_data_set = None
             annotationData = None
 
 
-        return Archive(investigation, study_sample, assay, processed_data_set, annotationData)
+        return Archive(investigation_file_name, study_file_name, assay_file_name, processedDataFilename,
+                       investigation, study_sample, assay, processed_data_set, annotationData)

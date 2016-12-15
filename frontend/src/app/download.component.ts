@@ -14,7 +14,8 @@ interface DownloadPostResponse {
 
 interface DownloadProgressResponse {
   status: string,
-  progress: number
+  progress: number,
+  errorString?: string
 }
 
 @Component({
@@ -181,6 +182,9 @@ export class DownloadComponent {
           // Kick off download
           window.location.href = self.downloadLocation;
 
+        } else if (result.status == 'error') {
+          self.errorMessage = `Error: ${result.errorString}!`;
+          self.preparingDownload = false;
         } else {
           self.schedulePollForProgress();
         }

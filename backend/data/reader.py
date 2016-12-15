@@ -217,7 +217,7 @@ def read_study_sample(f):
     return df
 
 
-def clean_up_study_samples(df, db_conn):
+def clean_up_study_samples(df, db_conn=None):
     # TODO: Really have to refactor this to not use the REST backend DB connection directly
 
     clean_column_names = [
@@ -226,11 +226,15 @@ def clean_up_study_samples(df, db_conn):
         for f in df.columns.values
     ]
 
-    with db_conn.cursor() as cur:
-        fieldMetas = {
-            f.fieldName: f
-            for f in FieldMeta.from_db_multi(cur, clean_column_names)
-        }  # type: dict[str, FieldMeta]
+    convertUnits = (db_conn is not None)
+    if db_conn:
+        with db_conn.cursor() as cur:
+            fieldMetas = {
+                f.fieldName: f
+                for f in FieldMeta.from_db_multi(cur, clean_column_names)
+            }  # type: dict[str, FieldMeta]
+    else:
+        fieldMetas = None
 
     unit_colnames = {}
     for colname, dirty_colname in zip(clean_column_names, df.columns):
@@ -250,15 +254,16 @@ def clean_up_study_samples(df, db_conn):
         protocols = []
         for colname, value in zip(clean_column_names, row):
             if (colname == 'Sample Name'
-                or (colname in fieldMetas and fieldMetas[colname].dataType == 'double' and isFloaty(value) and np.isnan(float(value)))):
+                or ((fieldMetas is None or (colname in fieldMetas and fieldMetas[colname].dataType == 'double')) and isFloaty(value) and np.isnan(float(value)))):
                 pass
             elif colname.startswith('Protocol REF'):
                 protocols.append(value)
-            elif colname.endswith('Unit'):
+            elif (convertUnits and colname.endswith('Unit')):
                 pass
 
             # TODO: REALLY, REALLY need to refactor the broken-down fields
-            elif (colname not in (u'Phase composition', u'Elements composition', u'Wettability') and
+            elif (convertUnits and
+                  colname not in (u'Phase composition', u'Elements composition', u'Wettability') and
                   colname in fieldMetas and
                   fieldMetas[colname].dimensions != 'none' and
                   fieldMetas[colname].dimensions in DimensionsRegister):
@@ -269,7 +274,7 @@ def clean_up_study_samples(df, db_conn):
                     unit_converter.toCanonicalUnit(float(value), row[unit_colnames[colname]])
                 )
             elif not isFloaty(value) or not np.isnan(float(value)):
-                if colname in fieldMetas and fieldMetas[colname].dataType == 'double' and colname not in ('Phase composition', 'Elements composition', 'Wettability'):
+                if fieldMetas and colname in fieldMetas and fieldMetas[colname].dataType == 'double' and colname not in ('Phase composition', 'Elements composition', 'Wettability'):
                     result[colname] = float(value)
                 else:
                     result[colname] = value
@@ -407,15 +412,15 @@ def read_processed_data(f):
     # A processed data file is a flat table of expression strength numbers
     # (in some arbitrary units).  Rows are genes (more precisely, individual
     # probes in the gene chip), columns are samples
-    df = pd.read_table(f, index_col=0, encoding=cfg.FILE_ENCODING)
+    df = pd.read_table(f, index_col=0, encoding=cfg.FILE_ENCODING, dtype='str')
     return df
 
 
-def read_annotations(f):
-    # An annotations file is a gene-chip-vendor-provided spec of what each
-    # probe (row in processed data) is actually talking about
-    #
-    # Starts with a bunch of comment lines with descriptions of each column
-    # (ignore for now)
-    df = pd.read_table(f, comment='#', encoding=cfg.FILE_ENCODING)
-    return df
+#def read_annotations(f):
+#    # An annotations file is a gene-chip-vendor-provided spec of what each
+#    # probe (row in processed data) is actually talking about
+#    #
+#    # Starts with a bunch of comment lines with descriptions of each column
+#    # (ignore for now)
+#    df = pd.read_table(f, comment='#', encoding=cfg.FILE_ENCODING, dtype='str')
+#    return df
