@@ -282,19 +282,24 @@ def read_archive(archive_filename, only_metadata=True):
                     with z.open(rawDataFilename, 'r') as f:
                         raw_data_set = read_raw_data(f)
 
-            # Check that processed data file for a sample actually includes data for each sample
-            #for sampleName in study_sample['Sample Name']:
-            #    if sampleName not in processed_data_set.columns:
-            #        raise ValueError(
-            #            "Sample {0} has no corresponding data in {1}".format(
-            #                sampleName, processedDataFilename))
+            if processed_data_set is not None:
+                # Check that processed data file for a sample actually includes data for each sample
+                for sampleName in study_sample['Sample Name']:
+                    if sampleName not in processed_data_set.columns:
+                        raise ValueError(
+                            "Sample {0} has no corresponding processed data in {1}".format(
+                                sampleName, processedDataFilename))
 
-            # And check that every column in the processed data has an associated sample in the study
-            #for sampleName in processed_data_set.columns:
-            #    if sampleName not in study_sample['Sample Name'].values:
-            #        raise ValueError(
-            #            "No sample metadata for sample {0} in {1}".format(
-            #                sampleName, processedDataFilename))
+                # And check that every column in the processed data has an associated sample in the study
+                for sampleName in processed_data_set.columns:
+                    if sampleName not in study_sample['Sample Name'].values:
+                        raise ValueError(
+                            "No sample metadata for sample {0} (found in processed data) in {1}".format(
+                                sampleName, processedDataFilename))
+
+            # Doing similar checks on the raw data is harder: the raw data has
+            # multiple columns per sample, where each such column name has
+            # the sample name as a prefix.  Don't bother
 
             # TODO: Support multiple annotation files per study
             #if len(set(assay['Comment[Annotation file]'])) != 1:

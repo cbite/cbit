@@ -1345,6 +1345,11 @@ export class UploadComponent {
 
   onUploadProgress(progress: any): void {
     this.progress = progress;
+    if (progress < 100) {
+      this.status = "Uploading...";
+    } else {
+      this.status = "Validating file contents...";
+    }
     this.changeDetectorRef.detectChanges();
   }
 

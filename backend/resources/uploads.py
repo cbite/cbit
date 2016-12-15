@@ -78,7 +78,7 @@ class UploadsResource(object):
 
         # Check that archive is valid
         try:
-            a = read_archive(filepath, only_metadata=True)
+            a = read_archive(filepath, only_metadata=False)
         except Exception as e:
             raise falcon.HTTPBadRequest(
                 description="Malformed archive: {0}".format(str(e))

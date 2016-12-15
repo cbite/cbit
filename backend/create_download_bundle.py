@@ -165,18 +165,8 @@ try:
                 )
 
                 # Subselect relevant samples in processed data
-                # (sometimes the column names do not match sample names; in that
-                # case, match columns in the processed data one-to-one with
-                # rows in the study_sample file).
                 if a.processed_data_set is not None:
-                    processed_data_columns_names = set(a.processed_data_set.columns.values)
-                    if not sampleNames.issubset(processed_data_columns_names):
-                        sampleNameIndices = {}
-                        for i, row in a.study_sample.iterrows():
-                            sampleNameIndices[row['Sample Name']] = i
-                        df = a.processed_data_set.iloc[:, [sampleNameIndices[sampleName] for sampleName in sampleNames]]
-                    else:
-                        df = a.processed_data_set[list(sampleNames)]
+                    df = a.processed_data_set[sorted(list(sampleNames))]
 
                     sio = StringIO()
                     df.to_csv(sio, index_label='Probe ID', encoding='utf-8')
