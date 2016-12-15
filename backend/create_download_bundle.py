@@ -153,7 +153,7 @@ try:
                 df = pd.DataFrame.from_dict(sampleInfo, orient='index', dtype='str')
                 sio = StringIO()
                 df = df.reindex_axis(sorted(df.columns), axis=1)   # TODO: Fix sorting so that units always come right after unitful quantity
-                df.to_csv(sio, index_label='Sample Name')
+                df.to_csv(sio, index_label='Sample Name', encoding='utf-8')
                 zf.writestr(
                     os.path.join(studyFolderName, "sample_info.csv"),
                     sio.getvalue()
@@ -174,7 +174,7 @@ try:
                         df = a.processed_data_set[list(sampleNames)]
 
                     sio = StringIO()
-                    df.to_csv(sio, index_label='Probe ID')
+                    df.to_csv(sio, index_label='Probe ID', encoding='utf-8')
                     zf.writestr(
                         os.path.join(studyFolderName, "processed_expression_data.csv"),
                         sio.getvalue()
