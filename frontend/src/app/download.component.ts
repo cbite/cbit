@@ -43,7 +43,10 @@ enum StudyCheckboxState {
             The archive will download automatically when finished.  You can still remove any
             study or sample by clicking on the checkboxes below. 
           </p>
-          <div class="limitedHeight">
+          <div *ngIf="!ready">
+            <spinner></spinner>
+          </div>
+          <div *ngIf="ready" class="limitedHeight">
             <ul class="studiesList">
               <li *ngFor="let study of studies" [formGroupName]="study._id">
               
@@ -131,8 +134,6 @@ enum StudyCheckboxState {
 })
 export class DownloadComponent {
   @Input() modal: ModalDirective;
-  numSelectedStudies: number = 0;
-  numSelectedSamples: number = 0;
   studies: Study[] = [];
   samplesInStudies: { [studyId: string]: Sample[] } = {};
   visibility: { [studyId: string]: boolean } = {};
@@ -145,6 +146,7 @@ export class DownloadComponent {
   download_uuid: string;
   downloadLocation: string;
   progressUrl: string;
+  ready: boolean = false;
 
   private jqElem: JQuery;
   form: FormGroup = new FormGroup({});
@@ -163,11 +165,14 @@ export class DownloadComponent {
   }
 
   refresh(): void {
+    this.ready = false;
+    this.errorMessage = '';
+    this.preparingDownload = false;
+    this.preparationProgress = 0;
+    this.downloadReady = false;
+    this.visibility = {};
+
     let studyIds = Object.keys(this._downloadSelectionService.getSelection().selection);
-    this.numSelectedStudies = studyIds.length;
-    this.numSelectedSamples =
-      Object.values(this._downloadSelectionService.getSelection().selection)
-        .reduce((soFar, samples) => soFar + Object.keys(samples).length, 0);
 
     let studiesPromise: Promise<{ [studyId: string]: Study }> =
       Promise.all(studyIds.map(studyId => {
@@ -198,15 +203,10 @@ export class DownloadComponent {
         this.studies = Object.values(studies).sort((x, y) => x._source['STUDY']['Study Title'].localeCompare(y._source['STUDY']['Study Title']));
         this.samplesInStudies = samplesInStudies;
         this.form = this.makeFormGroup();
+        this.ready = true;
         this.changeDetectorRef.detectChanges();
       })
     });
-
-    this.errorMessage = '';
-    this.preparingDownload = false;
-    this.preparationProgress = 0;
-    this.downloadReady = false;
-    this.visibility = {};
   }
 
   makeFormGroup(): FormGroup {
