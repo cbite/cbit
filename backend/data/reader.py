@@ -400,10 +400,7 @@ def join_study_sample_and_assay(clean_s, clean_a):
     for sample in samples:
         result[sample] = clean_s[sample]
         for k, v in clean_a[sample].iteritems():
-            if k not in ('Annotation file',
-                         'Array Data Matrix File',
-                         'Array Design REF',
-                         'Derived Array Data Matrix File'):
+            if k not in ('Array Design REF',):
                 result[sample][u'Transcriptomics Assay Detail: {0}'.format(k)] = v
 
     return result

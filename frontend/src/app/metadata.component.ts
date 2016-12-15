@@ -107,11 +107,30 @@ import {URLService} from "./services/url.service";
                 </div>
               </div>
             </div>
+                  
+                  
+            <div class="form-group">
+              <label [attr.for]="'isSupplementaryFileName-' + kv.key" class="col-sm-2 control-label vcenter">
+                Is Supplementary File Name?
+              </label>
+              <div class="col-sm-4 vcenter">
+                <input type="checkbox"
+                       formControlName="isSupplementaryFileName"
+                       [id]="'isSupplementaryFileName-' + kv.key">
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .vcenter {
+      display: inline-block;
+      vertical-align: middle;
+      float: none;
+    }
+  `]
 })
 export class FieldMetadataEditorComponent implements OnInit, OnChanges {
   @Input() fieldMetas: { [fieldName: string]: FieldMeta } = {};
@@ -144,13 +163,14 @@ export class FieldMetadataEditorComponent implements OnInit, OnChanges {
     for (let fieldName in this.fieldMetas) {
       let fieldMeta = this.fieldMetas[fieldName];
       group[fieldName] = new FormGroup({
-        fieldName:     new FormControl(fieldName),
-        description:   new FormControl(fieldMeta.description, Validators.required),
-        category:      new FormControl(fieldMeta.category),
-        visibility:    new FormControl(fieldMeta.visibility),
-        dataType:      new FormControl(fieldMeta.dataType),
-        dimensions:    new FormControl(fieldMeta.dimensions),
-        preferredUnit: new FormControl(fieldMeta.preferredUnit)
+        fieldName:               new FormControl(fieldName),
+        description:             new FormControl(fieldMeta.description, Validators.required),
+        category:                new FormControl(fieldMeta.category),
+        visibility:              new FormControl(fieldMeta.visibility),
+        dataType:                new FormControl(fieldMeta.dataType),
+        dimensions:              new FormControl(fieldMeta.dimensions),
+        preferredUnit:           new FormControl(fieldMeta.preferredUnit),
+        isSupplementaryFileName: new FormControl(fieldMeta.isSupplementaryFileName),
       });
     }
     return new FormGroup(group);

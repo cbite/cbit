@@ -43,6 +43,69 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dimensions": "none",
     "preferredUnit": "none"
   },
+  "Transcriptomics Assay Detail: Annotation file": {
+    "category": "Technical",
+    "dataType": "string",
+    "description": "File name of vendor-provided annotations for each gene probe (one file per study)",
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none",
+    "isSupplementaryFileName": true
+  },
+  "Transcriptomics Assay Detail: Raw Data File": {
+    "category": "Technical",
+    "dataType": "string",
+    "description": "Raw Data File name or URI for RNAseq data (one sample per file)",
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none",
+    "isSupplementaryFileName": true
+  },
+  "Transcriptomics Assay Detail: Array Data File": {
+    "category": "Technical",
+    "dataType": "string",
+    "description": "Raw Data File name or URI for microarray data (one sample per file)",
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none",
+    "isSupplementaryFileName": true
+  },
+  "Transcriptomics Assay Detail: Array Data Matrix File": {
+    "category": "Technical",
+    "dataType": "string",
+    "description": "Raw Data File name or URI for microarray data (multiple samples per file)",
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none",
+    "isSupplementaryFileName": true
+  },
+  "Transcriptomics Assay Detail: Derived Data File": {
+    "category": "Technical",
+    "dataType": "string",
+    "description": "Processed Data File name or URI (one sample per file)",
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none",
+    "isSupplementaryFileName": true
+  },
+  "Transcriptomics Assay Detail: Derived Array Data File": {
+    "category": "Technical",
+    "dataType": "string",
+    "description": "Processed Data File name or URI (one sample per file)",
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none",
+    "isSupplementaryFileName": true
+  },
+  "Transcriptomics Assay Detail: Derived Array Data Matrix File": {
+    "category": "Technical",
+    "dataType": "string",
+    "description": "Processed Data File name or URI (multiple samples)",
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none",
+    "isSupplementaryFileName": true
+  },
 
   // Biological properties
   "Source Name": {
@@ -324,7 +387,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "Name (or URI) of the file that contains the biomaterial characteristics displayed as a graph or image",
     "visibility": "hidden",
     "dimensions": "none",
-    "preferredUnit": "none"
+    "preferredUnit": "none",
+    "isSupplementaryFileName": true
   },
   "Protocol REF": {
     "category": "Biological",
@@ -1013,11 +1077,29 @@ interface UploadsResponse {
                 </div>
               </div>
             </div>
+                  
+            <div class="form-group">
+              <label [attr.for]="'isSupplementaryFileName-' + fieldName" class="col-sm-2 control-label vcenter">
+                Is Supplementary File Name?
+              </label>
+              <div class="col-sm-4 vcenter">
+                <input type="checkbox"
+                       formControlName="isSupplementaryFileName"
+                       [id]="'isSupplementaryFileName-' + fieldName">
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .vcenter {
+      display: inline-block;
+      vertical-align: middle;
+      float: none;
+    }
+  `]
 })
 export class FieldMetadataFormComponent implements OnInit, OnChanges {
   @Input() fieldNames: string[] = []
@@ -1063,13 +1145,14 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
       let defaults = this.fetchDefaults(fieldName);
 
       group[fieldName] = new FormGroup({
-        fieldName:     new FormControl(fieldName),
-        description:   new FormControl(defaults.description, Validators.required),
-        category:      new FormControl(defaults.category),
-        visibility:    new FormControl(defaults.visibility),
-        dataType:      new FormControl(defaults.dataType),
-        dimensions:    new FormControl(defaults.dimensions || 'none'),
-        preferredUnit: new FormControl(defaults.preferredUnit || 'none'),
+        fieldName:               new FormControl(fieldName),
+        description:             new FormControl(defaults.description, Validators.required),
+        category:                new FormControl(defaults.category),
+        visibility:              new FormControl(defaults.visibility),
+        dataType:                new FormControl(defaults.dataType),
+        dimensions:              new FormControl(defaults.dimensions),
+        preferredUnit:           new FormControl(defaults.preferredUnit),
+        isSupplementaryFileName: new FormControl(defaults.isSupplementaryFileName),
       });
 
       let fieldAnalysis = this.fieldAnalyses[fieldName];
@@ -1084,12 +1167,13 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
   fetchDefaults(fieldName: string): FieldMeta {
 
     let result: FieldMeta = {
-      description:   '',
-      dataType:      'string',
-      visibility:    'additional',
-      category:      'Technical',
-      dimensions:    'none',
-      preferredUnit: 'none'
+      description:             '',
+      dataType:                'string',
+      visibility:              'additional',
+      category:                'Technical',
+      dimensions:              'none',
+      preferredUnit:           'none',
+      isSupplementaryFileName: false,
     };
 
     let fieldAnalysis = this.fieldAnalyses[fieldName];

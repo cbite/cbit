@@ -107,6 +107,7 @@ CREATE TABLE dim_meta_meta (
   ,data_type VARCHAR NOT NULL
   ,dimensions VARCHAR NOT NULL
   ,preferred_unit VARCHAR NOT NULL
+  ,is_supplementary_file_name BOOLEAN NOT NULL
 );
 
 --INSERT INTO dim_meta_meta (field_name, description, category, visibility, data_type, dimensions, preferred_unit)

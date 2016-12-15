@@ -13,6 +13,7 @@ from data import reader
 import tempfile
 import pandas as pd
 from StringIO import StringIO
+from data.fieldmeta import FieldMeta
 
 INIT_PROGRESS = 10   # % progress represented just by kickstarting bundling process
 MAX_FILENAME_LEN = 31
@@ -112,6 +113,10 @@ try:
     studyAndSampleIds = download_config['targetData']
     studyInfos = download_config['studyInfos']
     sampleInfos = download_config['sampleInfos']
+    fieldMetas = {
+        fieldName: FieldMeta.from_json(rawFieldMeta)
+        for fieldName, rawFieldMeta in download_config['fieldMetas'].iteritems()
+    }
 
     studyFolderNameGen = StudyFolderNameGenerator(studyInfos)
 
@@ -181,14 +186,28 @@ try:
                     )
 
                 # And include all other files that aren't covered by the above
+                supFileNameColumns = set(
+                    fieldName
+                    for fieldName, fieldMeta in fieldMetas.iteritems()
+                    if fieldMeta.isSupplementaryFileName
+                )
+                includedFileNames = set()
+                for sampleName, info in sampleInfo.iteritems():
+                    for fieldName, value in info.iteritems():
+                        if fieldName in supFileNameColumns:
+                            includedFileNames.add(value)
+
                 excludedFileNames = set([
                     a.investigation_file_name,
                     a.study_file_name,
                     a.assay_file_name,
                     a.processedDataFilename
                 ])
+
+                print("Including: {0}, excluding: {1}".format(includedFileNames, excludedFileNames))
+
                 for filename in studyZf.namelist():
-                    if filename not in excludedFileNames:
+                    if filename in includedFileNames and filename not in excludedFileNames:
                         zf.writestr(
                             os.path.join(studyFolderName, filename),
                             studyZf.read(filename)

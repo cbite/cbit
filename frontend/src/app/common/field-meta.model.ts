@@ -42,5 +42,6 @@ export interface FieldMeta {
   visibility?: FieldVisibility,
   dataType?: FieldDataType,
   dimensions?: DimensionsType,
-  preferredUnit?: string
+  preferredUnit?: string,
+  isSupplementaryFileName?: boolean
 };

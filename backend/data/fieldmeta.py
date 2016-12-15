@@ -25,7 +25,8 @@ class FieldMeta(object):
 
     validDimensions = frozenset(DimensionsRegister.keys())
 
-    def __init__(self, fieldName, description, category, visibility, dataType, dimensions, preferredUnit):
+    def __init__(self, fieldName, description, category, visibility,
+                 dataType, dimensions, preferredUnit, isSupplementaryFileName):
         """
         Python wrapper object for the corresponding FieldMeta object:
 
@@ -42,7 +43,8 @@ class FieldMeta(object):
           visibility?: FieldVisibility,
           dataType?: FieldDataType,
           dimensions?: DimensionsType,
-          preferredUnit?: string     // Anything returned by DimensionsRegister[x].getPossibleUnits()
+          preferredUnit?: string,     // Anything returned by DimensionsRegister[x].getPossibleUnits()
+          isSupplementaryFileName?: boolean
         };
         """
 
@@ -77,6 +79,7 @@ class FieldMeta(object):
         self.dataType = dataType
         self.dimensions = dimensions
         self.preferredUnit = preferredUnit
+        self.isSupplementaryFileName = isSupplementaryFileName
 
 
     @staticmethod
@@ -96,6 +99,8 @@ class FieldMeta(object):
             raise ValueError("Missing 'dimensions'")
         if 'preferredUnit' not in jsObj:
             raise ValueError("Missing 'preferredUnit'")
+        if 'isSupplementaryFileName' not in jsObj:
+            raise ValueError("Missing 'isSupplementaryFileName'")
 
         return FieldMeta(
             fieldName=jsObj["fieldName"],
@@ -104,7 +109,8 @@ class FieldMeta(object):
             visibility=jsObj["visibility"],
             dataType=jsObj["dataType"],
             dimensions=jsObj["dimensions"],
-            preferredUnit=jsObj["preferredUnit"]
+            preferredUnit=jsObj["preferredUnit"],
+            isSupplementaryFileName=jsObj["isSupplementaryFileName"]
         )
 
 
@@ -117,17 +123,18 @@ class FieldMeta(object):
             "dataType": self.dataType,
             "dimensions": self.dimensions,
             "preferredUnit": self.preferredUnit,
+            "isSupplementaryFileName": self.isSupplementaryFileName,
         }
 
     def copy_with_new_name(self, newFieldName):
         return FieldMeta(newFieldName, self.description,
                          self.category, self.visibility, self.dataType,
-                         self.dimensions, self.preferredUnit)
+                         self.dimensions, self.preferredUnit, self.isSupplementaryFileName)
 
     def copy_with_new_data_type(self, newDataType):
         return FieldMeta(self.fieldName, self.description,
                          self.category, self.visibility, newDataType,
-                         self.dimensions, self.preferredUnit)
+                         self.dimensions, self.preferredUnit, self.isSupplementaryFileName)
 
     # For derived fields, we synthesize field metadata from the underlying fields
     # See reader.apply_special_treatments_to_study_sample for details
@@ -157,7 +164,7 @@ class FieldMeta(object):
 
         cur.execute(
             """
-            SELECT field_name, description, category, visibility, data_type, dimensions, preferred_unit
+            SELECT field_name, description, category, visibility, data_type, dimensions, preferred_unit, is_supplementary_file_name
             FROM dim_meta_meta
             WHERE field_name IN %s
             """, (tuple(set(realFieldNames.values())),))
@@ -165,9 +172,9 @@ class FieldMeta(object):
 
         rawRawResults = [
             FieldMeta(fieldName, description, category, visibility,
-                      dataType, dimensions, preferredUnit)
+                      dataType, dimensions, preferredUnit, isSupplementaryFileName)
             for (fieldName, description, category, visibility, dataType,
-                 dimensions, preferredUnit) in dbResults
+                 dimensions, preferredUnit, isSupplementaryFileName) in dbResults
         ]
 
         rawResults = {
@@ -201,12 +208,12 @@ class FieldMeta(object):
             cur.executemany(
                 """
                 INSERT INTO dim_meta_meta
-                (field_name, description, category, visibility, data_type, dimensions, preferred_unit)
+                (field_name, description, category, visibility, data_type, dimensions, preferred_unit, is_supplementary_file_name)
                 VALUES
-                (%s, %s, %s, %s, %s, %s, %s)
+                (%s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 [
-                    (f.fieldName, f.description, f.category, f.visibility, f.dataType, f.dimensions, f.preferredUnit)
+                    (f.fieldName, f.description, f.category, f.visibility, f.dataType, f.dimensions, f.preferredUnit, f.isSupplementaryFileName)
                     for f in fieldMetas
                 ]
             )
@@ -221,11 +228,12 @@ class FieldMeta(object):
                     description = %s,
                     category = %s,
                     visibility = %s,
-                    preferred_unit = %s
+                    preferred_unit = %s,
+                    is_supplementary_file_name = %s
                 WHERE field_name = %s
                 """,
                 [
-                    (f.description, f.category, f.visibility, f.preferredUnit,
+                    (f.description, f.category, f.visibility, f.preferredUnit, f.isSupplementaryFileName,
 
                     f.fieldName)
                     for f in fieldMetas

@@ -7,6 +7,7 @@ import os
 from collections import defaultdict
 import subprocess
 import shutil
+from data.fieldmeta import FieldMeta
 
 class DownloadsResource(object):
     def on_post(self, req, resp):
@@ -110,6 +111,24 @@ class DownloadsResource(object):
         for hit in rawResults['hits']['hits']:
             studyInfos[hit['_id']] = hit['_source']
 
+        # 1.825 Fetch relevant field metadata
+        db_conn = req.context['db']
+        with db_conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT field_name
+                FROM dim_meta_meta
+                """
+            )
+            dbResults = cur.fetchall()
+            fieldNames = [rawFieldName.decode('utf-8') for (rawFieldName,) in dbResults]
+            rawFieldMetas = FieldMeta.from_db_multi(cur, fieldNames)
+            fieldMetas = {
+                fieldMeta.fieldName: fieldMeta.to_json()
+                for fieldMeta in rawFieldMetas
+            }
+        db_conn.commit()
+
         # 2. Create download folders / DB records, etc.
         download_uuid = '{download_uuid}'.format(download_uuid=uuid.uuid4())
         download_dir = os.path.join(cfg.DOWNLOADS_PATH, download_uuid)
@@ -130,7 +149,8 @@ class DownloadsResource(object):
         downloadConfig = {
             'targetData': sampleIdsByStudy,
             'studyInfos': studyInfos,
-            'sampleInfos': sampleInfos
+            'sampleInfos': sampleInfos,
+            'fieldMetas': fieldMetas
         }
         os.makedirs(download_dir)
         configFilepath = os.path.join(download_dir, 'config.json')
@@ -217,10 +237,10 @@ class DownloadResource(object):
             # Clean up download (on Linux & Mac, we can delete the zip file while
             # open; when Falcon is done sending the contents in the response and
             # closes the file, the deletion actually takes place)
-            shutil.rmtree(downloadFolder)
-            with db_conn.cursor() as cur:
-                cur.execute("DELETE FROM downloads WHERE uuid = %s", (download_uuid,))
-            db_conn.commit()
+            #shutil.rmtree(downloadFolder)
+            #with db_conn.cursor() as cur:
+            #    cur.execute("DELETE FROM downloads WHERE uuid = %s", (download_uuid,))
+            #db_conn.commit()
 
             # Response
             resp.status = falcon.HTTP_OK

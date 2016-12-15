@@ -120,10 +120,7 @@ class Archive(object):
                          cleanName == 'Sample Name' or
                          (self.assay[origName] == self.assay['Sample Name']).all() or
                          self.assay[origName].isnull().values.all() or
-                         cleanName in ('Annotation file',
-                                       'Array Data Matrix File',
-                                       'Array Design REF',
-                                       'Derived Array Data Matrix File'))
+                         cleanName in ('Array Design REF',))
 
             finalName = u'Transcriptomics Assay Detail: {0}'.format(cleanName)
 
