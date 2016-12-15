@@ -1,10 +1,12 @@
-import {Component, ChangeDetectorRef, OnInit, Input} from "@angular/core";
+import {Component, ChangeDetectorRef, OnInit, Input, ElementRef} from "@angular/core";
 import {DownloadSelectionService} from "./services/download-selection.service";
 import {StudyService} from "./services/study.service";
-import {Study} from "./common/study.model";
+import {Study, Sample} from "./common/study.model";
 import {ModalDirective} from "ng2-bootstrap";
 import {AuthenticationService} from "./services/authentication.service";
 import {URLService} from "./services/url.service";
+import {FormGroup, FormControl} from "@angular/forms";
+import * as _ from 'lodash';
 
 interface DownloadPostResponse {
   download_uuid: string,
@@ -18,6 +20,12 @@ interface DownloadProgressResponse {
   errorString?: string
 }
 
+enum StudyCheckboxState {
+  All,
+  None,
+  Indeterminate
+}
+
 @Component({
   selector: 'download-checkout',
   template: `
@@ -28,20 +36,48 @@ interface DownloadProgressResponse {
           <button type="button" class="close" (click)="modal.hide()">&times;</button>
           <h2 class="modal-title">Download selected studies and samples</h2>
         </div>
-        <div class="modal-body">
+        
+        <div class="modal-body" [formGroup]="form">
           <p>
-            Selected {{ numSelectedSamples }} samples from {{ numSelectedStudies }} studies. 
+            On clicking "Download", an archive will be prepared with the following datasets.
+            The archive will download automatically when finished.  You can still remove any
+            study or sample by clicking on the checkboxes below. 
           </p>
-          <p>
-          For the moment, can only download study archives in full and individually.
-          Please click on the links below to download relevant study archives.
-          </p>
-          <ol>
-            <li *ngFor="let study of studies">
-              <a [href]="study._source['*Archive URL']">{{ study._source['STUDY']['Study Title']}}</a>
-            </li>
-          </ol>
+          <div class="limitedHeight">
+            <ul class="studiesList">
+              <li *ngFor="let study of studies" [formGroupName]="study._id">
+              
+                <div class="fullLabel">
+                  <a href="#" (click)="$event.preventDefault(); toggleVisible(study._id)">
+                    <span *ngIf=" isVisible(study._id)" class="glyphicon glyphicon-triangle-bottom"></span>
+                    <span *ngIf="!isVisible(study._id)" class="glyphicon glyphicon-triangle-right"></span>
+                  </a>
+                  <div class="checkbox-inline">
+                    <input type="checkbox" [id]="'study-' + study._id"
+                      (click)="$event.preventDefault(); clickStudyCheckbox(study._id)">
+                    <a href="#" (click)="$event.preventDefault(); toggleVisible(study._id)">
+                      {{ study._source['STUDY']['Study Title']}}
+                    </a>
+                  </div>
+                </div>
+                
+                <div [collapse]="!isVisible(study._id)">
+                  <ul class="samplesList">
+                    <li *ngFor="let sample of samplesInStudies[study._id]">
+                      <div class="checkbox">
+                        <label [attr.for]="'study-' + study._id + '-sample-' + sample._id">
+                          <input type="checkbox" [id]="'study-' + study._id + '-sample-' + sample._id" [formControlName]="sample._id">
+                          {{ sample._source['Sample Name']}}
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
+        
         <div class="modal-footer">
           <button type="button" class="btn btn-default" (click)="modal.hide()">Close</button>
           <button *ngIf="!preparingDownload" type="button" class="btn btn-primary" (click)="kickOffDownload()">Download</button>
@@ -77,6 +113,20 @@ interface DownloadProgressResponse {
   .progress {
     margin-bottom: 0;
   }
+  .limitedHeight {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 2px;
+    margin-bottom: 0;
+  }
+  ul.studiesList {
+    list-style: none;
+    padding-left: 10px;
+  }
+  ul.samplesList {
+    list-style: none;
+    padding-left: 40px;
+  }
   `]
 })
 export class DownloadComponent {
@@ -84,6 +134,8 @@ export class DownloadComponent {
   numSelectedStudies: number = 0;
   numSelectedSamples: number = 0;
   studies: Study[] = [];
+  samplesInStudies: { [studyId: string]: Sample[] } = {};
+  visibility: { [studyId: string]: boolean } = {};
 
   errorMessage: string = '';
   preparingDownload: boolean = false;
@@ -94,13 +146,21 @@ export class DownloadComponent {
   downloadLocation: string;
   progressUrl: string;
 
+  private jqElem: JQuery;
+  form: FormGroup = new FormGroup({});
+
   constructor(
     private _url: URLService,
     private _studyService: StudyService,
     private _auth: AuthenticationService,
     private _downloadSelectionService: DownloadSelectionService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private _elemRef: ElementRef
   ) { }
+
+  ngOnInit() {
+    this.jqElem = $(this._elemRef.nativeElement);
+  }
 
   refresh(): void {
     let studyIds = Object.keys(this._downloadSelectionService.getSelection().selection);
@@ -109,16 +169,132 @@ export class DownloadComponent {
       Object.values(this._downloadSelectionService.getSelection().selection)
         .reduce((soFar, samples) => soFar + Object.keys(samples).length, 0);
 
-    Promise.all(studyIds.map(studyId => this._studyService.getStudy(studyId)))
-      .then(studies => {
-        this.studies = studies;
+    let studiesPromise: Promise<{ [studyId: string]: Study }> =
+      Promise.all(studyIds.map(studyId => {
+        return this._studyService.getStudy(studyId)
+          .then(study => { return { [studyId]: study } })
+      }))
+        .then(studiesList => _.merge.apply(_, [{}].concat(studiesList)));
+
+    let samplesInStudiesPromise: Promise<{ [studyId: string]: Sample[] }> =
+      Promise.all(studyIds.map(studyId => this._studyService.getIdsOfSamplesInStudy(studyId).then(samplesInStudy => { return { [studyId]: samplesInStudy }; })))
+        .then(sampleIdsInStudiesList => {
+          let sampleIdsInStudies: { [studyId: string]: string[] } = _.merge.apply(_, sampleIdsInStudiesList);
+          let samplesInStudiesPromises: Promise<{ [studyId: string]: Sample[] }>[] = [];
+          for (let studyId in sampleIdsInStudies) {
+            let sampleIds = sampleIdsInStudies[studyId];
+            samplesInStudiesPromises.push(
+              Promise.all(sampleIds.map(sampleId => this._studyService.getSample(sampleId)))
+                .then(samples => { return { [studyId]: samples.sort((x, y) => x._source['Sample Name'].localeCompare(y._source['Sample Name'])) }})
+            );
+          }
+          return Promise.all(samplesInStudiesPromises).then(samplesInStudies =>
+            _.merge.apply(_, [{}].concat(samplesInStudies))
+          );
+        });
+
+    studiesPromise.then(studies => {
+      samplesInStudiesPromise.then(samplesInStudies => {
+        this.studies = Object.values(studies).sort((x, y) => x._source['STUDY']['Study Title'].localeCompare(y._source['STUDY']['Study Title']));
+        this.samplesInStudies = samplesInStudies;
+        this.form = this.makeFormGroup();
         this.changeDetectorRef.detectChanges();
       })
+    });
 
     this.errorMessage = '';
     this.preparingDownload = false;
     this.preparationProgress = 0;
     this.downloadReady = false;
+    this.visibility = {};
+  }
+
+  makeFormGroup(): FormGroup {
+    let group: any = {};
+
+    for (let studyId in this.samplesInStudies) {
+      let samples = this.samplesInStudies[studyId];
+      let samplesGroup = {};
+      for (let sample of samples) {
+        samplesGroup[sample._id] = new FormControl(true);
+      }
+      group[studyId] = new FormGroup(samplesGroup);
+    }
+
+    return new FormGroup(group);
+  }
+
+  isVisible(studyId: string) {
+    return this.visibility[studyId] || false;
+  }
+
+  toggleVisible(studyId: string) {
+    this.visibility[studyId] = !this.isVisible(studyId);
+  }
+
+  ngAfterViewChecked(): void {
+    for (let studyId in this.samplesInStudies) {
+      let state = this.getStudyCheckboxState(studyId);
+      let studyCheckbox = this.jqElem.find(`#study-${studyId}`);
+
+      console.log(`Before ${studyId}: indeterminate=${studyCheckbox.prop('indeterminate')}, checked=${studyCheckbox.prop('checked')}`);
+      switch (state) {
+        case StudyCheckboxState.All:
+          console.log(`Setting ${studyId} to ALL`);
+          studyCheckbox.prop({indeterminate: false, checked: true});
+          break;
+        case StudyCheckboxState.None:
+          console.log(`Setting ${studyId} to NONE`);
+          studyCheckbox.prop({indeterminate: false, checked: false});
+          break;
+        case StudyCheckboxState.Indeterminate:
+          console.log(`Setting ${studyId} to INDETERMINATE`);
+          studyCheckbox.prop({indeterminate: true});
+          break;
+      }
+      console.log(`After ${studyId}: indeterminate=${studyCheckbox.prop('indeterminate')}, checked=${studyCheckbox.prop('checked')}`);
+    }
+  }
+
+  getStudyCheckboxState(studyId: string): StudyCheckboxState {
+    let formValue = this.form.value;
+    let samplesChecked = formValue[studyId];
+
+    let numChecked = Object.values(samplesChecked).filter((checked: boolean) => checked).length;
+    let numTotal = Object.values(samplesChecked).length;
+
+    if (numChecked == 0) {
+      return StudyCheckboxState.None;
+    } else if (numChecked == numTotal) {
+      return StudyCheckboxState.All;
+    } else {
+      return StudyCheckboxState.Indeterminate;
+    }
+  }
+
+  clickStudyCheckbox(studyId: string): void {
+    let state = this.getStudyCheckboxState(studyId);
+    let newCheckedState: boolean;
+
+    switch (state) {
+      case StudyCheckboxState.All:
+      case StudyCheckboxState.Indeterminate:
+        newCheckedState = false;
+        break;
+      case StudyCheckboxState.None:
+        newCheckedState = true;
+        break;
+    }
+
+    for (let sampleControl of Object.values((<FormGroup>this.form.controls[studyId]).controls)) {
+      sampleControl.setValue(newCheckedState);
+    }
+
+    // Hack!  Don't know why the jQuery changes to the study checkbox in ngAfterViewChecked() don't
+    // actually survive, but forcing another call later on seems to do the trick...
+    setTimeout(() => {
+      this.ngAfterViewChecked();
+    }, 4);
   }
 
   kickOffDownload(): void {
@@ -129,11 +305,14 @@ export class DownloadComponent {
     this.preparationProgress = 0;
     this.downloadReady = false;
 
-    let selection = this._downloadSelectionService.getSelection().selection;
+    //let selection = this._downloadSelectionService.getSelection().selection;
+    let selection = this.form.value;
     let sampleIds: string[] = [];
     for (let studyId in selection) {
       for (let sampleId in selection[studyId]) {
-        sampleIds.push(sampleId);
+        if (selection[studyId][sampleId]) {
+          sampleIds.push(sampleId);
+        }
       }
     }
 
