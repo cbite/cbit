@@ -69,7 +69,7 @@
                   ({{ countMatchingSamplesInSelection(studyMatch) }} selected)
                 </a>
 
-                <div [collapse]="!areSamplesShown[studyMatch.study._id]">
+                <div *ngIf="areSamplesShown[studyMatch.study._id]">
                   <ul style="list-style: none">
                     <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
                       <div class="showonhover">

@@ -23,7 +23,7 @@ interface ClassifiedProperties {
     {{ categoryName }}
   </a>
 
-  <ul [collapse]="collapsed">
+  <ul *ngIf="!collapsed">
     <sample-filters *ngFor="let propName of propNames" 
                     [category]="propName"
                     [allCounts]="unfilteredPropNamesAndValueCounts[propName] || {}"
@@ -66,7 +66,7 @@ export class FilterSidebarCategoryComponent implements OnInit {
           Material Properties
         </a>
         
-        <ul [collapse]="materialPropertiesCollapsed">
+        <ul *ngIf="!materialPropertiesCollapsed">
           <li>
             <filter-sidebar-category categoryName="General"
                                      [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"

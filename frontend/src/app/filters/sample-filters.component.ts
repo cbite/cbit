@@ -61,7 +61,7 @@ enum GlobalCheckboxState {
         </div>
       </div>
   
-      <div [collapse]="!isVisible">
+      <div *ngIf="isVisible">
       
         <div class="units" *ngIf="dimensions !== 'none'">
           Units: <select *ngIf="units().length > 1" id="unitChooser" [(ngModel)]="chosenUnit">

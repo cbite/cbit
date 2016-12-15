@@ -61,7 +61,7 @@ enum StudyCheckboxState {
                   </div>
                 </div>
                 
-                <div [collapse]="!isVisible(study._id)">
+                <div *ngIf="isVisible(study._id)">
                   <ul class="samplesList">
                     <li *ngFor="let sample of samplesInStudies[study._id]">
                       <div class="checkbox">
