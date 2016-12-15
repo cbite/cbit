@@ -5,7 +5,8 @@ from reader import (
     read_study_sample,
     read_assay,
     #read_annotations,
-    read_processed_data
+    read_processed_data,
+    read_raw_data
 )
 import re
 from data.unit_conversions import DimensionsRegister, INVALID_DIMENSIONS
@@ -27,18 +28,20 @@ class FieldAnalysisResults(object):
         }
 
 class Archive(object):
-    def __init__(self, investigation_file_name, study_file_name, assay_file_name, processedDataFilename,
-                 investigation, study_samples, assay, processed_data_set, annotations):
+    def __init__(self, investigation_file_name, study_file_name, assay_file_name, processedDataFilename, rawDataFilename,
+                 investigation, study_samples, assay, processed_data_set, raw_data_set, annotations):
 
         self.investigation_file_name = investigation_file_name
         self.study_file_name = study_file_name
         self.assay_file_name = assay_file_name
         self.processedDataFilename = processedDataFilename
+        self.rawDataFilename = rawDataFilename
 
         self.investigation = investigation
         self.study_sample = study_samples
         self.assay = assay
         self.processed_data_set = processed_data_set
+        self.raw_data_set = raw_data_set
         self.annotations = annotations
 
     def analyse_fields(self):
@@ -236,17 +239,17 @@ def read_archive(archive_filename, only_metadata=True):
             # 'Derived Data File', each sample has one file; we treat these files
             # as supplementary files, to be included if the sample is selected
             # in a download)
-            assayFileNameColumn = None
+            derivedArrayDataMatrixFileNameColumn = None
             if 'Derived Array Data Matrix File' in assay.columns:
-                assayFileNameColumn = 'Derived Array Data Matrix File'
+                derivedArrayDataMatrixFileNameColumn = 'Derived Array Data Matrix File'
 
-            if assayFileNameColumn and len(set(assay[assayFileNameColumn])) > 1:
+            if derivedArrayDataMatrixFileNameColumn and len(set(assay[derivedArrayDataMatrixFileNameColumn])) > 1:
                 raise NotImplementedError('Multiple data set files per study')
             else:
                 def isNaN(x):
                     return x != x
 
-                processedDataFilename = assay[assayFileNameColumn].iloc[0] if assayFileNameColumn else None
+                processedDataFilename = assay[derivedArrayDataMatrixFileNameColumn].iloc[0] if derivedArrayDataMatrixFileNameColumn else None
                 if not processedDataFilename or isNaN(processedDataFilename):
                     processed_data_set = None
                 elif processedDataFilename not in filenames:
@@ -256,6 +259,28 @@ def read_archive(archive_filename, only_metadata=True):
                 else:
                     with z.open(processedDataFilename, 'r') as f:
                         processed_data_set = read_processed_data(f)
+
+
+            rawArrayDataMatrixFileNameColumn = None
+            if 'Array Data Matrix File' in assay.columns:
+                rawArrayDataMatrixFileNameColumn = 'Array Data Matrix File'
+
+            if rawArrayDataMatrixFileNameColumn and len(set(assay[rawArrayDataMatrixFileNameColumn])) > 1:
+                raise NotImplementedError('Multiple data set files per study')
+            else:
+                def isNaN(x):
+                    return x != x
+
+                rawDataFilename = assay[rawArrayDataMatrixFileNameColumn].iloc[0] if rawArrayDataMatrixFileNameColumn else None
+                if not rawDataFilename or isNaN(rawDataFilename):
+                    raw_data_set = None
+                elif rawDataFilename not in filenames:
+                    raise IOError(
+                        'Raw data file "{0}" is missing from archive'.format(
+                            rawDataFilename))
+                else:
+                    with z.open(rawDataFilename, 'r') as f:
+                        raw_data_set = read_raw_data(f)
 
             # Check that processed data file for a sample actually includes data for each sample
             #for sampleName in study_sample['Sample Name']:
@@ -287,8 +312,10 @@ def read_archive(archive_filename, only_metadata=True):
             # Skip raw data for now
             processedDataFilename = ''
             processed_data_set = None
+            rawDataFilename = ''
+            raw_data_set = None
             annotationData = None
 
 
-        return Archive(investigation_file_name, study_file_name, assay_file_name, processedDataFilename,
-                       investigation, study_sample, assay, processed_data_set, annotationData)
+        return Archive(investigation_file_name, study_file_name, assay_file_name, processedDataFilename, rawDataFilename,
+                       investigation, study_sample, assay, processed_data_set, raw_data_set, annotationData)

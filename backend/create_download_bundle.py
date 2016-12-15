@@ -185,6 +185,25 @@ try:
                         sio.getvalue()
                     )
 
+                # Subselect relevant samples in raw data
+                # (For each sample, there are multiple columns; we should search
+                # for a prefix "<Sample Name>." and include all matching columns)
+                if a.raw_data_set is not None:
+                    columnNames = []
+                    for colName in a.raw_data_set.columns:
+                        for sampleName in sampleNames:
+                            if colName.startswith(sampleName + '.'):
+                                columnNames.append(colName)
+
+                    df = a.raw_data_set[columnNames]
+
+                    sio = StringIO()
+                    df.to_csv(sio, index_label='Probe ID', encoding='utf-8')
+                    zf.writestr(
+                        os.path.join(studyFolderName, "raw_expression_data.csv"),
+                        sio.getvalue()
+                    )
+
                 # And include all other files that aren't covered by the above
                 supFileNameColumns = set(
                     fieldName
@@ -201,7 +220,8 @@ try:
                     a.investigation_file_name,
                     a.study_file_name,
                     a.assay_file_name,
-                    a.processedDataFilename
+                    a.processedDataFilename,
+                    a.rawDataFilename
                 ])
 
                 print("Including: {0}, excluding: {1}".format(includedFileNames, excludedFileNames))

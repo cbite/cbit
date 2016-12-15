@@ -413,6 +413,16 @@ def read_processed_data(f):
     return df
 
 
+def read_raw_data(f):
+    # A raw data file is a flat table of expression strength numbers
+    # (in some arbitrary units).  Rows are genes (more precisely, individual
+    # probes in the gene chip), columns are samples (multiple columns per
+    # sample, all with names starting with the sample name, followed by a dot '.',
+    # followed by a subfield name like 'AVG_Signal', 'Detection Pval', etc.)
+    df = pd.read_table(f, index_col=0, encoding=cfg.FILE_ENCODING, dtype='str')
+    return df
+
+
 #def read_annotations(f):
 #    # An annotations file is a gene-chip-vendor-provided spec of what each
 #    # probe (row in processed data) is actually talking about
