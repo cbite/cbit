@@ -275,13 +275,13 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
 
   toggleVisible() {
     this.isVisible = !this.isVisible;
-    if (this.slider) {
-      setTimeout(() => {
-        // Needs to happen *after* visibility changes take effect for
-        // slider dimensions to be correctly calculated
+    setTimeout(() => {
+      // Needs to happen *after* visibility changes take effect for
+      // slider dimensions to be correctly calculated
+      if (this.slider) {
         this.slider.refreshUI();
-      }, 4);
-    }
+      }
+    }, 4);
   }
 
   isTrivial(): boolean {
