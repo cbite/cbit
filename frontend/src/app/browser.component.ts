@@ -6,6 +6,7 @@ import {FiltersService} from "./services/filters.service";
 import {HIDDEN_SAMPLE_FILTER_LABELS} from "./filters/sample-filters.component";
 import {Observable, Subject} from "rxjs";
 import {DownloadSelectionService} from "./services/download-selection.service";
+import {CollapseStateService} from "./services/collapse-state.service";
 
 export const KEYS_IN_MINI_SUMMARY = {
   // Key = value name in sample metadata
@@ -33,7 +34,6 @@ export class BrowserComponent implements OnInit, OnDestroy {
   matches: UnifiedMatch[] = [];
   sampleKeys: string[];
   commonKeys: { [studyId: string]: { [key: string]: any } };
-  areSamplesShown: { [studyId: string]: boolean } = {};
   numMatchingStudies: number = 0;
   numMatchingSamples: number = 0;
   ready = false;
@@ -44,8 +44,12 @@ export class BrowserComponent implements OnInit, OnDestroy {
     private _studyService: StudyService,
     private _filtersService: FiltersService,
     private _downloadSelectionService: DownloadSelectionService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private _collapseStateService: CollapseStateService
   ) { }
+
+  areSamplesShown(studyId: string) { return !this._collapseStateService.isCollapsed(`samples-for-study-${studyId}`, true); }
+  setSamplesShown(studyId: string, value: boolean) { this._collapseStateService.setCollapsed(`samples-for-study-${studyId}`, !value); }
 
   ngOnInit(): void {
     // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
@@ -105,13 +109,6 @@ export class BrowserComponent implements OnInit, OnDestroy {
     });
     keys.delete('Sample Name');
     this.sampleKeys = Array.from(keys).sort();
-
-    // By default, hide matching samples
-    for (let studyMatch of this.matches) {
-      if (!(studyMatch.study._id in this.areSamplesShown)) {
-        this.areSamplesShown[studyMatch.study._id] = false;
-      }
-    }
 
     this.commonKeys = {};
     for (let studyMatch of this.matches) {

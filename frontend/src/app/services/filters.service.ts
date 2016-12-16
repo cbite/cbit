@@ -44,7 +44,6 @@ export const EMPTY_FILTERS: FiltersState = {
 @Injectable()
 export class FiltersService {
   private _filters: BehaviorSubject<FiltersState> = new BehaviorSubject(EMPTY_FILTERS);
-  private filterVisibility: { [category: string]: boolean } = {};
 
   public filters: Observable<FiltersState> = this._filters.asObservable();
 
@@ -148,17 +147,5 @@ export class FiltersService {
     let curFilters = _.cloneDeep(this.getFilters().sampleFilters);
     delete curFilters[category];
     this.setSampleFilters(curFilters);
-  }
-
-  setFilterVisibility(category: string, visibility: boolean): void {
-    this.filterVisibility[category] = visibility;
-  }
-
-  isFilterVisible(category: string): boolean {
-    if (this.filterVisibility.hasOwnProperty(category)) {
-      return this.filterVisibility[category];
-    } else {
-      return false;
-    }
   }
 }

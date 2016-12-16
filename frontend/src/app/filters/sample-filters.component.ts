@@ -8,6 +8,7 @@ import * as $ from 'jquery';
 import {DimensionsRegister} from "../common/unit-conversions";
 import {Ng2SliderComponent} from "../slider/ng2-slider.component";
 import {Subject} from "rxjs";
+import {CollapseStateService} from '../services/collapse-state.service';
 
 // TODO: Move all usages of this to backend
 export const HIDDEN_SAMPLE_FILTER_LABELS = {
@@ -261,14 +262,15 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
     private _filtersService: FiltersService,
     private _studyService: StudyService,
     private _elemRef: ElementRef,
-    private _changeDetectorRef: ChangeDetectorRef
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _collapsedStateService: CollapseStateService
   ) { }
 
   get isVisible(): boolean {
-    return this._filtersService.isFilterVisible(this.category);
+    return !this._collapsedStateService.isCollapsed(`sample-filters-${this.category}`, true);
   }
   set isVisible(value: boolean) {
-    this._filtersService.setFilterVisibility(this.category, value);
+    this._collapsedStateService.setCollapsed(`sample-filters-${this.category}`, !value);
   }
 
   toggleVisible() {
@@ -294,7 +296,10 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
 
   private jqElem: JQuery;
   ngOnInit(): void {
-    this.categoryRealName = (this.category.substr(0, 1) == '*' ? this.category.substr(this.category.indexOf(' - ') + 3) : this.category);
+    this.categoryRealName =
+      (this.category.substr(0, 1) == '*'
+       ? (this.category.indexOf(' - ') != -1 ? this.category.substr(this.category.indexOf(' - ') + 3) : this.category.substr(1))
+        : this.category);
     this.jqElem = $(this._elemRef.nativeElement);
 
     let fieldMetaPromise = this._studyService.getFieldMeta(this.category);

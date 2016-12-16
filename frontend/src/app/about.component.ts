@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {CollapseStateService} from "./services/collapse-state.service";
 
 @Component({
   template: `
@@ -384,6 +385,16 @@ export class AboutComponent {
   `]
 })
 export class FAQQuestionComponent {
-  expanded = false;
   @Input() question: string;
+
+  constructor(
+    private _collapsedStateService: CollapseStateService
+  ) { }
+
+  get expanded(): boolean {
+    return !this._collapsedStateService.isCollapsed(`faq-${this.question}`, true);
+  }
+  set expanded(value: boolean) {
+    this._collapsedStateService.setCollapsed(`faq-${this.question}`, !value);
+  }
 }

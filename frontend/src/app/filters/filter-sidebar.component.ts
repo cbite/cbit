@@ -6,6 +6,7 @@ import {Observable, Subject} from "rxjs";
 import {FieldVisibility, FieldCategory, FieldMeta} from "../common/field-meta.model";
 import * as _ from 'lodash';
 import {ModalDirective} from "ng2-bootstrap";
+import {CollapseStateService} from "../services/collapse-state.service";
 
 @Component({
   selector: 'filter-sidebar-category',
@@ -25,13 +26,13 @@ import {ModalDirective} from "ng2-bootstrap";
       </sample-filters>
       
       <div *ngIf="isSpecialPropsHeader(propName)" class="detailed-breakdown">
-        <a href="#" (click)="$event.preventDefault(); specialDetailExpanded[propName] = !specialDetailExpanded[propName]">
-          <span *ngIf=" specialDetailExpanded[propName]" class="glyphicon glyphicon-triangle-bottom"></span>
-          <span *ngIf="!specialDetailExpanded[propName]" class="glyphicon glyphicon-triangle-right"></span>
+        <a href="#" (click)="$event.preventDefault(); setSpecialDetailExpanded(propName, !isSpecialDetailExpanded(propName))">
+          <span *ngIf=" isSpecialDetailExpanded(propName)" class="glyphicon glyphicon-triangle-bottom"></span>
+          <span *ngIf="!isSpecialDetailExpanded(propName)" class="glyphicon glyphicon-triangle-right"></span>
           Detailed breakdown
         </a>
         
-        <ul *ngIf="specialDetailExpanded[propName]">
+        <ul *ngIf="isSpecialDetailExpanded(propName)">
           <div *ngFor="let detailedPropName of propNames">
             <sample-filters *ngIf="isSpecialPropSubfield(detailedPropName, propName)" 
                             [category]="detailedPropName"
@@ -60,17 +61,24 @@ import {ModalDirective} from "ng2-bootstrap";
     }
   `]
 })
-export class FilterSidebarCategoryComponent implements OnInit {
+export class FilterSidebarCategoryComponent {
   @Input() categoryName: string;
   @Input() unfilteredPropNamesAndValueCounts: any;
   @Input() allSampleFilterMatchCounts: any;
   @Input() propNames: string[] = [];
+  @Input() prefix: string;
 
   @Input() initCollapsed: boolean;
-  collapsed = false;
+  get collapsed(): boolean { return this._collapsedStateService.isCollapsed(`fscat-${this.prefix}-${this.categoryName}`, this.initCollapsed); }
+  set collapsed(value: boolean) { this._collapsedStateService.setCollapsed(`fscat-${this.prefix}-${this.categoryName}`, value); }
+
+  constructor(
+    private _collapsedStateService: CollapseStateService
+  ) { }
 
   specialPropNames = ['Elements composition', 'Phase composition', 'Wettability'];
-  specialDetailExpanded = {};  // By being empty, absent members default to falsy until set otherwise
+  isSpecialDetailExpanded(propName: string) { return this._collapsedStateService.isCollapsed(`fscat-special-${this.prefix}-${this.categoryName}-${propName}`, false); }
+  setSpecialDetailExpanded(propName: string, value: boolean) { return this._collapsedStateService.setCollapsed(`fscat-special-${this.prefix}-${this.categoryName}-${propName}`, value); }
 
   isNormalProp(propName: string) {
     for (let specialPropName of this.specialPropNames) {
@@ -95,14 +103,6 @@ export class FilterSidebarCategoryComponent implements OnInit {
   isSpecialPropSubfield(detailedPropName: string, parentPropName: string): boolean {
     return detailedPropName.startsWith('*' + parentPropName);
   }
-
-  specialPropSubfieldName(detailedPropName: string, parentPropName: string): boolean {
-    return detailedPropName.substr(1 + parentPropName.length + 3);
-  }
-
-  ngOnInit() {
-    this.collapsed = this.initCollapsed;
-  }
 }
 
 @Component({
@@ -118,7 +118,8 @@ export class FilterSidebarCategoryComponent implements OnInit {
         
         <ul *ngIf="!materialPropertiesCollapsed">
           <li>
-            <filter-sidebar-category categoryName="General"
+            <filter-sidebar-category [prefix]="name + '-material-'"
+                                     categoryName="General"
                                      [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                      [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
                                      [propNames]="classifiedProperties['Material > General'] || []"
@@ -127,7 +128,8 @@ export class FilterSidebarCategoryComponent implements OnInit {
           </li>
 
           <li>
-            <filter-sidebar-category categoryName="Chemical"
+            <filter-sidebar-category [prefix]="name + '-material-'"
+                                     categoryName="Chemical"
                                      [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                      [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
                                      [propNames]="classifiedProperties['Material > Chemical'] || []"
@@ -136,7 +138,8 @@ export class FilterSidebarCategoryComponent implements OnInit {
           </li>
 
           <li>
-            <filter-sidebar-category categoryName="Physical"
+            <filter-sidebar-category [prefix]="name + '-material-'"
+                                     categoryName="Physical"
                                      [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                      [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
                                      [propNames]="classifiedProperties['Material > Physical'] || []"
@@ -145,7 +148,8 @@ export class FilterSidebarCategoryComponent implements OnInit {
           </li>
 
           <li>
-            <filter-sidebar-category categoryName="Mechanical"
+            <filter-sidebar-category [prefix]="name + '-material-'"
+                                     categoryName="Mechanical"
                                      [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                      [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
                                      [propNames]="classifiedProperties['Material > Mechanical'] || []"
@@ -157,7 +161,8 @@ export class FilterSidebarCategoryComponent implements OnInit {
       </li>
 
       <li>
-        <filter-sidebar-category categoryName="Biological Properties"
+        <filter-sidebar-category [prefix]="name + '-biological-'"
+                                 categoryName="Biological Properties"
                                  [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                  [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
                                  [propNames]="classifiedProperties['Biological'] || []"
@@ -174,7 +179,8 @@ export class FilterSidebarCategoryComponent implements OnInit {
         
         <ul *ngIf="!technicalPropertiesCollapsed">
           <li>
-            <filter-sidebar-category categoryName="General"
+            <filter-sidebar-category [prefix]="name + '-technical-'"
+                                     categoryName="General"
                                      [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                      [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
                                      [propNames]="classifiedProperties['Technical > General'] || []"
@@ -183,7 +189,8 @@ export class FilterSidebarCategoryComponent implements OnInit {
           </li>
           
           <li>
-            <filter-sidebar-category categoryName="Microarray"
+            <filter-sidebar-category [prefix]="name + '-technical-'"
+                                     categoryName="Microarray"
                                      [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                      [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
                                      [propNames]="classifiedProperties['Technical > Microarray'] || []"
@@ -192,7 +199,8 @@ export class FilterSidebarCategoryComponent implements OnInit {
           </li>
           
           <li>
-            <filter-sidebar-category categoryName="RNA sequencing"
+            <filter-sidebar-category [prefix]="name + '-technical-'"
+                                     categoryName="RNA sequencing"
                                      [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                      [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
                                      [propNames]="classifiedProperties['Technical > RNA sequencing'] || []"
@@ -214,12 +222,21 @@ export class FilterSidebarCategoryComponent implements OnInit {
   `]
 })
 export class FilterSidebarAllULComponent {
+  @Input() name: string;
   @Input() unfilteredPropNamesAndValueCounts: any = {};
   @Input() allSampleFilterMatchCounts: any = {};
   @Input() classifiedProperties: ClassifiedPropertiesForGivenVisibility = {};
   @Input() initCollapsed: boolean;
-  materialPropertiesCollapsed = false;
-  technicalPropertiesCollapsed = false;
+
+  constructor(
+    private _collapsedStateService: CollapseStateService
+  ) { }
+
+  get materialPropertiesCollapsed() { return this._collapsedStateService.isCollapsed(`fsall-material-${this.name}`, false); }
+  set materialPropertiesCollapsed(value: boolean) { this._collapsedStateService.setCollapsed(`fsall-material-${this.name}`, value); }
+
+  get technicalPropertiesCollapsed() { return this._collapsedStateService.isCollapsed(`fsall-technical-${this.name}`, false); }
+  set technicalPropertiesCollapsed(value: boolean) { this._collapsedStateService.setCollapsed(`fsall-technical-${this.name}`, value); }
 }
 
 @Component({
@@ -242,7 +259,8 @@ export class FilterSidebarAllULComponent {
         <span class="filter-heading">
           MAIN FILTERS
         </span>
-        <filter-sidebar-all-ul [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
+        <filter-sidebar-all-ul name="main"
+                               [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
                                [classifiedProperties]="classifiedProperties.main || {}"
                                [initCollapsed]="true"
@@ -263,7 +281,8 @@ export class FilterSidebarAllULComponent {
           </li>
         </ul>
         
-        <filter-sidebar-all-ul [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
+        <filter-sidebar-all-ul name="additional"
+                               [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
                                [classifiedProperties]="classifiedProperties.additional || {}"
                                [initCollapsed]="true"

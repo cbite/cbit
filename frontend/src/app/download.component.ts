@@ -7,6 +7,7 @@ import {AuthenticationService} from "./services/authentication.service";
 import {URLService} from "./services/url.service";
 import {FormGroup, FormControl} from "@angular/forms";
 import * as _ from 'lodash';
+import {CollapseStateService} from "./services/collapse-state.service";
 
 interface DownloadPostResponse {
   download_uuid: string,
@@ -136,7 +137,6 @@ export class DownloadComponent {
   @Input() modal: ModalDirective;
   studies: Study[] = [];
   samplesInStudies: { [studyId: string]: Sample[] } = {};
-  visibility: { [studyId: string]: boolean } = {};
 
   errorMessage: string = '';
   preparingDownload: boolean = false;
@@ -157,7 +157,8 @@ export class DownloadComponent {
     private _auth: AuthenticationService,
     private _downloadSelectionService: DownloadSelectionService,
     private changeDetectorRef: ChangeDetectorRef,
-    private _elemRef: ElementRef
+    private _elemRef: ElementRef,
+    private _collapseStateService: CollapseStateService
   ) { }
 
   ngOnInit() {
@@ -170,7 +171,6 @@ export class DownloadComponent {
     this.preparingDownload = false;
     this.preparationProgress = 0;
     this.downloadReady = false;
-    this.visibility = {};
 
     let studyIds = Object.keys(this._downloadSelectionService.getSelection().selection);
 
@@ -225,11 +225,11 @@ export class DownloadComponent {
   }
 
   isVisible(studyId: string) {
-    return this.visibility[studyId] || false;
+    return !this._collapseStateService.isCollapsed(`download-study-${studyId}`, true);
   }
 
   toggleVisible(studyId: string) {
-    this.visibility[studyId] = !this.isVisible(studyId);
+    this._collapseStateService.setCollapsed(`download-study-${studyId}`, !(!this.isVisible(studyId)));
   }
 
   ngAfterViewChecked(): void {

@@ -62,14 +62,14 @@
               <div class="panel-body">
                 <p>by {{ studyMatch.study._source['STUDY']['Study Researchers Involved'] }}</p>
 
-                <a (click)="areSamplesShown[studyMatch.study._id] = !areSamplesShown[studyMatch.study._id]" href="javascript:void(0)">
-                  <span *ngIf=" !areSamplesShown[studyMatch.study._id]" class="glyphicon glyphicon-triangle-right"></span>
-                  <span *ngIf="!!areSamplesShown[studyMatch.study._id]" class="glyphicon glyphicon-triangle-bottom"></span>
+                <a (click)="setSamplesShown(studyMatch.study._id, !areSamplesShown(studyMatch.study._id))" href="javascript:void(0)">
+                  <span *ngIf="!areSamplesShown(studyMatch.study._id)" class="glyphicon glyphicon-triangle-right"></span>
+                  <span *ngIf=" areSamplesShown(studyMatch.study._id)" class="glyphicon glyphicon-triangle-bottom"></span>
                   {{ studyMatch.sampleMatches.length }} matching samples
                   ({{ countMatchingSamplesInSelection(studyMatch) }} selected)
                 </a>
 
-                <div *ngIf="areSamplesShown[studyMatch.study._id]">
+                <div *ngIf="areSamplesShown(studyMatch.study._id)">
                   <ul style="list-style: none">
                     <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
                       <div class="showonhover">
