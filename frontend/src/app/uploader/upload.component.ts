@@ -22,7 +22,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Gene expression type": {
     "category": "Technical > General",
     "dataType": "string",
-    "description": "Gene expression tehcnology used for the samples, e.g. Microarray, RNA sequencing. Use OBI term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
+    "description": "Gene expression technology used for the samples, e.g. Microarray, RNA sequencing.",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -30,7 +30,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Platform": {
     "category": "Technical > General",
     "dataType": "string",
-    "description": "Type of platform used, e.g. Illumina, Affymetrix, Agilent. Use OBI term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
+    "description": "Type of platform/manufacturer used, e.g. Illumina, Affymetrix, Agilent.",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -90,6 +90,38 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "preferredUnit": "none",
     "isSupplementaryFileName": true
   },
+  "Transcriptomics Assay Detail: Normalization Name": {
+    "category": "Technical > Microarray",
+    "dataType": "string",
+    "description": "No description available",
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
+  },
+  "Transcriptomics Assay Detail: Background correction": {
+    "category": "Technical > Microarray",
+    "dataType": "string",
+    "description": "No description available",
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
+  },
+  "Transcriptomics Assay Detail: Data Transformation Name": {
+    "category": "Technical > Microarray",
+    "dataType": "string",
+    "description": "No description available",
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
+  },
+  "Transcriptomics Assay Detail: Label": {
+    "category": "Technical > Microarray",
+    "dataType": "string",
+    "description": "No description available",
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
+  },
 
   // Technical properties - RNA sequencing
   "Transcriptomics Assay Detail: Raw Data File": {
@@ -118,6 +150,38 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dimensions": "none",
     "preferredUnit": "none"
   },
+  "Transcriptomics Assay Detail: Base caller": {
+    "category": "Technical > Microarray",
+    "dataType": "string",
+    "description": "No description available",
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
+  },
+  "Transcriptomics Assay Detail: Library layout": {
+    "category": "Technical > Microarray",
+    "dataType": "string",
+    "description": "No description available",
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
+  },
+  "Transcriptomics Assay Detail: MID": {
+    "category": "Technical > Microarray",
+    "dataType": "string",
+    "description": "No description available",
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
+  },
+  "Transcriptomics Assay Detail: Quality scorer": {
+    "category": "Technical > Microarray",
+    "dataType": "string",
+    "description": "No description available",
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
+  },
 
   // Biological properties
   "Source Name": {
@@ -139,7 +203,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Study ID": {
     "category": "Biological",
     "dataType": "string",
-    "description": "The Study ID (should be a number) that identifies the study.",
+    "description": "The Study ID that identifies the study.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -147,7 +211,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Group ID": {
     "category": "Biological",
     "dataType": "string",
-    "description": "The group ID (should be a number) that identifies a group of samples receiving the same treatment within a study. E.g. all samples exposed to compound X at dose Y for time span Z.",
+    "description": "The group ID (should be a number) that identifies a group of samples (usually replicates) receiving the same treatment within a study. E.g. all samples exposed to compound X at dose Y for time span Z.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -155,7 +219,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Biological Replicate": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Biological replicate ID. Put 1 for all samples if there are no biological replicates, otherwise use a number for each replicate group (required)",
+    "description": "Biological replicate ID. Within each group of samples (identified by the group ID) this number indicates the biological replicate (e.g. in group ID “1”, there are three biological replicates indicated as “1”, “2”, and “3”). If all samples have a biological replicate ID of “1” there are no biological replicates.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -163,7 +227,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Technical Replicate": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Technical replicate ID. Leave blank if there are no technical replicates, otherwise use a number for each technical replicate group.",
+    "description": "Technical replicate ID. Leave blank if there are no technical replicates, otherwise a number indicates the technical replicate (e.g. in group ID “2”, there are two biological replicates, each of which has three technical replicates indicated as “1”, “2”, and “3”).",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -171,7 +235,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Sample ID": {
     "category": "Biological",
     "dataType": "string",
-    "description": "The Sample ID describes each sample in a unique way within each study. It consists of a study ID, a group ID and a biological replicate ID (and when available, a technical replicate ID), separated by dashes. E.g.: 5-2-1 meaning study 5, group 2, bioreplicate 1.",
+    "description": "The Sample ID describes each sample in a unique way within each study. It consecutively consists of a study ID, a group ID, a biological replicate ID and when available, a technical replicate ID, separated by dashes. E.g.: 5-2-1 meaning study 5, group 2, biological replicate 1. Or another example: 2-2-3-1, meaning study 2, group 2, biological replicate 3, technical replicate 1.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -180,7 +244,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "*Cell strain": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Cell line name for cell line work or donor abbreviation (e.g. a human stem cell donor).",
+    "description": "Cell line name for cell line work, donor name (e.g. a human stem cell donor, coded name), or isolated cell type name for human subjects or animals.",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -188,7 +252,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Cell strain abbreviation": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Abbreviation of cell line name for cell line work or donor abbreviation (e.g. a human stem cell donor), CLO term when available (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
+    "description": "Abbreviation of cell line name for cell line work, donor abbreviation (e.g. a human stem cell donor), or abbreviation of isolated cell type for human subjects or animals.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -196,7 +260,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Cell strain full name": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Full name of cell line name for cell line work or donor abbreviation (e.g. a human stem cell donor).",
+    "description": "Full name of cell line for cell line work, donor name (e.g. a human stem cell donor, coded name), or isolated cell type name for human subjects or animals.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -220,7 +284,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Tissue": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Type of tissue the sample comes from, choose between: epithelium, connective, muscular, or nervous.",
+    "description": "Type of tissue the sample comes from (i.e. one of the four basic tissue types: epithelium, connective, muscular, or nervous).",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -228,7 +292,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Organ": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Organ from which the sample originates, UBERON term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
+    "description": "Organ from which the sample originates.",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -236,7 +300,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Organism": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Provide taxonomic information for the source sample, NCBITaxon term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
+    "description": "Organism from which the sample originates.",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -244,7 +308,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Sex": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Sex (sex of original source, male/female). unknown if not known or when a pool of cells is used with multiple sexes.",
+    "description": "Sex of the original source sample. “unknown” means it is either not known or possibly mixed, e.g. when a pool of cells is used with multiple sexes.",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -257,6 +321,14 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "dimensions": "time",
     "preferredUnit": "year"
   },
+  "In vivo treatment duration": {
+    "category": "Biological",
+    "dataType": "double",
+    "description": "Treatment time for animal experiments or human experiments (not compound exposure study).",
+    "visibility": "main",
+    "dimensions": "time",
+    "preferredUnit": "hour"
+  },
   "Passage number": {
     "category": "Biological",
     "dataType": "string",
@@ -268,7 +340,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Assay Type": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Type of assay (in vitro, in vivo or ex vivo) (required)",
+    "description": "Type of assay (in vitro, in vivo or ex vivo).",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -276,7 +348,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Culture medium": {
     "category": "Biological",
     "dataType": "string",
-    "description": "The type of culture medium used (use standard abbreviation, but no special characters).",
+    "description": "The type of culture medium used.",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -292,7 +364,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Control": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Control flag, is a sample a control or not (true or false) (required)",
+    "description": "Control flag, is a sample a control or not (true or false).",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -300,7 +372,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Group Match": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Group ID number of the matching control group for a given sample (when empty, no control group is linked to this sample).",
+    "description": "Group ID number of the matching control group for a given sample (when empty, no control group is linked to this sample). The sample match does not necessarily mean that the matching control is paired (this is indicated in the field “Paired sample”). It is only matched at the group level.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -316,7 +388,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "*Compound": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Compound Name for exposure study",
+    "description": "Compound name and abbreviation (for exposure studies).",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -324,7 +396,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Compound": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Compound Name for exposure study, CHEBI term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
+    "description": "Compound name (for exposure studies).",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -332,7 +404,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Compound abbreviation": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Compound abbreviation",
+    "description": "Compound name abbreviation (for exposure studies).",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -340,7 +412,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "CAS number": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Compound CAS (Chemical Abstracts Service) number",
+    "description": "Compound CAS (Chemical Abstracts Service) number.",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -348,7 +420,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Dose": {
     "category": "Biological",
     "dataType": "double",
-    "description": "Dose per administration",
+    "description": "Dose per administration of compound (for exposure studies).",
     "visibility": "main",
     "dimensions": "concentration",
     "preferredUnit": "millimolar"
@@ -356,7 +428,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Dose Duration": {
     "category": "Biological",
     "dataType": "double",
-    "description": "Duration of dose treatment; only for compound exposure study",
+    "description": "Duration of dose treatment (for exposure studies).",
     "visibility": "main",
     "dimensions": "time",
     "preferredUnit": "hour"
@@ -364,7 +436,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Dose Frequency": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Dose frequency; only for repeat dose toxicity study",
+    "description": "Dose frequency (for repeat exposure studies).",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -372,7 +444,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Vehicle": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Vehicle used to dilute the compound (water, dimethyl sulfoxide, etc.), CHEBI term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
+    "description": "Vehicle used to dilute the compound (water, dimethyl sulfoxide, etc.).",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -380,7 +452,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Route": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Administration route (gavage, injection, etc.), ERO term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
+    "description": "Administration route in animal experiment (gavage, injection, etc.).",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -388,7 +460,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Culture Duration": {
     "category": "Biological",
     "dataType": "double",
-    "description": "Culture time on biomaterial (after attachment) until isolation of cells",
+    "description": "Culture time on biomaterial (after attachment) until isolation of cells.",
     "visibility": "main",
     "dimensions": "time",
     "preferredUnit": "hour"
@@ -396,7 +468,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Biomaterial graphs file": {
     "category": "Biological",
     "dataType": "string",
-    "description": "Name (or URI) of the file that contains the biomaterial characteristics displayed as a graph or image",
+    "description": "Name (or URI) of the file that contains the biomaterial characteristics displayed as a graph or image.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none",
@@ -413,7 +485,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Sample Name": {
     "category": "Biological",
     "dataType": "string",
-    "description": "A unique name for each of your samples after all treatments described here (required). The microarray barcode is the best option here.",
+    "description": "A unique sample name corresponding to the microarray or RNAseq chip barcode.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -423,7 +495,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Material Class": {
     "category": "Material > General",
     "dataType": "string",
-    "description": "Class of material. E.g.: ceramic, metal, polymer, composite, natural graft",
+    "description": "Class of material, e.g. ceramic, metal, polymer, composite, natural graft.",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -431,7 +503,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "*Material": {
     "category": "Material > General",
     "dataType": "string",
-    "description": "Type of material",
+    "description": "Material name and abbreviation.",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -439,7 +511,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Material Name": {
     "category": "Material > General",
     "dataType": "string",
-    "description": "Full name of the type of material",
+    "description": "Full name of the type of material.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -447,7 +519,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Material abbreviation": {
     "category": "Material > General",
     "dataType": "string",
-    "description": "Abbreviation of the type of material",
+    "description": "Abbreviation of the type of material.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -455,7 +527,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Material Shape": {
     "category": "Material > General",
     "dataType": "string",
-    "description": "The shape of the material. Choose from: flat (for polystyrene culture flasks/dishes/plates), particle, disc, cylinder, block, coating, paste/injectable, cement, hydrogel",
+    "description": "The shape of the material, e.g. flat, particle, disc, cylinder, block, coating, paste/injectable, cement, hydrogel.",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -471,7 +543,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Manufacturer": {
     "category": "Material > General",
     "dataType": "string",
-    "description": "Manufacturer of the material",
+    "description": "Manufacturer of the material.",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -479,7 +551,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Etching": {
     "category": "Material > General",
     "dataType": "string",
-    "description": "Type of etching process used on material",
+    "description": "Type of etching process used on material.",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -487,7 +559,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Coating": {
     "category": "Material > General",
     "dataType": "string",
-    "description": "Type of coating applied on base material",
+    "description": "Type of coating applied on base material.",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -495,7 +567,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Clinically applied": {
     "category": "Material > General",
     "dataType": "string",
-    "description": "Has the material been clinically applied? (in this or other studies) yes/no",
+    "description": "Has the material been clinically applied?",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -503,7 +575,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Biologically degradable": {
     "category": "Material > General",
     "dataType": "string",
-    "description": "Is the material biologically degradable? yes/no",
+    "description": "Is the material biologically degradable?",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -513,7 +585,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Phase composition": {
     "category": "Material > Chemical",
     "dataType": "double",
-    "description": "Percentage (%) of each phase in the material, separated by semi-colons, e.g.: TCP=80;HA=20",
+    "description": "Percentage of each phase in the material.",
     "visibility": "main",
     "dimensions": "percentage",
     "preferredUnit": "%"
@@ -521,7 +593,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Phase composition device": {
     "category": "Material > Chemical",
     "dataType": "string",
-    "description": "The device used to measure the phase composition, e.g. XRD, EDS",
+    "description": "The device used to measure the phase composition, e.g. XRD, EDS.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -529,7 +601,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Elements composition": {
     "category": "Material > Chemical",
     "dataType": "double",
-    "description": "Element concentrations in material in parts per million (ppm) as measured by ICP-MS, separated by semi-colon, e.g.: Ca=800;P=400",
+    "description": "Element concentrations in material in parts per million (ppm).",
     "visibility": "main",
     "dimensions": "parts_per",
     "preferredUnit": "parts per million"
@@ -569,7 +641,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Degradation/ion release device": {
     "category": "Material > Chemical",
     "dataType": "string",
-    "description": "The device used to measure degradation/ion release, e.g. ICP-MS, colorimetric methods",
+    "description": "The device used to measure degradation/ion release, e.g. ICP-MS, colorimetric methods.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -593,7 +665,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Corrosion device": {
     "category": "Material > Chemical",
     "dataType": "string",
-    "description": "The device used to measure corrosion, e.g. EDS, ICP-MS",
+    "description": "The device used to measure corrosion, e.g. EDS, ICP-MS.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -601,7 +673,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Weight loss": {
     "category": "Material > Chemical",
     "dataType": "double",
-    "description": "The weight loss of the material per time Unit",
+    "description": "The percentage of weight loss of the material per time unit.",
     "visibility": "main",
     "dimensions": "weight_loss",
     "preferredUnit": "% / week"
@@ -611,7 +683,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Crystallinity": {
     "category": "Material > Physical",
     "dataType": "double",
-    "description": "The percentage (%) of amorphous/crystalline material",
+    "description": "The percentage of amorphous/crystalline material.",
     "visibility": "main",
     "dimensions": "percentage",
     "preferredUnit": "%"
@@ -619,7 +691,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Crystallinity device": {
     "category": "Material > Physical",
     "dataType": "string",
-    "description": "The device used to measure the crystallinity, e.g. XRD, SAXS/WAXS",
+    "description": "The device used to measure the crystallinity, e.g. XRD, SAXS/WAXS.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -627,7 +699,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Crystal structure": {
     "category": "Material > Physical",
     "dataType": "string",
-    "description": "Crystal structure (categorical), followed by lattice parameters (a,b,c), e.g.: hexagonal;(3,5,7)",
+    "description": "Crystal structure, followed by lattice parameters (a,b,c).",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -635,7 +707,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Porosity": {
     "category": "Material > Physical",
     "dataType": "double",
-    "description": "The percentage of porosity of the material",
+    "description": "The percentage of porosity of the material.",
     "visibility": "main",
     "dimensions": "percentage",
     "preferredUnit": "%"
@@ -643,7 +715,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Porosity device": {
     "category": "Material > Physical",
     "dataType": "string",
-    "description": "The device used to measure the porosity, e.g. microCT, mercury intrusion",
+    "description": "The device used to measure the porosity, e.g. microCT, mercury intrusion.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -651,7 +723,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Pore size": {
     "category": "Material > Physical",
     "dataType": "double",
-    "description": "Pore diameter size",
+    "description": "Pore diameter size.",
     "visibility": "main",
     "dimensions": "length",
     "preferredUnit": "micrometer"
@@ -659,7 +731,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Pore size device": {
     "category": "Material > Physical",
     "dataType": "string",
-    "description": "The device used to measure the pore size, e.g. microCT, SEM, profilometer",
+    "description": "The device used to measure the pore size, e.g. microCT, SEM, profilometer.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -675,7 +747,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Grain size device": {
     "category": "Material > Physical",
     "dataType": "string",
-    "description": "The device used to measure grain size, e.g. SEM, XRD",
+    "description": "The device used to measure grain size, e.g. SEM, XRD.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -683,7 +755,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Surface roughness Ra": {
     "category": "Material > Physical",
     "dataType": "double",
-    "description": "Surface roughness, average profile roughness parameter Ra in micrometers",
+    "description": "Surface roughness: average profile roughness parameter Ra.",
     "visibility": "main",
     "dimensions": "length",
     "preferredUnit": "micrometer"
@@ -691,7 +763,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Surface roughness Sa": {
     "category": "Material > Physical",
     "dataType": "double",
-    "description": "Surface roughness, average area roughness parameter Sa in micrometers",
+    "description": "Surface roughness, average area roughness parameter Sa.",
     "visibility": "main",
     "dimensions": "length",
     "preferredUnit": "micrometer"
@@ -707,7 +779,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Surface roughness device": {
     "category": "Material > Physical",
     "dataType": "string",
-    "description": "The device used to measure surface roughness, e.g. microCT, profilometer",
+    "description": "The device used to measure surface roughness, e.g. microCT, profilometer.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -715,7 +787,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Specific surface area": {
     "category": "Material > Physical",
     "dataType": "double",
-    "description": "Specific surface area of the material",
+    "description": "Specific surface area of the material.",
     "visibility": "main",
     "dimensions": "area",
     "preferredUnit": "square millimeter"
@@ -723,7 +795,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Specific surface area device": {
     "category": "Material > Physical",
     "dataType": "string",
-    "description": "The device used to measure the specific surface area, e.g. BET, Gas absorption",
+    "description": "The device used to measure the specific surface area, e.g. BET, Gas absorption.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -731,7 +803,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Wettability": {
     "category": "Material > Physical",
     "dataType": "double",
-    "description": "Wettability of the material (contact angle in degrees) with a liquid measured with contact angle device.Write down as e.g. water=45;ethanol=60",
+    "description": "Wettability of the material (contact angle) with a liquid.",
     "visibility": "main",
     "dimensions": "angle",
     "preferredUnit": "degree"
@@ -739,7 +811,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Surface charge": {
     "category": "Material > Physical",
     "dataType": "double",
-    "description": "The surface charge of the material measured as zeta potential (in millivolt).",
+    "description": "The surface charge of the material measured as zeta potential.",
     "visibility": "additional",
     "dimensions": "electric_potential_difference",
     "preferredUnit": "millivolt"
@@ -747,7 +819,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Surface charge device": {
     "category": "Material > Physical",
     "dataType": "string",
-    "description": "The device used to measure the surface charge, e.g. DLS, M3-PALS",
+    "description": "The device used to measure the surface charge, e.g. DLS, M3-PALS.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -771,7 +843,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Crosslinking degree": {
     "category": "Material > Physical",
     "dataType": "double",
-    "description": "Degree of crosslinking (%)",
+    "description": "Degree of crosslinking (%).",
     "visibility": "main",
     "dimensions": "percentage",
     "preferredUnit": "%"
@@ -779,7 +851,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Crosslinking degree device": {
     "category": "Material > Physical",
     "dataType": "string",
-    "description": "The device used to measure the degree of crosslinking, e.g. XRD, SAXS/WAXS, rheometer",
+    "description": "The device used to measure the degree of crosslinking, e.g. XRD, SAXS/WAXS, rheometer.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -787,7 +859,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Homogeneity of ceramic distribution": {
     "category": "Material > Physical",
     "dataType": "string",
-    "description": "Homogeneity of ceramic distribution in composite materials, i.e. are ceramic particles distributed homogenously or do they form aggregates? yes/no respectively",
+    "description": "Homogeneity of ceramic distribution in composite materials, i.e. are ceramic particles distributed homogenously (yes) or do they form aggregates (no)?",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -797,7 +869,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Elasticity": {
     "category": "Material > Mechanical",
     "dataType": "double",
-    "description": "Elasticity of the material (elastic modulus, average) in Pascal",
+    "description": "Elasticity of the material (elastic modulus, average).",
     "visibility": "main",
     "dimensions": "pressure",
     "preferredUnit": "pascal"
@@ -813,7 +885,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Elasticity device": {
     "category": "Material > Mechanical",
     "dataType": "string",
-    "description": "The device used to measure elasticity, e.g. Nanoindentator, AFM, microCT",
+    "description": "The device used to measure elasticity, e.g. Nanoindentator, AFM, microCT.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -821,7 +893,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Toughness": {
     "category": "Material > Mechanical",
     "dataType": "double",
-    "description": "Toughness of the material as measured by Nanoindentator in Pascal",
+    "description": "Toughness of the material as measured by Nanoindentator.",
     "visibility": "additional",
     "dimensions": "pressure",
     "preferredUnit": "pascal"
@@ -829,7 +901,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Hardness": {
     "category": "Material > Mechanical",
     "dataType": "double",
-    "description": "Knoop hardness as measured by Nanoindentator in Pascal",
+    "description": "Knoop hardness as measured by Nanoindentator.",
     "visibility": "main",
     "dimensions": "pressure",
     "preferredUnit": "pascal"
@@ -837,7 +909,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Compressive strength": {
     "category": "Material > Mechanical",
     "dataType": "double",
-    "description": "Compressive strength as measured by mechanical tester in Pascal",
+    "description": "Compressive strength as measured by mechanical tester.",
     "visibility": "main",
     "dimensions": "pressure",
     "preferredUnit": "pascal"
@@ -853,7 +925,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Tensile strength": {
     "category": "Material > Mechanical",
     "dataType": "double",
-    "description": "Tensile strength as measured by mechanical tester in Pascal.",
+    "description": "Tensile strength as measured by mechanical tester.",
     "visibility": "main",
     "dimensions": "pressure",
     "preferredUnit": "pascal"
@@ -869,7 +941,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Rheology": {
     "category": "Material > Mechanical",
     "dataType": "string",
-    "description": "Rheology (Reynolds number) as measured by rheometer (unitless measure).",
+    "description": "Rheology (Reynolds number) as measured by rheometer.",
     "visibility": "additional",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -885,7 +957,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Torsion": {
     "category": "Material > Mechanical",
     "dataType": "double",
-    "description": "Torsion in Pascal as measured by mechanical tester.",
+    "description": "Torsion as measured by mechanical tester.",
     "visibility": "additional",
     "dimensions": "pressure",
     "preferredUnit": "pascal"
@@ -901,7 +973,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Shear stress": {
     "category": "Material > Mechanical",
     "dataType": "double",
-    "description": "Shear stress in Pascal as measured by rheometer or mechanical tester.",
+    "description": "Shear stress as measured by rheometer or mechanical tester.",
     "visibility": "additional",
     "dimensions": "pressure",
     "preferredUnit": "pascal"
@@ -917,7 +989,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Shear stress device": {
     "category": "Material > Mechanical",
     "dataType": "string",
-    "description": "The device used to measure shear, e.g. rheometer, mechanical tester",
+    "description": "The device used to measure shear, e.g. rheometer, mechanical tester.",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none"
@@ -925,7 +997,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Bending strength": {
     "category": "Material > Mechanical",
     "dataType": "double",
-    "description": "Bending strength as measured by mechanical tester in Pascal.",
+    "description": "Bending strength as measured by mechanical tester.",
     "visibility": "main",
     "dimensions": "pressure",
     "preferredUnit": "pascal"
@@ -941,7 +1013,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   "Stress rupture": {
     "category": "Material > Mechanical",
     "dataType": "double",
-    "description": "Stress rupture as measued by mechanical tester in Pascal.",
+    "description": "Stress rupture as measued by mechanical tester.",
     "visibility": "additional",
     "dimensions": "pressure",
     "preferredUnit": "pascal"
