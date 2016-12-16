@@ -55,6 +55,7 @@ export class StudyService {
     this.studyRequester.flushCache();
     this.sampleRequester.flushCache();
     this.sampleIdsRequester.flushCache();
+    this.fieldMetaRequester.flushCache();
   }
 
   getStudy(studyId: string): Promise<Study> {
