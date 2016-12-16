@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xs-3 sidebar">
-      <filter-sidebar></filter-sidebar>
+      <filter-sidebar [allFieldsModal]="allFieldsModal"></filter-sidebar>
     </div>
 
     <div class="col-xs-9 col-xs-offset-3 main">
@@ -164,4 +164,23 @@
     </div>
   </div>
 
+
+  <div bsModal #allFieldsModal="bs-modal" class="modal fade" role="dialog" (onShow)="allFields.refresh()">
+    <div class="modal-dialog">
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" (click)="allFieldsModal.hide()">&times;</button>
+          <h4 class="modal-title">Full list of fields</h4>
+        </div>
+        <div class="modal-body">
+          <all-fields #allFields="allFields"></all-fields>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" (click)="allFieldsModal.hide()">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>

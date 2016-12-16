@@ -1,18 +1,11 @@
 import {Component, OnInit, ChangeDetectorRef, OnDestroy, Input, OnChanges} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {FiltersService, FiltersState} from "../services/filters.service";
-import {StudyService, ManySampleCounts} from "../services/study.service";
+import {StudyService, ManySampleCounts, ClassifiedProperties, ClassifiedPropertiesForGivenVisibility} from "../services/study.service";
 import {Observable, Subject} from "rxjs";
 import {FieldVisibility, FieldCategory, FieldMeta} from "../common/field-meta.model";
 import * as _ from 'lodash';
-
-interface ClassifiedPropertiesForGivenVisibility {
-  [category: string]: string[]   // field names
-}
-
-interface ClassifiedProperties {
-  [visibility: string]: ClassifiedPropertiesForGivenVisibility
-}
+import {ModalDirective} from "ng2-bootstrap";
 
 @Component({
   selector: 'filter-sidebar-category',
@@ -185,6 +178,10 @@ export class FilterSidebarAllULComponent {
       </li>
   
       <li>
+        <a href="#" (click)="$event.preventDefault(); allFieldsModal && allFieldsModal.show()">Full list of fields</a>
+      </li>
+  
+      <li>
         <span class="filter-heading">
           MAIN FILTERS
         </span>
@@ -267,24 +264,9 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
   allFieldMetas: {[fieldName: string]: FieldMeta} = {};
   visiblePropNames: string[] = []
 
-  // classifiedProperties looks something like this:
-  // {
-  //   "main": {          <-- visibility from metadata
-  //     "Technical > General": [   <-- category from metadata
-  //        "NameOfMainTechnicalGeneralField1",
-  //        "NameOfMainTechnicalGeneralField2",
-  //        ...
-  //      ],
-  //      "Biological": [
-  //        ...
-  //      ],
-  //      ...
-  //   },
-  //   "additional": {
-  //     ...
-  //   },
-  //   ...
-  // }
+  @Input() allFieldsModal: ModalDirective = null;
+
+  // See comment in StudyService.classifyProperties
   classifiedProperties: ClassifiedProperties = {};
 
   ready = false;
@@ -314,13 +296,13 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
       .getAllCountsAsync()
       .then(unfilteredCounts => {
         this.unfilteredPropNamesAndValueCounts = unfilteredCounts;
-        return this._studyService.getAllFieldMetas(Object.keys(unfilteredCounts));
+        return this._studyService.getAllFieldMetas();
       })
       .then(allFieldMetas => {
         this.allFieldMetas = allFieldMetas;
         this.visiblePropNames = this.calcVisiblePropNames(allFieldMetas);
 
-        this.classifiedProperties = this.classifyProperties(allFieldMetas);
+        this.classifiedProperties = this._studyService.classifyProperties(allFieldMetas);
 
         this.changeDetectorRef.detectChanges();
         this.startListening();
@@ -344,39 +326,6 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
       let visibility = fieldMetas[fieldName].visibility;
       return (visibility === 'main' || visibility === 'additional');
     });
-  }
-
-  classifyProperties(fieldMetas: {[fieldName: string]: FieldMeta}): ClassifiedProperties {
-    let self = this;
-
-    // See lodash docs for "_.mergeWith"
-    let customizer = function(objValue: any, srcValue: any) {
-      if (_.isArray(objValue)) {
-        return objValue.concat(srcValue);
-      }
-    }
-
-    let result: ClassifiedProperties = {};
-    for (let fieldName in fieldMetas) {
-      let fieldMeta = fieldMetas[fieldName];
-      result = _.mergeWith(result, {
-        [fieldMeta.visibility || "additional"]: {
-          [fieldMeta.category || "Technical > General"]: [
-            fieldName
-          ]
-        }
-      }, customizer);
-    }
-
-    for (let visibility in result) {
-      for (let category in result[visibility]) {
-        result[visibility][category] = result[visibility][category].sort(
-          (a: string, b: string) => this.withoutStar(a).localeCompare(this.withoutStar(b))
-        );
-      }
-    }
-
-    return result;
   }
 
   private startListening() {

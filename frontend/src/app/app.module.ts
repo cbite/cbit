@@ -36,6 +36,10 @@ import {UserManagementComponent, UserEditorComponent, AddUserComponent} from "./
 import {Ng2SliderComponent} from "./slider/ng2-slider.component";
 import {HorizontallySlidableDirective} from "./slider/horizontally-slidable.directive";
 import {AboutComponent, FAQQuestionComponent} from "./about.component";
+import {
+  AllFieldsComponent, AllFieldsForVisibilityComponent,
+  AllFieldsForVisibilityCategoryComponent
+} from "./all-fields.component";
 
 @NgModule({
   imports: [
@@ -68,6 +72,9 @@ import {AboutComponent, FAQQuestionComponent} from "./about.component";
     PubmedLinksDirective,
     DOILinkDirective,
     FilterSidebarComponent,
+    AllFieldsComponent,
+    AllFieldsForVisibilityComponent,
+    AllFieldsForVisibilityCategoryComponent,
     FilterSidebarCategoryComponent,
     FilterSidebarAllULComponent,
     SampleFiltersComponent,

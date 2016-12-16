@@ -42,6 +42,14 @@ export interface ManySampleCounts {
   [category: string]: SampleCounts
 }
 
+export interface ClassifiedPropertiesForGivenVisibility {
+  [category: string]: string[]   // field names
+}
+
+export interface ClassifiedProperties {
+  [visibility: string]: ClassifiedPropertiesForGivenVisibility
+}
+
 const CACHE_LIFETIME_MS = 60 * 1000;  // Cache study and sample metadata for this long
 const REQUEST_BUFFER_MS = 100;        // After a first request for study/sample info, delay this long and buffer other requests
                                       // before actually sending a request to the backend (grouping several study/sample metadata queries)
@@ -104,16 +112,19 @@ export class StudyService {
     });
   }
 
-  getAllFieldMetas(fieldNames: string[]): Promise<{[fieldName: string]: FieldMeta}> {
+  getAllFieldMetas(): Promise<{[fieldName: string]: FieldMeta}> {
     let self = this;
 
-    let allPromises = fieldNames.map(fieldName => {
-      return self.getFieldMeta(fieldName).then(fieldMeta => {
-        return { [fieldName]: fieldMeta };
-      });
-    });
+    return this.getAllFieldNames()
+      .then(fieldNames => {
+        let allPromises = fieldNames.map(fieldName => {
+          return self.getFieldMeta(fieldName).then(fieldMeta => {
+            return {[fieldName]: fieldMeta};
+          });
+        });
 
-    return Promise.all(allPromises).then(allFieldMetaObjects => _.merge.apply(null, [{}].concat(allFieldMetaObjects)));
+        return Promise.all(allPromises).then(allFieldMetaObjects => _.merge.apply(null, [{}].concat(allFieldMetaObjects)));
+      });
   }
 
   getAllCountsAsync(): Promise<ManySampleCounts> {
@@ -194,6 +205,58 @@ export class StudyService {
     });
   }
 
+  // result looks something like this:
+  // {
+  //   "main": {          <-- visibility from metadata
+  //     "Technical > General": [   <-- category from metadata
+  //        "NameOfMainTechnicalGeneralField1",
+  //        "NameOfMainTechnicalGeneralField2",
+  //        ...
+  //      ],
+  //      "Biological": [
+  //        ...
+  //      ],
+  //      ...
+  //   },
+  //   "additional": {
+  //     ...
+  //   },
+  //   ...
+  // }
+  classifyProperties(fieldMetas: {[fieldName: string]: FieldMeta}): ClassifiedProperties {
+    let self = this;
+
+    // See lodash docs for "_.mergeWith"
+    let customizer = function(objValue: any, srcValue: any) {
+      if (_.isArray(objValue)) {
+        return objValue.concat(srcValue);
+      }
+    }
+
+    let result: ClassifiedProperties = {};
+    for (let fieldName in fieldMetas) {
+      let fieldMeta = fieldMetas[fieldName];
+      result = _.mergeWith(result, {
+        [fieldMeta.visibility || "additional"]: {
+          [fieldMeta.category || "Technical > General"]: [
+            fieldName
+          ]
+        }
+      }, customizer);
+    }
+
+    for (let visibility in result) {
+      for (let category in result[visibility]) {
+        result[visibility][category] = result[visibility][category].sort(
+          (a: string, b: string) => this.withoutStar(a).localeCompare(this.withoutStar(b))
+        );
+      }
+    }
+
+    return result;
+  }
+
+
 
   // PRIVATE DETAILS
   // ===============
@@ -238,5 +301,13 @@ export class StudyService {
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
     );
+  }
+
+  withoutStar(s: string): string {
+    if (s.substr(0, 1) == '*') {
+      return s.substr(1);
+    } else {
+      return s;
+    }
   }
 }

@@ -230,11 +230,9 @@ export class MetadataComponent implements OnInit {
 
   ngOnInit(): void {
     let self = this;
-    this._studyService.getAllFieldNames().then(fieldNames => {
-      this._studyService.getAllFieldMetas(fieldNames).then(fieldMetas => {
-        this.fieldMetas = fieldMetas;
-        this.ready = true;
-      })
+    this._studyService.getAllFieldMetas().then(fieldMetas => {
+      this.fieldMetas = fieldMetas;
+      this.ready = true;
     });
   }
 
