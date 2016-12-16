@@ -11,26 +11,6 @@ from data.filters import FiltersState, SampleFilter, FilterMode
 from data.unit_conversions import DimensionsRegister
 from data.fieldmeta import FieldMeta
 
-HIDDEN_SAMPLE_FILTER_LABELS = frozenset((
-  'Barcode',
-  'Biological Replicate',
-  'Sample ID',
-  'Sample Name',
-  'Source Name',
-  'Study ID',
-  'Group ID',
-  'Protocols',
-  'Group Match',
-
-  # Fields that have been merged in backend
-  'Material Name',
-  'Material abbreviation',
-  'Strain full name',
-  'Strain abbreviation',
-  'Compound',
-  'Compound abbreviation',
-))
-
 # Should be a parseable number to play nicely with numeric fields
 # and it should survive a round-trip conversion in ES from string to double to string
 # (hence the '.0')
@@ -83,7 +63,6 @@ class MetadataAllCountsResource(object):
             }
 
             for propName in properties
-            if propName not in HIDDEN_SAMPLE_FILTER_LABELS
         }
 
         if not invisibleStudyIds:
