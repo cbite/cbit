@@ -130,11 +130,11 @@ try:
             else:
                 return s
         sio = StringIO()
-        sio.write(u"Field Name,Description\n")
-        w = csv.writer(sio)
+        sio.write(u"Field Name\tDescription\n")
         for fieldName in sorted(fieldMetas.keys(), key=withoutStar):
-            w.writerow([withoutStar(fieldName), fieldMetas[fieldName].description])
-        zf.writestr("field_descriptions.csv", sio.getvalue().encode('utf-8'))
+            sio.write(u"{0}\t{1}\n".format(withoutStar(fieldName), fieldMetas[fieldName].description))
+        siovalue = sio.getvalue()
+        zf.writestr("field_descriptions.tsv", siovalue.encode('utf-8'))
 
         for (studyNum, studyId) in enumerate(download_config['targetData'].iterkeys()):
 
@@ -183,7 +183,7 @@ try:
                     df = a.processed_data_set[sorted(list(sampleNames))]
 
                     sio = StringIO()
-                    df.to_csv(sio, index_label='Probe ID', encoding='utf-8')
+                    df.to_csv(sio, index_label='Probe ID')#, encoding='utf-8') # to_csv is very slow when encoding is specified, and the data files shouldn't have encoding issues
                     zf.writestr(
                         os.path.join(studyFolderName, "processed_expression_data.csv"),
                         sio.getvalue()
@@ -202,7 +202,7 @@ try:
                     df = a.raw_data_set[columnNames]
 
                     sio = StringIO()
-                    df.to_csv(sio, index_label='Probe ID', encoding='utf-8')
+                    df.to_csv(sio, index_label='Probe ID')#, encoding='utf-8') # to_csv is very slow when encoding is specified, and the data files shouldn't have encoding issues
                     zf.writestr(
                         os.path.join(studyFolderName, "raw_expression_data.csv"),
                         sio.getvalue()
