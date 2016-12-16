@@ -151,7 +151,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "preferredUnit": "none"
   },
   "Transcriptomics Assay Detail: Base caller": {
-    "category": "Technical > Microarray",
+    "category": "Technical > RNA sequencing",
     "dataType": "string",
     "description": "No description available",
     "visibility": "additional",
@@ -159,7 +159,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "preferredUnit": "none"
   },
   "Transcriptomics Assay Detail: Library layout": {
-    "category": "Technical > Microarray",
+    "category": "Technical > RNA sequencing",
     "dataType": "string",
     "description": "No description available",
     "visibility": "additional",
@@ -167,7 +167,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "preferredUnit": "none"
   },
   "Transcriptomics Assay Detail: MID": {
-    "category": "Technical > Microarray",
+    "category": "Technical > RNA sequencing",
     "dataType": "string",
     "description": "No description available",
     "visibility": "additional",
@@ -175,7 +175,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "preferredUnit": "none"
   },
   "Transcriptomics Assay Detail: Quality scorer": {
-    "category": "Technical > Microarray",
+    "category": "Technical > RNA sequencing",
     "dataType": "string",
     "description": "No description available",
     "visibility": "additional",
