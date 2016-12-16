@@ -101,7 +101,7 @@ export const KEYS_IN_MINI_SUMMARY = {
                     <div *ngIf="areSamplesShown(studyMatch.study._id)">
                       <ul style="list-style: none">
                         <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
-                          <div class="showonhover">
+                          <div [tooltipHtml]="tooltipHtmlFor(studyMatch.study._id, sampleMatch)" [tooltipPlacement]="tooltipPlacementForIndex(i)" [tooltipAppendToBody]="true">
     
                             <a *ngIf="!isSampleSelected(studyMatch.study._id, sampleMatch._id)" href="#"
                                class="btn btn-success btn-xs" role="button"
@@ -119,12 +119,6 @@ export const KEYS_IN_MINI_SUMMARY = {
                             <span *ngFor="let kv of filteredDistinctKeyValues(studyMatch.study._id, sampleMatch) | mapToIterable; let isLast = last">
                               <i>{{ kv.key }}</i>: {{ kv.val }}<span *ngIf="!isLast">, </span>
                             </span>
-    
-                            <div class="hovertext">
-                              <div *ngFor="let kv of distinctKeyValues(studyMatch.study._id, sampleMatch) | mapToIterable">
-                                <b>{{ kv.key }}</b>: {{ kv.val }}
-                              </div>
-                            </div>
                           </div>
                         </li>
                       </ul>
@@ -558,5 +552,22 @@ export class BrowserComponent implements OnInit, OnDestroy {
     return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
       .map((p: RawStudyPublication) => p['Study Publication DOI'])
     );
+  }
+
+  tooltipHtmlFor(studyId: string, sample: Sample): string {
+    let result = '';
+    let contents = this.distinctKeyValues(studyId, sample);
+    for (let key of Object.keys(contents).sort((x: string, y: string) => x.localeCompare(y))) {
+      result += `<div><b>${key}</b>: ${contents[key]}</div>`;
+    }
+    return result;
+  }
+
+  tooltipPlacementForIndex(i: number): string {
+    if ((i % 3) === 2) {
+      return "left";
+    } else {
+      return "right";
+    }
   }
 }
