@@ -70,7 +70,7 @@ enum GlobalCheckboxState {
                   <span *ngIf="units().length === 1">{{ uiUnitName(dimensions, units()[0]) }}</span>
         </div>
         
-        <ul class="contents" *ngIf="!shouldUseSlider">
+        <ul *ngIf="!shouldUseSlider">
           <li *ngFor="let kv of allCountSorted" class="checkbox">
             <label [class.disabled]="!isEnabled(kv.key)">
               <input type="checkbox"
@@ -89,7 +89,7 @@ enum GlobalCheckboxState {
           </li>
         </ul>
         
-        <div class="contents slider-box" *ngIf="shouldUseSlider">
+        <div class="slider-box" *ngIf="shouldUseSlider">
           <div class="actualRange">
             From {{ formatValueName(displayStartValue + '') }} to {{ formatValueName(displayEndValue + '') }}
           </div>
@@ -138,6 +138,8 @@ enum GlobalCheckboxState {
     }
     .my-label {
       width: auto;
+      max-width: 80%;
+      vertical-align: top;
     }
     .my-label a {
       padding: 10px 0;
@@ -152,10 +154,6 @@ enum GlobalCheckboxState {
       font-style: oblique;
       padding-left: 38px;
       padding-top: 7px;
-    }
-    
-    .contents {
-      margin-left: 30px;
     }
     
     ul li {
@@ -185,6 +183,7 @@ enum GlobalCheckboxState {
     
     .slider-box {
       position: relative;
+      margin-left: 30px;
       padding-top: 20px;
     }
     
@@ -211,6 +210,8 @@ enum GlobalCheckboxState {
     
     .slider-box > ng2-slider {
       display: block;
+      margin-left: 10px;
+      margin-right: 10px;
     }
     
     .slider-box > .checkbox {
