@@ -18,11 +18,14 @@ class DownloadsResource(object):
 
         Request Data
         ============
-        [
-          "SampleId1",
-          "SampleId2",
-          ...
-        ]
+        {
+          "onlyIncludeMetadata": false,
+          "sampleIds": [
+            "SampleId1",
+            "SampleId2",
+            ...
+          ]
+        }
 
         Response Data
         =============
@@ -39,11 +42,12 @@ class DownloadsResource(object):
         # 0. Check request data
         # ---------------------
 
-        if not isinstance(data, list):
+        if not isinstance(data, dict):
             raise falcon.HTTPBadRequest(
-                description="Expected JSON array as payload")
+                description="Expected JSON object as payload")
 
-        sampleIds = data
+        onlyIncludeMetadata = data['onlyIncludeMetadata']
+        sampleIds = data['sampleIds']
         if not sampleIds:
             raise falcon.HTTPBadRequest(description="No samples specified for download")
 
@@ -147,6 +151,7 @@ class DownloadsResource(object):
 
         # Now dump bundle creation config into temporary space
         downloadConfig = {
+            'onlyIncludeMetadata': onlyIncludeMetadata,
             'targetData': sampleIdsByStudy,
             'studyInfos': studyInfos,
             'sampleInfos': sampleInfos,

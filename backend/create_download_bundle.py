@@ -111,6 +111,7 @@ progress = ProgressManager()
 
 try:
     # For now, just bundle the individual studies as they are, no sample subselection
+    onlyIncludeMetadata = download_config['onlyIncludeMetadata']
     studyAndSampleIds = download_config['targetData']
     studyInfos = download_config['studyInfos']
     sampleInfos = download_config['sampleInfos']
@@ -142,7 +143,7 @@ try:
             studyFolderName = studyFolderNameGen.genName(studyId)
 
             # Ingest data in raw form
-            a = read_archive(studyArchivePath, only_metadata=False)
+            a = read_archive(studyArchivePath, only_metadata=onlyIncludeMetadata)
 
             with zipfile.ZipFile(studyArchivePath, "r") as studyZf:
 
@@ -179,7 +180,7 @@ try:
                 )
 
                 # Subselect relevant samples in processed data
-                if a.processed_data_set is not None:
+                if not onlyIncludeMetadata and a.processed_data_set is not None:
                     df = a.processed_data_set[sorted(list(sampleNames))]
 
                     sio = StringIO()
@@ -192,7 +193,7 @@ try:
                 # Subselect relevant samples in raw data
                 # (For each sample, there are multiple columns; we should search
                 # for a prefix "<Sample Name>." and include all matching columns)
-                if a.raw_data_set is not None:
+                if not onlyIncludeMetadata and a.raw_data_set is not None:
                     columnNames = []
                     for colName in a.raw_data_set.columns:
                         for sampleName in sampleNames:
@@ -214,6 +215,13 @@ try:
                     for fieldName, fieldMeta in fieldMetas.iteritems()
                     if fieldMeta.isSupplementaryFileName
                 )
+                if onlyIncludeMetadata:
+                    # Quick-n-dirty heuristic for metadata columns
+                    supFileNameColumns = set(
+                        fieldName
+                        for fieldName in supFileNameColumns
+                        if 'data' not in fieldName.lower() and 'annotation file' not in fieldName.lower()
+                    )
                 includedFileNames = set()
                 for sampleName, info in sampleInfo.iteritems():
                     for fieldName, value in info.iteritems():
@@ -228,18 +236,12 @@ try:
                     a.rawDataFilename
                 ])
 
-                print("Including: {0}, excluding: {1}".format(includedFileNames, excludedFileNames))
-
                 for filename in studyZf.namelist():
                     if filename in includedFileNames and filename not in excludedFileNames:
                         zf.writestr(
                             os.path.join(studyFolderName, filename),
                             studyZf.read(filename)
                         )
-
-                print("Hello")
-
-            #zf.write(studyArchivePath, arcname=studyFolderName + '.zip')
 
             # Progress update
             progress.update(float(studyNum+1) / len(studyAndSampleIds))

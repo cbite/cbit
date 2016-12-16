@@ -38,16 +38,24 @@ enum StudyCheckboxState {
           <h2 class="modal-title">Download selected studies and samples</h2>
         </div>
         
-        <div class="modal-body" [formGroup]="form">
+        <div class="modal-body">
           <p>
             On clicking "Download", an archive will be prepared with the following datasets.
             The archive will download automatically when finished.  You can still remove any
             study or sample by clicking on the checkboxes below. 
           </p>
+          
+          <div class="checkbox">
+            <label for="onlyIncludeMetadata">
+              <input type="checkbox" [id]="onlyIncludeMetadata" [(ngModel)]="onlyIncludeMetadata">
+              <b>Only include metadata, not gene expression data</b>
+            </label>
+          </div>
+          
           <div *ngIf="!ready">
             <spinner></spinner>
           </div>
-          <div *ngIf="ready" class="limitedHeight">
+          <div *ngIf="ready" [formGroup]="form" class="limitedHeight">
             <ul class="studiesList">
               <li *ngFor="let study of studies" [formGroupName]="study._id">
               
@@ -158,6 +166,8 @@ export class DownloadComponent {
   progressUrl: string;
   ready: boolean = false;
 
+  onlyIncludeMetadata = false;
+
   private jqElem: JQuery;
   form: FormGroup = new FormGroup({});
 
@@ -181,6 +191,7 @@ export class DownloadComponent {
     this.preparingDownload = false;
     this.preparationProgress = 0;
     this.downloadReady = false;
+    this.onlyIncludeMetadata = false;
 
     let studyIds = Object.keys(this._downloadSelectionService.getSelection().selection);
 
@@ -326,7 +337,10 @@ export class DownloadComponent {
       type: 'POST',
       url: this._url.downloadsResource(),
       headers: this._auth.headers(),
-      data: JSON.stringify(sampleIds),
+      data: JSON.stringify({
+        onlyIncludeMetadata: this.onlyIncludeMetadata,
+        sampleIds: sampleIds
+      }),
       dataType: 'json',
       success: (data: DownloadPostResponse) => {
         self.download_uuid = data.download_uuid;
