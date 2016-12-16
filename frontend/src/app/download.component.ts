@@ -137,6 +137,7 @@ enum StudyCheckboxState {
     padding-left: 40px;
   }
   .patienceNote {
+    text-align: left;
     font-style: oblique;
     font-size: 80%;
   }
