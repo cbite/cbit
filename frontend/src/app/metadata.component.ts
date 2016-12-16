@@ -121,6 +121,20 @@ import {URLService} from "./services/url.service";
                        [id]="'isSupplementaryFileName-' + kv.key">
               </div>
             </div>
+            
+            <div class="form-group">
+              <label [attr.for]="'nameInSampleMiniSummary-' + kv.key" class="col-sm-2 control-label">
+                Name in Sample Mini-Summary
+              </label>
+              <div class="col-sm-4">
+                <input type="text"
+                       placeholder="Leave blank to omit field from sample mini-summary"
+                       formControlName="nameInSampleMiniSummary"
+                       [id]="'nameInSampleMiniSummary-' + kv.key"
+                       class="form-control">
+              </div>
+            </div>
+                  
           </div>
         </div>
       </div>
@@ -173,6 +187,7 @@ export class FieldMetadataEditorComponent implements OnInit, OnChanges {
         dimensions:              new FormControl(fieldMeta.dimensions),
         preferredUnit:           new FormControl(fieldMeta.preferredUnit),
         isSupplementaryFileName: new FormControl(fieldMeta.isSupplementaryFileName),
+        nameInSampleMiniSummary: new FormControl(fieldMeta.nameInSampleMiniSummary),
       });
     }
     return new FormGroup(group);

@@ -45,5 +45,6 @@ export interface FieldMeta {
   dataType?: FieldDataType,
   dimensions?: DimensionsType,
   preferredUnit?: string,
-  isSupplementaryFileName?: boolean
+  isSupplementaryFileName?: boolean,
+  nameInSampleMiniSummary?: string
 };

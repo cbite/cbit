@@ -394,11 +394,11 @@ export class BrowserComponent implements OnInit, OnDestroy {
   filteredDistinctKeyValues(studyId: string, sample: Sample): Object {
     var result = {};
     for (let key of Object.keys(sample._source)) {
-      if ((key in KEYS_IN_MINI_SUMMARY) &&
+      if ((key in this.fieldMetas && this.fieldMetas[key].nameInSampleMiniSummary !== '') &&
         !(key in this.commonKeys[studyId]) &&
         (sample._source[key] !== sample._source['Sample Name'])
       ) {
-        let shortKey = KEYS_IN_MINI_SUMMARY[key];
+        let shortKey = this.fieldMetas[key].nameInSampleMiniSummary;
         result[shortKey] = sample._source[key];
       }
     }

@@ -255,7 +255,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "Abbreviation of cell line name for cell line work, donor abbreviation (e.g. a human stem cell donor), or abbreviation of isolated cell type for human subjects or animals.",
     "visibility": "hidden",
     "dimensions": "none",
-    "preferredUnit": "none"
+    "preferredUnit": "none",
+    "nameInSampleMiniSummary": "Cell strain"
   },
   "Cell strain full name": {
     "category": "Biological",
@@ -279,7 +280,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "Type of cells (not cell line), e.g. bone marrow cells, osteosarcoma cells, etc.",
     "visibility": "main",
     "dimensions": "none",
-    "preferredUnit": "none"
+    "preferredUnit": "none",
+    "nameInSampleMiniSummary": "Cell type"
   },
   "Tissue": {
     "category": "Biological",
@@ -295,7 +297,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "Organ from which the sample originates.",
     "visibility": "main",
     "dimensions": "none",
-    "preferredUnit": "none"
+    "preferredUnit": "none",
+    "nameInSampleMiniSummary": "Organ"
   },
   "Organism": {
     "category": "Biological",
@@ -303,7 +306,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "Organism from which the sample originates.",
     "visibility": "main",
     "dimensions": "none",
-    "preferredUnit": "none"
+    "preferredUnit": "none",
+    "nameInSampleMiniSummary": "Organism"
   },
   "Sex": {
     "category": "Biological",
@@ -343,7 +347,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "Type of assay (in vitro, in vivo or ex vivo).",
     "visibility": "main",
     "dimensions": "none",
-    "preferredUnit": "none"
+    "preferredUnit": "none",
+    "nameInSampleMiniSummary": "Assay Type"
   },
   "Culture medium": {
     "category": "Biological",
@@ -367,7 +372,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "Control flag, is a sample a control or not (true or false).",
     "visibility": "hidden",
     "dimensions": "none",
-    "preferredUnit": "none"
+    "preferredUnit": "none",
+    "nameInSampleMiniSummary": "Control"
   },
   "Group Match": {
     "category": "Biological",
@@ -407,7 +413,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "Compound name abbreviation (for exposure studies).",
     "visibility": "hidden",
     "dimensions": "none",
-    "preferredUnit": "none"
+    "preferredUnit": "none",
+    "nameInSampleMiniSummary": "Compound"
   },
   "CAS number": {
     "category": "Biological",
@@ -423,7 +430,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "Dose per administration of compound (for exposure studies).",
     "visibility": "main",
     "dimensions": "concentration",
-    "preferredUnit": "millimolar"
+    "preferredUnit": "millimolar",
+    "nameInSampleMiniSummary": "Dose"
   },
   "Dose Duration": {
     "category": "Biological",
@@ -498,7 +506,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "Class of material, e.g. ceramic, metal, polymer, composite, natural graft.",
     "visibility": "main",
     "dimensions": "none",
-    "preferredUnit": "none"
+    "preferredUnit": "none",
+    "nameInSampleMiniSummary": "Material Class"
   },
   "*Material": {
     "category": "Material > General",
@@ -522,7 +531,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "Abbreviation of the type of material.",
     "visibility": "hidden",
     "dimensions": "none",
-    "preferredUnit": "none"
+    "preferredUnit": "none",
+    "nameInSampleMiniSummary": "Material"
   },
   "Material Shape": {
     "category": "Material > General",
@@ -530,7 +540,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "description": "The shape of the material, e.g. flat, particle, disc, cylinder, block, coating, paste/injectable, cement, hydrogel.",
     "visibility": "main",
     "dimensions": "none",
-    "preferredUnit": "none"
+    "preferredUnit": "none",
+    "nameInSampleMiniSummary": "Material Shape"
   },
   "Sintering temperature": {
     "category": "Material > General",
@@ -1174,6 +1185,19 @@ interface UploadsResponse {
                        [id]="'isSupplementaryFileName-' + fieldName">
               </div>
             </div>
+            
+            <div class="form-group">
+              <label [attr.for]="'nameInSampleMiniSummary-' + fieldName" class="col-sm-2 control-label">
+                Name in Sample Mini-Summary
+              </label>
+              <div class="col-sm-4">
+                <input type="text"
+                       placeholder="Leave blank to omit field from sample mini-summary"
+                       formControlName="nameInSampleMiniSummary"
+                       [id]="'nameInSampleMiniSummary-' + fieldName"
+                       class="form-control">
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1239,6 +1263,7 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
         dimensions:              new FormControl(defaults.dimensions),
         preferredUnit:           new FormControl(defaults.preferredUnit),
         isSupplementaryFileName: new FormControl(defaults.isSupplementaryFileName),
+        nameInSampleMiniSummary: new FormControl(defaults.nameInSampleMiniSummary),
       });
 
       let fieldAnalysis = this.fieldAnalyses[fieldName];
@@ -1260,6 +1285,7 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
       dimensions:              'none',
       preferredUnit:           'none',
       isSupplementaryFileName: false,
+      nameInSampleMiniSummary: '',
     };
 
     let fieldAnalysis = this.fieldAnalyses[fieldName];
