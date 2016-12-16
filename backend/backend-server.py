@@ -2,7 +2,10 @@
 
 import falcon
 from config import config as cfg
-from middleware.clean_old_uploads import CleanOldUploadsMiddleware
+from middleware.clean_old_uploads import (
+    CleanOldUploadsMiddleware,
+    CleanOldDownloadsMiddleware
+)
 from middleware.cors import CORSMiddleware
 from middleware.database_session import DatabaseSessionMiddleware
 from middleware.authentication import AuthenticationMiddleware
@@ -52,6 +55,7 @@ if cfg.CORS_ENABLED:
 middleware.extend([
     DatabaseSessionMiddleware(),
     CleanOldUploadsMiddleware(),
+    CleanOldDownloadsMiddleware(),
     AuthenticationMiddleware()
 ])
 
