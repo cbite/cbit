@@ -86,8 +86,18 @@ export class BrowserComponent implements OnInit, OnDestroy {
 
   updateMatches(rawMatches: UnifiedMatch[]): void {
     this.matches = rawMatches.sort((a, b) =>
-      a.study._source['STUDY']['Study Researchers Involved']
-        .localeCompare(b.study._source['STUDY']['Study Researchers Involved']));
+      (
+        // Descending by Publication Date
+        -(a.study._source['*Publication Date']
+          .localeCompare(b.study._source['*Publication Date']))
+
+        ||
+
+        // ...then ascending by study title
+        (a.study._source['STUDY']['Study Title']
+          .localeCompare(b.study._source['STUDY']['Study Title']))
+      )
+    );
 
     let keys = new Set<string>();
     this.matches.forEach(studyMatch => {
