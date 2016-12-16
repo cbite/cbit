@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   template: `
@@ -108,43 +108,211 @@ import {Component} from '@angular/core';
           
           
           
-          <!--
-          LET’S IGNORE THE FAQ SECTION FOR NOW:
-          FAQs
-          What is cBIT? cBiT is a repository that incorporates material science, transcriptomics-based cell biology, and clinical data. Users of cBiT are able to download single or multiple datasets, which will provide scientists with a powerful tool to improve their research, ultimately contributing to new cell biology knowledge and/or new biomaterial development.
-          Why should I submit my data to cBIT?
-          There are several good reasons for submitting your data to us. The most likely reason is that the journal in which you are publishing your research requires deposit of microarray data to a MIAME-compliant public repository like cBIT. We endeavor to make data deposit procedures as straightforward as possible and will provide as much assistance as you require to get your data submitted to cBIT. 
-          If you have problems or questions about the submission procedures, just e-mail us at geo@ncbi.nlm.nih.gov and one of our curators will quickly get back to you. In addition to satisfying possible journal requirements for publication, there are other significant benefits to depositing data with GEO. Your data receive long term archiving at a centralized repository, and are integrated with other NCBI resources which afford greatly increased usability and visibility. You may also include links back to your own project websites within your submission, again increasing visibility of your research. Journal publication is not a requirement for data submission to GEO.
-          How do I submit my data to GEO?
-          When do I submit my data to GEO?
-          When will my data receive GEO accession numbers?
-          I'm a reviewer, how do I access and evaluate pre-publication data?
-          Does GEO support MIAME?
-          What kinds of data will GEO accept?
-          Does GEO store raw data?
-          How are submitters authenticated?
-          Can I keep my data private while my manuscript is being prepared or under review?
-          Can I keep my data private after my manuscript is published?
-          How can I allow reviewers access to my private records?
-          How can I make corrections to data that I already submitted?
-          How can I delete my records?
-          Can I submit data derived from human subjects?
-          How can I make edits to my contact information?
-          Can I submit an extracted or summary subset of data?
-          Query and search
-          Who can use GEO data?
-          What kinds of retrievals are possible in GEO?
-          How can I query and analyze GEO data?
-          Can GEO data be accessed programmatically?
-          Can I get notified when new data is available?
-          Can I cite data I find in GEO as evidence to support my own research?
-          What is the difference between a Series and a DataSet?
-          Why can't I find gene profile charts or clusters for my study of interest?
-          What do the red bars and blue squares represent in GEO profile charts?
-          Why can't I find supplementary/raw data for my study of interest?
-          What data types are provided with next-generation sequence submissions?
-          What is GEO BLAST?
-          -->
+          <h2>Frequently Asked Questions (FAQ)</h2>
+        
+          <dl>
+          
+            <faq-question question="What is cBIT?">
+              <p>
+                cBiT is a repository that incorporates material science, transcriptomics-based
+                cell biology, and clinical data. Users of cBiT are able to download single or
+                multiple datasets, which will provide scientists with a powerful tool to improve
+                their research, ultimately contributing to new cell biology knowledge and/or
+                new biomaterial development.
+              </p>
+            </faq-question>
+            
+            <faq-question question="Why should I submit my data to cBIT?">
+              <p>
+                There are several good reasons for submitting your data to us. The most likely
+                reason is that the journal in which you are publishing your research requires
+                deposit of microarray data to a MIAME-compliant public repository like cBIT.
+                We endeavor to make data deposit procedures as straightforward as possible and
+                will provide as much assistance as you require to get your data submitted to cBIT.
+              </p>
+              
+              <p>
+                If you have problems or questions about the submission procedures, just e-mail
+                us at <code>geo@ncbi.nlm.nih.gov</code> and one of our curators will quickly get
+                back to you. In addition to satisfying possible journal requirements for publication,
+                there are other significant benefits to depositing data with GEO. Your data receive
+                long term archiving at a centralized repository, and are integrated with other NCBI
+                resources which afford greatly increased usability and visibility. You may also include
+                links back to your own project websites within your submission, again increasing
+                visibility of your research. Journal publication is not a requirement for data
+                submission to GEO.
+              </p>
+            </faq-question>
+            
+            <faq-question question="When do I submit my data to GEO?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="When will my data receive GEO accession numbers?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="I'm a reviewer, how do I access and evaluate pre-publication data?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Does GEO support MIAME?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="What kinds of data will GEO accept?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Does GEO store raw data?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="How are submitters authenticated?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Can I keep my data private while my manuscript is being prepared or under review?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Can I keep my data private after my manuscript is published?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="How can I allow reviewers access to my private records?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="How can I make corrections to data that I already submitted?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="How can I delete my records?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Can I submit data derived from human subjects?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="How can I make edits to my contact information?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Can I submit an extracted or summary subset of data?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Query and search">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Who can use GEO data?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="What kinds of retrievals are possible in GEO?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="How can I query and analyze GEO data?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Can GEO data be accessed programmatically?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Can I get notified when new data is available?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Can I cite data I find in GEO as evidence to support my own research?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="What is the difference between a Series and a DataSet?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Why can't I find gene profile charts or clusters for my study of interest?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="What do the red bars and blue squares represent in GEO profile charts?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="Why can't I find supplementary/raw data for my study of interest?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="What data types are provided with next-generation sequence submissions?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+            <faq-question question="What is GEO BLAST?">
+              <p>
+                TBA
+              </p>
+            </faq-question>
+            
+          </dl>
           
           
           
@@ -191,4 +359,31 @@ import {Component} from '@angular/core';
   `]
 })
 export class AboutComponent {
+}
+
+@Component({
+  selector: 'faq-question',
+  template: `
+    <dt>
+      <a href="#" (click)="$event.preventDefault(); expanded = !expanded">
+        <span *ngIf=" expanded" class="glyphicon glyphicon-triangle-bottom"></span>
+        <span *ngIf="!expanded" class="glyphicon glyphicon-triangle-right"></span>
+        {{ question }}
+      </a>
+    </dt>
+    <dd *ngIf="expanded">
+      <ng-content></ng-content>
+    </dd>
+  `,
+  styles: [`
+    dd {
+      margin-left: 20px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+  `]
+})
+export class FAQQuestionComponent {
+  expanded = false;
+  @Input() question: string;
 }
