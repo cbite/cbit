@@ -251,10 +251,17 @@ export class FilterSidebarAllULComponent {
         </span>
       </li>
   
-      <li>
+      <li class="nopadding">
         <a href="#" (click)="$event.preventDefault(); allFieldsModal && allFieldsModal.show()">Full list of fields</a>
       </li>
   
+      <li class="checkbox nav-header nopadding">
+        <label>
+          <input id="includeControls" type="checkbox" name="includeControls" [formControl]="includeControlsInForm"/>
+          Include associated controls
+        </label>
+      </li>
+        
       <li>
         <span class="filter-heading">
           MAIN FILTERS
@@ -271,15 +278,6 @@ export class FilterSidebarAllULComponent {
         <span class="filter-heading">
           ADDITIONAL FILTERS
         </span>
-        
-        <ul>
-          <li class="checkbox nav-header">
-            <label>
-              <input id="includeControls" type="checkbox" name="includeControls" [formControl]="includeControlsInForm"/>
-              Also include associated controls
-            </label>
-          </li>
-        </ul>
         
         <filter-sidebar-all-ul name="additional"
                                [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
@@ -326,6 +324,9 @@ export class FilterSidebarAllULComponent {
       color: #999;
       font-weight: bold;
       font-size: 90%;
+    }
+    .nopadding {
+      padding: 0;
     }
   `]
 })
