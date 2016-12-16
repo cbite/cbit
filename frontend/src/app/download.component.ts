@@ -211,12 +211,13 @@ export class DownloadComponent {
 
   makeFormGroup(): FormGroup {
     let group: any = {};
+    let selection = this._downloadSelectionService.getSelection().selection;
 
     for (let studyId in this.samplesInStudies) {
       let samples = this.samplesInStudies[studyId];
       let samplesGroup = {};
       for (let sample of samples) {
-        samplesGroup[sample._id] = new FormControl(true);
+        samplesGroup[sample._id] = new FormControl(selection[studyId][sample._id] || false);
       }
       group[studyId] = new FormGroup(samplesGroup);
     }
