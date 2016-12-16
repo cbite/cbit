@@ -94,14 +94,19 @@ enum StudyCheckboxState {
           </div>
           
           <div *ngIf="preparingDownload" class="pull-left" style="width: 50%;">
-            <label class="prepLabel">Preparing download:</label>
-            <div class="progress">
-              <div class="progress-bar"
-               [class.progress-bar-striped]="!downloadReady"
-               [class.active]="!downloadReady"
-               [class.progress-bar-success]="downloadReady"
-               role="progressbar" [style.width.%]="preparationProgress">
+            <div>
+              <label class="prepLabel">Preparing download:</label>
+              <div class="progress">
+                <div class="progress-bar"
+                 [class.progress-bar-striped]="!downloadReady"
+                 [class.active]="!downloadReady"
+                 [class.progress-bar-success]="downloadReady"
+                 role="progressbar" [style.width.%]="preparationProgress">
+                </div>
               </div>
+            </div>
+            <div class="patienceNote">
+              Please be patient, this can take a few minutes
             </div>
           </div>
         </div>
@@ -130,6 +135,10 @@ enum StudyCheckboxState {
   ul.samplesList {
     list-style: none;
     padding-left: 40px;
+  }
+  .patienceNote {
+    font-style: oblique;
+    font-size: 80%;
   }
   `]
 })
