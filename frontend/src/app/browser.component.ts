@@ -209,26 +209,6 @@ export const KEYS_IN_MINI_SUMMARY = {
     </div>
   `,
   styles: [`
-    .showonhover .hovertext {
-      display: none;
-      position:relative;
-      font-size: 10px;
-      left: 20%;
-      z-index: 999;
-      background:#e0e0e0;
-      padding:0px 7px;
-      border: 1px solid #c0c0c0;
-      box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);
-    
-      opacity: 0;
-      transition:opacity 0.4s ease-out;
-    }
-    .showonhover:hover .hovertext {
-      position: absolute;
-      display: block;
-      opacity: 1;
-    }
-    
     /*
      * Sidebar
      */

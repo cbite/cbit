@@ -6,7 +6,63 @@ import { Location } from '@angular/common';
 
 @Component({
   selector: 'study',
-  templateUrl: 'study.component.html'
+  template: `
+    <div *ngIf="!ready">
+      <span style="color: red;font-style: italic">Fetching study data...</span>
+    </div>
+    
+    <div *ngIf="ready && study">
+      <h3 *ngIf="showTitle">{{ study._source['STUDY']['Study Title'] }}</h3>
+      <h4>{{ study._source['STUDY']['Study Researchers Involved'] }}</h4>
+    
+      <h5>Extra Info</h5>
+      <ul>
+        <li *ngFor="let categoryKV of studyCategoryMap | mapToIterable">
+          <b>{{ categoryKV.key }}:</b>
+    
+          <div *ngIf="isCategoryIsMultiValued(categoryKV.key)">
+            <ol>
+              <li *ngFor="let item of study._source[categoryKV.key]">
+                <ul>
+                  <li *ngFor="let subcategoryKV of item | mapToIterable">
+                    <i>{{ subcategoryKV.key }}</i>: {{ subcategoryKV.val }}
+                  </li>
+                </ul>
+              </li>
+            </ol>
+          </div>
+    
+          <div *ngIf="!isCategoryIsMultiValued(categoryKV.key)">
+            <ul>
+              <li *ngFor="let subcategoryKV of study._source[categoryKV.key] | mapToIterable">
+                <i>{{ subcategoryKV.key }}</i>: {{ subcategoryKV.val }}
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    
+      <h5>Samples</h5>
+      <h6>Common Properties:</h6>
+      <ul>
+        <li *ngFor="let kv of commonKeys | mapToIterable">
+          <i>{{ kv.key }}</i>: {{ kv.val }}
+        </li>
+      </ul>
+      <h6>Distinguishing properties:</h6>
+      <ol>
+        <li *ngFor="let sample of samples">
+          <b>{{ sample._source['Sample Name'] }}</b>:
+          <span *ngFor="let propName of distinctKeys(sample); let isLast = last">
+            <span *ngIf="sample._source[propName]">
+              <i>{{ propName }}</i>: {{ sample._source[propName] }}<span *ngIf="!isLast">, </span>
+            </span>
+          </span>
+        </li>
+      </ol>
+      <!--<button (click)="goBack()">Back</button>-->
+    </div>
+  `
 })
 export class StudyComponent implements OnInit {
   @Input() studyId: string;
