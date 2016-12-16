@@ -80,7 +80,7 @@ export class URLService {
     return `${BASE_URL}/uploads`;
   }
 
-  uploadsIRODSResource(iRODSStudyName): string {
+  uploadsIRODSResource(iRODSStudyName: string): string {
     return `${BASE_URL}/uploads/_irods/${iRODSStudyName}`;
   }
 
