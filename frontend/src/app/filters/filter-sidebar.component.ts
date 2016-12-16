@@ -116,12 +116,40 @@ export class FilterSidebarCategoryComponent implements OnInit {
       </li>
       
       <li>
-        <filter-sidebar-category categoryName="Technical Properties"
-                                 [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
-                                 [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
-                                 [propNames]="classifiedProperties['Technical'] || []"
-                                 [initCollapsed]="initCollapsed"
-        ></filter-sidebar-category>
+        <a href="#" (click)="$event.preventDefault(); technicalPropertiesCollapsed = !technicalPropertiesCollapsed">
+          <span *ngIf="!technicalPropertiesCollapsed" class="glyphicon glyphicon-triangle-bottom"></span>
+          <span *ngIf=" technicalPropertiesCollapsed" class="glyphicon glyphicon-triangle-right"></span>
+          Technical Properties
+        </a>
+        
+        <ul *ngIf="!technicalPropertiesCollapsed">
+          <li>
+            <filter-sidebar-category categoryName="General"
+                                     [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
+                                     [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
+                                     [propNames]="classifiedProperties['Technical > General'] || []"
+                                     [initCollapsed]="initCollapsed"
+            ></filter-sidebar-category>
+          </li>
+          
+          <li>
+            <filter-sidebar-category categoryName="Microarray"
+                                     [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
+                                     [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
+                                     [propNames]="classifiedProperties['Technical > Microarray'] || []"
+                                     [initCollapsed]="initCollapsed"
+            ></filter-sidebar-category>
+          </li>
+          
+          <li>
+            <filter-sidebar-category categoryName="RNA sequencing"
+                                     [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
+                                     [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
+                                     [propNames]="classifiedProperties['Technical > RNA sequencing'] || []"
+                                     [initCollapsed]="initCollapsed"
+            ></filter-sidebar-category>
+          </li>
+        </ul>
       </li>
     </ul>
   `,
@@ -141,6 +169,7 @@ export class FilterSidebarAllULComponent {
   @Input() classifiedProperties: ClassifiedPropertiesForGivenVisibility = {};
   @Input() initCollapsed: boolean;
   materialPropertiesCollapsed = false;
+  technicalPropertiesCollapsed = false;
 }
 
 @Component({
@@ -241,9 +270,9 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
   // classifiedProperties looks something like this:
   // {
   //   "main": {          <-- visibility from metadata
-  //     "Technical": [   <-- category from metadata
-  //        "NameOfMainTechnicalField1",
-  //        "NameOfMainTechnicalField2",
+  //     "Technical > General": [   <-- category from metadata
+  //        "NameOfMainTechnicalGeneralField1",
+  //        "NameOfMainTechnicalGeneralField2",
   //        ...
   //      ],
   //      "Biological": [
@@ -332,7 +361,7 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
       let fieldMeta = fieldMetas[fieldName];
       result = _.mergeWith(result, {
         [fieldMeta.visibility || "additional"]: {
-          [fieldMeta.category || "Technical"]: [
+          [fieldMeta.category || "Technical > General"]: [
             fieldName
           ]
         }

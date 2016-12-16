@@ -73,7 +73,9 @@ import {URLService} from "./services/url.service";
                   <option value="Material > Physical">Material Properties - Physical</option>
                   <option value="Material > Mechanical">Material Properties - Mechanical</option>
                   <option value="Biological">Biological Properties</option>
-                  <option value="Technical">Technical Properties</option>
+                  <option value="Technical > General">Technical Properties - General</option>
+                  <option value="Technical > Microarray">Technical Properties - Microarrays</option>
+                  <option value="Technical > RNA sequencing">Technical Properties - RNA sequencing</option>
                 </select>
               </div>
             </div>

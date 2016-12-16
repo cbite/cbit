@@ -1,5 +1,7 @@
 export type FieldCategory = (
-  "Technical" |
+  "Technical > General" |
+  "Technical > Microarray" |
+  "Technical > RNA sequencing" |
   "Biological" |
   "Material > General" |
   "Material > Chemical" |

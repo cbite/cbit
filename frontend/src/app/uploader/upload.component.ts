@@ -18,9 +18,9 @@ import {URLService} from "../services/url.service";
 
 const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
 
-  // Technical properties
+  // Technical properties - Microarray
   "Gene expression type": {
-    "category": "Technical",
+    "category": "Technical > General",
     "dataType": "string",
     "description": "Gene expression tehcnology used for the samples, e.g. Microarray, RNA sequencing. Use OBI term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
     "visibility": "main",
@@ -28,15 +28,17 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "preferredUnit": "none"
   },
   "Platform": {
-    "category": "Technical",
+    "category": "Technical > General",
     "dataType": "string",
     "description": "Type of platform used, e.g. Illumina, Affymetrix, Agilent. Use OBI term (use ontology lookup service from EBI: https://www.ebi.ac.uk/ols/index)",
     "visibility": "main",
     "dimensions": "none",
     "preferredUnit": "none"
   },
+
+  // Technical properties - Microarray
   "Array or chip design": {
-    "category": "Technical",
+    "category": "Technical > Microarray",
     "dataType": "string",
     "description": "The design of the microarray or RNAseq chip, e.g. Illumina HT12v4",
     "visibility": "main",
@@ -44,7 +46,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "preferredUnit": "none"
   },
   "Transcriptomics Assay Detail: Annotation file": {
-    "category": "Technical",
+    "category": "Technical > Microarray",
     "dataType": "string",
     "description": "File name of vendor-provided annotations for each gene probe (one file per study)",
     "visibility": "hidden",
@@ -52,17 +54,8 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "preferredUnit": "none",
     "isSupplementaryFileName": true
   },
-  "Transcriptomics Assay Detail: Raw Data File": {
-    "category": "Technical",
-    "dataType": "string",
-    "description": "Raw Data File name or URI for RNAseq data (one sample per file)",
-    "visibility": "hidden",
-    "dimensions": "none",
-    "preferredUnit": "none",
-    "isSupplementaryFileName": true
-  },
   "Transcriptomics Assay Detail: Array Data File": {
-    "category": "Technical",
+    "category": "Technical > Microarray",
     "dataType": "string",
     "description": "Raw Data File name or URI for microarray data (one sample per file)",
     "visibility": "hidden",
@@ -71,7 +64,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "isSupplementaryFileName": true
   },
   "Transcriptomics Assay Detail: Array Data Matrix File": {
-    "category": "Technical",
+    "category": "Technical > Microarray",
     "dataType": "string",
     "description": "Raw Data File name or URI for microarray data (multiple samples per file)",
     "visibility": "hidden",
@@ -79,32 +72,51 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     "preferredUnit": "none",
     "isSupplementaryFileName": true
   },
-  "Transcriptomics Assay Detail: Derived Data File": {
-    "category": "Technical",
-    "dataType": "string",
-    "description": "Processed Data File name or URI (one sample per file)",
-    "visibility": "hidden",
-    "dimensions": "none",
-    "preferredUnit": "none",
-    "isSupplementaryFileName": true
-  },
   "Transcriptomics Assay Detail: Derived Array Data File": {
-    "category": "Technical",
+    "category": "Technical > Microarray",
     "dataType": "string",
-    "description": "Processed Data File name or URI (one sample per file)",
+    "description": "Processed Data File name or URI for microarray data (one sample per file)",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none",
     "isSupplementaryFileName": true
   },
   "Transcriptomics Assay Detail: Derived Array Data Matrix File": {
-    "category": "Technical",
+    "category": "Technical > Microarray",
     "dataType": "string",
-    "description": "Processed Data File name or URI (multiple samples)",
+    "description": "Processed Data File name or URI for microarray data (multiple samples)",
     "visibility": "hidden",
     "dimensions": "none",
     "preferredUnit": "none",
     "isSupplementaryFileName": true
+  },
+
+  // Technical properties - RNA sequencing
+  "Transcriptomics Assay Detail: Raw Data File": {
+    "category": "Technical > RNA sequencing",
+    "dataType": "string",
+    "description": "Raw Data File name or URI for RNAseq data (one sample per file)",
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none",
+    "isSupplementaryFileName": true
+  },
+  "Transcriptomics Assay Detail: Derived Data File": {
+    "category": "Technical > RNA sequencing",
+    "dataType": "string",
+    "description": "Processed Data File name or URI for RNAseq data (one sample per file)",
+    "visibility": "hidden",
+    "dimensions": "none",
+    "preferredUnit": "none",
+    "isSupplementaryFileName": true
+  },
+  "Transcriptomics Assay Detail: Sequencing instrument": {
+    "category": "Technical > RNA sequencing",
+    "dataType": "string",
+    "description": "Sequencing instrument name",
+    "visibility": "additional",
+    "dimensions": "none",
+    "preferredUnit": "none"
   },
 
   // Biological properties
@@ -941,8 +953,8 @@ function isTranscriptomicsAssayDetail(fieldName: string): boolean {
 }
 const TRANSCRIPTOMIC_ASSY_DETAIL_DEFAULT_METADATA: FieldMeta = {
   description: "",
-  visibility: "main",
-  category: "Technical",
+  visibility: "additional",
+  category: "Technical > General",
   dataType: "string",
   dimensions: "none",
   preferredUnit: "none"
@@ -1033,7 +1045,9 @@ interface UploadsResponse {
                   <option value="Material > Physical">Material Properties - Physical</option>
                   <option value="Material > Mechanical">Material Properties - Mechanical</option>
                   <option value="Biological">Biological Properties</option>
-                  <option value="Technical">Technical Properties</option>
+                  <option value="Technical > General">Technical Properties - General</option>
+                  <option value="Technical > Microarray">Technical Properties - Microarray</option>
+                  <option value="Technical > RNA sequencing">Technical Properties - RNA sequencing</option>
                 </select>
               </div>
             </div>
@@ -1170,7 +1184,7 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
       description:             '',
       dataType:                'string',
       visibility:              'additional',
-      category:                'Technical',
+      category:                'Technical > General',
       dimensions:              'none',
       preferredUnit:           'none',
       isSupplementaryFileName: false,
