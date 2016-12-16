@@ -14,6 +14,7 @@ import tempfile
 import pandas as pd
 from StringIO import StringIO
 from data.fieldmeta import FieldMeta
+import csv
 
 INIT_PROGRESS = 10   # % progress represented just by kickstarting bundling process
 MAX_FILENAME_LEN = 31
@@ -121,6 +122,19 @@ try:
     studyFolderNameGen = StudyFolderNameGenerator(studyInfos)
 
     with zipfile.ZipFile(os.path.join(download_folder, "download_bundle.zip"), "w", zipfile.ZIP_DEFLATED) as zf:
+
+        # Create glossary file
+        def withoutStar(s):
+            if s and s[0] == '*':
+                return s[1:]
+            else:
+                return s
+        sio = StringIO()
+        sio.write(u"Field Name,Description\n")
+        w = csv.writer(sio)
+        for fieldName in sorted(fieldMetas.keys(), key=withoutStar):
+            w.writerow([withoutStar(fieldName), fieldMetas[fieldName].description])
+        zf.writestr("field_descriptions.csv", sio.getvalue().encode('utf-8'))
 
         for (studyNum, studyId) in enumerate(download_config['targetData'].iterkeys()):
 
