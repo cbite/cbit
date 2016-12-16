@@ -112,10 +112,16 @@ export class StudyService {
     });
   }
 
-  getAllFieldMetas(): Promise<{[fieldName: string]: FieldMeta}> {
+  getAllFieldMetas(explicitFieldNames: string[] = null): Promise<{[fieldName: string]: FieldMeta}> {
     let self = this;
 
-    return this.getAllFieldNames()
+    let fieldNamesPromise: Promise<string[]>;
+    if (explicitFieldNames) {
+      fieldNamesPromise = Promise.resolve(explicitFieldNames);
+    } else {
+      fieldNamesPromise = this.getAllFieldNames();
+    }
+    return fieldNamesPromise
       .then(fieldNames => {
         let allPromises = fieldNames.map(fieldName => {
           return self.getFieldMeta(fieldName).then(fieldMeta => {

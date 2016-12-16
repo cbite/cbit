@@ -17,11 +17,31 @@ import {ModalDirective} from "ng2-bootstrap";
   </a>
 
   <ul *ngIf="!collapsed">
-    <sample-filters *ngFor="let propName of propNames" 
-                    [category]="propName"
-                    [allCounts]="unfilteredPropNamesAndValueCounts[propName] || {}"
-                    [filteredCounts]="allSampleFilterMatchCounts[propName] || {}">
-    </sample-filters>
+    <div *ngFor="let propName of propNames">
+      <sample-filters *ngIf="isNormalProp(propName)" 
+                      [category]="propName"
+                      [allCounts]="unfilteredPropNamesAndValueCounts[propName] || {}"
+                      [filteredCounts]="allSampleFilterMatchCounts[propName] || {}">
+      </sample-filters>
+      
+      <div *ngIf="isSpecialPropsHeader(propName)" class="detailed-breakdown">
+        <a href="#" (click)="$event.preventDefault(); specialDetailExpanded[propName] = !specialDetailExpanded[propName]">
+          <span *ngIf=" specialDetailExpanded[propName]" class="glyphicon glyphicon-triangle-bottom"></span>
+          <span *ngIf="!specialDetailExpanded[propName]" class="glyphicon glyphicon-triangle-right"></span>
+          Detailed breakdown
+        </a>
+        
+        <ul *ngIf="specialDetailExpanded[propName]">
+          <div *ngFor="let detailedPropName of propNames">
+            <sample-filters *ngIf="isSpecialPropSubfield(detailedPropName, propName)" 
+                            [category]="detailedPropName"
+                            [allCounts]="unfilteredPropNamesAndValueCounts[detailedPropName] || {}"
+                            [filteredCounts]="allSampleFilterMatchCounts[detailedPropName] || {}">
+            </sample-filters>
+          </div>
+        </ul>
+      </div>
+    </div>
   </ul>
   `,
   styles: [`
@@ -31,6 +51,12 @@ import {ModalDirective} from "ng2-bootstrap";
     }
     sample-filters {
       padding-top: 5px;
+    }
+    
+    .detailed-breakdown {
+      padding-left: 18px;
+      padding-top: 5px;
+      padding-bottom: 7px;
     }
   `]
 })
@@ -42,6 +68,37 @@ export class FilterSidebarCategoryComponent implements OnInit {
 
   @Input() initCollapsed: boolean;
   collapsed = false;
+
+  specialPropNames = ['Elements composition', 'Phase composition', 'Wettability'];
+  specialDetailExpanded = {};  // By being empty, absent members default to falsy until set otherwise
+
+  isNormalProp(propName: string) {
+    for (let specialPropName of this.specialPropNames) {
+      if (propName !== specialPropName && propName.startsWith('*' + specialPropName)) {
+
+        // Mark the broken down fields like "Elements composition - Ca" as special, but not the header fields like "Elements composition"
+        return false;
+      }
+    }
+    return true;
+  }
+
+  isSpecialPropsHeader(propName: string) {
+    for (let specialPropName of this.specialPropNames) {
+      if (propName === specialPropName) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isSpecialPropSubfield(detailedPropName: string, parentPropName: string): boolean {
+    return detailedPropName.startsWith('*' + parentPropName);
+  }
+
+  specialPropSubfieldName(detailedPropName: string, parentPropName: string): boolean {
+    return detailedPropName.substr(1 + parentPropName.length + 3);
+  }
 
   ngOnInit() {
     this.collapsed = this.initCollapsed;
@@ -296,7 +353,7 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
       .getAllCountsAsync()
       .then(unfilteredCounts => {
         this.unfilteredPropNamesAndValueCounts = unfilteredCounts;
-        return this._studyService.getAllFieldMetas();
+        return this._studyService.getAllFieldMetas(Object.keys(unfilteredCounts));
       })
       .then(allFieldMetas => {
         this.allFieldMetas = allFieldMetas;

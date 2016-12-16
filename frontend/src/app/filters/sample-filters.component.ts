@@ -294,7 +294,7 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
 
   private jqElem: JQuery;
   ngOnInit(): void {
-    this.categoryRealName = (this.category.substr(0, 1) == '*' ? this.category.substr(1) : this.category);
+    this.categoryRealName = (this.category.substr(0, 1) == '*' ? this.category.substr(this.category.indexOf(' - ') + 3) : this.category);
     this.jqElem = $(this._elemRef.nativeElement);
 
     let fieldMetaPromise = this._studyService.getFieldMeta(this.category);
