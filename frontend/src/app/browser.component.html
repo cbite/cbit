@@ -104,12 +104,14 @@
               <div class="panel-footer">
                 <div class="btn-group btn-group-xs" style="float:right">
                   <a *ngFor="let pubmedId of pubmedIdsOf(studyMatch.study)"
+                     target="_blank"
                      class="btn btn-default" role="button"
                      pubmed-link [pubmedId]="pubmedId">
                     PubMed
                   </a>
 
                   <a *ngFor="let doi of doisOf(studyMatch.study)"
+                     target="_blank"
                      class="btn btn-default" role="button"
                      doi-link [doi]="doi">
                     DOI
