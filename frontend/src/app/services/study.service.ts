@@ -54,6 +54,7 @@ const CACHE_LIFETIME_MS = 60 * 1000;  // Cache study and sample metadata for thi
 const REQUEST_BUFFER_MS = 100;        // After a first request for study/sample info, delay this long and buffer other requests
                                       // before actually sending a request to the backend (grouping several study/sample metadata queries)
 
+
 @Injectable()
 export class StudyService {
 
@@ -259,6 +260,42 @@ export class StudyService {
       }
     }
 
+    return result;
+  }
+
+  findCommonFieldValues(samples: Sample[]): { [fieldName: string]: any } {
+    let commonFieldValues: { [fieldName: string]: any } = {};
+
+    if (samples.length > 0) {
+      let firstSample = samples[0];
+      for (let fieldName in firstSample._source) {
+        commonFieldValues[fieldName] = firstSample._source[fieldName];
+      }
+
+      for (let sample of samples) {
+        for (let commonFieldName in commonFieldValues) {
+          if (!(commonFieldName in sample._source) ||
+            (sample._source[commonFieldName] !== commonFieldValues[commonFieldName])) {
+            delete commonFieldValues[commonFieldName];
+          }
+        }
+      }
+    }
+
+    return commonFieldValues;
+  }
+
+  distinctKeyValues(commonFieldValues: { [fieldName: string]: any }, sample: Sample,
+                    fieldMetas: { [fieldName: string]: FieldMeta } ): Object {
+    var result = {};
+    for (let key of Object.keys(sample._source)
+      .filter(key => !(key in commonFieldValues))
+      .filter(key => (key in fieldMetas) && fieldMetas[key].visibility !== 'hidden')
+      .filter(key => sample._source[key] !== sample._source['Sample Name'])) {
+
+      let keyWithoutStar = (key.substr(0,1) === '*' ? key.substr(1) : key);
+      result[keyWithoutStar] = sample._source[key];
+    }
     return result;
   }
 

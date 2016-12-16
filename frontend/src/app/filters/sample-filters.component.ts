@@ -10,27 +10,6 @@ import {Ng2SliderComponent} from "../slider/ng2-slider.component";
 import {Subject} from "rxjs";
 import {CollapseStateService} from '../services/collapse-state.service';
 
-// TODO: Move all usages of this to backend
-export const HIDDEN_SAMPLE_FILTER_LABELS = {
-  'Barcode': true,
-  'Biological Replicate': true,
-  'Sample ID': true,
-  'Sample Name': true,
-  'Source Name': true,
-  'Study ID': true,
-  'Group ID': true,
-  'Protocols': true,
-  'Group Match': true,
-
-  // Fields that have been merged in backend
-  'Material Name': true,
-  'Material abbreviation': true,
-  'Strain full name': true,
-  'Strain abbreviation': true,
-  'Compound': true,
-  'Compound abbreviation': true
-};
-
 enum GlobalCheckboxState {
   All,
   None,

@@ -3,10 +3,10 @@ import {StudyService, UnifiedMatch} from "./services/study.service";
 import {Study, Sample, RawStudyPublication} from "./common/study.model";
 import {Router} from "@angular/router";
 import {FiltersService} from "./services/filters.service";
-import {HIDDEN_SAMPLE_FILTER_LABELS} from "./filters/sample-filters.component";
 import {Observable, Subject} from "rxjs";
 import {DownloadSelectionService} from "./services/download-selection.service";
 import {CollapseStateService} from "./services/collapse-state.service";
+import {FieldMeta} from "./common/field-meta.model";
 
 export const KEYS_IN_MINI_SUMMARY = {
   // Key = value name in sample metadata
@@ -46,7 +46,7 @@ export const KEYS_IN_MINI_SUMMARY = {
             {{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples
           </div>
     
-          <div class="row">
+          <div *ngIf="fieldMetasReady" class="row">
     
             <!-- Have to expand *ngFor manually here to insert clearfix every 3 items -->
             <template ngFor let-studyMatch [ngForOf]="matches" let-i="index">
@@ -297,6 +297,8 @@ export class BrowserComponent implements OnInit, OnDestroy {
   numMatchingSamples: number = 0;
   ready = false;
   stopStream = new Subject<string>();
+  fieldMetasReady = false;
+  fieldMetas: { [fieldName: string]: FieldMeta } = {};
 
   constructor(
     private _router: Router,
@@ -311,6 +313,13 @@ export class BrowserComponent implements OnInit, OnDestroy {
   setSamplesShown(studyId: string, value: boolean) { this._collapseStateService.setCollapsed(`samples-for-study-${studyId}`, !value); }
 
   ngOnInit(): void {
+
+    this.fieldMetasReady = false;
+    this._studyService.getAllFieldMetas().then(fieldMetas => {
+      this.fieldMetas = fieldMetas;
+      this.fieldMetasReady = true;
+    });
+
     // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
     this._filtersService.filters
       .switchMap(filters => {
@@ -371,24 +380,7 @@ export class BrowserComponent implements OnInit, OnDestroy {
 
     this.commonKeys = {};
     for (let studyMatch of this.matches) {
-      let studyCommonKeys = {};
-      if (studyMatch.sampleMatches.length > 0) {
-        let firstSampleMatch = studyMatch.sampleMatches[0];
-        for (let key in firstSampleMatch._source) {
-          studyCommonKeys[key] = firstSampleMatch._source[key];
-        }
-
-        for (let sampleMatch of studyMatch.sampleMatches) {
-          for (let commonKey in studyCommonKeys) {
-            if (!(commonKey in sampleMatch._source) ||
-              (sampleMatch._source[commonKey] !== studyCommonKeys[commonKey])) {
-              delete studyCommonKeys[commonKey];
-            }
-          }
-        }
-      }
-
-      this.commonKeys[studyMatch.study._id] = studyCommonKeys;
+      this.commonKeys[studyMatch.study._id] = this._studyService.findCommonFieldValues(studyMatch.sampleMatches);
     }
 
     this.numMatchingStudies = this.matches.length;
@@ -396,20 +388,7 @@ export class BrowserComponent implements OnInit, OnDestroy {
   }
 
   distinctKeyValues(studyId: string, sample: Sample): Object {
-    let ignoreSampleKeys = {
-      'Sample ID': true
-    }
-    var result = {};
-    for (let key of Object.keys(sample._source)
-        .filter(key => !(key in this.commonKeys[studyId]))
-        .filter(key => !(key in ignoreSampleKeys))
-        .filter(key => !(key in HIDDEN_SAMPLE_FILTER_LABELS))
-        .filter(key => sample._source[key] !== sample._source['Sample Name'])) {
-
-      let keyWithoutStar = (key.substr(0,1) === '*' ? key.substr(1) : key);
-      result[keyWithoutStar] = sample._source[key];
-    }
-    return result;
+    return this._studyService.distinctKeyValues(this.commonKeys[studyId], sample, this.fieldMetas);
   }
 
   filteredDistinctKeyValues(studyId: string, sample: Sample): Object {
