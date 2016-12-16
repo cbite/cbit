@@ -237,22 +237,17 @@ export class DownloadComponent {
       let state = this.getStudyCheckboxState(studyId);
       let studyCheckbox = this.jqElem.find(`#study-${studyId}`);
 
-      console.log(`Before ${studyId}: indeterminate=${studyCheckbox.prop('indeterminate')}, checked=${studyCheckbox.prop('checked')}`);
       switch (state) {
         case StudyCheckboxState.All:
-          console.log(`Setting ${studyId} to ALL`);
           studyCheckbox.prop({indeterminate: false, checked: true});
           break;
         case StudyCheckboxState.None:
-          console.log(`Setting ${studyId} to NONE`);
           studyCheckbox.prop({indeterminate: false, checked: false});
           break;
         case StudyCheckboxState.Indeterminate:
-          console.log(`Setting ${studyId} to INDETERMINATE`);
           studyCheckbox.prop({indeterminate: true});
           break;
       }
-      console.log(`After ${studyId}: indeterminate=${studyCheckbox.prop('indeterminate')}, checked=${studyCheckbox.prop('checked')}`);
     }
   }
 
