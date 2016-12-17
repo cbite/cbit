@@ -288,13 +288,29 @@ export class StudyService {
   distinctKeyValues(commonFieldValues: { [fieldName: string]: any }, sample: Sample,
                     fieldMetas: { [fieldName: string]: FieldMeta } ): Object {
     var result = {};
-    for (let key of Object.keys(sample._source)
-      .filter(key => !(key in commonFieldValues))
-      .filter(key => (key in fieldMetas) && fieldMetas[key].visibility !== 'hidden')
-      .filter(key => sample._source[key] !== sample._source['Sample Name'])) {
+    for (let fieldName of Object.keys(sample._source)) {
+      if (((fieldName in fieldMetas) && fieldMetas[fieldName].visibility !== 'hidden') &&
+          !(fieldName in commonFieldValues) &&
+          (sample._source[fieldName] !== sample._source['Sample Name'])) {
 
-      let keyWithoutStar = (key.substr(0,1) === '*' ? key.substr(1) : key);
-      result[keyWithoutStar] = sample._source[key];
+        let keyWithoutStar = (fieldName.substr(0, 1) === '*' ? fieldName.substr(1) : fieldName);
+        result[keyWithoutStar] = sample._source[fieldName];
+      }
+    }
+    return result;
+  }
+
+  distinctKeyValuesForMiniSummary(commonFieldValues: { [fieldName: string]: any }, sample: Sample,
+                                  fieldMetas: { [fieldName: string]: FieldMeta } ): Object {
+    var result = {};
+    for (let fieldName of Object.keys(sample._source)) {
+      if ((fieldName in fieldMetas && fieldMetas[fieldName].nameInSampleMiniSummary !== '') &&
+          !(fieldName in commonFieldValues) &&
+          (sample._source[fieldName] !== sample._source['Sample Name'])
+      ) {
+        let shortKey = fieldMetas[fieldName].nameInSampleMiniSummary;
+        result[shortKey] = sample._source[fieldName];
+      }
     }
     return result;
   }

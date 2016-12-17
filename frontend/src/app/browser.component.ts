@@ -392,17 +392,24 @@ export class BrowserComponent implements OnInit, OnDestroy {
   }
 
   filteredDistinctKeyValues(studyId: string, sample: Sample): Object {
-    var result = {};
-    for (let key of Object.keys(sample._source)) {
-      if ((key in this.fieldMetas && this.fieldMetas[key].nameInSampleMiniSummary !== '') &&
-        !(key in this.commonKeys[studyId]) &&
-        (sample._source[key] !== sample._source['Sample Name'])
-      ) {
-        let shortKey = this.fieldMetas[key].nameInSampleMiniSummary;
-        result[shortKey] = sample._source[key];
-      }
+    return this._studyService.distinctKeyValuesForMiniSummary(this.commonKeys[studyId], sample, this.fieldMetas);
+  }
+
+  tooltipHtmlFor(studyId: string, sample: Sample): string {
+    let result = '';
+    let contents = this.distinctKeyValues(studyId, sample);
+    for (let key of Object.keys(contents).sort((x: string, y: string) => x.localeCompare(y))) {
+      result += `<div><b>${key}</b>: ${contents[key]}</div>`;
     }
     return result;
+  }
+
+  tooltipPlacementForIndex(i: number): string {
+    if ((i % 3) === 2) {
+      return "left";
+    } else {
+      return "right";
+    }
   }
 
   sortSampleMatches(sampleMatches: Sample[]): Sample[] {
@@ -511,22 +518,5 @@ export class BrowserComponent implements OnInit, OnDestroy {
     return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
       .map((p: RawStudyPublication) => p['Study Publication DOI'])
     );
-  }
-
-  tooltipHtmlFor(studyId: string, sample: Sample): string {
-    let result = '';
-    let contents = this.distinctKeyValues(studyId, sample);
-    for (let key of Object.keys(contents).sort((x: string, y: string) => x.localeCompare(y))) {
-      result += `<div><b>${key}</b>: ${contents[key]}</div>`;
-    }
-    return result;
-  }
-
-  tooltipPlacementForIndex(i: number): string {
-    if ((i % 3) === 2) {
-      return "left";
-    } else {
-      return "right";
-    }
   }
 }
