@@ -54,33 +54,37 @@ export class FiltersService {
     return this._filters.getValue();
   }
 
+  setFilters(newFilters: FiltersState) {
+    this._filters.next(newFilters);
+  }
+
   clearFilters(): void {
-    this._filters.next(EMPTY_FILTERS);
+    this.setFilters(EMPTY_FILTERS);
   }
 
   setSearchText(newSearchText: string): void {
 
     // See https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
-    this._filters.next(Object.assign({}, this._filters.getValue(), {
+    this.setFilters(Object.assign({}, this._filters.getValue(), {
       searchText: newSearchText
     }));
   }
 
   setIncludeControls(newIncludeControls: boolean): void {
-    this._filters.next(Object.assign({}, this._filters.getValue(), {
+    this.setFilters(Object.assign({}, this._filters.getValue(), {
       includeControls: newIncludeControls
     }));
   }
 
   setSampleFilters(newSampleFilters: SampleFilters): void {
-    this._filters.next(Object.assign({}, this._filters.getValue(), {
+    this.setFilters(Object.assign({}, this._filters.getValue(), {
       sampleFilters: newSampleFilters
     }))
   }
 
   // Force all components to reprocess filters (e.g., after logging in as an admin)
   pulse(): void {
-    this._filters.next(this._filters.getValue());
+    this.setFilters(this._filters.getValue());
   }
 
   setSampleFilter(category: string, valueName: string, include: boolean): void {

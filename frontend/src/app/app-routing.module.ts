@@ -10,6 +10,7 @@ import {MetadataComponent} from "./metadata.component";
 import {StudyManagementComponent} from "./study-management.component";
 import {UserManagementComponent} from "./user-management.component";
 import {AboutComponent} from "./about.component";
+import {StudyRedirectComponent} from "./study-redirect.component";
 
 const routes: Routes = [
   { path: '',           redirectTo: '/welcome', pathMatch: 'full' },
@@ -21,7 +22,7 @@ const routes: Routes = [
   { path: 'metadata',   component: MetadataComponent },
   { path: 'studies',    component: StudyManagementComponent },
   { path: 'users',      component: UserManagementComponent },
-  { path: 'study/:id',  component: StudyComponent }
+  { path: 'study/:id',  component: StudyRedirectComponent }
 ];
 
 @NgModule({

@@ -40,6 +40,7 @@ import {
   AllFieldsComponent, AllFieldsForVisibilityComponent,
   AllFieldsForVisibilityCategoryComponent
 } from "./all-fields.component";
+import {StudyRedirectComponent} from "./study-redirect.component";
 
 @NgModule({
   imports: [
@@ -88,6 +89,7 @@ import {
     DropdownDirective,
     DropdownMenuDirective,
     DropdownToggleDirective,
+    StudyRedirectComponent,
 
     Ng2SliderComponent,
     HorizontallySlidableDirective

@@ -465,6 +465,7 @@ class MetadataFields(object):
                 """
             )
             dbResults = cur.fetchall()
+        db_conn.commit()
         fieldNames = [rawFieldName.decode('utf-8') for (rawFieldName,) in dbResults]
 
         resp.status = falcon.HTTP_OK
