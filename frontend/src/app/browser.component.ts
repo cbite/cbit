@@ -389,7 +389,7 @@ export class BrowserComponent implements OnInit, OnDestroy {
     let result = '';
     let contents = this.genSampleSummary(studyId, sample);
     for (let key of Object.keys(contents).sort((x: string, y: string) => x.localeCompare(y))) {
-      result += `<div style="text-align: left;"><b>${key}</b>: ${contents[key]}</div>`;
+      result += `<div><b>${key}</b>: ${contents[key]}</div>`;
     }
     return result;
   }
