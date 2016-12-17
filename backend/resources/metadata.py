@@ -890,23 +890,40 @@ def buildESQueryPieces(filters, controlStudyIds = [], invisibleStudyIds = []):
     mustNotClause = {}        # type: dict[str, dict]
 
     if filters.searchText:
-        shouldClauses = [
-            {
-                "match_phrase": {
-                    "_all": filters.searchText
-                }
-            },
-            {
-                "has_parent": {
-                    "type": cfg.ES_STUDY_DOCTYPE,
-                    "query": {
-                        "match_phrase": {
-                            "_all": filters.searchText
+        # Special case "studyId:<id>" matches a specific study
+        if filters.searchText.startswith(u'studyId:'):
+            studyIdToMatch = filters.searchText[len('studyId:'):]
+            shouldClauses = [
+                {
+                    "has_parent": {
+                        "type": cfg.ES_STUDY_DOCTYPE,
+                        "query": {
+                            "ids": {
+                                "type": cfg.ES_STUDY_DOCTYPE,
+                                "values": [studyIdToMatch]
+                            }
                         }
                     }
                 }
-            }
-        ]
+            ]
+        else:
+            shouldClauses = [
+                {
+                    "match_phrase": {
+                        "_all": filters.searchText
+                    }
+                },
+                {
+                    "has_parent": {
+                        "type": cfg.ES_STUDY_DOCTYPE,
+                        "query": {
+                            "match_phrase": {
+                                "_all": filters.searchText
+                            }
+                        }
+                    }
+                }
+            ]
     else:
         shouldClauses = [
             {
