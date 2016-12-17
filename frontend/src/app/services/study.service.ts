@@ -285,31 +285,31 @@ export class StudyService {
     return commonFieldValues;
   }
 
-  distinctKeyValues(commonFieldValues: { [fieldName: string]: any }, sample: Sample,
-                    fieldMetas: { [fieldName: string]: FieldMeta } ): Object {
+  genSampleSummary(commonFieldValues: { [fieldName: string]: any },
+                   sample: Sample,
+                   fieldMetas: { [fieldName: string]: FieldMeta },
+                   isMiniSummary: boolean
+                   ): Object {
+
+    let fieldMetaFilter: (fieldMeta: FieldMeta) => boolean = (
+      isMiniSummary
+        ? (fieldMeta) => fieldMeta.nameInSampleMiniSummary !== ''
+        : (fieldMeta) => fieldMeta.visibility !== 'hidden'
+    );
+    let fieldNameGen: (fieldMeta: FieldMeta) => string = (
+      isMiniSummary
+        ? (fieldMeta) => fieldMeta.nameInSampleMiniSummary
+        : (fieldMeta) => (fieldMeta.fieldName.substr(0, 1) === '*' ? fieldMeta.fieldName.substr(1) : fieldMeta.fieldName)
+    );
+
     var result = {};
     for (let fieldName of Object.keys(sample._source)) {
-      if (((fieldName in fieldMetas) && fieldMetas[fieldName].visibility !== 'hidden') &&
+      if (((fieldName in fieldMetas) && fieldMetaFilter(fieldMetas[fieldName]) &&
           !(fieldName in commonFieldValues) &&
-          (sample._source[fieldName] !== sample._source['Sample Name'])) {
+          (sample._source[fieldName] !== sample._source['Sample Name']))) {
 
         let keyWithoutStar = (fieldName.substr(0, 1) === '*' ? fieldName.substr(1) : fieldName);
-        result[keyWithoutStar] = sample._source[fieldName];
-      }
-    }
-    return result;
-  }
-
-  distinctKeyValuesForMiniSummary(commonFieldValues: { [fieldName: string]: any }, sample: Sample,
-                                  fieldMetas: { [fieldName: string]: FieldMeta } ): Object {
-    var result = {};
-    for (let fieldName of Object.keys(sample._source)) {
-      if ((fieldName in fieldMetas && fieldMetas[fieldName].nameInSampleMiniSummary !== '') &&
-          !(fieldName in commonFieldValues) &&
-          (sample._source[fieldName] !== sample._source['Sample Name'])
-      ) {
-        let shortKey = fieldMetas[fieldName].nameInSampleMiniSummary;
-        result[shortKey] = sample._source[fieldName];
+        result[fieldNameGen(fieldMetas[fieldName])] = sample._source[fieldName];
       }
     }
     return result;
