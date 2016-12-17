@@ -100,7 +100,7 @@ import {FieldMeta} from "./common/field-meta.model";
                             </a>
     
                             <b>{{ sampleMatch._source['Sample Name'] }}</b>
-                            <span *ngFor="let kv of filteredDistinctKeyValues(studyMatch.study._id, sampleMatch) | mapToIterable; let isLast = last">
+                            <span *ngFor="let kv of genSampleMiniSummary(studyMatch.study._id, sampleMatch) | mapToIterable; let isLast = last">
                               <i>{{ kv.key }}</i>: {{ kv.val }}<span *ngIf="!isLast">, </span>
                             </span>
                           </div>
@@ -371,17 +371,17 @@ export class BrowserComponent implements OnInit, OnDestroy {
     this.numMatchingSamples = this.matches.reduce((soFar, studyMatch) => soFar + studyMatch.sampleMatches.length, 0);
   }
 
-  distinctKeyValues(studyId: string, sample: Sample): Object {
-    return this._studyService.distinctKeyValues(this.commonKeys[studyId], sample, this.fieldMetas);
+  genSampleSummary(studyId: string, sample: Sample): Object {
+    return this._studyService.genSampleSummary(this.commonKeys[studyId], sample, this.fieldMetas, false);
   }
 
-  filteredDistinctKeyValues(studyId: string, sample: Sample): Object {
-    return this._studyService.distinctKeyValuesForMiniSummary(this.commonKeys[studyId], sample, this.fieldMetas);
+  genSampleMiniSummary(studyId: string, sample: Sample): Object {
+    return this._studyService.genSampleSummary(this.commonKeys[studyId], sample, this.fieldMetas, true);
   }
 
   tooltipHtmlFor(studyId: string, sample: Sample): string {
     let result = '';
-    let contents = this.distinctKeyValues(studyId, sample);
+    let contents = this.genSampleSummary(studyId, sample);
     for (let key of Object.keys(contents).sort((x: string, y: string) => x.localeCompare(y))) {
       result += `<div><b>${key}</b>: ${contents[key]}</div>`;
     }
