@@ -12,6 +12,7 @@ import {CacheableBulkRequester} from "../common/cacheable-bulk-request";
 import {FieldMeta} from "../common/field-meta.model";
 import {AuthenticationService} from "./authentication.service";
 import {URLService} from "./url.service";
+import {UnitFormattingService} from "./unit-formatting.service";
 
 // Should be a parseable number to play nicely with numeric fields
 // and it should survive a round-trip conversion in ES from string to double to string
@@ -285,9 +286,48 @@ export class StudyService {
     return commonFieldValues;
   }
 
+  calcValueRanges(samples: Sample[], fieldMetas: {[fieldName: string]: FieldMeta}): {[fieldName: string]: number} {
+
+    let result = {};
+    let minValues = {};
+    let maxValues = {};
+
+    // Go through the data twice to gather ranges for the broken-down fields like "Wettability" and "Phase composition"
+    for (let sample of samples) {
+      for (let fieldName in sample._source) {
+        let parentFieldName = (
+          fieldName.substr(0,1) == '*' && fieldName.indexOf(' - ') != -1
+            ? fieldName.substring(1, fieldName.indexOf(' - '))   // "*Wettability - ethanol" -> "Wettability"
+            : fieldName
+        );
+
+        let fieldMeta = fieldMetas[parentFieldName];
+        if (fieldMeta && fieldMeta.dataType === 'double' && fieldName !== 'Wettability' && fieldName !== 'Phase composition' && fieldName !== 'Elements composition') {
+          let value = sample._source[fieldName];
+          minValues[parentFieldName] = (parentFieldName in minValues ? Math.min(value, minValues[parentFieldName]) : value);
+          maxValues[parentFieldName] = (parentFieldName in maxValues ? Math.max(value, maxValues[parentFieldName]) : value);
+        }
+      }
+    }
+
+    for (let fieldName in minValues) {
+      let minValue = minValues[fieldName];
+      let maxValue = maxValues[fieldName];
+
+      if (minValue === maxValue) {
+        result[fieldName] = Math.abs(maxValue);
+      } else {
+        result[fieldName] = maxValue - minValue;
+      }
+    }
+
+    return result;
+  }
+
   genSampleSummary(commonFieldValues: { [fieldName: string]: any },
                    sample: Sample,
                    fieldMetas: { [fieldName: string]: FieldMeta },
+                   valueRanges: {[fieldName: string]: number},
                    isMiniSummary: boolean
                    ): Object {
 
@@ -308,8 +348,11 @@ export class StudyService {
           !(fieldName in commonFieldValues) &&
           (sample._source[fieldName] !== sample._source['Sample Name']))) {
 
-        let keyWithoutStar = (fieldName.substr(0, 1) === '*' ? fieldName.substr(1) : fieldName);
-        result[fieldNameGen(fieldMetas[fieldName])] = sample._source[fieldName];
+        let fieldMeta = fieldMetas[fieldName];
+        let value = sample._source[fieldName];
+        let formattedValue = this._unitFormattingService.formatValue(value, fieldMeta, valueRanges);
+
+        result[fieldNameGen(fieldMeta)] = formattedValue;
       }
     }
     return result;
@@ -327,7 +370,8 @@ export class StudyService {
 
   constructor(
     private _url: URLService,
-    private _auth: AuthenticationService
+    private _auth: AuthenticationService,
+    private _unitFormattingService: UnitFormattingService
   ) {
     this.studyRequester = new CacheableBulkRequester<Study>(
       "study",

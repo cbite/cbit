@@ -9,6 +9,8 @@ import {DimensionsRegister} from "../common/unit-conversions";
 import {Ng2SliderComponent} from "../slider/ng2-slider.component";
 import {Subject} from "rxjs";
 import {CollapseStateService} from '../services/collapse-state.service';
+import {UnitFormattingService} from "../services/unit-formatting.service";
+import {FieldMeta} from "../common/field-meta.model";
 
 enum GlobalCheckboxState {
   All,
@@ -211,6 +213,7 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
   categoryRealName: string;
   @ViewChild(Ng2SliderComponent) slider: Ng2SliderComponent;
 
+  fieldMeta: FieldMeta = {};
   description: string = "Fetching description...";
   dimensions: string = "none";
   chosenUnit: string = "none";
@@ -242,7 +245,8 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
     private _studyService: StudyService,
     private _elemRef: ElementRef,
     private _changeDetectorRef: ChangeDetectorRef,
-    private _collapsedStateService: CollapseStateService
+    private _collapsedStateService: CollapseStateService,
+    private _unitFormattingService: UnitFormattingService
   ) { }
 
   get isVisible(): boolean {
@@ -283,6 +287,7 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
 
     let fieldMetaPromise = this._studyService.getFieldMeta(this.category);
     fieldMetaPromise.then(fieldMeta => {
+      this.fieldMeta = fieldMeta;
       this.description = fieldMeta.description || "No description available";
       this.dimensions = fieldMeta.dimensions;
       this.chosenUnit = fieldMeta.preferredUnit;
@@ -508,60 +513,13 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
     this.setSampleRangeFilter(this.startValue, this.endValue, e.target.checked);
   }
 
-  decodePhaseCompositionLike(s: string, entryFormatter: (component: string, value: number) => string): string {
-    if (s === NULL_CATEGORY_NAME) {
-      return s;
-    }
-
-    try {
-      var results: Array<string> = [];
-      for (let entry of s.split(';')) {
-        var
-          fields = entry.split('='),
-          component = fields[0],
-          percentage = parseFloat(fields[1]);
-        results.push(entryFormatter(component, percentage));
-      }
-      return results.join(', ');
-    } catch(e) {
-      return s;
-    }
-  }
-
-  formatValueName(s: string): string {
+  formatValueName(s: (string | number)): string {
     // Don't reformat or convert units of missing data, but do show it in the UI as "<None>"
     if (s === NULL_CATEGORY_NAME) {
       return '<None>';
-    }
-
-    let unitConverter = DimensionsRegister[this.dimensions];
-    let convert: (val: any) => string;
-    let unitUIName: string;
-    if (this.dimensions == 'none' || !unitConverter) {
-      convert = (x: any) => x + '';
-      unitUIName = '';
     } else {
-
-      let rawConvert = (x: any) => unitConverter.fromCanonicalUnits(+x, this.chosenUnit);
-
-      // Convert numbers with enough precision to distinguish a change of size this.tickSize
-      let tickSizeInChosenUnits = rawConvert(this.tickSize) - rawConvert(0);
-      let fixedDigits = Math.max(0, Math.min(20, -Math.floor(Math.log10(tickSizeInChosenUnits))));
-      convert = (x: any) => rawConvert(x).toFixed(fixedDigits);
-
-      unitUIName = unitConverter.getUnitUIName(this.chosenUnit);
-    }
-
-
-    switch (this.category) {
-      case 'Phase composition':
-        return this.decodePhaseCompositionLike(s, (component, percentage) => `${convert(percentage)}${unitUIName} ${component}`);
-      case 'Elements composition':
-        return this.decodePhaseCompositionLike(s, (element, percentage) => `${convert(percentage)}${unitUIName} ${element}`);
-      case 'Wettability':
-        return this.decodePhaseCompositionLike(s, (liquid, contactAngle) => `${convert(contactAngle)}${unitUIName} with ${liquid}`);
-      default:
-        return `${convert(s)} ${unitUIName}`;
+      let valueRanges = {[this.fieldMeta.fieldName]: this.tickSize * 100};
+      return this._unitFormattingService.formatValue(s, this.fieldMeta, valueRanges, this.chosenUnit);
     }
   }
 

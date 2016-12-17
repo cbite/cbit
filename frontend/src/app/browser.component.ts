@@ -277,6 +277,7 @@ export class BrowserComponent implements OnInit, OnDestroy {
   matches: UnifiedMatch[] = [];
   sampleKeys: string[];
   commonKeys: { [studyId: string]: { [key: string]: any } };
+  valueRanges: { [studyId: string]: { [fieldName: string]: number } };
   numMatchingStudies: number = 0;
   numMatchingSamples: number = 0;
   ready = false;
@@ -302,34 +303,34 @@ export class BrowserComponent implements OnInit, OnDestroy {
     this._studyService.getAllFieldMetas().then(fieldMetas => {
       this.fieldMetas = fieldMetas;
       this.fieldMetasReady = true;
+
+      // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
+      this._filtersService.filters
+        .switchMap(filters => {
+          this.ready = false;
+          this.changeDetectorRef.detectChanges();
+          return Observable.fromPromise(<Promise<UnifiedMatch[]>> this._studyService.getUnifiedMatchesAsync(filters));
+        })
+        .takeUntil(this.stopStream)
+        .subscribe(rawMatches => {
+          this.updateMatches(rawMatches);
+          this.ready = true;
+
+          // Force Angular2 change detection to see ready = true change.
+          // Not sure why it's not being picked up automatically
+          this.changeDetectorRef.detectChanges();
+        });
+
+      this._downloadSelectionService.selection
+        .takeUntil(this.stopStream)
+        .subscribe(selection => {
+          this.updateDownloadSelectionStats();
+
+          // Force Angular2 change detection to see ready = true change.
+          // Not sure why it's not being picked up automatically
+          this.changeDetectorRef.detectChanges();
+        })
     });
-
-    // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
-    this._filtersService.filters
-      .switchMap(filters => {
-        this.ready = false;
-        this.changeDetectorRef.detectChanges();
-        return Observable.fromPromise(<Promise<UnifiedMatch[]>> this._studyService.getUnifiedMatchesAsync(filters));
-      })
-      .takeUntil(this.stopStream)
-      .subscribe(rawMatches => {
-        this.updateMatches(rawMatches);
-        this.ready = true;
-
-        // Force Angular2 change detection to see ready = true change.
-        // Not sure why it's not being picked up automatically
-        this.changeDetectorRef.detectChanges();
-      });
-
-    this._downloadSelectionService.selection
-      .takeUntil(this.stopStream)
-      .subscribe(selection => {
-        this.updateDownloadSelectionStats();
-
-        // Force Angular2 change detection to see ready = true change.
-        // Not sure why it's not being picked up automatically
-        this.changeDetectorRef.detectChanges();
-      })
   }
 
   ngOnDestroy() {
@@ -367,16 +368,21 @@ export class BrowserComponent implements OnInit, OnDestroy {
       this.commonKeys[studyMatch.study._id] = this._studyService.findCommonFieldValues(studyMatch.sampleMatches);
     }
 
+    this.valueRanges = {};
+    for (let studyMatch of this.matches) {
+      this.valueRanges[studyMatch.study._id] = this._studyService.calcValueRanges(studyMatch.sampleMatches, this.fieldMetas);
+    }
+
     this.numMatchingStudies = this.matches.length;
     this.numMatchingSamples = this.matches.reduce((soFar, studyMatch) => soFar + studyMatch.sampleMatches.length, 0);
   }
 
   genSampleSummary(studyId: string, sample: Sample): Object {
-    return this._studyService.genSampleSummary(this.commonKeys[studyId], sample, this.fieldMetas, false);
+    return this._studyService.genSampleSummary(this.commonKeys[studyId], sample, this.fieldMetas, this.valueRanges[studyId], false);
   }
 
   genSampleMiniSummary(studyId: string, sample: Sample): Object {
-    return this._studyService.genSampleSummary(this.commonKeys[studyId], sample, this.fieldMetas, true);
+    return this._studyService.genSampleSummary(this.commonKeys[studyId], sample, this.fieldMetas, this.valueRanges[studyId], true);
   }
 
   tooltipHtmlFor(studyId: string, sample: Sample): string {

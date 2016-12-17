@@ -167,6 +167,7 @@ export class DownloadComponent {
   studies: Study[] = [];
   samplesInStudies: { [studyId: string]: Sample[] } = {};
   commonFieldValues: { [studyId: string]: { [fieldName: string]: any } };
+  valueRanges: { [studyId: string]: { [fieldName: string]: number } };
   fieldMetas: { [fieldName: string]: FieldMeta } = {};
 
   errorMessage: string = '';
@@ -244,6 +245,11 @@ export class DownloadComponent {
           this.commonFieldValues = {};
           for (let studyId in this.samplesInStudies) {
             this.commonFieldValues[studyId] = this._studyService.findCommonFieldValues(this.samplesInStudies[studyId]);
+          }
+
+          this.valueRanges = {};
+          for (let studyId in this.samplesInStudies) {
+            this.valueRanges[studyId] = this._studyService.calcValueRanges(this.samplesInStudies[studyId], this.fieldMetas);
           }
 
           this.form = this.makeFormGroup();
@@ -339,11 +345,11 @@ export class DownloadComponent {
   }
 
   genSampleMiniSummary(studyId: string, sample: Sample): Object {
-    return this._studyService.genSampleSummary(this.commonFieldValues[studyId], sample, this.fieldMetas, true);
+    return this._studyService.genSampleSummary(this.commonFieldValues[studyId], sample, this.fieldMetas, this.valueRanges[studyId], true);
   }
 
   genSampleSummary(studyId: string, sample: Sample): Object {
-    return this._studyService.genSampleSummary(this.commonFieldValues[studyId], sample, this.fieldMetas, false);
+    return this._studyService.genSampleSummary(this.commonFieldValues[studyId], sample, this.fieldMetas, this.valueRanges[studyId], false);
   }
 
   tooltipHtmlFor(studyId: string, sample: Sample): string {

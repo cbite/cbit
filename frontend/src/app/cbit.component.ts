@@ -6,6 +6,7 @@ import {AuthenticationService} from "./services/authentication.service";
 import {URLService} from "./services/url.service";
 import {Router} from "@angular/router";
 import {CollapseStateService} from "./services/collapse-state.service";
+import {UnitFormattingService} from "./services/unit-formatting.service";
 
 @Component({
   selector: 'cbit',
@@ -59,7 +60,7 @@ import {CollapseStateService} from "./services/collapse-state.service";
       opacity: 0.3;
     }
   `],
-  providers: [URLService, StudyService, FiltersService, DownloadSelectionService, AuthenticationService, CollapseStateService]
+  providers: [URLService, StudyService, FiltersService, DownloadSelectionService, AuthenticationService, CollapseStateService, UnitFormattingService]
 })
 export class CBiTComponent {
 
