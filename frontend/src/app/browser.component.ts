@@ -8,22 +8,6 @@ import {DownloadSelectionService} from "./services/download-selection.service";
 import {CollapseStateService} from "./services/collapse-state.service";
 import {FieldMeta} from "./common/field-meta.model";
 
-export const KEYS_IN_MINI_SUMMARY = {
-  // Key = value name in sample metadata
-  // Value = name to use in mini-summary
-  'Assay Type':              'Assay Type',
-  'Control':                 'Control',
-  'Organism':                'Organism',
-  'Cell type':               'Cell type',
-  'Strain abbreviation':     'Strain',
-  'Organ':                   'Organ',
-  'Compound abbreviation':   'Compound',
-  'Dose (mM)':               'Dose (mM)',  // TODO: Use sensible units, i.e. unitful number between 1 and 1000
-  'Material abbreviation':   'Material',
-  'Material Class':          'Material Class',
-  'Material Shape':          'Material Shape'
-};
-
 @Component({
   selector: 'browser',
   template: `
