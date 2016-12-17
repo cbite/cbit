@@ -8,6 +8,7 @@ import {URLService} from "./services/url.service";
 import {FormGroup, FormControl} from "@angular/forms";
 import * as _ from 'lodash';
 import {CollapseStateService} from "./services/collapse-state.service";
+import {FieldMeta} from "./common/field-meta.model";
 
 interface DownloadPostResponse {
   download_uuid: string,
@@ -68,7 +69,7 @@ enum StudyCheckboxState {
                     <input type="checkbox" [id]="'study-' + study._id"
                       (click)="$event.preventDefault(); clickStudyCheckbox(study._id)">
                     <a href="#" (click)="$event.preventDefault(); toggleVisible(study._id)">
-                      {{ study._source['STUDY']['Study Title']}}
+                      <b>{{ study._source['STUDY']['Study Title']}}</b>
                     </a>
                   </div>
                 </div>
@@ -77,10 +78,17 @@ enum StudyCheckboxState {
                   <ul class="samplesList">
                     <li *ngFor="let sample of samplesInStudies[study._id]">
                       <div class="checkbox">
-                        <label [attr.for]="'study-' + study._id + '-sample-' + sample._id">
-                          <input type="checkbox" [id]="'study-' + study._id + '-sample-' + sample._id" [formControlName]="sample._id">
-                          {{ sample._source['Sample Name']}}
-                        </label>
+                        <div class="tooltipWrapper"
+                             [tooltipHtml]="tooltipHtmlFor(study._id, sample)" tooltipPlacement="right" [tooltipAppendToBody]="true">
+                          <label [attr.for]="'study-' + study._id + '-sample-' + sample._id">
+                            <input type="checkbox" [id]="'study-' + study._id + '-sample-' + sample._id" [formControlName]="sample._id">
+                            <b>{{ sample._source['Sample Name']}}</b>
+                          </label>
+                          
+                          <span *ngFor="let kv of genSampleMiniSummary(study._id, sample) | mapToIterable; let isLast = last">
+                            <i>{{ kv.key }}</i>: {{ kv.val }}<span *ngIf="!isLast">, </span>
+                          </span>
+                        </div>
                       </div>
                     </li>
                   </ul>
@@ -149,12 +157,17 @@ enum StudyCheckboxState {
     font-style: oblique;
     font-size: 80%;
   }
+  .tooltipWrapper {
+    display: inline-block;
+  }
   `]
 })
 export class DownloadComponent {
   @Input() modal: ModalDirective;
   studies: Study[] = [];
   samplesInStudies: { [studyId: string]: Sample[] } = {};
+  commonFieldValues: { [studyId: string]: { [fieldName: string]: any } };
+  fieldMetas: { [fieldName: string]: FieldMeta } = {};
 
   errorMessage: string = '';
   preparingDownload: boolean = false;
@@ -219,14 +232,25 @@ export class DownloadComponent {
           );
         });
 
+    let fieldMetasPromise = this._studyService.getAllFieldMetas();
+
     studiesPromise.then(studies => {
       samplesInStudiesPromise.then(samplesInStudies => {
-        this.studies = Object.values(studies).sort((x, y) => x._source['STUDY']['Study Title'].localeCompare(y._source['STUDY']['Study Title']));
-        this.samplesInStudies = samplesInStudies;
-        this.form = this.makeFormGroup();
-        this.ready = true;
-        this.changeDetectorRef.detectChanges();
-      })
+        fieldMetasPromise.then(fieldMetas => {
+          this.studies = Object.values(studies).sort((x, y) => x._source['STUDY']['Study Title'].localeCompare(y._source['STUDY']['Study Title']));
+          this.samplesInStudies = samplesInStudies;
+          this.fieldMetas = fieldMetas;
+
+          this.commonFieldValues = {};
+          for (let studyId in this.samplesInStudies) {
+            this.commonFieldValues[studyId] = this._studyService.findCommonFieldValues(this.samplesInStudies[studyId]);
+          }
+
+          this.form = this.makeFormGroup();
+          this.ready = true;
+          this.changeDetectorRef.detectChanges();
+        });
+      });
     });
   }
 
@@ -312,6 +336,26 @@ export class DownloadComponent {
     setTimeout(() => {
       this.ngAfterViewChecked();
     }, 4);
+  }
+
+  genSampleMiniSummary(studyId: string, sample: Sample): Object {
+    return this._studyService.genSampleSummary(this.commonFieldValues[studyId], sample, this.fieldMetas, true);
+  }
+
+  genSampleSummary(studyId: string, sample: Sample): Object {
+    return this._studyService.genSampleSummary(this.commonFieldValues[studyId], sample, this.fieldMetas, false);
+  }
+
+  tooltipHtmlFor(studyId: string, sample: Sample): string {
+    let result = '';
+    let contents = this.genSampleSummary(studyId, sample);
+    for (let key of Object.keys(contents).sort((x: string, y: string) => x.localeCompare(y))) {
+      result += `<div><b>${key}</b>: ${contents[key]}</div>`;
+    }
+    console.log(studyId);
+    console.log(sample);
+    console.log(result);
+    return result;
   }
 
   kickOffDownload(): void {
