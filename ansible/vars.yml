@@ -27,3 +27,14 @@ elasticsearch_cluster_name: cbit.elasticsearch.cluster
 
 # Set up long timeouts to handle uploads of large files (direct or via iRODS)
 request_timeout_s: 120
+
+# For fake certs
+#gen_self_signed_ssl_cert: yes
+#ssl_cert_path: /home/cbit/frontend/server.crt
+#ssl_key_path: /home/cbit/frontend/server.key
+
+
+# For real certs
+gen_self_signed_ssl_cert: no
+ssl_cert_path: /etc/ssl/cbit_maastrichtuniversity_nl.pem
+ssl_key_path: /etc/ssl/cbit.maastrichtuniversity.nl.key

@@ -32,25 +32,29 @@
     - 404.html
     - 50x.html
 
-- name: frontend | Setup self-signed SSL cert (TODO - Get real cert from Pieter)
-  command: openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.crt -days 365 -nodes -subj '/CN=cbit.maastrichtuniversity.nl'
+- name: frontend | Setup self-signed SSL cert if we haven't got a real cert
+  command: openssl req -x509 -newkey rsa:4096 -keyout {{ ssl_key_path }} -out {{ ssl_cert_path }} -days 365 -nodes -subj '/CN=cbit.maastrichtuniversity.nl'
   args:
-    chdir: /home/cbit/frontend
-    creates: server.crt
+    creates: "{{ ssl_cert_path }}"
+  when: "{{ gen_self_signed_ssl_cert }}"
 
+# nginx starts up as root, reads the ssl certs, then downgrades to the nginx
+# user.  So the safest permissions for these certs are root read-only
 - name: frontend | Ensure correct permissions for SSL cert
   file:
     path: /home/cbit/frontend/server.crt
-    mode: 0644
-    owner: cbit
-    group: cbit
+    mode: 0400
+    owner: root
+    group: root
+  when: "{{ gen_self_signed_ssl_cert }}"
 
 - name: frontend | Ensure correct permissions for SSL private key
   file:
     path: /home/cbit/frontend/server.key
-    mode: 0640
-    owner: cbit
-    group: nginx   # `cbit` can change, `nginx` can read, nobody else can do anything
+    mode: 0400
+    owner: root
+    group: root
+  when: "{{ gen_self_signed_ssl_cert }}"
 
 - name: frontend | Build frontend bundle (locally)
   local_action: command npm run build

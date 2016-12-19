@@ -63,8 +63,8 @@ http {
         # Load configuration files for the default server block.
         include /etc/nginx/default.d/*.conf;
 
-        ssl_certificate "/home/cbit/frontend/server.crt";
-        ssl_certificate_key "/home/cbit/frontend/server.key";
+        ssl_certificate {{ ssl_cert_path }};
+        ssl_certificate_key {{ ssl_key_path }};
         ssl_session_cache shared:SSL:1m;
         ssl_session_timeout  10m;
         ssl_ciphers HIGH:!aNULL:!MD5;
