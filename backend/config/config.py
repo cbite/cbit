@@ -31,8 +31,8 @@ UPLOADS_PATH = 'uploads'
 DOWNLOADS_PATH = 'downloads'
 FILES_PATH = 'files'
 
-IRODS_BASE_URL = "http://frontend.acc.rit.unimaas.nl/rest/"
-IRODS_BASE_DIR = "/nlmumc/projects/P000000003"
+IRODS_BASE_URL = "http://frontend.prod.rit.unimaas.nl/rest/"
+IRODS_BASE_DIR = "/nlmumc/projects/P000000009"
 # IRODS_USERNAME = "dataminded-service@maastrichtuniversity.nl";
-IRODS_USERNAME = "service-dataminded"
-IRODS_PASSWORD = "mrln2016?"
+IRODS_USERNAME = "service-cbit"
+IRODS_PASSWORD = "6n014c9mE12d91Sfj0T1fdkKNO77KBuk"
