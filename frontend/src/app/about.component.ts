@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {CollapseStateService} from "./services/collapse-state.service";
-"#########test#####"
+
 @Component({
   template: `
     <div class="container">
@@ -123,202 +123,131 @@ import {CollapseStateService} from "./services/collapse-state.service";
               </p>
             </faq-question>
             
-            <faq-question question="Why should I submit my data to cBIT?">
+            <faq-question question="Can I submit my data to cBIT?">
               <p>
-                There are several good reasons for submitting your data to us. The most likely
-                reason is that the journal in which you are publishing your research requires
-                deposit of microarray data to a MIAME-compliant public repository like cBIT.
-                We endeavor to make data deposit procedures as straightforward as possible and
-                will provide as much assistance as you require to get your data submitted to cBIT.
-              </p>
-              
-              <p>
-                If you have problems or questions about the submission procedures, just e-mail
-                us at <code>geo@ncbi.nlm.nih.gov</code> and one of our curators will quickly get
-                back to you. In addition to satisfying possible journal requirements for publication,
-                there are other significant benefits to depositing data with GEO. Your data receive
-                long term archiving at a centralized repository, and are integrated with other NCBI
-                resources which afford greatly increased usability and visibility. You may also include
-                links back to your own project websites within your submission, again increasing
-                visibility of your research. Journal publication is not a requirement for data
-                submission to GEO.
+                Yes you can! We encourage researchers to submit their own data sets, consisting of
+				transcriptomics data and material characterizations. We can provide you with a data
+				description template (basically a spreadsheet) and tutorial on how to fill it in.
+				After completing the template, just send it to us along with your transcriptomics
+				data and we will check everything and upload it into cBiT. Please contact Dennie Hebels
+				for more details.
               </p>
             </faq-question>
             
-            <faq-question question="When do I submit my data to GEO?">
+            <faq-question question="When my data are deposited in cBiT do I also need to upload them in other repositories like GEO or ArrayExpress?">
               <p>
-                TBA
+                cBiT was designed to include all the essential information that is also requested in
+				repositories like the Gene Expression Omnibus (GEO) or ArrayExpress. We follow the
+				MIAME (Minimum Information About a Microarray Experiment) and MINSEQE (Minimum Information
+				about a high-throughput nucleotide SEQuencing Experiment) guidelines. However, when
+				publishing a paper, the journal often requests that data are deposited in GEO or
+				ArrayExpress. If these two repositories are specifically requested, the data should also
+				be uploaded there. If not, cBiT is a good alternative.
               </p>
             </faq-question>
             
-            <faq-question question="When will my data receive GEO accession numbers?">
+            <faq-question question="Do datasets in cBiT have accession numbers?">
               <p>
-                TBA
+                We are planning to assign a Persistent Identifier (PID) to each dataset which could 
+				also be used for referencing purposes in publications. The ePIC PID will be used 
+				and should be implemented this year: https://www.surf.nl/en/services-and-products/data-persistent-identifier/index.html
               </p>
             </faq-question>
             
-            <faq-question question="I'm a reviewer, how do I access and evaluate pre-publication data?">
+            <faq-question question="Does cBiT support MIAME and MINSEQE?">
               <p>
-                TBA
+                Yes, cBiT includes all the information described in the MIAME and MINSEQE guidelines.
               </p>
             </faq-question>
             
-            <faq-question question="Does GEO support MIAME?">
+            <faq-question question="What kinds of data does cBiT offer?">
               <p>
-                TBA
+                cBiT was designed with two main types of data in mind: transcriptomics data (microarray 
+				or RNAseq-based) and material characterization data. The transcriptomics datasets 
+				include both raw and processed data for microarrays and only processed data for RNAseq 
+				datasets. The material characterization data cover a wide range of chemical, physical, 
+				and mechanical properties and can contain both single values and graph data. Other types 
+				of data can also be included as supplementary files. However, these cannot be searched.
               </p>
             </faq-question>
             
-            <faq-question question="What kinds of data will GEO accept?">
+            <faq-question question="Which material properties are included?">
               <p>
-                TBA
+                Any type of material property can be included. For an overview of the current list of 
+				material properties present in cBiT, please check the "Full list of fields" in the Browse 
+				tab. This list is constantly updated when new datasets, with new properties, are added to 
+				cBiT. It also includes other non-material properties such as technical details about the 
+				transcriptomics technique and biological details about the experimental setup.
               </p>
-            </faq-question>
-            
-            <faq-question question="Does GEO store raw data?">
+            </faq-question>            
+			
+			<faq-question question="Which transcriptomics platforms does cBiT support?">
               <p>
-                TBA
+                For microarrays, the three main platforms (Affymettrix, Agilent, Illumina) are supported. 
+				For sequencing, Illumins is supported but other platforms can also be included. Just contact 
+				us for more details.
               </p>
             </faq-question>
             
             <faq-question question="How are submitters authenticated?">
               <p>
-                TBA
+                We thoroughly check all submissions and submitters and if necessary  verify details with 
+				department or institution leaders before uploading a dataset into cBiT.
               </p>
             </faq-question>
             
             <faq-question question="Can I keep my data private while my manuscript is being prepared or under review?">
               <p>
-                TBA
+                If you decide to submit your data to cBiT we can already upload it and hide your study 
+				from public view until your manuscript is published.
               </p>
             </faq-question>
             
             <faq-question question="Can I keep my data private after my manuscript is published?">
               <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="How can I allow reviewers access to my private records?">
-              <p>
-                TBA
+                No, we follow the same procedure as other online repositories, where data need to be 
+				publically available after publication. This is normally also requested by journals and 
+				ensures an open data policy.
               </p>
             </faq-question>
             
             <faq-question question="How can I make corrections to data that I already submitted?">
               <p>
-                TBA
+                First send us an email detailing what needs to be changed. Based on that we will determine 
+				whether we can update the dataset for you or whether we need you to create a new study 
+				template. Once completed, we will  update the dataset which comes into effect immediately.
               </p>
             </faq-question>
             
             <faq-question question="How can I delete my records?">
               <p>
-                TBA
+                If you would like your study to be deleted, please send us an email with the reason and we
+				will proceed to remove the study from cBiT.
               </p>
             </faq-question>
             
             <faq-question question="Can I submit data derived from human subjects?">
               <p>
-                TBA
+                Yes, however it is your responsibility to ensure that the submitted information does not 
+				compromise participant privacy and is in accord with the original consent in addition to all 
+				applicable laws, regulations, and institutional policies.
               </p>
-            </faq-question>
-            
-            <faq-question question="How can I make edits to my contact information?">
+            </faq-question>          
+           
+            <faq-question question="Search and download">
               <p>
-                TBA
+                For detailed information on how to search for studies or specific samples in cBiT and how
+				to download them, please check out the video tutorial above. If you have any questions not
+				answered in the video, please contact us and we will get back to you as soon as possible.
               </p>
-            </faq-question>
-            
-            <faq-question question="Can I submit an extracted or summary subset of data?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="Query and search">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="Who can use GEO data?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="What kinds of retrievals are possible in GEO?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="How can I query and analyze GEO data?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="Can GEO data be accessed programmatically?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="Can I get notified when new data is available?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="Can I cite data I find in GEO as evidence to support my own research?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="What is the difference between a Series and a DataSet?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="Why can't I find gene profile charts or clusters for my study of interest?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="What do the red bars and blue squares represent in GEO profile charts?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="Why can't I find supplementary/raw data for my study of interest?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="What data types are provided with next-generation sequence submissions?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
-            
-            <faq-question question="What is GEO BLAST?">
-              <p>
-                TBA
-              </p>
-            </faq-question>
+            </faq-question>                        
             
           </dl>
           
           
           
           <p class="copyright">
-            &copy; 2016 Laboratory for cell-Biology inspired Tissue Engineering, Maastricht University.
+            &copy; 2017 Laboratory for cell-Biology inspired Tissue Engineering, Maastricht University.
             All Rights Reserved.
           </p>
         </div>
