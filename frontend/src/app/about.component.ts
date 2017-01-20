@@ -7,13 +7,13 @@ import {CollapseStateService} from "./services/collapse-state.service";
       <div class="row justified">
         <div class="col-xs-8 col-xs-offset-2">
         
-          <h1>Welcome to cBiT – the Compendium for Biomaterial Transcriptomics!</h1>
+          <h1>What is cBiT?</h1>
     
           <p>
-          cBiT is a repository that incorporates material science and transcriptomics-based
-          cell biology, with a focus on clinically relevant materials. It is based on the
-          principle of “materiomics”, which offers a holistic approach to material systems
-          that aims to merge materials science and biological methodologies in order to open
+          cBiT is a new type of repository that specifically focuses on the biomaterial field
+          and integrates material science and transcriptomics-based cell biology. It is based
+          on the principle of “materiomics”, which offers a holistic approach to studying material
+          systems. It aims to merge materials science and biological methodologies in order to open
           new opportunities to discover novel and improved materials with reduced development
           times. cBiT contains a collection of genome-wide transcriptional expression data
           (microarray and RNAseq) from relevant cell lines cultured on clinically successful
@@ -37,9 +37,10 @@ import {CollapseStateService} from "./services/collapse-state.service";
           
           <h2>Data organization and tutorial</h2>
           <p>
-          cBiT can be easily queried and studies or samples of interest can be selected and
+          cBiT can be easily queried under Browse using either free text search or a material and
+          study property quick selection menu. Studies or samples of interest can be selected and
           subsequently downloaded. All the available data are organized using ISA-TAB archives
-          which ensure a standardized way of characterizing samples and an unambiguous
+          which ensures a standardized way of characterizing samples and an unambiguous
           identification of samples. For a tutorial on how to use cBiT, please have a look
           at the following video:
           </p>

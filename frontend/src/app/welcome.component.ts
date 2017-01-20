@@ -5,7 +5,11 @@ import {Component} from '@angular/core';
     <div class="container">
       <div class="row justified">
         <div class="col-xs-8 col-xs-offset-2">
-          <h1>Welcome to cBiT – the Compendium for Biomaterial Transcriptomics!</h1>
+          
+		  <img src="/public/images/logos_welcome_screen.png" class="img-overview">
+		  
+		  
+		  <h1>Welcome to cBiT – the Compendium for Biomaterial Transcriptomics!</h1>
     
           <p>
           cBiT is a repository that incorporates material science and transcriptomics-based
