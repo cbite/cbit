@@ -9,9 +9,12 @@ import {ClassifiedProperties, StudyService, ClassifiedPropertiesForGivenVisibili
       <ul>
         <li *ngFor="let field of fields">
           <div class="fieldName"
-               [tooltipHtml]="description[field] || 'No description available'" tooltipPlacement="right" [tooltipAppendToBody]="true">
+               [tooltip]="tooltipTemplate" placement="right" container="body">
             {{ withoutStar(field) }}
           </div>
+          <ng-template #tooltipTemplate>
+            <div [innerHtml]="description[field] || 'No description available'"></div>
+          </ng-template>
         </li>
       </ul>
       <div *ngIf="(!fields || fields.length == 0)" class="none-yet">

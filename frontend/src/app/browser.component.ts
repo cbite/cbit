@@ -85,7 +85,10 @@ import {FieldMeta} from "./common/field-meta.model";
                     <div *ngIf="areSamplesShown(studyMatch.study._id)">
                       <ul style="list-style: none">
                         <li *ngFor="let sampleMatch of sortSampleMatches(studyMatch.sampleMatches)">
-                          <div [tooltipHtml]="tooltipHtmlFor(studyMatch.study._id, sampleMatch)" [tooltipPlacement]="tooltipPlacementForIndex(i)" [tooltipAppendToBody]="true">
+                          <ng-template #tooltipTemplate>
+                            <div [innerHtml]="tooltipHtmlFor(studyMatch.study._id, sampleMatch)"></div>
+                          </ng-template>
+                          <div [tooltip]="tooltipTemplate" [placement]="tooltipPlacementForIndex(i)" container="body">
     
                             <a *ngIf="!isSampleSelected(studyMatch.study._id, sampleMatch._id)" href="#"
                                class="btn btn-success btn-xs" role="button"
