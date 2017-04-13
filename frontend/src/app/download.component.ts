@@ -228,9 +228,10 @@ export class DownloadComponent {
                 .then(samples => { return { [studyId]: samples.sort((x, y) => x._source['Sample Name'].localeCompare(y._source['Sample Name'])) }})
             );
           }
-          return Promise.all(samplesInStudiesPromises).then(samplesInStudies =>
-            _.merge.apply(_, [{}].concat(samplesInStudies))
-          );
+          return Promise.all(samplesInStudiesPromises).then(samplesInStudies => {
+            let result: { [studyId: string]: Sample[] } = _.merge.apply(_, [].concat(samplesInStudies));
+            return result;
+          });
         });
 
     let fieldMetasPromise = this._studyService.getAllFieldMetas();

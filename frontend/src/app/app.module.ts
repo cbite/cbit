@@ -48,8 +48,8 @@ import {StudyRedirectComponent} from "./study-redirect.component";
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    ModalModule,
-    TooltipModule
+    ModalModule.forRoot(),
+    TooltipModule.forRoot()
   ],
   declarations: [
     CBiTComponent,

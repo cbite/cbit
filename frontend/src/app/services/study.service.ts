@@ -131,7 +131,10 @@ export class StudyService {
           });
         });
 
-        return Promise.all(allPromises).then(allFieldMetaObjects => _.merge.apply(null, [{}].concat(allFieldMetaObjects)));
+        return Promise.all(allPromises).then(allFieldMetaObjects => {
+          let result: {[fieldName: string]: FieldMeta} = _.merge.apply(null, [{}].concat(allFieldMetaObjects));
+          return result;
+        });
       });
   }
 

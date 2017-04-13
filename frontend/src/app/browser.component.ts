@@ -33,7 +33,7 @@ import {FieldMeta} from "./common/field-meta.model";
           <div *ngIf="fieldMetasReady" class="row">
     
             <!-- Have to expand *ngFor manually here to insert clearfix every 3 items -->
-            <template ngFor let-studyMatch [ngForOf]="matches" let-i="index">
+            <ng-template ngFor let-studyMatch [ngForOf]="matches" let-i="index">
               <div class="col-md-4">
     
                 <div class="panel"
@@ -157,7 +157,7 @@ import {FieldMeta} from "./common/field-meta.model";
     
     
               <div *ngIf="((i + 1) % 3) === 0" class="clearfix"></div>
-            </template>
+            </ng-template>
           </div>
     
         </div>
