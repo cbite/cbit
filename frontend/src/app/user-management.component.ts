@@ -4,7 +4,7 @@ import {FormGroup, FormControl, Validators} from "@angular/forms";
 import {Study} from "./common/study.model";
 import {AuthenticationService} from "./services/authentication.service";
 import {ChangePasswordComponent} from "./change-password.component";
-import {ModalDirective} from "ng2-bootstrap";
+import {ModalDirective} from "ngx-bootstrap";
 import {URLService} from "./services/url.service";
 
 enum UserState {

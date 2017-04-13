@@ -5,7 +5,7 @@ import {StudyService, ManySampleCounts, ClassifiedProperties, ClassifiedProperti
 import {Observable, Subject} from "rxjs";
 import {FieldVisibility, FieldCategory, FieldMeta} from "../common/field-meta.model";
 import * as _ from 'lodash';
-import {ModalDirective} from "ng2-bootstrap";
+import {ModalDirective} from "ngx-bootstrap";
 import {CollapseStateService} from "../services/collapse-state.service";
 
 @Component({

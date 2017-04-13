@@ -65,7 +65,7 @@ import {UnitFormattingService} from "./services/unit-formatting.service";
 export class CBiTComponent {
 
   // HACK FOR NG2-BOOTSTRAP MODALS!
-  // See https://valor-software.com/ng2-bootstrap/#/modals
+  // See https://valor-software.com/ngx-bootstrap/#/modals
   constructor(
     private viewContainerRef:ViewContainerRef,
     private _router: Router

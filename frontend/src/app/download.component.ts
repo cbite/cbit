@@ -2,7 +2,7 @@ import {Component, ChangeDetectorRef, OnInit, Input, ElementRef} from "@angular/
 import {DownloadSelectionService} from "./services/download-selection.service";
 import {StudyService} from "./services/study.service";
 import {Study, Sample} from "./common/study.model";
-import {ModalDirective} from "ng2-bootstrap";
+import {ModalDirective} from "ngx-bootstrap";
 import {AuthenticationService} from "./services/authentication.service";
 import {URLService} from "./services/url.service";
 import {FormGroup, FormControl} from "@angular/forms";
