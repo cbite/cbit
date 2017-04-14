@@ -127,6 +127,7 @@ import {ChangePasswordComponent} from "./change-password.component";
   /* See http://stackoverflow.com/a/30702646 */
   .navbar-brand {
     padding: 0px; /* firefox bug fix */
+    cursor: default;
   }
   .navbar-brand>img {
     height: 100%;
