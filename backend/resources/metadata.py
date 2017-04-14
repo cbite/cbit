@@ -184,16 +184,16 @@ class MetadataFilteredCountsResource(object):
             if category in q.mustClause or category in q.mustNotClause:
 
                 # Special filter for this category
-                theseMustClauses = {
-                    cat: clause
+                theseMustClauses = [
+                    clause
                     for cat, clause in q.mustClause.iteritems()
                     if cat != category
-                }
-                theseMustNotClauses = {
-                    cat: clause
+                ]
+                theseMustNotClauses = [
+                    clause
                     for cat, clause in q.mustNotClause.iteritems()
                     if cat != category
-                }
+                ]
 
                 thisAgg = {}
                 aggs["Filtered " + category] = {
