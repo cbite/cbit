@@ -241,10 +241,15 @@ class DownloadResource(object):
             # Clean up download (on Linux & Mac, we can delete the zip file while
             # open; when Falcon is done sending the contents in the response and
             # closes the file, the deletion actually takes place)
-            shutil.rmtree(downloadFolder)
-            with db_conn.cursor() as cur:
-                cur.execute("DELETE FROM downloads WHERE uuid = %s", (download_uuid,))
-            db_conn.commit()
+            #
+            # PV 2017-04-14: Don't clean up automatically immediately after downloads.
+            # Instead, wait for stale downloads clean up middleware to remove after 24 hours (or whatever the config says).
+            # Some users have reported 404 Not Founds near the end of a download.  Not sure what
+            # the underlying problem is, but this band-aid will make the symptoms go away.
+            #shutil.rmtree(downloadFolder)
+            #with db_conn.cursor() as cur:
+            #    cur.execute("DELETE FROM downloads WHERE uuid = %s", (download_uuid,))
+            #db_conn.commit()
 
             # Response
             resp.status = falcon.HTTP_OK
