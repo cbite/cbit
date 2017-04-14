@@ -7,10 +7,12 @@ import {URLService} from "./services/url.service";
 import {Router} from "@angular/router";
 import {CollapseStateService} from "./services/collapse-state.service";
 import {UnitFormattingService} from "./services/unit-formatting.service";
+import {TooltipService} from "./services/tooltip.service";
 
 @Component({
   selector: 'cbit',
   template: `
+    <tooltip-container></tooltip-container>
     <navbar></navbar>
     <img id="bg" src="public/images/achtergrond_transp_v3.png">
     <img id="bg2" src="public/images/achtergrond 2_transp.png"
@@ -60,7 +62,7 @@ import {UnitFormattingService} from "./services/unit-formatting.service";
       opacity: 0.3;
     }
   `],
-  providers: [URLService, StudyService, FiltersService, DownloadSelectionService, AuthenticationService, CollapseStateService, UnitFormattingService]
+  providers: [URLService, StudyService, FiltersService, DownloadSelectionService, AuthenticationService, CollapseStateService, UnitFormattingService, TooltipService]
 })
 export class CBiTComponent {
 

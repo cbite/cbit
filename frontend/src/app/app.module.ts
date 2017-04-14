@@ -41,6 +41,8 @@ import {
   AllFieldsForVisibilityCategoryComponent
 } from "./all-fields.component";
 import {StudyRedirectComponent} from "./study-redirect.component";
+import {TooltipContainer} from "./common/tooltip-container.component";
+import {MyTooltipDirective} from "./common/my-tooltip.directive";
 
 @NgModule({
   imports: [
@@ -92,7 +94,10 @@ import {StudyRedirectComponent} from "./study-redirect.component";
     StudyRedirectComponent,
 
     Ng2SliderComponent,
-    HorizontallySlidableDirective
+    HorizontallySlidableDirective,
+
+    TooltipContainer,
+    MyTooltipDirective
   ],
   bootstrap: [ CBiTComponent ]
 })
