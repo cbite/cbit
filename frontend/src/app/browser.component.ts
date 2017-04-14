@@ -88,7 +88,7 @@ import {FieldMeta} from "./common/field-meta.model";
                           <ng-template #tooltipTemplate>
                             <div [innerHtml]="tooltipHtmlFor(studyMatch.study._id, sampleMatch)"></div>
                           </ng-template>
-                          <div [tooltip]="tooltipTemplate" [placement]="tooltipPlacementForIndex(i)" container="body">
+                          <div [my-tooltip]="tooltipTemplate" [placement]="tooltipPlacementForIndex(i)">
     
                             <a *ngIf="!isSampleSelected(studyMatch.study._id, sampleMatch._id)" href="#"
                                class="btn btn-success btn-xs" role="button"

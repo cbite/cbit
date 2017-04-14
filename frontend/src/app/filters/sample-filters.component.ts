@@ -39,7 +39,7 @@ enum GlobalCheckboxState {
             </ng-template>
             <a href="#" (click)="$event.preventDefault(); toggleVisible()"
                [class.disabled]="!anyEnabled()"
-               [tooltip]="tooltipTemplate" placement="right" container="body">
+               [my-tooltip]="tooltipTemplate" placement="right">
               {{ categoryRealName }}
             </a>
           </label>

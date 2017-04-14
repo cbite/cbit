@@ -34,15 +34,15 @@ export class MyTooltipDirective implements AfterViewInit, OnDestroy {
   }
 
   private mouseenter(event: any): void {
-    this.showTooltip();
+    this.showTooltip(event.pageX, event.pageY);
   }
 
   private mouseleave(event: any): void {
     this.hideTooltip();
   }
 
-  private showTooltip() {
-    this.tooltipService.showTooltipFor(this.elementRef, this.templateRef, this.placement);
+  private showTooltip(mousePageX?: number, mousePageY?: number) {
+    this.tooltipService.showTooltipFor(this.elementRef, this.templateRef, this.placement, mousePageX, mousePageY);
   }
 
   private hideTooltip() {

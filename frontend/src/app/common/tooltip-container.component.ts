@@ -28,6 +28,7 @@ export class TooltipContainer {
   public show(templateRef: TemplateRef<any>, placement: string) {
     this.shown = true;
     this.placement = placement;
+    this._vcr.clear();
     this._vcr.createEmbeddedView(templateRef);
   }
 

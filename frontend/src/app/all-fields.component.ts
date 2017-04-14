@@ -9,7 +9,7 @@ import {ClassifiedProperties, StudyService, ClassifiedPropertiesForGivenVisibili
       <ul>
         <li *ngFor="let field of fields">
           <div class="fieldName"
-               [tooltip]="tooltipTemplate" placement="right" container="body">
+               [my-tooltip]="tooltipTemplate" placement="right">
             {{ withoutStar(field) }}
           </div>
           <ng-template #tooltipTemplate>

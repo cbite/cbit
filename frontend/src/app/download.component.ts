@@ -82,7 +82,7 @@ enum StudyCheckboxState {
                           <div [innerHtml]="tooltipHtmlFor(study._id, sample)"></div>
                         </ng-template>
                         <div class="tooltipWrapper"
-                             [tooltip]="tooltipTemplate" placement="right" container="body">
+                             [my-tooltip]="tooltipTemplate" placement="right">
                           <label [attr.for]="'study-' + study._id + '-sample-' + sample._id">
                             <input type="checkbox" [id]="'study-' + study._id + '-sample-' + sample._id" [formControlName]="sample._id">
                             <b>{{ sample._source['Sample Name']}}</b>

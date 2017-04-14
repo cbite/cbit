@@ -11,6 +11,8 @@ export class TooltipService {
   tooltipElementRef: ElementRef;
   targetElementRef: ElementRef;
   placement: string;
+  mouseX: number;
+  mouseY: number;
 
   constructor(
     private ngZone: NgZone
@@ -31,11 +33,17 @@ export class TooltipService {
     this.ngZone.onStable.subscribe(() => this.repositionTooltip());
     setInterval(() => this.repositionTooltip(), 10);
 
-    console.log("Registered tooltip container");
+    // Check to hide tooltip when mouse moves out of bounding box (sometimes "mouseleave" events don't fire)
+    document.addEventListener("mousemove", (e) => {
+      this.mouseX = e.pageX;
+      this.mouseY = e.pageY;
+    }, true);
+    setInterval(() => this.checkMouseInsideTooltipTarget(), 100);
   }
 
-  public showTooltipFor(targetElementRef: ElementRef, templateRef: TemplateRef<any>, placement: string) {
-    console.log(`Showing tooltip for ${targetElementRef}`);
+  public showTooltipFor(targetElementRef: ElementRef, templateRef: TemplateRef<any>, placement: string, mousePageX?: number, mousePageY?: number) {
+    this.mouseX = mousePageX || this.mouseX;
+    this.mouseY = mousePageY || this.mouseY;
     this.targetElementRef = targetElementRef;
     this.placement = placement;
     this.tooltipContainer.show(templateRef, placement);
@@ -43,7 +51,6 @@ export class TooltipService {
   }
 
   public hideTooltipFor(targetElementRef: ElementRef) {
-    console.log(`Hiding tooltip for ${targetElementRef}`);
     if (this.targetElementRef === targetElementRef) {
       this.targetElementRef = null;
       this.tooltipContainer.hide();
@@ -53,6 +60,19 @@ export class TooltipService {
   private repositionTooltip() {
     if (!!this.targetElementRef) {
       this.doPositionElements(this.targetElementRef.nativeElement, this.tooltipElementRef.nativeElement, this.placement);
+    }
+  }
+
+  private checkMouseInsideTooltipTarget() {
+    if (!!this.targetElementRef) {
+      let element = this.targetElementRef.nativeElement;
+      let elOffset = this.offset(element);
+
+      //console.log(`x in [${elOffset.left}, ${elOffset.right}], y in [${elOffset.top}, ${elOffset.bottom}].  Current position (${this.mouseX}, ${this.mouseY})`);
+
+      if (!(this.mouseX >= elOffset.left && this.mouseX <= elOffset.right && this.mouseY >= elOffset.top && this.mouseY <= elOffset.bottom)) {
+        this.hideTooltipFor(this.targetElementRef);
+      }
     }
   }
 
