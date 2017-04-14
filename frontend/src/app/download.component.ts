@@ -35,7 +35,8 @@ enum StudyCheckboxState {
 
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" (click)="modal.hide()">&times;</button>
+          <button *ngIf="!preparingDownload" type="button" class="close" (click)="modal.hide()">&times;</button>
+          <button *ngIf=" preparingDownload" type="button" class="close" disabled>&times;</button>
           <h2 class="modal-title">Download selected studies and samples</h2>
         </div>
         
@@ -102,8 +103,11 @@ enum StudyCheckboxState {
         </div>
         
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" (click)="modal.hide()">Close</button>
+          
+          <button *ngIf="!preparingDownload" type="button" class="btn btn-default" (click)="modal.hide()">Close</button>
           <button *ngIf="!preparingDownload" type="button" class="btn btn-primary" (click)="kickOffDownload()">Download</button>
+          
+          <button *ngIf=" preparingDownload" type="button" class="btn btn-default" disabled>Close</button>
           <button *ngIf=" preparingDownload" type="button" class="btn btn-primary" disabled>Download</button>
           
           <div *ngIf="errorMessage" class="pull-left" style="width: 70%">
