@@ -139,7 +139,7 @@ export class HorizontallySlidableDirective {
 
 
   pin(viewportX: number, slidingDomainRect: BoundingRectClass): number {
-    return Math.round((viewportX - slidingDomainRect.left) / this.step) * this.step + slidingDomainRect.left;
+    return ((viewportX - slidingDomainRect.left) / this.step) * this.step + slidingDomainRect.left;
   }
 
   relativePercent(): number {
@@ -211,9 +211,9 @@ export class HorizontallySlidableDirective {
       case 'bottom':
         return boundingRect[coordName];
       case 'center-x':
-        return boundingRect.left + Math.round(boundingRect.width / 2);
+        return boundingRect.left + (boundingRect.width / 2);
       case 'center-y':
-        return boundingRect.top + Math.round(boundingRect.height / 2);
+        return boundingRect.top + (boundingRect.height / 2);
       default:
         return undefined;
     }
