@@ -25,10 +25,10 @@ enum GlobalCheckboxState {
       <div class="fullLabel">
         <a href="#" (click)="$event.preventDefault(); toggleVisible()"
            [class.disabled]="!anyEnabled()"
-        >
-          <span *ngIf=" isVisible" class="glyphicon glyphicon-triangle-bottom"></span>
-          <span *ngIf="!isVisible" class="glyphicon glyphicon-triangle-right"></span>
-        </a>
+        ><!--
+          --><span *ngIf=" isVisible" class="glyphicon glyphicon-triangle-bottom"></span><!--
+          --><span *ngIf="!isVisible" class="glyphicon glyphicon-triangle-right"></span><!--
+        --></a>
         <div class="my-label checkbox-inline">
           <label>
             <input class="globalCheckbox" type="checkbox" [name]="category" value=""
@@ -132,7 +132,7 @@ enum GlobalCheckboxState {
       font-weight: normal;
     }
     .my-label a:hover {
-      text-decoration: none;
+      text-decoration: underline;
     }
     .units {
       font-size: 90%;
