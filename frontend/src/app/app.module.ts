@@ -27,7 +27,7 @@ import {SelectionIndicatorComponent} from "./selection-indicator.component";
 import {DropdownDirective} from "./common/dropdown.directive";
 import {DropdownMenuDirective} from "./common/dropdown-menu.directive";
 import {DropdownToggleDirective} from "./common/dropdown-toggle.directive";
-import {ModalModule, TooltipDirective, TooltipModule} from "ngx-bootstrap";
+import {ModalModule} from "ngx-bootstrap";
 import {MetadataComponent, FieldMetadataEditorComponent} from "./metadata.component";
 import {StudyMetadataEditorComponent, StudyManagementComponent} from "./study-management.component";
 import {LoginComponent} from "./login.component";
@@ -50,8 +50,7 @@ import {MyTooltipDirective} from "./common/my-tooltip.directive";
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    ModalModule.forRoot(),
-    TooltipModule.forRoot()
+    ModalModule.forRoot()
   ],
   declarations: [
     CBiTComponent,
