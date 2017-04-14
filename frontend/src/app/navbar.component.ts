@@ -142,6 +142,10 @@ import {ChangePasswordComponent} from "./change-password.component";
     vertical-align: middle;
   }
   
+  li.dropdown {
+    cursor: pointer;
+  }
+  
   .selectionLI {
     background-color: #cfc;
   }
