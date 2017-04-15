@@ -113,8 +113,10 @@ try:
     # For now, just bundle the individual studies as they are, no sample subselection
     onlyIncludeMetadata = download_config['onlyIncludeMetadata']
     studyAndSampleIds = download_config['targetData']
+    allStudyAndSampleIds = download_config['allSampleIdsByStudy']
     studyInfos = download_config['studyInfos']
     sampleInfos = download_config['sampleInfos']
+
     fieldMetas = {
         fieldName: FieldMeta.from_json(rawFieldMeta)
         for fieldName, rawFieldMeta in download_config['fieldMetas'].iteritems()
@@ -164,6 +166,10 @@ try:
                 for sampleId in studyAndSampleIds[studyId]:
                     sampleNames.add(sampleInfos[sampleId]['Sample Name'])
 
+                allSampleNames = set()   # Every sample in each study, not just selected samples
+                for sampleId in allStudyAndSampleIds[studyId]:
+                    allSampleNames.add(sampleInfos[sampleId]['Sample Name'])
+
                 # Subselect only relevant samples
                 sampleInfo = {sampleName: info
                               for sampleName, info in sampleInfo.iteritems()
@@ -193,12 +199,26 @@ try:
                 # Subselect relevant samples in raw data
                 # (For each sample, there are multiple columns; we should search
                 # for a prefix "<Sample Name>." and include all matching columns)
+                # In raw data, there are annotation fields that are not specific to any
+                # sample.  We also include those
                 if not onlyIncludeMetadata and a.raw_data_set is not None:
                     columnNames = []
                     for colName in a.raw_data_set.columns:
+                        appendIt = False
+
                         for sampleName in sampleNames:
                             if colName.startswith(sampleName + '.'):
-                                columnNames.append(colName)
+                                appendIt = True
+
+                        colIsSampleSpecific = False
+                        for sampleName in allSampleNames:
+                            if colName.startswith(sampleName + '.'):
+                                colIsSampleSpecific = True
+                        if not colIsSampleSpecific:
+                            appendIt = True
+
+                        if appendIt:
+                            columnNames.append(colName)
 
                     df = a.raw_data_set[columnNames]
 

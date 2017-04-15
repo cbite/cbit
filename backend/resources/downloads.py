@@ -133,6 +133,34 @@ class DownloadsResource(object):
             }
         db_conn.commit()
 
+        # 1.9 Fetch all sample IDs in linked studies (to separate columns in raw data
+        #  that are sample-specific from generic annotations)
+        rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, body={
+            "size": 10000,   # TODO: Think about sizes
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "has_parent": {
+                                "type": cfg.ES_STUDY_DOCTYPE,
+                                "query": {
+                                    "ids": {
+                                        "values": list(studyIds)
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "_source": ["Sample Name"]  # NOTE: this is for later when we subselect samples
+        })
+
+        allSampleIdsByStudy = defaultdict(list)
+        for sample in rawResults["hits"]["hits"]:
+            sampleInfos[sample['_id']] = sample['_source']
+            allSampleIdsByStudy[sample["_parent"]].append(sample["_id"])
+
         # 2. Create download folders / DB records, etc.
         download_uuid = '{download_uuid}'.format(download_uuid=uuid.uuid4())
         download_dir = os.path.join(cfg.DOWNLOADS_PATH, download_uuid)
@@ -155,6 +183,7 @@ class DownloadsResource(object):
             'targetData': sampleIdsByStudy,
             'studyInfos': studyInfos,
             'sampleInfos': sampleInfos,
+            'allSampleIdsByStudy': allSampleIdsByStudy,
             'fieldMetas': fieldMetas
         }
         os.makedirs(download_dir)
