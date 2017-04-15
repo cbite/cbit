@@ -1,5 +1,6 @@
 import os
 import shutil
+import re
 
 import config.config as cfg
 
@@ -15,6 +16,9 @@ class CleanOldStuffMiddleware(object):
         self.tableName = tableName
         self.staleInterval = staleInterval
 
+    def is_uuid_like(self, subject):
+        return bool(re.match(r'^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$', str(subject)))
+
     def process_request(self, req, resp):
         if 'db' in req.context:
             db_conn = req.context['db']
@@ -22,7 +26,11 @@ class CleanOldStuffMiddleware(object):
             with db_conn.cursor() as cur:
 
                 if os.path.exists(self.filesPath):
-                    local_uuids = os.listdir(self.filesPath)
+                    local_uuids = [
+                        dir_name
+                        for dir_name in os.listdir(self.filesPath)
+                        if self.is_uuid_like(dir_name)
+                    ]
                 else:
                     local_uuids = []
 
