@@ -408,7 +408,8 @@ export class DownloadComponent {
         self.schedulePollForProgress();
       },
       error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
-        self.errorMessage = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
+        console.log(`Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`);
+        self.errorMessage = "Error while initiating download preparation, please try again";
         self.preparingDownload = false;
         self.changeDetectorRef.detectChanges();
       }
@@ -447,7 +448,8 @@ export class DownloadComponent {
         }
       },
       error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
-        self.errorMessage = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
+        console.log(`Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`);
+        self.errorMessage = "Error while preparing download, please try again";
         self.preparingDownload = false;
       },
       complete: () => {
