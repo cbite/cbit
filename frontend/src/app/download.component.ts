@@ -167,6 +167,17 @@ enum StudyCheckboxState {
   .tooltipWrapper {
     display: inline-block;
   }
+  .fullLabel {
+    margin-bottom: -15px;
+  }
+  .fullLabel > a {
+    position: relative;
+  }
+  .fullLabel > .checkbox-inline {
+    display: block;
+    padding-left: 40px;
+    top: -20px;
+  }
   `]
 })
 export class DownloadComponent {
