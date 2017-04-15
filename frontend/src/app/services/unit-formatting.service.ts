@@ -19,10 +19,11 @@ export class UnitFormattingService {
       let rawConvert = (x: any) => unitConverter.fromCanonicalUnits(+x, targetUnit);
 
       // Convert numbers with enough precision to distinguish a change of size that's 1/100th of the range of value
+      // But whatever happens, always output 0 as 0, not something like 0.000
       let tickSize = (valueRanges[fieldMeta.fieldName] || 1) / 100;
       let tickSizeInChosenUnits = rawConvert(tickSize) - rawConvert(0);
       let fixedDigits = Math.max(0, Math.min(20, -Math.floor(Math.log10(tickSizeInChosenUnits))));
-      convert = (x: any) => rawConvert(x).toFixed(fixedDigits);
+      convert = (x: any) => (x === 0.0 ? "0" : rawConvert(x).toFixed(fixedDigits));
 
       unitUIName = unitConverter.getUnitUIName(targetUnit);
     }
