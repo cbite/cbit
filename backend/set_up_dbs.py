@@ -45,7 +45,11 @@ def set_up_elasticsearch():
                         ]
                     }
                 }
-            }
+            },
+
+            # Quick band-aid for large queries; if this is exceeded again,
+            # need to think about changing how ElasticSearch is queried
+            "max_result_window": 100000,
         },
 
         "mappings": {
