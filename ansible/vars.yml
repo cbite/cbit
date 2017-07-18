@@ -26,7 +26,7 @@ postgresql_user_privileges:
 elasticsearch_cluster_name: cbit.elasticsearch.cluster
 
 # Set up long timeouts to handle uploads of large files (direct or via iRODS)
-request_timeout_s: 120
+request_timeout_s: 600
 
 # For fake certs
 #gen_self_signed_ssl_cert: yes
