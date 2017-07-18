@@ -48,18 +48,26 @@ def read_investigation(f):
         for c in itertools.chain(s, [None]):
 
             # Handle quoting properly
-            if not in_quote and len(cur_token_chars) == 0 and c == '"':
+            if not in_quote and c == '"':
+                cur_token_chars.append(c)
                 in_quote = True
             elif in_quote and c == '"':
+                cur_token_chars.append(c)
                 in_quote = False
-                yield ''.join(cur_token_chars)
-                cur_token_chars = []
             elif in_quote:
                 cur_token_chars.append(c)
 
             elif c in ('\t', '\r', '\n', None):
+                
                 # Emit current token, if any
                 if cur_token_chars:
+                    
+                    # Remove leading and trailing quotes from current token
+                    if len(cur_token_chars) > 0 and cur_token_chars[0] == '"':
+                        cur_token_chars = cur_token_chars[1:]
+                    if len(cur_token_chars) > 0 and cur_token_chars[-1] == '"':
+                        cur_token_chars = cur_token_chars[:-1]
+                    
                     yield ''.join(cur_token_chars)
                     cur_token_chars = []
 
