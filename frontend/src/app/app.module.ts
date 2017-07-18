@@ -6,6 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CBiTComponent }   from './cbit.component';
 import {StudyComponent}   from "./study/study.component";
 import {WelcomeComponent} from "./welcome.component";
+import {AboutComponent} from "./about.component";
+import {FAQComponent, FAQQuestionComponent} from "./faq.component";
 import {BrowserComponent} from "./browser.component";
 import {DownloadComponent} from "./download.component";
 import {UploadComponent, FieldMetadataFormComponent} from "./uploader/upload.component";
@@ -35,7 +37,6 @@ import {ChangePasswordComponent} from "./change-password.component";
 import {UserManagementComponent, UserEditorComponent, AddUserComponent} from "./user-management.component";
 import {Ng2SliderComponent} from "./slider/ng2-slider.component";
 import {HorizontallySlidableDirective} from "./slider/horizontally-slidable.directive";
-import {AboutComponent, FAQQuestionComponent} from "./about.component";
 import {
   AllFieldsComponent, AllFieldsForVisibilityComponent,
   AllFieldsForVisibilityCategoryComponent
@@ -62,6 +63,7 @@ import {MyTooltipDirective} from "./common/my-tooltip.directive";
     AddUserComponent,
     WelcomeComponent,
     AboutComponent,
+    FAQComponent,
     FAQQuestionComponent,
     BrowserComponent,
     DownloadComponent,

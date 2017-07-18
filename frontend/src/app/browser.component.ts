@@ -7,6 +7,7 @@ import {Observable, Subject} from "rxjs";
 import {DownloadSelectionService} from "./services/download-selection.service";
 import {CollapseStateService} from "./services/collapse-state.service";
 import {FieldMeta} from "./common/field-meta.model";
+import {AuthenticationService} from "./services/authentication.service";
 
 @Component({
   selector: 'browser',
@@ -127,7 +128,8 @@ import {FieldMeta} from "./common/field-meta.model";
                         DOI
                       </a>
     
-                      <a [href]="studyMatch.study._source['*Archive URL']"
+                      <a *ngIf="isAdmin()" 
+                         [href]="studyMatch.study._source['*Archive URL']"
                          class="btn btn-default" role="button">
                         <span class="glyphicon glyphicon-download-alt"></span>
                         Download
@@ -294,7 +296,8 @@ export class BrowserComponent implements OnInit, OnDestroy {
     private _filtersService: FiltersService,
     private _downloadSelectionService: DownloadSelectionService,
     private changeDetectorRef: ChangeDetectorRef,
-    private _collapseStateService: CollapseStateService
+    private _collapseStateService: CollapseStateService,
+    private _auth: AuthenticationService
   ) { }
 
   areSamplesShown(studyId: string) { return !this._collapseStateService.isCollapsed(`samples-for-study-${studyId}`, true); }
@@ -503,13 +506,19 @@ export class BrowserComponent implements OnInit, OnDestroy {
 
   pubmedIdsOf(study: Study): string[] {
     return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
+        .filter((p: RawStudyPublication) => p['Study PubMed ID'])
         .map((p: RawStudyPublication) => p['Study PubMed ID'])
     );
   }
 
   doisOf(study: Study): string[] {
     return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
-      .map((p: RawStudyPublication) => p['Study Publication DOI'])
+        .filter((p: RawStudyPublication) => p['Study Publication DOI'])
+        .map((p: RawStudyPublication) => p['Study Publication DOI'])
     );
+  }
+
+  isAdmin() {
+    return !this._auth.isGuest;
   }
 }

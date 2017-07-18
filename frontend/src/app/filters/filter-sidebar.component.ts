@@ -252,7 +252,9 @@ export class FilterSidebarAllULComponent {
       </li>
   
       <li class="nopadding">
-        <a class="nopadding" href="#" (click)="$event.preventDefault(); allFieldsModal && allFieldsModal.show()">Full list of fields</a>
+        <a class="nopadding" href="#" (click)="$event.preventDefault(); allFieldsModal && allFieldsModal.show()">
+          Full list of properties
+        </a>
       </li>
   
       <li class="checkbox nav-header nopadding">
