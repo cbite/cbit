@@ -17,7 +17,7 @@ import {Component} from '@angular/core';
           <div class="centered">
             <iframe width="560"
                     height="315"
-                    src="https://www.youtube.com/embed/fNqDPa1ELfc"
+                    src="https://www.youtube.com/embed/O12dPthanrM"
                     frameborder="0"
                     allowfullscreen>
             </iframe>
