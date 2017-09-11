@@ -82,9 +82,9 @@ import {CollapseStateService} from "./services/collapse-state.service";
                 Upload your own dataset
               </div>
 
-              Researchers who are interested in depositing their own data in cBiT can contact us for detailed
-              instructions and support on how to prepare the data into archives. Please send an email to Dennie
-              Hebels (<code>d.hebels [at] maastrichtuniversity.nl</code>).
+              Researchers who are interested in depositing their own data in cBiT can follow the detailed
+              instructions in <a href="/public/pdfs/Archive preparation instructions.zip">this zip file</a> on how to prepare 
+              the data into archives.
             </li>
           </ol>
 
