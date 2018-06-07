@@ -72,6 +72,12 @@ npm install  # Only run once
 npm start    # Go to http://localhost:8080
 ```
 
+8. To run the backend locally, run following command from your virtual environment
+```
+cd cbit/backend
+sh run-backend-server.sh
+```
+
 
 Troubleshooting
 ---------------
@@ -101,3 +107,52 @@ If it is, you may have to delete stale uploads / downloads from `/home/cbit/back
 ```
 sudo shutdown -r now
 ```
+
+
+
+Extra tips for getting this to work
+-----------------------------------
+- Make sure you have python and pip on your local machine
+- Install PostgreSQL
+```
+brew install postgresql
+```
+
+- Install ElasticSearch (only works with version 2.4)
+```
+brew install elasticsearch@2.4
+```
+
+- Install virtualenv
+```
+sudo pip install virtualenv
+```
+
+- Start elasticsearch
+```
+cd /usr/local/Cellar/elasticsearch\@2.4/2.4.6_1/
+./bin/elasticsearch
+```
+
+-  Start postgreSQL
+```
+pg_ctl -D /usr/local/var/postgres start
+```
+
+-  Stop postgreSQL
+```
+pg_ctl -D /usr/local/var/postgres stop
+```
+
+- Credentials: admin/admin
+
+Debugging Python Backend
+-------------------------
+- Go to PyCharm -> preferences -> Python Debugger
+- Enable 'Gevent compatible'
+
+- Go to Run -> Edit configurations
+- Create a new Python configuration with settings as indicated below
+Script path: <repo location>/venv/bin/gunicorn
+Parameters: -c <repo location>/backend/config/gunicorn-config.py -w 4 backend-server:app
+Python interpreter: The one from the virtual environment

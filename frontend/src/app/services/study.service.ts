@@ -201,7 +201,7 @@ export class StudyService {
             let studiesById = _.zipObject(studyIds, studies);
             let samplesById = _.zipObject(sampleIds, samples);
 
-            let unifiedMatches: UnifiedMatch[] = Object.keys(data).map(studyId => {
+            let unifiedMatches: any[] = Object.keys(data).map(studyId => {
               return {
                 study: studiesById[studyId],
                 sampleMatches: data[studyId].map(sampleId => samplesById[sampleId])
