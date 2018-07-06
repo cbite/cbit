@@ -55,6 +55,10 @@ import {AppHeaderComponent} from './core/components/app-header/app-header.compon
 import {AppFooterComponent} from './core/components/app-footer/app-footer.component';
 import {LoginPopupComponent} from './popups/login/login-popup.component';
 import {PopupService} from './services/popup.service';
+import {CommonModule} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
+import {BusyIndicatorService} from './services/busy-indicator.service';
+import {HttpGatewayService} from './services/http-gateway.service';
 
 @NgModule(
   {
@@ -63,6 +67,8 @@ import {PopupService} from './services/popup.service';
       FormsModule,
       ReactiveFormsModule,
       AppRoutingModule,
+      HttpClientModule,
+      CommonModule,
       NgbModule.forRoot()
     ],
     declarations: [
@@ -118,6 +124,8 @@ import {PopupService} from './services/popup.service';
       StudyService,
       FiltersService,
       DownloadSelectionService,
+      BusyIndicatorService,
+      HttpGatewayService,
       AuthenticationService,
       CollapseStateService,
       UnitFormattingService,

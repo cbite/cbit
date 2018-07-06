@@ -13,6 +13,7 @@ import {FieldMeta} from "../common/field-meta.model";
 import {AuthenticationService} from "./authentication.service";
 import {URLService} from "./url.service";
 import {UnitFormattingService} from "./unit-formatting.service";
+import {HttpGatewayService} from './http-gateway.service';
 
 // Should be a parseable number to play nicely with numeric fields
 // and it should survive a round-trip conversion in ES from string to double to string
@@ -87,15 +88,9 @@ export class StudyService {
   getAllFieldNames(): Promise<string[]> {
     let self = this;
     return new Promise(resolve => {
-      $.ajax({
-        type: 'GET',
-        url: self._url.metadataFieldsResource(),
-        headers: self._auth.headers(),
-        contentType: 'application/json',
-        success: function(data: string[]) {
-          resolve(data);
-        }
-      })
+      this.httpGatewayService.get(self._url.metadataFieldsResource()).subscribe(data=>{
+        resolve(data);
+      });
     });
   }
 
@@ -373,6 +368,7 @@ export class StudyService {
 
   constructor(
     private _url: URLService,
+    private httpGatewayService:HttpGatewayService,
     private _auth: AuthenticationService,
     private _unitFormattingService: UnitFormattingService
   ) {
