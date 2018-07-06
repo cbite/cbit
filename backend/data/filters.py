@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class FilterMode(Enum):
     AllButThese = 0
     OnlyThese = 1
