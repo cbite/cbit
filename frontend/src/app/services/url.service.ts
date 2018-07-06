@@ -1,11 +1,12 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 
+// TODO@Sam Fix this!
 let BASE_URL: string;
-if (process.env.ENV === 'production') {
-  BASE_URL = "/api";                     // Production
-} else {
-  BASE_URL = "http://localhost:23456";   // Development
-}
+// if (process.env.ENV === 'production') {
+//   BASE_URL = "/api";                     // Production
+// } else {
+  BASE_URL = 'http://localhost:23456';   // Development
+// }
 
 /*
   Central location for URLs to access back-end API

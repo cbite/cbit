@@ -8,3 +8,4 @@
 /backend/error.log
 /backend/files
 /backend/uploads
+/backend/**/*.pyc

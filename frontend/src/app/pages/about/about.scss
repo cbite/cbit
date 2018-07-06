@@ -1,0 +1,43 @@
+.page {
+  margin-top: 40px;
+  margin-bottom: 80px;
+
+  .page-content {
+    max-width: 1000px;
+    margin:auto;
+  }
+
+  .img-overview {
+    margin: 40px auto;
+    display: block;
+    text-align: center;
+    width: 80%;
+  }
+}
+
+.contact-details {
+  margin-left: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+h4 {
+  margin-top: 40px;
+}
+
+.disclaimers {
+  margin-top: 40px;
+  font-size: 80%;
+}
+
+.disclaimers > h5 {
+  font-weight: bolder;
+}
+
+.possibilities > li {
+  margin-top: 10px;
+}
+
+.possibility {
+  font-weight: bold;
+}

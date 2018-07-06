@@ -1,0 +1,59 @@
+@import '../../../variables';
+
+.page {
+  //padding-top: 50px;
+
+  .video-panel {
+    //margin-top: 60px;
+    background-color: $color-light;
+    text-align: center;
+    padding: 40px 0;
+  }
+
+  .text-panel {
+    text-align: center;
+    margin-top: 20px;
+
+    .left-panel {
+      display: inline-block;
+      vertical-align: top;
+      padding-top: 60px;
+
+      .university_logo {
+        width: 240px;
+        vertical-align: top;
+      }
+    }
+
+    .right-panel {
+      display: inline-block;
+      text-align: left;
+      padding-left: 70px;
+
+      .title-panel {
+        padding: 40px 0;
+
+        .title {
+          color: $color-dark-blue;
+          font-size: $font-size-enormous;
+        }
+
+        .subtitle {
+          font-size: $font-size-huge;
+        }
+      }
+
+      .text-content {
+        font-size: $font-size-big;
+      }
+    }
+  }
+}
+
+//.img-overview {
+//  display: block;
+//  text-align: center;
+//  width: 100%;
+//  margin-top: 15px;
+//  margin-bottom: 40px
+//}

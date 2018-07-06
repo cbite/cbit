@@ -1,0 +1,48 @@
+@import '../../../../../variables';
+
+.sidebar {
+  min-width: 280px;
+  width: 100%;
+
+  .searchbox {
+    position: relative;
+    padding: 20px;
+
+    input {
+      height: 30px;
+    }
+
+    label {
+      float: left;
+    }
+
+    span {
+      display: block;
+      overflow: hidden;
+    }
+  }
+
+  .searchbox span > input[type="text"] {
+    width: 70%;
+    margin-left: 10px;
+  }
+
+  .searchbox spinner {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+
+  .filter-panel {
+
+    .filter-heading {
+      width: 100%;
+      background-color: $color-blue;
+      color: white;
+      height: 40px;
+      line-height: 40px;
+      padding: 0 20px;
+      margin-bottom: 10px;
+    }
+  }
+}
