@@ -3,15 +3,15 @@ import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 
-import {StudyComponent} from './study/study.component';
+import {StudyComponent} from './pages/studies/components/study/study.component';
 import {DownloadComponent} from './common/components/download.component';
-import {UploadComponent, FieldMetadataFormComponent} from './uploader/upload.component';
+import {UploadComponent, FieldMetadataFormComponent} from './common/uploader/upload.component';
 import {AppRoutingModule} from './router/routing.module';
 import {FilterSidebarComponent} from './pages/browser/components/filters/filter-sidebar.component';
 import {MapToIterablePipe} from './common/mapToIterable.pipe';
 import {SampleFiltersComponent} from './pages/browser/components/filters/sample-filters.component';
-import {PubmedLinksDirective} from './study/pubmed-link.directive';
-import {DOILinkDirective} from './study/doi-link.directive';
+import {PubmedLinksDirective} from './pages/studies/components/study/pubmed-link.directive';
+import {DOILinkDirective} from './pages/studies/components/study/doi-link.directive';
 
 import {FileSelectDirective, FileDropDirective} from 'ng2-file-upload/ng2-file-upload';
 import {CollapseDirective} from './common/collapse.directive';
@@ -23,9 +23,9 @@ import {MetadataComponent, FieldMetadataEditorComponent} from './pages/metadata/
 import {StudyMetadataEditorComponent, StudyManagementComponent} from './pages/studies/study-management.component';
 import {LoginComponent} from './common/components/login.component';
 import {ChangePasswordComponent} from './common/components/change-password.component';
-import {UserManagementComponent} from './user-management/user-management.component';
-import {Ng2SliderComponent} from './slider/ng2-slider.component';
-import {HorizontallySlidableDirective} from './slider/horizontally-slidable.directive';
+import {UserManagementComponent} from './pages/user-management/user-management.component';
+import {Ng2SliderComponent} from './common/slider/ng2-slider.component';
+import {HorizontallySlidableDirective} from './common/slider/horizontally-slidable.directive';
 import {
   AllFieldsComponent, AllFieldsForVisibilityComponent,
   AllFieldsForVisibilityCategoryComponent
@@ -42,8 +42,8 @@ import {FiltersService} from './services/filters.service';
 import {StudyService} from './services/study.service';
 import {URLService} from './services/url.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {UserEditorComponent} from './user-management/user-editor.component';
-import {AddUserComponent} from './user-management/add-user.component';
+import {UserEditorComponent} from './pages/user-management/user-editor.component';
+import {AddUserComponent} from './pages/user-management/add-user.component';
 import {FilterSidebarAllULComponent} from './pages/browser/components/filters/filter-sidebar-all-ul.component';
 import {FilterSidebarCategoryComponent} from './pages/browser/components/filters/filter-sidebar-category.component';
 import {WelcomePage} from './pages/welcome/welcome.page';

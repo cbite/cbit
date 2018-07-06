@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, Directive, HostBinding} from '@angular/core';
-import {Study, RawStudyPublication} from "../common/study.model";
+import {Study, RawStudyPublication} from "../../../../common/study.model";
 
 @Directive({
   selector: '[pubmed-link]'

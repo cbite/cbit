@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {DownloadComponent} from '../common/components/download.component';
-import {UploadComponent} from '../uploader/upload.component';
+import {UploadComponent} from '../common/uploader/upload.component';
 import {MetadataComponent} from '../pages/metadata/metadata.component';
 import {StudyManagementComponent} from '../pages/studies/study-management.component';
-import {UserManagementComponent} from '../user-management/user-management.component';
+import {UserManagementComponent} from '../pages/user-management/user-management.component';
 import {StudyRedirectComponent} from '../pages/studies/study-redirect.component';
 import {AppUrls} from './app-urls';
 import {WelcomePage} from '../pages/welcome/welcome.page';
