@@ -15,6 +15,8 @@ from data.fieldmeta import FieldMeta
 import requests
 import zipfile
 
+from data.study import StudyType
+
 # Possible upload statuses
 UPLOAD_STATUS_UPLOADING = 'uploading'
 UPLOAD_STATUS_UPLOADED = 'uploaded'
@@ -281,7 +283,7 @@ class UploadResource(object):
         # 3. Ingest archive into DBs
         uploaded_archive_path = os.path.join(cfg.UPLOADS_PATH, upload_uuid, 'archive.zip')
         try:
-            self._ingest_archive(uploaded_archive_path, db_conn, upload_uuid, publicationDate, visible)
+            self._ingest_archive(uploaded_archive_path, db_conn, upload_uuid, StudyType.biomaterial, publicationDate, visible) # TODO determine study type here
         except ValueError as e:
             import traceback
             tb = traceback.format_exc()
@@ -323,12 +325,12 @@ class UploadResource(object):
         resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 
 
-    def _ingest_archive(self, filename, db_conn, study_uuid, publicationDate, visible):
+    def _ingest_archive(self, filename, db_conn, study_uuid, study_type, publicationDate, visible):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
         if not es.indices.exists(cfg.ES_INDEX):
             raise falcon.HTTPInternalServerError(description='ElasticSearch database not ready.  Have you run set_up_dbs.py?')
 
-        importer.import_archive(db_conn, es, filename, study_uuid, publicationDate, visible)
+        importer.import_archive(db_conn, es, filename, study_uuid, study_type, publicationDate, visible)
 
