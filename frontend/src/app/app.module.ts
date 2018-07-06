@@ -21,7 +21,6 @@ import {DropdownDirective} from './common/dropdown.directive';
 import {DropdownMenuDirective} from './common/dropdown-menu.directive';
 import {MetadataComponent, FieldMetadataEditorComponent} from './pages/metadata/metadata.component';
 import {StudyMetadataEditorComponent, StudyManagementComponent} from './pages/studies/study-management.component';
-import {LoginComponent} from './common/components/login.component';
 import {ChangePasswordComponent} from './common/components/change-password.component';
 import {UserManagementComponent} from './pages/user-management/user-management.component';
 import {Ng2SliderComponent} from './common/slider/ng2-slider.component';
@@ -54,71 +53,78 @@ import {BrowserPage} from './pages/browser/browser.page';
 import {AppComponent} from './app.component';
 import {AppHeaderComponent} from './core/components/app-header/app-header.component';
 import {AppFooterComponent} from './core/components/app-footer/app-footer.component';
+import {LoginPopupComponent} from './popups/login/login-popup.component';
+import {PopupService} from './services/popup.service';
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AppRoutingModule,
-    NgbModule,
-  ],
-  declarations: [
-    AppComponent,
-    AppHeaderComponent,
-    AppFooterComponent,
-    LoginComponent,
-    ChangePasswordComponent,
-    UserManagementComponent,
-    UserEditorComponent,
-    AddUserComponent,
-    WelcomePage,
-    AboutPage,
-    FAQPage,
-    FAQQuestionComponent,
-    BrowserPage,
-    DownloadComponent,
-    UploadComponent,
-    FieldMetadataFormComponent,
-    MetadataComponent,
-    FieldMetadataEditorComponent,
-    StudyManagementComponent,
-    StudyMetadataEditorComponent,
-    PubmedLinksDirective,
-    DOILinkDirective,
-    FilterSidebarComponent,
-    AllFieldsComponent,
-    AllFieldsForVisibilityComponent,
-    AllFieldsForVisibilityCategoryComponent,
-    FilterSidebarCategoryComponent,
-    FilterSidebarAllULComponent,
-    SampleFiltersComponent,
-    StudyComponent,
-    MapToIterablePipe,
-    FileSelectDirective,
-    FileDropDirective,
-    CollapseDirective,
-    SpinnerComponent,
-    SelectionIndicatorComponent,
-    DropdownDirective,
-    DropdownMenuDirective,
-    StudyRedirectComponent,
-    Ng2SliderComponent,
-    HorizontallySlidableDirective,
-    TooltipContainer,
-    MyTooltipDirective
-  ],
-  providers: [
-    URLService,
-    StudyService,
-    FiltersService,
-    DownloadSelectionService,
-    AuthenticationService,
-    CollapseStateService,
-    UnitFormattingService,
-    TooltipService
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule(
+  {
+    imports: [
+      BrowserModule,
+      FormsModule,
+      ReactiveFormsModule,
+      AppRoutingModule,
+      NgbModule.forRoot()
+    ],
+    declarations: [
+      AppComponent,
+      AppHeaderComponent,
+      AppFooterComponent,
+      ChangePasswordComponent,
+      UserManagementComponent,
+      UserEditorComponent,
+      AddUserComponent,
+      WelcomePage,
+      AboutPage,
+      FAQPage,
+      FAQQuestionComponent,
+      BrowserPage,
+      DownloadComponent,
+      UploadComponent,
+      FieldMetadataFormComponent,
+      MetadataComponent,
+      FieldMetadataEditorComponent,
+      StudyManagementComponent,
+      StudyMetadataEditorComponent,
+      PubmedLinksDirective,
+      DOILinkDirective,
+      FilterSidebarComponent,
+      LoginPopupComponent,
+      AllFieldsComponent,
+      AllFieldsForVisibilityComponent,
+      AllFieldsForVisibilityCategoryComponent,
+      FilterSidebarCategoryComponent,
+      FilterSidebarAllULComponent,
+      SampleFiltersComponent,
+      StudyComponent,
+      MapToIterablePipe,
+      FileSelectDirective,
+      FileDropDirective,
+      CollapseDirective,
+      SpinnerComponent,
+      SelectionIndicatorComponent,
+      DropdownDirective,
+      DropdownMenuDirective,
+      StudyRedirectComponent,
+      Ng2SliderComponent,
+      HorizontallySlidableDirective,
+      TooltipContainer,
+      MyTooltipDirective
+    ],
+    entryComponents: [
+      LoginPopupComponent
+    ],
+    providers: [
+      URLService,
+      StudyService,
+      FiltersService,
+      DownloadSelectionService,
+      AuthenticationService,
+      CollapseStateService,
+      UnitFormattingService,
+      TooltipService,
+      PopupService
+    ],
+    bootstrap: [AppComponent]
+  })
 export class AppModule {
 }
