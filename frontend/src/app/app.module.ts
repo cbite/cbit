@@ -54,9 +54,15 @@ import {BrowserPage} from './pages/browser/browser.page';
 import {AppComponent} from './app.component';
 import {AppHeaderComponent} from './core/components/app-header/app-header.component';
 import {AppFooterComponent} from './core/components/app-footer/app-footer.component';
+import {BusyIndicatorService} from './services/busy-indicator.service';
+import {HttpGatewayService} from './services/http-gateway.service';
+import {CommonModule} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   imports: [
+    CommonModule,
+    HttpClientModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
@@ -116,7 +122,9 @@ import {AppFooterComponent} from './core/components/app-footer/app-footer.compon
     AuthenticationService,
     CollapseStateService,
     UnitFormattingService,
-    TooltipService
+    TooltipService,
+    BusyIndicatorService,
+    HttpGatewayService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class AuthenticationService {
@@ -21,6 +21,14 @@ export class AuthenticationService {
       return {
         Authorization: 'Basic ' + btoa(this.username + ':' + this.password)
       };
+    }
+  }
+
+  getAuthorizationHeaderContent() {
+    if (this.isGuest) {
+      return undefined;
+    } else {
+      return 'Basic ' + btoa(this.username + ':' + this.password);
     }
   }
 

@@ -34,7 +34,7 @@ export class URLService {
   }
 
   metadataFieldsResource(): string {
-    return `${BASE_URL}/metadata/fields`;
+    return `metadata/fields`;
   }
 
   metadataFieldsMultiResource(): string {
