@@ -429,13 +429,3 @@ def read_raw_data(f):
     # followed by a subfield name like 'AVG_Signal', 'Detection Pval', etc.)
     df = pd.read_table(f, index_col=0, encoding=cfg.FILE_ENCODING, dtype='str')
     return df
-
-
-#def read_annotations(f):
-#    # An annotations file is a gene-chip-vendor-provided spec of what each
-#    # probe (row in processed data) is actually talking about
-#    #
-#    # Starts with a bunch of comment lines with descriptions of each column
-#    # (ignore for now)
-#    df = pd.read_table(f, comment='#', encoding=cfg.FILE_ENCODING, dtype='str')
-#    return df

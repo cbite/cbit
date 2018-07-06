@@ -1,5 +1,4 @@
 #!/usr/bin/python2.7
-
 import sys
 import psycopg2
 import config.config as cfg
