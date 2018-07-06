@@ -6,12 +6,12 @@ import {
 } from 'ng2-file-upload/ng2-file-upload';
 //import { FileItem } from 'ng2-file-upload/components/file-upload/file-item.class'
 import * as $ from 'jquery';
-import {FieldMeta, DimensionsType} from '../common/field-meta.model';
+import {FieldMeta, DimensionsType} from '../../common/field-meta.model';
 import {FormGroup, FormControl, Validators, RequiredValidator} from '@angular/forms';
 import * as _ from 'lodash';
-import {DimensionsRegister, INVALID_DIMENSIONS} from '../common/unit-conversions';
-import {AuthenticationService} from '../services/authentication.service';
-import {URLService} from '../services/url.service';
+import {DimensionsRegister, INVALID_DIMENSIONS} from '../../common/unit-conversions';
+import {AuthenticationService} from '../../services/authentication.service';
+import {URLService} from '../../services/url.service';
 
 // Heavily adapted from here:
 // http://valor-software.com/ng2-file-upload/

@@ -6,7 +6,7 @@ import {FiltersService, FilterMode, FiltersState} from "../../../../services/fil
 import {NULL_CATEGORY_NAME, StudyService} from "../../../../services/study.service";
 import * as $ from 'jquery';
 import {DimensionsRegister} from "../../../../common/unit-conversions";
-import {Ng2SliderComponent} from "../../../../slider/ng2-slider.component";
+import {Ng2SliderComponent} from "../../../../common/slider/ng2-slider.component";
 import {Subject} from "rxjs";
 import {CollapseStateService} from '../../../../services/collapse-state.service';
 import {UnitFormattingService} from "../../../../services/unit-formatting.service";

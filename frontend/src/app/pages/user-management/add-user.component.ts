@@ -1,11 +1,11 @@
 import {Component, OnInit, ChangeDetectorRef, OnChanges, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {StudyService} from '../services/study.service';
+import {StudyService} from '../../services/study.service';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {Study} from '../common/study.model';
-import {AuthenticationService} from '../services/authentication.service';
-import {ChangePasswordComponent} from '../common/components/change-password.component';
+import {Study} from '../../common/study.model';
+import {AuthenticationService} from '../../services/authentication.service';
+import {ChangePasswordComponent} from '../../common/components/change-password.component';
 // import {ModalDirective} from 'ngx-bootstrap';
-import {URLService} from '../services/url.service';
+import {URLService} from '../../services/url.service';
 import {User} from './user-management.component';
 
 @Component({
