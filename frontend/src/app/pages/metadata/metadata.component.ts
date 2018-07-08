@@ -3,7 +3,7 @@ import {FieldMeta} from "../../common/field-meta.model";
 import {StudyService} from "../../services/study.service";
 import {FormGroup, FormControl, Validators, Form} from "@angular/forms";
 import {DimensionsRegister} from "../../common/unit-conversions";
-import {AuthenticationService} from "../../services/authentication.service";
+import {AuthenticationService} from "../../core/authentication/authentication.service";
 import {URLService} from "../../services/url.service";
 
 

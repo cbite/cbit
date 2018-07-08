@@ -1,19 +1,22 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {URLService} from '../../services/url.service';
-import {AuthenticationService} from '../../services/authentication.service';
-import {FiltersService} from '../../services/filters.service';
+import {AuthenticationService} from '../../core/authentication/authentication.service';
 
 @Component({
     styleUrls: ['./login-popup.scss'],
     template: `
       <div class="modal-panel noselect">
         <div class="modal-header">
-          <div class="title">Enter ADMIN Area
+          <div class="title">Access ADMIN Area
           </div>
           <span class="close" (click)="onCloseClick()"><i class="fal fa-times"></i></span>
         </div>
         <div class="modal-body">
+          <div *ngIf="errorMessage">
+            <div class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
+          </div>
           <form>
             <div class="form-group">
               <input type="text" name="user" class="form-control" placeholder="Username" [(ngModel)]="username">
@@ -21,17 +24,10 @@ import {FiltersService} from '../../services/filters.service';
             <div class="form-group">
               <input type="password" name="pass" class="form-control" placeholder="Password" [(ngModel)]="password">
             </div>
-
-            <div *ngIf="errorMessage">
-              <div class="alert alert-danger">
-                {{ errorMessage }}
-              </div>
-            </div>
-
             <div class="button-panel">
-              <input *ngIf="!loggingIn" type="submit" name="login" class="login" (click)="login()"
+              <input *ngIf="!loginProgress" type="submit" name="login" class="login" (click)="login()"
                      value="Login">
-              <input *ngIf=" loggingIn" type="submit" name="login" class="login" disabled value="Logging in...">
+              <input *ngIf=" loginProgress" type="submit" name="login" class="login" disabled value="Logging in...">
             </div>
           </form>
         </div>
@@ -41,50 +37,35 @@ import {FiltersService} from '../../services/filters.service';
 )
 export class LoginPopupComponent {
 
-  username: string;
-  password: string;
-  errorMessage: string;
-  loggingIn: boolean;
+  public username: string;
+  public password: string;
+  public errorMessage: string;
+  public loginProgress: boolean;
 
-  constructor(private _url: URLService,
-              private _auth: AuthenticationService,
-              private _filtersService: FiltersService,
-              private changeDetectorRef: ChangeDetectorRef,
+  constructor(private authenticationService: AuthenticationService,
               public activeModal: NgbActiveModal) {
   }
 
-  refresh(): void {
+  public refresh(): void {
     this.username = '';
     this.password = '';
     this.errorMessage = '';
-    this.loggingIn = false;
+    this.loginProgress = false;
   }
 
-  login(): void {
-    // let self = this;
-    //
-    // this.loggingIn = true;
-    // $.ajax({
-    //   type: 'GET',
-    //   url: this._url.userResource(this.username),
-    //   headers: {
-    //     Authorization: `Basic ${btoa(`${this.username}:${this.password}`)}`
-    //   },
-    //   dataType: 'json',
-    //   success: (data: GetUserResponse) => {
-    //     self._auth.login(this.username, this.password, data.realname);
-    //     self._filtersService.pulse();
-    //     // TODO@Sam Fix it!
-    //     // self.modal.hide();
-    //   },
-    //   error: () => {
-    //     self.errorMessage = 'Login failed!';
-    //     self.loggingIn = false;
-    //   },
-    //   complete: () => {
-    //     self.changeDetectorRef.detectChanges();
-    //   }
-    // })
+  public login(): void {
+    this.loginProgress = true;
+    this.authenticationService.login(
+      this.username,
+      this.password).subscribe((success) => {
+      this.loginProgress = false;
+
+        if (success) {
+          this.activeModal.close();
+        } else {
+          this.errorMessage = 'Login failed - please try again';
+        }
+    });
   }
 
   public onCloseClick() {

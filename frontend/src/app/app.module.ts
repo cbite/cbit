@@ -35,7 +35,7 @@ import {MyTooltipDirective} from './common/my-tooltip.directive';
 import {TooltipService} from './services/tooltip.service';
 import {UnitFormattingService} from './services/unit-formatting.service';
 import {CollapseStateService} from './services/collapse-state.service';
-import {AuthenticationService} from './services/authentication.service';
+import {AuthenticationService} from './core/authentication/authentication.service';
 import {DownloadSelectionService} from './services/download-selection.service';
 import {FiltersService} from './services/filters.service';
 import {StudyService} from './services/study.service';
@@ -61,6 +61,8 @@ import {BusyIndicatorService} from './services/busy-indicator.service';
 import {HttpGatewayService} from './services/http-gateway.service';
 import {StudyResultsComponent} from './pages/browser/components/study-results/study-results.component';
 import {StudyResultComponent} from './pages/browser/components/study-results/study-result.component';
+import {StoreModule} from '@ngrx/store';
+import {reducers} from './core/redux/reducers/index';
 
 @NgModule(
   {
@@ -69,6 +71,7 @@ import {StudyResultComponent} from './pages/browser/components/study-results/stu
       FormsModule,
       ReactiveFormsModule,
       AppRoutingModule,
+      StoreModule.forRoot(reducers),
       HttpClientModule,
       CommonModule,
       NgbModule.forRoot()

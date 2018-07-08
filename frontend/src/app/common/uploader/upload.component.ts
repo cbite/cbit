@@ -10,7 +10,7 @@ import {FieldMeta, DimensionsType} from '../../common/field-meta.model';
 import {FormGroup, FormControl, Validators, RequiredValidator} from '@angular/forms';
 import * as _ from 'lodash';
 import {DimensionsRegister, INVALID_DIMENSIONS} from '../../common/unit-conversions';
-import {AuthenticationService} from '../../services/authentication.service';
+import {AuthenticationService} from '../../core/authentication/authentication.service';
 import {URLService} from '../../services/url.service';
 
 // Heavily adapted from here:

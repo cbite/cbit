@@ -6,7 +6,7 @@ import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {DownloadSelectionService} from '../../../services/download-selection.service';
 import {DownloadComponent} from '../../../common/components/download.component';
-import {AuthenticationService} from '../../../services/authentication.service';
+import {AuthenticationService} from '../../authentication/authentication.service';
 import {FiltersService} from '../../../services/filters.service';
 import {ChangePasswordComponent} from '../../../common/components/change-password.component';
 import {PopupService} from '../../../services/popup.service';
@@ -111,19 +111,21 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   }
 
   isAdmin() {
-    return !this._auth.isGuest;
+    // return !this._auth.isGuest;
+    return false;
   }
 
   getRealname() {
-    if (this._auth.isGuest) {
-      return 'Guest';
-    } else {
-      return this._auth.realname;
-    }
+    // if (this._auth.isGuest) {
+    //   return 'Guest';
+    // } else {
+    //   return this._auth.realname;
+    // }
+    return 'admin';
   }
 
   logout() {
-    this._auth.logout();
+    // this._auth.logout();
     this._filtersService.pulse();
 
     // Go to Browse pane in case we were in an admin-only screen
@@ -131,7 +133,8 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   }
 
   adminRealName() {
-    return this._auth.realname;
+    return 'admin';
+    // return this._auth.realname;
   }
 
   onLoginClick() {

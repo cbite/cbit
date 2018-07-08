@@ -1,4 +1,4 @@
-import {AuthenticationService} from "../services/authentication.service";
+import {AuthenticationService} from "../core/authentication/authentication.service";
 /**
  * Allow bufferable requests to a REST end-point, caching responses.
  *

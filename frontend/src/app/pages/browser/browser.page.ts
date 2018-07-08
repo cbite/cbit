@@ -7,7 +7,7 @@ import {Observable, Subject} from 'rxjs';
 import {DownloadSelectionService} from '../../services/download-selection.service';
 import {CollapseStateService} from '../../services/collapse-state.service';
 import {FieldMeta} from '../../common/field-meta.model';
-import {AuthenticationService} from '../../services/authentication.service';
+import {AuthenticationService} from '../../core/authentication/authentication.service';
 
 @Component({
   styleUrls: ['./browser.scss'],
@@ -445,6 +445,7 @@ export class BrowserPage implements OnInit, OnDestroy {
   }
 
   isAdmin() {
-    return !this._auth.isGuest;
+    // return !this._auth.isGuest;
+    return true;
   }
 }

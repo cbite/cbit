@@ -10,7 +10,7 @@ import {FiltersState} from "./filters.service";
 import * as $ from 'jquery';
 import {CacheableBulkRequester} from "../common/cacheable-bulk-request";
 import {FieldMeta} from "../common/field-meta.model";
-import {AuthenticationService} from "./authentication.service";
+import {AuthenticationService} from "../core/authentication/authentication.service";
 import {URLService} from "./url.service";
 import {UnitFormattingService} from "./unit-formatting.service";
 import {HttpGatewayService} from './http-gateway.service';

@@ -3,7 +3,7 @@ import {DownloadSelectionService} from '../../services/download-selection.servic
 import {StudyService} from '../../services/study.service';
 import {Study, Sample} from '../study.model';
 // import {ModalDirective} from 'ngx-bootstrap';
-import {AuthenticationService} from '../../services/authentication.service';
+import {AuthenticationService} from '../../core/authentication/authentication.service';
 import {URLService} from '../../services/url.service';
 import {FormGroup, FormControl} from '@angular/forms';
 import * as _ from 'lodash';

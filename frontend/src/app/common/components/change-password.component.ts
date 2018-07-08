@@ -1,6 +1,6 @@
 import {Component, ChangeDetectorRef, OnInit, Input} from "@angular/core";
 // import {ModalDirective} from "ngx-bootstrap";
-import {AuthenticationService} from "../../services/authentication.service";
+import {AuthenticationService} from "../../core/authentication/authentication.service";
 import {URLService} from "../../services/url.service";
 
 @Component({
@@ -62,38 +62,38 @@ export class ChangePasswordComponent {
   }
 
   changePassword(): void {
-    let self = this;
-
-    if (this.password === '') {
-      this.errorMessage = 'Please enter a password.';
-    } else if (this.password !== this.passwordConfirmation) {
-      this.errorMessage = 'Passwords do not match.  Check your inputs and try again.'
-    } else {
-      this.errorMessage = '';
-
-      this.changing = true;
-      $.ajax({
-        type: 'POST',
-        url: this._url.userResource(this.username),
-        headers: this._auth.headers(),
-        dataType: 'json',
-        data: JSON.stringify({
-          "newPassword": this.password
-        }),
-        success: () => {
-          if (this.username == this._auth.username) {
-            self._auth.login(this._auth.username, this.password, this._auth.realname);
-          }
-          //self.modal.hide();
-        },
-        error: () => {
-          self.errorMessage = 'Password change failed!';
-          self.changing = false;
-        },
-        complete: () => {
-          self.changeDetectorRef.detectChanges();
-        }
-      })
-    }
+    // let self = this;
+    //
+    // if (this.password === '') {
+    //   this.errorMessage = 'Please enter a password.';
+    // } else if (this.password !== this.passwordConfirmation) {
+    //   this.errorMessage = 'Passwords do not match.  Check your inputs and try again.'
+    // } else {
+    //   this.errorMessage = '';
+    //
+    //   this.changing = true;
+    //   $.ajax({
+    //     type: 'POST',
+    //     url: this._url.userResource(this.username),
+    //     headers: this._auth.headers(),
+    //     dataType: 'json',
+    //     data: JSON.stringify({
+    //       "newPassword": this.password
+    //     }),
+    //     success: () => {
+    //       if (this.username == this._auth.username) {
+    //         self._auth.login(this._auth.username, this.password, this._auth.realname);
+    //       }
+    //       //self.modal.hide();
+    //     },
+    //     error: () => {
+    //       self.errorMessage = 'Password change failed!';
+    //       self.changing = false;
+    //     },
+    //     complete: () => {
+    //       self.changeDetectorRef.detectChanges();
+    //     }
+    //   })
+    // }
   }
 }

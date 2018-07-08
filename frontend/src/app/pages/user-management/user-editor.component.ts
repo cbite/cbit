@@ -2,7 +2,7 @@ import {Component, OnInit, ChangeDetectorRef, OnChanges, Input, Output, EventEmi
 import {StudyService} from '../../services/study.service';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {Study} from '../../common/study.model';
-import {AuthenticationService} from '../../services/authentication.service';
+import {AuthenticationService} from '../../core/authentication/authentication.service';
 import {ChangePasswordComponent} from '../../common/components/change-password.component';
 // import {ModalDirective} from 'ngx-bootstrap';
 import {URLService} from '../../services/url.service';
@@ -81,7 +81,7 @@ export class UserEditorComponent {
   changePasswordUsername: string;
   @ViewChild(ChangePasswordComponent) changePasswordPopup: ChangePasswordComponent;
 
-  //TODO@Sam Fix this!
+  // TODO@Sam Fix this!
   // @ViewChild('changePasswordModal') changePasswordModal: ModalDirective;
 
   constructor(
@@ -93,7 +93,8 @@ export class UserEditorComponent {
   }
 
   isCurrentUser(username: string) {
-    return username == this._auth.username;
+    // return username == this._auth.username;
+    return false;
   }
 
   isDeletingUser(username: string) {
@@ -107,6 +108,6 @@ export class UserEditorComponent {
   doChangePassword(username: string): void {
     this.changePasswordUsername = username;
     // TODO@Sam Fix it!
-    //this.changePasswordModal.show();
+    // this.changePasswordModal.show();
   }
 }

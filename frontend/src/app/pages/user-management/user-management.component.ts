@@ -2,7 +2,7 @@ import {Component, OnInit, ChangeDetectorRef, OnChanges, Input, Output, EventEmi
 import {StudyService} from '../../services/study.service';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {Study} from '../../common/study.model';
-import {AuthenticationService} from '../../services/authentication.service';
+import {AuthenticationService} from '../../core/authentication/authentication.service';
 import {ChangePasswordComponent} from '../../common/components/change-password.component';
 // import {ModalDirective} from 'ngx-bootstrap';
 import {URLService} from '../../services/url.service';
@@ -95,11 +95,12 @@ export class UserManagementComponent implements OnInit {
   }
 
   userAdded(newUserInfo: User) {
-    const username = newUserInfo.username;
-    this.users = Object.assign(Object.assign({}, this.users), {[username]: newUserInfo});  // Important to create a new object for Angular2 change detection to be triggered
-    this.userState[username] = UserState.Present;
-    this.form.addControl(username, this.formGroupForUser(newUserInfo));
-    this._changeDetectorRef.detectChanges();
+    // const username = newUserInfo.username;
+    // this.users = Object.assign(Object.assign({}, this.users), {[username]: newUserInfo});
+    // Important to create a new object for Angular2 change detection to be triggered
+    // this.userState[username] = UserState.Present;
+    // this.form.addControl(username, this.formGroupForUser(newUserInfo));
+    // this._changeDetectorRef.detectChanges();
   }
 
   formGroupForUser(user: User): FormGroup {
@@ -112,10 +113,10 @@ export class UserManagementComponent implements OnInit {
   makeFormGroup(): FormGroup {
     const group: any = {};
 
-    for (const username in this.users) {
-      const user = this.users[username];
-      group[username] = this.formGroupForUser(user);
-    }
+    // for (const username in this.users) {
+    //   const user = this.users[username];
+    //   group[username] = this.formGroupForUser(user);
+    // }
     return new FormGroup(group);
   }
 
@@ -152,31 +153,31 @@ export class UserManagementComponent implements OnInit {
     this.saveDone = false;
     this.saveError = '';
 
-    $.ajax({
-      type: 'POST',
-      url: this._url.usersResource(),
-      headers: this._auth.headers(),
-      data: JSON.stringify(Object.values(this.form.value).filter((info: User) => self.userState[info.username] == UserState.Present)),
-      dataType: 'json',
-      success: function(response) {
-        self.savingChanges = false;
-        self.saveDone = true;
-
-        // Update current user's data if logged in
-        const curUserNewRealname = (<FormGroup>self.form.controls[self._auth.username]).controls['realname'].value;
-        if (curUserNewRealname !== self._auth.realname) {
-          self._auth.login(self._auth.username, self._auth.password, curUserNewRealname);
-        }
-
-        self._changeDetectorRef.detectChanges();
-      },
-      error: function(jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
-        self.savingChanges = false;
-        self.saveDone = true;
-        self.saveError = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
-        self._changeDetectorRef.detectChanges();
-      }
-    });
+    // $.ajax({
+    //   type: 'POST',
+    //   url: this._url.usersResource(),
+    //   headers: this._auth.headers(),
+    //   data: JSON.stringify(Object.values(this.form.value).filter((info: User) => self.userState[info.username] == UserState.Present)),
+    //   dataType: 'json',
+    //   success: function(response) {
+    //     self.savingChanges = false;
+    //     self.saveDone = true;
+    //
+    //     // Update current user's data if logged in
+    //     // const curUserNewRealname = (<FormGroup>self.form.controls[self._auth.username]).controls['realname'].value;
+    //     // if (curUserNewRealname !== self._auth.realname) {
+    //     //   self._auth.login(self._auth.username, self._auth.password, curUserNewRealname);
+    //     // }
+    //
+    //     self._changeDetectorRef.detectChanges();
+    //   },
+    //   error: function(jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
+    //     self.savingChanges = false;
+    //     self.saveDone = true;
+    //     self.saveError = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
+    //     self._changeDetectorRef.detectChanges();
+    //   }
+    // });
   }
 }
 

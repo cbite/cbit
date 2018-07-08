@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {BusyIndicatorService} from './busy-indicator.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
-import {AuthenticationService} from './authentication.service';
+import {AuthenticationService} from '../core/authentication/authentication.service';
 import {environment} from '../../environments/environment';
 
 @Injectable()
@@ -10,8 +10,8 @@ export class HttpGatewayService {
     private headers: HttpHeaders;
 
     constructor(private http: HttpClient,
-                private busyIndicatorService: BusyIndicatorService,
-                private authenticationService : AuthenticationService,) {
+                private authenticationService: AuthenticationService,
+                private busyIndicatorService: BusyIndicatorService) {
         this.headers = new HttpHeaders({
             'Content-Type': 'application/json'
         });
@@ -64,7 +64,7 @@ export class HttpGatewayService {
     private withAuthHeader(headers: HttpHeaders): HttpHeaders {
         const authHeader = headers.get('Authorization');
         if (!authHeader || authHeader === '') {
-           const authHeaderContent = this.authenticationService.getAuthorizationHeaderContent();
+           const authHeaderContent = this.authenticationService.getAuthorizationHeader();
             if (authHeaderContent) {
                 headers.append('Authorization', authHeaderContent);
             }
