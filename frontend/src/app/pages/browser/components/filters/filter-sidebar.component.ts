@@ -15,7 +15,7 @@ import {CollapseStateService} from '../../../../services/collapse-state.service'
     <div class="sidebar">
       <div class="searchbox">
         <label for="searchText">Search for:</label>
-        <spinner *ngIf="!ready"></spinner>
+        <!--<spinner *ngIf="!ready"></spinner>-->
         <span>
           <input id="searchText"
                  type="text"

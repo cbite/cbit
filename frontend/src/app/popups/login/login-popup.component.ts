@@ -9,7 +9,7 @@ import {FiltersService} from '../../services/filters.service';
     template: `
       <div class="modal-panel noselect">
         <div class="modal-header">
-          <div class="title">Login
+          <div class="title">Enter ADMIN Area
           </div>
           <span class="close" (click)="onCloseClick()"><i class="fal fa-times"></i></span>
         </div>
@@ -28,10 +28,10 @@ import {FiltersService} from '../../services/filters.service';
               </div>
             </div>
 
-            <div class="form-group">
-              <input *ngIf="!loggingIn" type="submit" name="login" class="btn btn-primary" (click)="login()"
+            <div class="button-panel">
+              <input *ngIf="!loggingIn" type="submit" name="login" class="login" (click)="login()"
                      value="Login">
-              <input *ngIf=" loggingIn" type="submit" name="login" class="btn btn-primary" disabled value="Logging in...">
+              <input *ngIf=" loggingIn" type="submit" name="login" class="login" disabled value="Logging in...">
             </div>
           </form>
         </div>

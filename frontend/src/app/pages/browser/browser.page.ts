@@ -19,10 +19,13 @@ import {AuthenticationService} from '../../services/authentication.service';
         </div>
 
         <div class="col-9 main">
-
+          <cbit-study-results></cbit-study-results>
+        </div>
+        
+        
           <!--<filter-sidebar [allFieldsModal]="allFieldsModal"></filter-sidebar>-->
-          
-          
+
+
           <!--<div class="h1">-->
             <!--Results-->
             <!--<spinner *ngIf="!ready"></spinner>-->
@@ -177,7 +180,6 @@ import {AuthenticationService} from '../../services/authentication.service';
             <!--</a>-->
           <!--</li>-->
         <!--</div>-->
-      </div>
 
 
       <!--<div bsModal #allFieldsModal="bs-modal" class="modal fade" role="dialog" (onShow)="allFields.refresh()">-->

@@ -59,6 +59,8 @@ import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import {BusyIndicatorService} from './services/busy-indicator.service';
 import {HttpGatewayService} from './services/http-gateway.service';
+import {StudyResultsComponent} from './pages/browser/components/study-results/study-results.component';
+import {StudyResultComponent} from './pages/browser/components/study-results/study-result.component';
 
 @NgModule(
   {
@@ -107,6 +109,8 @@ import {HttpGatewayService} from './services/http-gateway.service';
       FileDropDirective,
       CollapseDirective,
       SpinnerComponent,
+      StudyResultsComponent,
+      StudyResultComponent,
       SelectionIndicatorComponent,
       DropdownDirective,
       DropdownMenuDirective,
