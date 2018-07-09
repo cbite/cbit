@@ -68,6 +68,7 @@ import {StudyManagementComponent} from './pages/studies/study-management.compone
 import {ConfirmationComponent} from './popups/confirmation/confirmation.component';
 import {SplitByThreePipe} from './shared/pipes/split-by-three-pipe';
 import {WindowRef} from './shared/util/WindowRef';
+import {StudyDetailsComponent} from './popups/study-details/study-details.component';
 
 @NgModule(
   {
@@ -113,6 +114,7 @@ import {WindowRef} from './shared/util/WindowRef';
       SampleFiltersComponent,
       StudyComponent,
       MapToIterablePipe,
+      StudyDetailsComponent,
       FileSelectDirective,
       FileDropDirective,
       CollapseDirective,
@@ -133,6 +135,7 @@ import {WindowRef} from './shared/util/WindowRef';
       LoginPopupComponent,
       AddUserComponent,
       ChangePasswordComponent,
+      StudyDetailsComponent,
       ConfirmationComponent
     ],
     providers: [

@@ -1,0 +1,16 @@
+@import '../../../variables';
+
+.modal-header {
+  background-color: $color-blue;
+  color: white;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
+
+  .close {
+    color: white;
+  }
+
+  .title {
+    font-size: $font-size-big;
+  }
+}

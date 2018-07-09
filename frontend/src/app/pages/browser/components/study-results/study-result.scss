@@ -28,8 +28,11 @@
       border-top: 1px solid darken($color-gray, 10%);
       font-size: $font-size-small;
       color: $color-blue;
+      text-align: right;
 
       .link {
+        display: inline-block;
+        margin: 0 10px;
         cursor: pointer;
 
         &:hover {

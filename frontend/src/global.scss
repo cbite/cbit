@@ -1,6 +1,30 @@
-@import '../node_modules/bootstrap/scss/bootstrap';
 @import "/assets/fonts";
 @import "./variables";
+
+//=======================================//
+//======= BOOTSTRAP OVERWRITES ==========//
+//=======================================//
+
+ngb-modal-window {
+  overflow-x: auto !important;
+
+  &.large-window {
+    max-height: calc(100vh - 270px);
+
+    .modal-dialog {
+      min-width: 1080px;
+      width: calc(100vw - 300px);
+      max-width: 1400px;
+      margin: 60px auto;
+
+      .modal-content {
+        border-radius: 10px;
+      }
+    }
+  }
+}
+
+@import '../node_modules/bootstrap/scss/bootstrap';
 
 //============================//
 //======== NO SELECT =========//

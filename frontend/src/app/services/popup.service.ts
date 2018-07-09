@@ -5,6 +5,8 @@ import {AddUserComponent} from '../popups/add-user/add-user.component';
 import {User} from '../pages/user-management/types/User';
 import {ChangePasswordComponent} from '../popups/change-password/change-password.component';
 import {ConfirmationComponent} from '../popups/confirmation/confirmation.component';
+import {StudyDetailsComponent} from '../popups/study-details/study-details.component';
+import {Study} from '../core/types/study.model';
 
 @Injectable()
 export class PopupService {
@@ -36,8 +38,8 @@ export class PopupService {
     popupInstance.successCallback = successCallback;
   }
 
-  public showConfirmationPoupup(confirmationMessage: string, confirmCallback: any, cancelCallback: any = () => {
-  }) {
+  public showConfirmationPoupup(confirmationMessage: string, confirmCallback: any,
+                                cancelCallback: any = () => {}) {
     const popupInstance = <ConfirmationComponent> this.modalService.open(ConfirmationComponent, {
       backdrop: 'static',
       windowClass: 'small-window'
@@ -45,5 +47,13 @@ export class PopupService {
     popupInstance.confirmationMessage = confirmationMessage;
     popupInstance.cancelCallback = cancelCallback;
     popupInstance.confirmCallback = confirmCallback;
+  }
+
+  public showStudyDetailsPopup(study: Study) {
+    const popupInstance = <StudyDetailsComponent> this.modalService.open(StudyDetailsComponent, {
+      backdrop: 'static',
+      windowClass: 'large-window'
+    }).componentInstance;
+    popupInstance.study = study;
   }
 }

@@ -7,7 +7,7 @@ import {WindowRef} from '../../../../shared/util/WindowRef';
   selector: 'cbit-study-result',
   styleUrls: ['./study-result.scss'],
   template: `
-    <div class="study-panel">
+    <div class="study-panel noselect">
       <div class="header" (click)="onShowStudyDetails()">{{match.study._source.STUDY['Study Title']}}</div>
       <div class="body">
         <div class="authors" (click)="onShowStudyDetails()">
@@ -18,10 +18,10 @@ import {WindowRef} from '../../../../shared/util/WindowRef';
         </div>
         <div class="links">
           <div class="link" *ngFor="let doi of doiIds" (click)="onOpenExternal('DOI', doi)">
-            <i class="far fa-link"></i> DOI: {{doi}}
+            <i class="far fa-link"></i> DOI
           </div>
           <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', doi)">
-            <i class="far fa-link"></i> PubMed: {{pubmedId}}
+            <i class="far fa-link"></i> PubMed
           </div>
         </div>
       </div>
