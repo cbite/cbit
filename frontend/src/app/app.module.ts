@@ -5,7 +5,6 @@ import {ReactiveFormsModule} from '@angular/forms';
 
 import {StudyComponent} from './pages/studies/components/study/study.component';
 import {DownloadComponent} from './common/components/download.component';
-import {UploadComponent, FieldMetadataFormComponent} from './common/uploader/upload.component';
 import {AppRoutingModule} from './router/routing.module';
 import {FilterSidebarComponent} from './pages/browser/components/filters/filter-sidebar.component';
 import {MapToIterablePipe} from './common/mapToIterable.pipe';
@@ -64,6 +63,8 @@ import {StudyResultComponent} from './pages/browser/components/study-results/stu
 import {StoreModule} from '@ngrx/store';
 import {reducers} from './core/redux/reducers/index';
 import {AppHeaderMenuComponent} from './core/components/app-header/app-header-menu.component';
+import {UploadPage} from './pages/upload/upload.page';
+import {FieldMetadataFormComponent} from './pages/upload/components/FieldMetadataFormComponent';
 
 @NgModule(
   {
@@ -92,7 +93,7 @@ import {AppHeaderMenuComponent} from './core/components/app-header/app-header-me
       FAQQuestionComponent,
       BrowserPage,
       DownloadComponent,
-      UploadComponent,
+      UploadPage,
       FieldMetadataFormComponent,
       MetadataComponent,
       FieldMetadataEditorComponent,
