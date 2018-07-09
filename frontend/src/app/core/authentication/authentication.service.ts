@@ -49,6 +49,10 @@ export class AuthenticationService {
     return this.loggedInUser.displayName;
   }
 
+  public getLoggedInUserName(): string {
+    return this.loggedInUser.username;
+  }
+
   private performLogin(username: string, authHeader: string): Observable<any> {
     const url = this.resolveUrl(this.urlService.userResource(username));
     const headers = new HttpHeaders({'Authorization': authHeader});

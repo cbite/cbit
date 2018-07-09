@@ -8,22 +8,28 @@ import {User, UserState} from '../types/User';
     <div>
       <table class="table table-striped">
         <thead>
-          <tr>
-            <th>Username</th>
-            <th>Real name</th>
-            <th>Change password?</th>
-            <th>Delete?</th>
-          </tr>
+        <tr>
+          <th>Username</th>
+          <th>Real name</th>
+          <th>Change password?</th>
+          <th>Delete?</th>
+        </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let user of users">
-              <td>{{user.username}}</td>
-              <td>{{user.realname}}</td>
-              <td><button (click)="onChangePwdClicked(user.username)" class="btn btn-primary">
-                Change Password</button></td>
-              <td><button (click)="onDeleteClicked(user.username)" class="btn btn-danger">
-                Delete</button></td>
-            </tr>
+        <tr *ngFor="let user of users">
+          <td>{{user.username}}</td>
+          <td>{{user.realname}}</td>
+          <td>
+            <button (click)="onChangePwdClicked(user.username)" class="btn btn-primary">
+              Change Password
+            </button>
+          </td>
+          <td>
+            <button (click)="onDeleteClicked(user.username)" class="btn btn-danger">
+              Delete
+            </button>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
