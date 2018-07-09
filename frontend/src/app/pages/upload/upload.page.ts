@@ -19,113 +19,118 @@ import {Observable} from 'rxjs/Observable';
 @Component({
   styleUrls: ['./upload.scss'],
   template: `
-    <div class="container">
-      <h1>Upload New Study</h1>
+    <div class="page">
+      <div class="page-content">
+        <div class="container">
+          <h3>Upload New Study</h3>
 
-      <div [class.hidden]="step !== 1">
-        <h2>Step 1a: Upload a .zip archive in ISAtab format from RIT (iRODS)</h2>
-        <p>Click on an iRODS folder name to start upload:</p>
-        <div class="row">
-          <div class="col-md-8 col-md-offset-2 well irods-list">
-            <div *ngIf="!iRODSListReady">
-              Fetching study list from iRODS...
-              <spinner></spinner>
+          <div [class.hidden]="step !== 1">
+            <h4>Step 1a: Upload a .zip archive in ISAtab format from RIT (iRODS)</h4>
+            <p>Click on an iRODS folder name to start upload:</p>
+            <div class="row">
+              <div class="col-md-8 col-md-offset-2 well irods-list">
+                <div *ngIf="!iRODSListReady">
+                  Fetching study list from iRODS...
+                  <spinner></spinner>
+                </div>
+                <div *ngIf="iRODSListReady">
+                  <ul>
+                    <li *ngFor="let iRODSStudyName of iRODSStudyNames">
+                      <a href="#" (click)="$event.preventDefault(); kickOffIRODSUpload(iRODSStudyName)">
+                        {{ iRODSStudyName }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div *ngIf="iRODSListReady">
-              <ul>
-                <li *ngFor="let iRODSStudyName of iRODSStudyNames">
-                  <a href="#" (click)="$event.preventDefault(); kickOffIRODSUpload(iRODSStudyName)">
-                    {{ iRODSStudyName }}
-                  </a>
-                </li>
-              </ul>
+            <div class="row">
+              <div class="col-md-8 col-md-offset-2">
+                <span class="status" *ngIf="iRODSStatus">Status: {{ iRODSStatus }}</span>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-8 col-md-offset-2">
-            <span class="status" *ngIf="iRODSStatus">Status: {{ iRODSStatus }}</span>
-          </div>
-        </div>
 
-        <h1>OR...</h1>
+            <h3>OR...</h3>
 
-        <h2>Step 1b: Upload a .zip archive in ISAtab format from this computer</h2>
-        <div [class.disabled]="uploadFileChooserDisabled">
-          <div ng2FileDrop
-               [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-               (fileOver)="fileOverBase($event)"
-               [uploader]="uploader"
-               class="well my-drop-zone"
-               style="display: inline-block">
-            Drag a file here
-          </div>
-          or select a file here: <input type="file" ng2FileSelect [uploader]="uploader"
-                                        [disabled]="uploadFileChooserDisabled"/>
-        </div>
-        <p>
-          <b>File to upload: </b>{{ uploadFileName }}
-        </p>
-        <div>
-          Then click here:
-          <button type="button" (click)="doUpload()" [disabled]="!uploader.getNotUploadedItems().length">Upload</button>
-          <div>
-            Progress:
-            <div class="w3-progress-container">
-              <div class="w3-progressbar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
+            <h4>Step 1b: Upload a .zip archive in ISAtab format from this computer</h4>
+            <div [class.disabled]="uploadFileChooserDisabled">
+              <div ng2FileDrop
+                   [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                   (fileOver)="fileOverBase($event)"
+                   [uploader]="uploader"
+                   class="well my-drop-zone"
+                   style="display: inline-block">
+                Drag a file here
+              </div>
+              or select a file here: <input type="file" ng2FileSelect [uploader]="uploader"
+                                            [disabled]="uploadFileChooserDisabled"/>
             </div>
-            <span class="status" *ngIf="status">Status: {{ status }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div [class.hidden]="step !== 2">
-        <h2>Step 2: Enter metadata</h2>
-
-        <h3>Study Metadata</h3>
-        <div class="form-inline">
-          <div class="row">
-            <div class="form-group col-sm-5 col-sm-offset-1">
-              <label for="studyPublicationDate">Publication Date</label>
-              <input type="text" id="studyPublicationDate" [(ngModel)]="studyPublicationDate" class="form-control">
+            <p>
+              <b>File to upload: </b>{{ uploadFileName }}
+            </p>
+            <div>
+              Then click here:
+              <button type="button" (click)="doUpload()" [disabled]="!uploader.getNotUploadedItems().length">Upload
+              </button>
+              <div>
+                Progress:
+                <div class="w3-progress-container">
+                  <div class="w3-progressbar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
+                </div>
+                <span class="status" *ngIf="status">Status: {{ status }}</span>
+              </div>
             </div>
           </div>
 
-          <div class="row">
-            <div class="checkbox col-sm-5 col-sm-offset-1">
-              <label for="studyInitiallyVisible">
-                <input type="checkbox" id="studyInitiallyVisible" [(ngModel)]="studyInitiallyVisible">
-                Visible
-              </label>
+          <div [class.hidden]="step !== 2">
+            <h2>Step 2: Enter metadata</h2>
+
+            <h3>Study Metadata</h3>
+            <div class="form-inline">
+              <div class="row">
+                <div class="form-group col-sm-5 col-sm-offset-1">
+                  <label for="studyPublicationDate">Publication Date</label>
+                  <input type="text" id="studyPublicationDate" [(ngModel)]="studyPublicationDate" class="form-control">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="checkbox col-sm-5 col-sm-offset-1">
+                  <label for="studyInitiallyVisible">
+                    <input type="checkbox" id="studyInitiallyVisible" [(ngModel)]="studyInitiallyVisible">
+                    Visible
+                  </label>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <h3>New Fields</h3>
+            <h3>New Fields</h3>
 
-        <div *ngIf="!unknownFields">
-          No new fields in this study
-        </div>
+            <div *ngIf="!unknownFields">
+              No new fields in this study
+            </div>
 
         <div *ngIf="unknownFields">
           <cbit-field-metadata-form [fieldNames]="unknownFields" [fieldAnalyses]="fieldAnalyses"
-                                    (form)="fieldMetadataForm = $event"></cbit-field-metadata-form>
+                               (form)="fieldMetadataForm = $event"></cbit-field-metadata-form>
         </div>
 
-        <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">
-          {{ confirmMetadataButtonName }}
-        </button>
-      </div>
+            <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">
+              {{ confirmMetadataButtonName }}
+            </button>
+          </div>
 
-      <div *ngIf="step === 3">
-        <h2>Upload succeeded!</h2>
-        <study [studyId]="upload_uuid" [showTitle]="true"></study>
-      </div>
+          <div *ngIf="step === 3">
+            <h2>Upload succeeded!</h2>
+            <study [studyId]="upload_uuid" [showTitle]="true"></study>
+          </div>
 
-      <div *ngIf="step === 4">
-        <h2>Upload failed!</h2>
-        <div class="alert alert-danger">
-          {{ errorMessage }}
+          <div *ngIf="step === 4">
+            <h2>Upload failed!</h2>
+            <div class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,17 +1,17 @@
 import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef} from '@angular/core';
-import {FieldMeta} from '../../common/field-meta.model';
-import {StudyService} from '../../services/study.service';
+import {FieldMeta} from '../../../common/field-meta.model';
+import {StudyService} from '../../../services/study.service';
 import {FormGroup, FormControl, Validators, Form} from '@angular/forms';
-import {DimensionsRegister} from '../../common/unit-conversions';
-import {AuthenticationService} from '../../core/authentication/authentication.service';
-import {URLService} from '../../services/url.service';
-import {HttpGatewayService} from '../../services/http-gateway.service';
+import {DimensionsRegister} from '../../../common/unit-conversions';
+import {AuthenticationService} from '../../../core/authentication/authentication.service';
+import {URLService} from '../../../services/url.service';
+import {HttpGatewayService} from '../../../services/http-gateway.service';
 import {Observable} from 'rxjs/Observable';
 
 
 // TODO: Refactor this component and the uploader's field-metadata-form into a single metadata editor
 @Component({
-  selector: 'field-metadata-editor',
+  selector: 'cbit-field-metadata-editor',
   template: `
     <div [formGroup]="_form">
 
@@ -142,14 +142,7 @@ import {Observable} from 'rxjs/Observable';
         </div>
       </div>
     </div>
-  `,
-  styles: [`
-    .vcenter {
-      display: inline-block;
-      vertical-align: middle;
-      float: none;
-    }
-  `]
+  `
 })
 export class FieldMetadataEditorComponent implements OnInit, OnChanges {
   @Input() fieldMetas: { [fieldName: string]: FieldMeta } = {};
@@ -167,20 +160,20 @@ export class FieldMetadataEditorComponent implements OnInit, OnChanges {
   }
 
   possibleUnits(fieldName: string): string[] {
-    let unitConverter = DimensionsRegister[this.fieldMetas[fieldName].dimensions];
+    const unitConverter = DimensionsRegister[this.fieldMetas[fieldName].dimensions];
     return (unitConverter ? unitConverter.getPossibleUnits() : []);
   }
 
   uiUnitName(fieldName: string, unitName: string): string {
-    let unitConverter = DimensionsRegister[this.fieldMetas[fieldName].dimensions];
+    const unitConverter = DimensionsRegister[this.fieldMetas[fieldName].dimensions];
     return (unitConverter ? unitConverter.getUnitUIName(unitName) : unitName);
   }
 
   makeFormGroup(): FormGroup {
-    let group: any = {};
+    const group: any = {};
 
-    for (let fieldName in this.fieldMetas) {
-      let fieldMeta = this.fieldMetas[fieldName];
+    for (const fieldName in this.fieldMetas) {
+      const fieldMeta = this.fieldMetas[fieldName];
       group[fieldName] = new FormGroup({
         fieldName: new FormControl(fieldName),
         description: new FormControl(fieldMeta.description, Validators.required),

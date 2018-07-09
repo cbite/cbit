@@ -60,10 +60,7 @@ export class AppHeaderComponent {
       case 'edit_metadata':
         this.router.navigateByUrl(AppUrls.metadataUrl);
         break;
-      case 'change_password':
-        this.popupService.showChangePwdPopup();
-        break;
-      case 'manage_users':
+     case 'manage_users':
         this.router.navigateByUrl(AppUrls.usersUrl);
         break;
       default:

@@ -18,7 +18,6 @@ import {LoggedInUser} from '../../authentication/loggedInUser';
         <div class="header-menu-link" (click)="onMenuClick('upload_study')">Upload Study</div>
         <div class="header-menu-link" (click)="onMenuClick('manage_studies')">Manage Studies</div>
         <div class="header-menu-link" (click)="onMenuClick('edit_metadata')">Edit Field Metadata</div>
-        <div class="header-menu-link" (click)="onMenuClick('change_password')">Change Password</div>
         <div class="header-menu-link" (click)="onMenuClick('manage_users')">Manage Users</div>
         <div class="header-menu-link" (click)="onLogoutClick()">Logout</div>
       </div>
