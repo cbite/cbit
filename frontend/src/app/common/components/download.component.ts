@@ -424,7 +424,7 @@ export class DownloadComponent {
       self.errorMessage = 'Error while initiating download preparation, please try again';
       self.preparingDownload = false;
       self.changeDetectorRef.detectChanges();
-      return Observable.of(null);
+      return Observable.throw(err);
     };
 
     this.httpGatewayService.post(this._url.downloadsResource(), JSON.stringify({
@@ -478,7 +478,7 @@ export class DownloadComponent {
       self.errorMessage = 'Error while preparing download, please try again';
       self.preparingDownload = false;
       self.changeDetectorRef.detectChanges();
-      return Observable.of(null);
+      return Observable.throw(err);
     };
 
     this.httpGatewayService.get(this.progressUrl, onError)

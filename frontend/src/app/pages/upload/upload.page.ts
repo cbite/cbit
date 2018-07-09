@@ -174,10 +174,10 @@ export class UploadPage implements OnInit {
 
   ngOnInit() {
     const onError = (err, caught) => {
-      this.iRODSStatus = `Failed to get list of studies from iRODS: ${err}!`;
+      this.iRODSStatus = `Failed to get list of studies from iRODS: ${err.statusText}!`;
       this.iRODSListReady = true;
       this.changeDetectorRef.detectChanges();
-      return Observable.of(null);
+      return Observable.throw(err);
     };
 
     this.httpGatewayService.get(this._url.iRODSListResource(), onError).subscribe((iRODSList: string[]) => {
@@ -241,10 +241,10 @@ export class UploadPage implements OnInit {
 
     const onError = (err, caught) => {
       this.step = 4;
-      this.errorMessage = `iRODS upload failed: ${err}!`;
+      this.errorMessage = `iRODS upload failed: ${err.statusText}!`;
       this.iRODSListReady = true;
       this.changeDetectorRef.detectChanges();
-      return Observable.of(null);
+      return Observable.throw(err);
     };
 
     this.httpGatewayService.post(this._url.uploadsIRODSResource(iRODSStudyName), {}, onError).subscribe((uploadsResponse: UploadsResponse) => {
@@ -322,11 +322,11 @@ export class UploadPage implements OnInit {
     } else {
       metadataInsertionPromise = new Promise((resolve, reject) => {
         const onError = (err, caught) => {
-          that.errorMessage = `Failed to create new fields: ${err}!`;
+          that.errorMessage = `Failed to create new fields: ${err.statusText}!`;
           that.step = 4;
           that.changeDetectorRef.detectChanges();
           reject();
-          return Observable.of(null);
+          return Observable.throw(err);
         };
 
         this.httpGatewayService.put(that._url.metadataFieldsMultiResource(), JSON.stringify(newFieldMetadata), onError).subscribe(() => {
@@ -360,10 +360,10 @@ export class UploadPage implements OnInit {
       });
 
       const onError = (err, caught) => {
-        that.errorMessage = `Details ${err}`;
+        that.errorMessage = `Details ${err.statusText}`;
         that.step = 4;
         that.changeDetectorRef.detectChanges();
-        return Observable.of(null);
+        return Observable.throw(err);
       };
 
       this.httpGatewayService.put(this.confirm_upload_url, JSON.stringify({
