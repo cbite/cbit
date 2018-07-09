@@ -17,7 +17,7 @@ import {HttpGatewayService} from '../../services/http-gateway.service';
           <spinner></spinner>
         </div>
         <div *ngIf="ready" class="container">
-          <field-metadata-editor [fieldMetas]="fieldMetas" (form)="updateForm($event)"></field-metadata-editor>
+          <cbit-field-metadata-editor [fieldMetas]="fieldMetas" (form)="updateForm($event)"></cbit-field-metadata-editor>
           <div class="row">
 
             <div class="col-xs-2">

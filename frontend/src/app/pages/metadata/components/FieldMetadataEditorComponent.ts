@@ -6,11 +6,12 @@ import {DimensionsRegister} from '../../../common/unit-conversions';
 import {AuthenticationService} from '../../../core/authentication/authentication.service';
 import {URLService} from '../../../services/url.service';
 import {HttpGatewayService} from '../../../services/http-gateway.service';
+import {Observable} from 'rxjs/Observable';
 
 
 // TODO: Refactor this component and the uploader's field-metadata-form into a single metadata editor
 @Component({
-  selector: 'field-metadata-editor',
+  selector: 'cbit-field-metadata-editor',
   template: `
     <div [formGroup]="_form">
 
@@ -186,5 +187,91 @@ export class FieldMetadataEditorComponent implements OnInit, OnChanges {
       });
     }
     return new FormGroup(group);
+  }
+}
+
+
+@Component({
+  template: `
+    <h2>Edit Field Metadata</h2>
+
+    <div *ngIf="!ready">
+      Loading...
+      <spinner></spinner>
+    </div>
+    <div *ngIf="ready" class="container">
+      <field-metadata-editor [fieldMetas]="fieldMetas" (form)="updateForm($event)"></field-metadata-editor>
+      <div class="row">
+
+        <div class="col-xs-2">
+          <button type="submit" class="btn btn-primary" (click)="saveChanges()"
+                  [attr.disabled]="savingChanges || null">
+            <span *ngIf="!savingChanges">Save Changes</span>
+            <span *ngIf=" savingChanges">Saving Changes...</span>
+          </button>
+        </div>
+
+        <div class="col-xs-10" *ngIf="!savingChanges && saveDone">
+          <div *ngIf=" !saveError" class="alert alert-success" role="alert">Changes saved!</div>
+          <div *ngIf="!!saveError" class="alert alert-danger" role="alert">Save failed: {{ saveError }}</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <!-- Footer whitespace -->
+        </div>
+      </div>
+    </div>
+  `
+})
+export class MetadataComponent implements OnInit {
+  ready = false;
+  fieldMetas: { [fieldName: string]: FieldMeta } = {};
+  form: FormGroup;
+  savingChanges = false;
+  saveDone = false;
+  saveError = '';
+
+  constructor(private _url: URLService,
+              private _studyService: StudyService,
+              private httpGatewayService: HttpGatewayService,
+              private _changeDetectorRef: ChangeDetectorRef) {
+  }
+
+  ngOnInit(): void {
+    let self = this;
+    this._studyService.getAllFieldMetas().then(fieldMetas => {
+      this.fieldMetas = fieldMetas;
+      this.ready = true;
+    });
+  }
+
+  updateForm(form: FormGroup) {
+    this.form = form;
+  }
+
+  saveChanges() {
+    let self = this;
+
+    this.savingChanges = true;
+    this.saveDone = false;
+    this.saveError = '';
+
+    const onError = (err, caught) => {
+      self.savingChanges = false;
+      self.saveDone = true;
+      self.saveError = `Error: ${err}`;
+      self._changeDetectorRef.detectChanges();
+      self._studyService.flushCaches();
+      return Observable.of(null);
+    };
+
+    this.httpGatewayService.post(this._url.metadataFieldsMultiResource(), JSON.stringify(Object.values(this.form.value)), onError)
+      .subscribe(() => {
+        self.savingChanges = false;
+        self.saveDone = true;
+        self._changeDetectorRef.detectChanges();
+        self._studyService.flushCaches();
+      });
   }
 }

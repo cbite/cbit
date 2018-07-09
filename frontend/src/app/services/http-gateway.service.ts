@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
-import {BusyIndicatorService} from './busy-indicator.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+import {Observable, ObservableInput} from 'rxjs/Observable';
 import {AuthenticationService} from '../core/authentication/authentication.service';
 import {environment} from '../../environments/environment';
 
@@ -10,52 +9,51 @@ export class HttpGatewayService {
   private headers: HttpHeaders;
 
   constructor(private http: HttpClient,
-              private authenticationService: AuthenticationService,
-              private busyIndicatorService: BusyIndicatorService) {
+              private authenticationService: AuthenticationService) {
   }
 
-  public get(url: string, actionKey?: string, headers?: HttpHeaders): Observable<any> {
-    this.trySetBusy(actionKey);
+  public get(url: string, errorHandler?: (err: any, caught: Observable<{}>) => ObservableInput<{}>,
+             headers?: HttpHeaders): Observable<any> {
     return this.http.get(this.resolveUrl(url), {
       headers: headers ? headers : this.withAuthHeader(),
       withCredentials: true
     })
       .map(this.checkResponseBody.bind(this))
-      .catch(this.handleError)
-      .finally(() => this.trySetIdle(actionKey));
+      .catch(errorHandler ? errorHandler : this.handleError)
+      .finally(() => {});
   }
 
-  public delete(url: string, actionKey?: string, headers?: HttpHeaders): Observable<any> {
-    this.trySetBusy(actionKey);
+  public delete(url: string, errorHandler?: (err: any, caught: Observable<{}>) => ObservableInput<{}>,
+                headers?: HttpHeaders): Observable<any> {
     return this.http.delete(this.resolveUrl(url), {
       headers: headers ? headers : this.withAuthHeader(),
       withCredentials: true
     })
       .map(this.checkResponseBody.bind(this))
-      .catch(this.handleError)
-      .finally(() => this.trySetIdle(actionKey));
+      .catch(errorHandler ? errorHandler : this.handleError)
+      .finally(() => {});
   }
 
-  public post(url: string, body: any, actionKey?: string, headers?: HttpHeaders): Observable<any> {
-    this.trySetBusy(actionKey);
+  public post(url: string, body: any, errorHandler?: (err: any, caught: Observable<{}>) => ObservableInput<{}>,
+              headers?: HttpHeaders): Observable<any> {
     return this.http.post(this.resolveUrl(url), body, {
       headers: headers ? headers : this.withAuthHeader(),
       withCredentials: true
     })
       .map(this.checkResponseBody.bind(this))
-      .catch(this.handleError)
-      .finally(() => this.trySetIdle(actionKey));
+      .catch(errorHandler ? errorHandler : this.handleError)
+      .finally(() => {});
   }
 
-  public put(url: string, body: any, actionKey?: string, headers?: HttpHeaders): Observable<any> {
-    this.trySetBusy(actionKey);
+  public put(url: string, body: any, errorHandler?: (err: any, caught: Observable<{}>) => ObservableInput<{}>,
+             headers?: HttpHeaders): Observable<any> {
     return this.http.put(this.resolveUrl(url), body, {
       headers: headers ? headers : this.withAuthHeader(),
       withCredentials: true
     })
       .map(this.checkResponseBody.bind(this))
-      .catch(this.handleError)
-      .finally(() => this.trySetIdle(actionKey));
+      .catch(errorHandler ? errorHandler : this.handleError)
+      .finally(() => {});
   }
 
   private withAuthHeader(): HttpHeaders {
@@ -70,18 +68,7 @@ export class HttpGatewayService {
     return environment.api_url + url;
   }
 
-  private trySetBusy(actionKey?: string) {
-    if (actionKey) {
-      this.busyIndicatorService.setBusy(actionKey);
-    }
-  }
-
-  private trySetIdle(actionKey?: string) {
-    if (actionKey) {
-      this.busyIndicatorService.setIdle(actionKey);
-    }
-  }
-
+  // TODO@Sam check what still makes sense here
   private checkResponseBody(body: any): any {
     // throw error when server returned error
     if (body.error) {
