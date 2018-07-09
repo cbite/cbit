@@ -45,13 +45,14 @@ export class UserManagementPage implements OnInit {
   }
 
   public onChangePwdClicked(username: string) {
+    this.popupService.showChangePasswordPoupup(username, this.refreshList.bind(this));
   }
 
   public onDeleteUserClicked(username: string) {
     this.httpGatewayService.delete(this.urlService.userResource(username)).subscribe(() => {
-        const index = this.users.findIndex(u => u.username === username);
-        this.users.splice(index, 1);
-      });
+      const index = this.users.findIndex(u => u.username === username);
+      this.users.splice(index, 1);
+    });
   }
 
   public refreshList() {
