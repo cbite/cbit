@@ -7,6 +7,7 @@ import {ChangePasswordComponent} from '../../common/components/change-password.c
 // import {ModalDirective} from 'ngx-bootstrap';
 import {URLService} from '../../services/url.service';
 import {User} from './user-management.component';
+import {HttpGatewayService} from '../../services/http-gateway.service';
 
 @Component({
   selector: 'cbit-add-user',
@@ -30,7 +31,8 @@ import {User} from './user-management.component';
               <input type="password" name="pass1" class="form-control" placeholder="Password" [(ngModel)]="password">
             </div>
             <div class="form-group">
-              <input type="password" name="pass2" class="form-control" placeholder="Confirm Password" [(ngModel)]="passwordConfirmation">
+              <input type="password" name="pass2" class="form-control" placeholder="Confirm Password"
+                     [(ngModel)]="passwordConfirmation">
             </div>
 
             <div *ngIf="errorMessage">
@@ -40,10 +42,11 @@ import {User} from './user-management.component';
             </div>
 
             <div class="form-group">
-              <input *ngIf="!adding" type="submit" name="login" class="btn btn-primary" (click)="addUser()" value="Add User">
+              <input *ngIf="!adding" type="submit" name="login" class="btn btn-primary" (click)="addUser()"
+                     value="Add User">
               <input *ngIf=" adding" type="submit" name="login" class="btn btn-primary" disabled value="Adding User...">
             </div>
-				  </form>
+          </form>
         </div>
       </div>
 
@@ -63,11 +66,10 @@ export class AddUserComponent {
   errorMessage: string;
   adding: boolean;
 
-  constructor(
-    private _url: URLService,
-    private _auth: AuthenticationService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) { }
+  constructor(private _url: URLService,
+              private httpGatewayService: HttpGatewayService,
+              private changeDetectorRef: ChangeDetectorRef) {
+  }
 
   refresh(): void {
     this.username = '';
@@ -94,15 +96,27 @@ export class AddUserComponent {
       const addedUserName = this.username;
       const addedRealName = this.realname;
 
-      $.ajax({
+      this.httpGatewayService.put(this._url.userResource(this.username), JSON.stringify({
+        'realname': this.realname,
+        'password': this.password
+      }))
+        .subscribe(() => {
+          // TODO@Sam Fix this!
+          // self.modal.hide();
+          self.userAdded.emit({
+            username: addedUserName,
+            realname: addedRealName
+          });
+          // TODO@Sam check what happens on error
+          self.changeDetectorRef.detectChanges();
+        });
+
+      /*$.ajax({
         type: 'PUT',
         url: this._url.userResource(this.username),
         headers: this._auth.headers(),
         dataType: 'json',
-        data: JSON.stringify({
-          'realname': this.realname,
-          'password': this.password
-        }),
+        data: ),
         success: () => {
           //TODO@Sam Fix this!
           //self.modal.hide();
@@ -118,7 +132,7 @@ export class AddUserComponent {
         complete: () => {
           self.changeDetectorRef.detectChanges();
         }
-      });
+      });*/
     }
   }
 }

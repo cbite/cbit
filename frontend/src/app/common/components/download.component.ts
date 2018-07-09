@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import * as $ from 'jquery';
 import {CollapseStateService} from '../../services/collapse-state.service';
 import {FieldMeta} from '../field-meta.model';
+import {HttpGatewayService} from '../../services/http-gateway.service';
 
 interface DownloadPostResponse {
   download_uuid: string;
@@ -44,7 +45,7 @@ enum StudyCheckboxState {
         <div class="modal-body">
           <p>
             On clicking "Download", an archive will be prepared with the following datasets.
-            The archive will download automatically when finished.  You can still remove any
+            The archive will download automatically when finished. You can still remove any
             study or sample by clicking on the checkboxes below.
           </p>
 
@@ -69,7 +70,7 @@ enum StudyCheckboxState {
                   </a>
                   <div class="checkbox-inline">
                     <input type="checkbox" [id]="'study-' + study._id"
-                      (click)="$event.preventDefault(); clickStudyCheckbox(study._id)">
+                           (click)="$event.preventDefault(); clickStudyCheckbox(study._id)">
                     <a href="#" (click)="$event.preventDefault(); toggleVisible(study._id)">
                       <b>{{ study._source['STUDY']['Study Title']}}</b>
                     </a>
@@ -86,11 +87,13 @@ enum StudyCheckboxState {
                         <div class="tooltipWrapper"
                              [my-tooltip]="tooltipTemplate" placement="right">
                           <label [attr.for]="'study-' + study._id + '-sample-' + sample._id">
-                            <input type="checkbox" [id]="'study-' + study._id + '-sample-' + sample._id" [formControlName]="sample._id">
+                            <input type="checkbox" [id]="'study-' + study._id + '-sample-' + sample._id"
+                                   [formControlName]="sample._id">
                             <b>{{ sample._source['Sample Name']}}</b>
                           </label>
 
-                          <span *ngFor="let kv of genSampleMiniSummary(study._id, sample) | mapToIterable; let isLast = last">
+                          <span
+                            *ngFor="let kv of genSampleMiniSummary(study._id, sample) | mapToIterable; let isLast = last">
                             <i>{{ kv.key }}</i>: {{ kv.val }}<span *ngIf="!isLast">, </span>
                           </span>
                         </div>
@@ -106,7 +109,9 @@ enum StudyCheckboxState {
         <div class="modal-footer">
 
           <button *ngIf="!preparingDownload" type="button" class="btn btn-default" (click)="modal.hide()">Close</button>
-          <button *ngIf="!preparingDownload" type="button" class="btn btn-primary" (click)="kickOffDownload()">Download</button>
+          <button *ngIf="!preparingDownload" type="button" class="btn btn-primary" (click)="kickOffDownload()">
+            Download
+          </button>
 
           <button *ngIf=" preparingDownload" type="button" class="btn btn-default" disabled>Close</button>
           <button *ngIf=" preparingDownload" type="button" class="btn btn-primary" disabled>Download</button>
@@ -122,10 +127,10 @@ enum StudyCheckboxState {
               <label class="prepLabel">Preparing download:</label>
               <div class="progress">
                 <div class="progress-bar"
-                 [class.progress-bar-striped]="!downloadReady"
-                 [class.active]="!downloadReady"
-                 [class.progress-bar-success]="downloadReady"
-                 role="progressbar" [style.width.%]="preparationProgress">
+                     [class.progress-bar-striped]="!downloadReady"
+                     [class.active]="!downloadReady"
+                     [class.progress-bar-success]="downloadReady"
+                     role="progressbar" [style.width.%]="preparationProgress">
                 </div>
               </div>
             </div>
@@ -139,46 +144,55 @@ enum StudyCheckboxState {
     </div>
   `,
   styles: [`
-  .prepLabel {
-    float: left;
-    margin-right: 1em;
-  }
-  .progress {
-    margin-bottom: 0;
-  }
-  .limitedHeight {
-    max-height: 300px;
-    overflow-y: auto;
-    padding: 2px;
-    margin-bottom: 0;
-  }
-  ul.studiesList {
-    list-style: none;
-    padding-left: 10px;
-  }
-  ul.samplesList {
-    list-style: none;
-    padding-left: 40px;
-  }
-  .patienceNote {
-    text-align: left;
-    font-style: oblique;
-    font-size: 80%;
-  }
-  .tooltipWrapper {
-    display: inline-block;
-  }
-  .fullLabel {
-    margin-bottom: -15px;
-  }
-  .fullLabel > a {
-    position: relative;
-  }
-  .fullLabel > .checkbox-inline {
-    display: block;
-    padding-left: 40px;
-    top: -20px;
-  }
+    .prepLabel {
+      float: left;
+      margin-right: 1em;
+    }
+
+    .progress {
+      margin-bottom: 0;
+    }
+
+    .limitedHeight {
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 2px;
+      margin-bottom: 0;
+    }
+
+    ul.studiesList {
+      list-style: none;
+      padding-left: 10px;
+    }
+
+    ul.samplesList {
+      list-style: none;
+      padding-left: 40px;
+    }
+
+    .patienceNote {
+      text-align: left;
+      font-style: oblique;
+      font-size: 80%;
+    }
+
+    .tooltipWrapper {
+      display: inline-block;
+    }
+
+    .fullLabel {
+      margin-bottom: -15px;
+    }
+
+    .fullLabel > a {
+      position: relative;
+    }
+
+    .fullLabel > .checkbox-inline {
+      display: block;
+      padding-left: 40px;
+      top: -20px;
+    }
   `]
 })
 export class DownloadComponent {
@@ -206,15 +220,14 @@ export class DownloadComponent {
   private jqElem: JQuery;
   form: FormGroup = new FormGroup({});
 
-  constructor(
-    private _url: URLService,
-    private _studyService: StudyService,
-    private _auth: AuthenticationService,
-    private _downloadSelectionService: DownloadSelectionService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private _elemRef: ElementRef,
-    private _collapseStateService: CollapseStateService
-  ) { }
+  constructor(private _url: URLService,
+              private _studyService: StudyService,
+              private httpGatewayService: HttpGatewayService,
+              private _downloadSelectionService: DownloadSelectionService,
+              private changeDetectorRef: ChangeDetectorRef,
+              private _elemRef: ElementRef,
+              private _collapseStateService: CollapseStateService) {
+  }
 
   ngOnInit() {
     this.jqElem = $(this._elemRef.nativeElement);
@@ -233,12 +246,12 @@ export class DownloadComponent {
     const studiesPromise: Promise<{ [studyId: string]: Study }> =
       Promise.all(studyIds.map(studyId => {
         return this._studyService.getStudy(studyId)
-          .then(study => ({ [studyId]: study }));
+          .then(study => ({[studyId]: study}));
       }))
         .then(studiesList => _.merge.apply(_, [{}].concat(studiesList)));
 
     const samplesInStudiesPromise: Promise<{ [studyId: string]: Sample[] }> =
-      Promise.all(studyIds.map(studyId => this._studyService.getIdsOfSamplesInStudy(studyId).then(samplesInStudy => ({ [studyId]: samplesInStudy }))))
+      Promise.all(studyIds.map(studyId => this._studyService.getIdsOfSamplesInStudy(studyId).then(samplesInStudy => ({[studyId]: samplesInStudy}))))
         .then(sampleIdsInStudiesList => {
           const sampleIdsInStudies: { [studyId: string]: string[] } = _.merge.apply(_, sampleIdsInStudiesList);
           const samplesInStudiesPromises: Promise<{ [studyId: string]: Sample[] }>[] = [];
@@ -246,7 +259,7 @@ export class DownloadComponent {
             const sampleIds = sampleIdsInStudies[studyId];
             samplesInStudiesPromises.push(
               Promise.all(sampleIds.map(sampleId => this._studyService.getSample(sampleId)))
-                .then(samples => ({ [studyId]: samples.sort((x, y) => x._source['Sample Name'].localeCompare(y._source['Sample Name'])) }))
+                .then(samples => ({[studyId]: samples.sort((x, y) => x._source['Sample Name'].localeCompare(y._source['Sample Name']))}))
             );
           }
           return Promise.all(samplesInStudiesPromises).then(samplesInStudies => {
@@ -405,7 +418,20 @@ export class DownloadComponent {
       }
     }
 
-    $.ajax({
+    this.httpGatewayService.post(this._url.downloadsResource(), JSON.stringify({
+      onlyIncludeMetadata: this.onlyIncludeMetadata,
+      sampleIds: sampleIds
+    })).subscribe((data: DownloadPostResponse) => {
+      self.download_uuid = data.download_uuid;
+      self.downloadLocation = data.location;
+      self.progressUrl = data.progressUrl;
+
+      self.schedulePollForProgress();
+
+      // TODO@Sam check what happens on error
+    });
+
+    /*$.ajax({
       type: 'POST',
       url: this._url.downloadsResource(),
       headers: this._auth.headers(),
@@ -427,7 +453,7 @@ export class DownloadComponent {
         self.preparingDownload = false;
         self.changeDetectorRef.detectChanges();
       }
-    });
+    });*/
   }
 
   schedulePollForProgress() {
@@ -439,7 +465,30 @@ export class DownloadComponent {
   doProgressPoll() {
     const self = this;
 
-    $.ajax({
+    this.httpGatewayService.get(this.progressUrl)
+      .subscribe((result: DownloadProgressResponse) => {
+        self.preparationProgress = result.progress;
+
+        if (result.status === 'ready') {
+          self.downloadReady = true;
+
+          // todo @Sam fix this!
+          // setTimeout(() => { self.modal.hide(); }, 1000);
+
+          // Kick off download
+          window.location.href = self.downloadLocation;
+
+        } else if (result.status == 'error') {
+          self.errorMessage = `Error: ${result.errorString}!`;
+          self.preparingDownload = false;
+        } else {
+          self.schedulePollForProgress();
+        }
+        self.changeDetectorRef.detectChanges();
+      });
+    // TODO@Sam check what happens on error
+
+    /*$.ajax({
       type: 'GET',
       url: this.progressUrl,
       headers: this._auth.headers(),
@@ -471,6 +520,6 @@ export class DownloadComponent {
       complete: () => {
         self.changeDetectorRef.detectChanges();
       }
-    });
+    });*/
   }
 }

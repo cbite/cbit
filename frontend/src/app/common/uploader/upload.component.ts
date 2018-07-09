@@ -12,6 +12,8 @@ import * as _ from 'lodash';
 import {DimensionsRegister, INVALID_DIMENSIONS} from '../../common/unit-conversions';
 import {AuthenticationService} from '../../core/authentication/authentication.service';
 import {URLService} from '../../services/url.service';
+import {HttpGatewayService} from '../../services/http-gateway.service';
+import {HttpHeaders} from '@angular/common/http';
 
 // Heavily adapted from here:
 // http://valor-software.com/ng2-file-upload/
@@ -1034,6 +1036,7 @@ const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
 function isTranscriptomicsAssayDetail(fieldName: string): boolean {
   return fieldName.startsWith('Transcriptomics Assay Detail: ');
 }
+
 const TRANSCRIPTOMIC_ASSY_DETAIL_DEFAULT_METADATA: FieldMeta = {
   description: '',
   visibility: 'additional',
@@ -1093,7 +1096,7 @@ interface UploadsResponse {
                 <select [id]="dataType + fieldName"
                         formControlName="dataType"
                         class="form-control"
-                        >
+                >
                   <option value="string">String (text)</option>
                   <option value="double">Number</option>
                 </select>
@@ -1147,7 +1150,8 @@ interface UploadsResponse {
                           class="form-control">
                     <option *ngFor="let dimension of fieldConfigs[fieldName].possibleDimensions"
                             [value]="dimension"
-                            >{{ dimension }}</option>
+                    >{{ dimension }}
+                    </option>
                   </select>
                   <p *ngIf="fieldConfigs[fieldName].possibleDimensions.length === 1" class="form-control-static">
                     {{ fieldConfigs[fieldName].possibleDimensions[0] }}
@@ -1166,7 +1170,8 @@ interface UploadsResponse {
                           class="form-control">
                     <option *ngFor="let unitName of possibleUnits(fieldName)"
                             [value]="unitName"
-                            >{{ uiUnitName(fieldName, unitName) }}</option>
+                    >{{ uiUnitName(fieldName, unitName) }}
+                    </option>
                   </select>
                   <p *ngIf="possibleUnits(fieldName).length === 1" class="form-control-static">
                     {{ uiUnitName(fieldName, possibleUnits(fieldName)[0]) }}
@@ -1217,7 +1222,7 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
   @Output() form = new EventEmitter<FormGroup>();
   _form: FormGroup;
 
-  fieldConfigs: {[fieldName: string]: any} = {};
+  fieldConfigs: { [fieldName: string]: any } = {};
 
   ngOnInit() {
     this._form = this.makeFormGroup();
@@ -1255,13 +1260,13 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
       const defaults = this.fetchDefaults(fieldName);
 
       group[fieldName] = new FormGroup({
-        fieldName:               new FormControl(fieldName),
-        description:             new FormControl(defaults.description, Validators.required),
-        category:                new FormControl(defaults.category),
-        visibility:              new FormControl(defaults.visibility),
-        dataType:                new FormControl(defaults.dataType),
-        dimensions:              new FormControl(defaults.dimensions),
-        preferredUnit:           new FormControl(defaults.preferredUnit),
+        fieldName: new FormControl(fieldName),
+        description: new FormControl(defaults.description, Validators.required),
+        category: new FormControl(defaults.category),
+        visibility: new FormControl(defaults.visibility),
+        dataType: new FormControl(defaults.dataType),
+        dimensions: new FormControl(defaults.dimensions),
+        preferredUnit: new FormControl(defaults.preferredUnit),
         isSupplementaryFileName: new FormControl(defaults.isSupplementaryFileName),
         nameInSampleMiniSummary: new FormControl(defaults.nameInSampleMiniSummary),
       });
@@ -1278,12 +1283,12 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
   fetchDefaults(fieldName: string): FieldMeta {
 
     let result: FieldMeta = {
-      description:             '',
-      dataType:                'string',
-      visibility:              'additional',
-      category:                'Technical > General',
-      dimensions:              'none',
-      preferredUnit:           'none',
+      description: '',
+      dataType: 'string',
+      visibility: 'additional',
+      category: 'Technical > General',
+      dimensions: 'none',
+      preferredUnit: 'none',
       isSupplementaryFileName: false,
       nameInSampleMiniSummary: '',
     };
@@ -1309,138 +1314,186 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
 
 @Component({
   template: `
-  <div class="container">
-    <h1>Upload New Study</h1>
+    <div class="container">
+      <h1>Upload New Study</h1>
 
-    <div [class.hidden]="step !== 1">
-      <h2>Step 1a: Upload a .zip archive in ISAtab format from RIT (iRODS)</h2>
-      <p>Click on an iRODS folder name to start upload:</p>
-      <div class="row">
-        <div class="col-md-8 col-md-offset-2 well irods-list">
-          <div *ngIf="!iRODSListReady">
-            Fetching study list from iRODS... <spinner></spinner>
+      <div [class.hidden]="step !== 1">
+        <h2>Step 1a: Upload a .zip archive in ISAtab format from RIT (iRODS)</h2>
+        <p>Click on an iRODS folder name to start upload:</p>
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2 well irods-list">
+            <div *ngIf="!iRODSListReady">
+              Fetching study list from iRODS...
+              <spinner></spinner>
+            </div>
+            <div *ngIf="iRODSListReady">
+              <ul>
+                <li *ngFor="let iRODSStudyName of iRODSStudyNames">
+                  <a href="#" (click)="$event.preventDefault(); kickOffIRODSUpload(iRODSStudyName)">
+                    {{ iRODSStudyName }}
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div *ngIf="iRODSListReady">
-            <ul>
-              <li *ngFor="let iRODSStudyName of iRODSStudyNames">
-                <a href="#" (click)="$event.preventDefault(); kickOffIRODSUpload(iRODSStudyName)">
-                  {{ iRODSStudyName }}
-                </a>
-              </li>
-            </ul>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+            <span class="status" *ngIf="iRODSStatus">Status: {{ iRODSStatus }}</span>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-          <span class="status" *ngIf="iRODSStatus">Status: {{ iRODSStatus }}</span>
-        </div>
-      </div>
 
-      <h1>OR...</h1>
+        <h1>OR...</h1>
 
-      <h2>Step 1b: Upload a .zip archive in ISAtab format from this computer</h2>
-      <div [class.disabled]="uploadFileChooserDisabled">
-        <div ng2FileDrop
-             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-             (fileOver)="fileOverBase($event)"
-             [uploader]="uploader"
-             class="well my-drop-zone"
-             style="display: inline-block">
-             Drag a file here
+        <h2>Step 1b: Upload a .zip archive in ISAtab format from this computer</h2>
+        <div [class.disabled]="uploadFileChooserDisabled">
+          <div ng2FileDrop
+               [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+               (fileOver)="fileOverBase($event)"
+               [uploader]="uploader"
+               class="well my-drop-zone"
+               style="display: inline-block">
+            Drag a file here
+          </div>
+          or select a file here: <input type="file" ng2FileSelect [uploader]="uploader"
+                                        [disabled]="uploadFileChooserDisabled"/>
         </div>
-        or select a file here: <input type="file" ng2FileSelect [uploader]="uploader" [disabled]="uploadFileChooserDisabled"/>
-      </div>
-      <p>
-        <b>File to upload: </b>{{ uploadFileName }}
-      </p>
-      <div>
-        Then click here: <button type="button" (click)="doUpload()" [disabled]="!uploader.getNotUploadedItems().length">Upload</button>
+        <p>
+          <b>File to upload: </b>{{ uploadFileName }}
+        </p>
         <div>
-          Progress:
-          <div class="w3-progress-container">
-            <div class="w3-progressbar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
-          </div>
-          <span class="status" *ngIf="status">Status: {{ status }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div [class.hidden]="step !== 2">
-      <h2>Step 2: Enter metadata</h2>
-
-      <h3>Study Metadata</h3>
-      <div class="form-inline">
-        <div class="row">
-          <div class="form-group col-sm-5 col-sm-offset-1">
-            <label for="studyPublicationDate">Publication Date</label>
-            <input type="text" id="studyPublicationDate" [(ngModel)]="studyPublicationDate" class="form-control">
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="checkbox col-sm-5 col-sm-offset-1">
-            <label for="studyInitiallyVisible">
-              <input type="checkbox" id="studyInitiallyVisible" [(ngModel)]="studyInitiallyVisible">
-              Visible
-            </label>
+          Then click here:
+          <button type="button" (click)="doUpload()" [disabled]="!uploader.getNotUploadedItems().length">Upload</button>
+          <div>
+            Progress:
+            <div class="w3-progress-container">
+              <div class="w3-progressbar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
+            </div>
+            <span class="status" *ngIf="status">Status: {{ status }}</span>
           </div>
         </div>
       </div>
 
-      <h3>New Fields</h3>
+      <div [class.hidden]="step !== 2">
+        <h2>Step 2: Enter metadata</h2>
 
-      <div *ngIf="!unknownFields">
-        No new fields in this study
+        <h3>Study Metadata</h3>
+        <div class="form-inline">
+          <div class="row">
+            <div class="form-group col-sm-5 col-sm-offset-1">
+              <label for="studyPublicationDate">Publication Date</label>
+              <input type="text" id="studyPublicationDate" [(ngModel)]="studyPublicationDate" class="form-control">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="checkbox col-sm-5 col-sm-offset-1">
+              <label for="studyInitiallyVisible">
+                <input type="checkbox" id="studyInitiallyVisible" [(ngModel)]="studyInitiallyVisible">
+                Visible
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <h3>New Fields</h3>
+
+        <div *ngIf="!unknownFields">
+          No new fields in this study
+        </div>
+
+        <div *ngIf="unknownFields">
+          <field-metadata-form [fieldNames]="unknownFields" [fieldAnalyses]="fieldAnalyses"
+                               (form)="fieldMetadataForm = $event"></field-metadata-form>
+        </div>
+
+        <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">
+          {{ confirmMetadataButtonName }}
+        </button>
       </div>
 
-      <div *ngIf="unknownFields">
-        <field-metadata-form [fieldNames]="unknownFields" [fieldAnalyses]="fieldAnalyses" (form)="fieldMetadataForm = $event"></field-metadata-form>
+      <div *ngIf="step === 3">
+        <h2>Upload succeeded!</h2>
+        <study [studyId]="upload_uuid" [showTitle]="true"></study>
       </div>
 
-      <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">{{ confirmMetadataButtonName }}</button>
-    </div>
-
-    <div *ngIf="step === 3">
-      <h2>Upload succeeded!</h2>
-      <study [studyId]="upload_uuid" [showTitle]="true"></study>
-    </div>
-
-    <div *ngIf="step === 4">
-      <h2>Upload failed!</h2>
-      <div class="alert alert-danger">
-        {{ errorMessage }}
+      <div *ngIf="step === 4">
+        <h2>Upload failed!</h2>
+        <div class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
       </div>
     </div>
-  </div>
   `,
 
   // Adapted from W3.css for prototype (http://www.w3schools.com/w3css/default.asp)
   // ...and from Bootstrap
   // ...and from the ng2-file-uploader example
   styles: [`
-    .well{min-height:20px;padding:19px;margin-bottom:20px;background-color:#f5f5f5;border:1px solid #e3e3e3;border-radius:4px;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.05);box-shadow:inset 0 1px 1px rgba(0,0,0,.05)}
-    .my-drop-zone { border: dotted 3px lightgray; }
-    .nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
-    .w3-progress-container{width:200px;height:1.5em;position:relative;background-color:#f1f1f1;display:inline-block}
-    .w3-progressbar{background-color:#757575;height:100%;position:absolute;line-height:inherit}
-    .disabled { color: rgb(128, 128, 128) }
-    .disabled .well { background-color:#fcfcfc }
-    .hidden { display: none }
+    .well {
+      min-height: 20px;
+      padding: 19px;
+      margin-bottom: 20px;
+      background-color: #f5f5f5;
+      border: 1px solid #e3e3e3;
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05)
+    }
 
-    .status { color: red; }
+    .my-drop-zone {
+      border: dotted 3px lightgray;
+    }
+
+    .nv-file-over {
+      border: dotted 3px red;
+    }
+
+    /* Default class applied to drop zones on over */
+    .w3-progress-container {
+      width: 200px;
+      height: 1.5em;
+      position: relative;
+      background-color: #f1f1f1;
+      display: inline-block
+    }
+
+    .w3-progressbar {
+      background-color: #757575;
+      height: 100%;
+      position: absolute;
+      line-height: inherit
+    }
+
+    .disabled {
+      color: rgb(128, 128, 128)
+    }
+
+    .disabled .well {
+      background-color: #fcfcfc
+    }
+
+    .hidden {
+      display: none
+    }
+
+    .status {
+      color: red;
+    }
+
     .irods-list {
       padding: 10px;
       max-height: 400px;
       overflow-y: auto;
     }
+
     .irods-list ul {
       padding-left: 20px;
       margin: 0;
     }
   `]
 })
-export class UploadComponent {
+export class UploadComponent implements OnInit {
 
   public uploader: MyFileUploader;
   public hasBaseDropZoneOver = false;
@@ -1454,9 +1507,9 @@ export class UploadComponent {
   confirmMetadataButtonName = 'Confirm Upload';
   uploadConfirmationSent = false;
   fieldNames: string[] = [];
-  knownFields: {[fieldName: string]: FieldMeta} = {};
+  knownFields: { [fieldName: string]: FieldMeta } = {};
   unknownFields: string[] = [];
-  fieldAnalyses: {[fieldName: string]: FieldAnalysisResults} = {};
+  fieldAnalyses: { [fieldName: string]: FieldAnalysisResults } = {};
   fieldMetadataForm: FormGroup;
   errorMessage = '';
 
@@ -1467,38 +1520,44 @@ export class UploadComponent {
   studyPublicationDate: string = (new Date()).toISOString().substring(0, 10);  // YYYY-MM-DD
   studyInitiallyVisible = true;
 
-  constructor(
-    private _url: URLService,
-    private _router: Router,
-    private _auth: AuthenticationService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {
+  constructor(private _url: URLService,
+              private _router: Router,
+              private _auth: AuthenticationService,
+              private httpGatewayService: HttpGatewayService,
+              private changeDetectorRef: ChangeDetectorRef) {
     this.uploader = new MyFileUploader(this, {
       url: this._url.uploadsResource(),
       method: 'POST',
       queueLimit: 1,
       disableMultipart: true,  // Send the file body directly as request body, don't wrap it in any way
-      authToken: this._auth.headers()['Authorization']
+      authToken: this._auth.headers()['Authorization'] // TODO@Sam check if header still works
     });
   }
 
   ngOnInit() {
-    $.ajax({
-      type: 'GET',
-      url: this._url.iRODSListResource(),
-      headers: this._auth.headers(),
-      dataType: 'json',
-      success: (iRODSList: string[]) => {
-        this.iRODSStudyNames = iRODSList;
-      },
-      error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
-        this.iRODSStatus = `Failed to get list of studies from iRODS: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
-      },
-      complete: () => {
-        this.iRODSListReady = true;
-        this.changeDetectorRef.detectChanges();
-      }
+    this.httpGatewayService.get(this._url.iRODSListResource()).subscribe((iRODSList: string[]) => {
+      this.iRODSStudyNames = iRODSList;
+      this.iRODSListReady = true;
+      this.changeDetectorRef.detectChanges();
+      // TODO@Sam check what happens on error
     });
+
+    /* $.ajax({
+       type: 'GET',
+       url: this._url.iRODSListResource(),
+       headers: this._auth.headers(),
+       dataType: 'json',
+       success: (iRODSList: string[]) => {
+         this.iRODSStudyNames = iRODSList;
+       },
+       error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
+         this.iRODSStatus = `Failed to get list of studies from iRODS: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
+       },
+       complete: () => {
+         this.iRODSListReady = true;
+         this.changeDetectorRef.detectChanges();
+       }
+     });*/
   }
 
   fileOverBase(e: any): void {
@@ -1535,23 +1594,31 @@ export class UploadComponent {
 
   kickOffIRODSUpload(iRODSStudyName: string) {
     this.iRODSStatus = 'Working on it (this can take quite a while!)...';
-    $.ajax({
-      type: 'POST',
-      url: this._url.uploadsIRODSResource(iRODSStudyName),
-      headers: this._auth.headers(),
-      dataType: 'json',
-      success: (uploadsResponse: UploadsResponse) => {
-        this.proceedToUploadsStep2(uploadsResponse);
-      },
-      error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
-        this.step = 4;
-        this.errorMessage = `iRODS upload failed: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
-      },
-      complete: () => {
-        this.iRODSListReady = true;
-        this.changeDetectorRef.detectChanges();
-      }
+
+    this.httpGatewayService.post(this._url.uploadsIRODSResource(iRODSStudyName), {}).subscribe((uploadsResponse: UploadsResponse) => {
+      this.proceedToUploadsStep2(uploadsResponse);
+      this.iRODSListReady = true;
+      this.changeDetectorRef.detectChanges();
+      // TODO@Sam check what happens on error
     });
+
+    /* $.ajax({
+       type: 'POST',
+       url: this._url.uploadsIRODSResource(iRODSStudyName),
+       headers: this._auth.headers(),
+       dataType: 'json',
+       success: (uploadsResponse: UploadsResponse) => {
+         this.proceedToUploadsStep2(uploadsResponse);
+       },
+       error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
+         this.step = 4;
+         this.errorMessage = `iRODS upload failed: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
+       },
+       complete: () => {
+         this.iRODSListReady = true;
+         this.changeDetectorRef.detectChanges();
+       }
+     });*/
   }
 
   onUploadSuccess(response: string, status: number, headers: ParsedResponseHeaders): void {
@@ -1597,53 +1664,69 @@ export class UploadComponent {
 
   doConfirmMetadata() {
     const that = this;
-
     const newFieldMetadata = Object.values(this.fieldMetadataForm.value);
     let metadataInsertionPromise: Promise<any>;
     if (!newFieldMetadata || newFieldMetadata.length === 0) {
       metadataInsertionPromise = Promise.resolve([]);
     } else {
       metadataInsertionPromise = new Promise((resolve, reject) => {
-        $.ajax({
-          type: 'PUT',
-          url: that._url.metadataFieldsMultiResource(),
-          headers: that._auth.headers(),
-          data: JSON.stringify(newFieldMetadata),
-          dataType: 'json',
-          success: function(response) {
-            resolve();
-          },
-          error: function(jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
-            that.errorMessage = `Failed to create new fields: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
-            that.step = 4;
-            that.changeDetectorRef.detectChanges();
-            reject();
-          }
+        this.httpGatewayService.put(that._url.metadataFieldsMultiResource(), JSON.stringify(newFieldMetadata)).subscribe(() => {
+          resolve();
+          // TODO@Sam check what happens on error
         });
+
+        /* $.ajax({
+           type: 'PUT',
+           url: that._url.metadataFieldsMultiResource(),
+           headers: that._auth.headers(),
+           data: JSON.stringify(newFieldMetadata),
+           dataType: 'json',
+           success: function (response) {
+             resolve();
+           },
+           error: function (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
+             that.errorMessage = `Failed to create new fields: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
+             that.step = 4;
+             that.changeDetectorRef.detectChanges();
+             reject();
+           }
+         });*/
       });
     }
 
     metadataInsertionPromise.then(() => {
-      $.ajax({
-        type: 'PUT',
-        url: this.confirm_upload_url,
-        headers: this._auth.headers(),
-        data: JSON.stringify({
-          publicationDate: that.studyPublicationDate,
-          visible: that.studyInitiallyVisible
-        }),
-        dataType: 'json',
-        contentType: 'text/plain',  // TODO: Use JSON when sending metadata confirmations
-        success: function(data: any, textStatus: string, jqXHR: XMLHttpRequest) {
-          that.step = 3;
-          that.changeDetectorRef.detectChanges();
-        },
-        error: function(jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
-          that.errorMessage = `Details ${JSON.stringify({textStatus, errorThrown})}`;
-          that.step = 4;
-          that.changeDetectorRef.detectChanges();
-        },
+      const headers = new HttpHeaders({
+        'Content-Type': 'text/plain'
       });
+      this.httpGatewayService.put(this.confirm_upload_url, JSON.stringify({
+        publicationDate: that.studyPublicationDate,
+        visible: that.studyInitiallyVisible
+      }), undefined, headers).subscribe(() => {
+        that.step = 3;
+        that.changeDetectorRef.detectChanges();
+        // TODO@Sam check what happens on error => go to step 4
+      });
+
+      /* $.ajax({
+         type: 'PUT',
+         url: this.confirm_upload_url,
+         headers: this._auth.headers(),
+         data: JSON.stringify({
+           publicationDate: that.studyPublicationDate,
+           visible: that.studyInitiallyVisible
+         }),
+         dataType: 'json',
+         contentType: 'text/plain',  // TODO: Use JSON when sending metadata confirmations
+         success: function (data: any, textStatus: string, jqXHR: XMLHttpRequest) {
+           that.step = 3;
+           that.changeDetectorRef.detectChanges();
+         },
+         error: function (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
+           that.errorMessage = `Details ${JSON.stringify({textStatus, errorThrown})}`;
+           that.step = 4;
+           that.changeDetectorRef.detectChanges();
+         },
+       });*/
     });
 
     this.confirmMetadataButtonName = 'Confirming Upload...';

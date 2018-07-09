@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {environment} from '../../environments/environment';
 
 // TODO@Sam Fix this!
 let BASE_URL: string;
@@ -14,23 +15,19 @@ let BASE_URL: string;
 @Injectable()
 export class URLService {
   usersResource(): string {
-    return `${BASE_URL}/users`;
+    return `users`;
   }
 
   userResource(username: string): string {
-    return `${BASE_URL}/users/${username}`;
-  }
-
-  downloadResource(): string {
-    return `${BASE_URL}/downloads`;
+    return `users/${username}`;
   }
 
   metadataAllCountsResource(): string {
-    return `${BASE_URL}/metadata/all_counts`;
+    return `metadata/all_counts`;
   }
 
   metadataFilteredCountsResource(): string {
-    return `${BASE_URL}/metadata/filtered_counts`;
+    return `metadata/filtered_counts`;
   }
 
   metadataFieldsResource(): string {
@@ -38,54 +35,46 @@ export class URLService {
   }
 
   metadataFieldsMultiResource(): string {
-    return `${BASE_URL}/metadata/fields/_multi`;
+    return `metadata/fields/_multi`;
   }
 
   metadataSearchResource(): string {
-    return `${BASE_URL}/metadata/search`;
+    return `metadata/search`;
   }
 
   metadataStudiesResource(): string {
-    return `${BASE_URL}/metadata/studies`;
-  }
-
-  metadataStudyResource(studyId: string): string {
-    return `${BASE_URL}/metadata/studies/${studyId}`;
+    return `metadata/studies`;
   }
 
   metadataSamplesInStudiesResource(): string {
-    return `${BASE_URL}/metadata/samples_in_studies`;
+    return `metadata/samples_in_studies`;
   }
 
   studiesResource(): string {
-    return `${BASE_URL}/studies`;
+    return `studies`;
   }
 
   studyResource(studyId: string): string {
-    return `${BASE_URL}/studies/${studyId}`;
+    return `studies/${studyId}`;
   }
 
   samplesResource(): string {
-    return `${BASE_URL}/samples`;
-  }
-
-  sampleResource(sampleId: string): string {
-    return `${BASE_URL}/samples/${sampleId}`;
+    return `samples`;
   }
 
   downloadsResource(): string {
-    return `${BASE_URL}/downloads`;
+    return `downloads`;
   }
 
   uploadsResource(): string {
-    return `${BASE_URL}/uploads`;
+    return environment.api_url + 'uploads';
   }
 
   uploadsIRODSResource(iRODSStudyName: string): string {
-    return `${BASE_URL}/uploads/_irods/${iRODSStudyName}`;
+    return `uploads/_irods/${iRODSStudyName}`;
   }
 
   iRODSListResource(): string {
-    return `${BASE_URL}/irods/list`;
+    return `irods/list`;
   }
 }

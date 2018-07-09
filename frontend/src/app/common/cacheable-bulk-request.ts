@@ -1,4 +1,6 @@
-import {AuthenticationService} from "../core/authentication/authentication.service";
+import {AuthenticationService} from '../core/authentication/authentication.service';
+import {HttpGatewayService} from '../services/http-gateway.service';
+
 /**
  * Allow bufferable requests to a REST end-point, caching responses.
  *
@@ -24,13 +26,12 @@ export class CacheableBulkRequester<T> {
   // PUBLIC INTERFACE
   // ================
 
-  constructor(
-    public readonly name: string,
-    public readonly url: string,
-    private readonly _auth: AuthenticationService,
-    public readonly cacheTimeMs: number,
-    public readonly requestBufferTimeMs: number)
-  { }
+  constructor(public readonly name: string,
+              public readonly url: string,
+              private readonly httpGatewayService: HttpGatewayService,
+              public readonly cacheTimeMs: number,
+              public readonly requestBufferTimeMs: number) {
+  }
 
   get(id: string): Promise<T> {
 
@@ -84,9 +85,9 @@ export class CacheableBulkRequester<T> {
   }
 
   private checkCacheExpiration(): void {
-    let timeNowMs = Date.now();
+    const timeNowMs = Date.now();
 
-    for (let id in this.cache) {
+    for (const id in this.cache) {
       if (this.cache[id].expirationTimeMs < timeNowMs) {
         delete this.cache[id];
       }
@@ -96,7 +97,7 @@ export class CacheableBulkRequester<T> {
   // IMPLEMENTATION (Async Requests)
   // ===============================
 
-  private fetchTimeoutActivated: boolean = false;
+  private fetchTimeoutActivated = false;
 
   private idsToFetch: {
     [id: string]: {
@@ -107,17 +108,21 @@ export class CacheableBulkRequester<T> {
 
 
   private initiateFetch(id: string): Promise<T> {
-    let toFetch = {
+    const toFetch = {
       promise: null as Promise<T>,
       resolve: null as (data: T) => void
-    }
-    toFetch.promise = new Promise(resolve => { toFetch.resolve = resolve; });
+    };
+    toFetch.promise = new Promise(resolve => {
+      toFetch.resolve = resolve;
+    });
 
     this.idsToFetch[id] = toFetch;
 
-    let self = this;
+    const self = this;
     if (!this.fetchTimeoutActivated) {
-      setTimeout(function() { self.doFetch() }, this.requestBufferTimeMs);
+      setTimeout(function () {
+        self.doFetch();
+      }, this.requestBufferTimeMs);
       this.fetchTimeoutActivated = true;
     }
 
@@ -126,31 +131,20 @@ export class CacheableBulkRequester<T> {
 
   private doFetch(): void {
 
-    let saveIdsToFetch = this.idsToFetch;
+    const saveIdsToFetch = this.idsToFetch;
     this.idsToFetch = {};
     this.fetchTimeoutActivated = false;
 
-    let ids = Object.keys(saveIdsToFetch);
+    const ids = Object.keys(saveIdsToFetch);
 
-    let self = this;
-    $.ajax({
-      type: 'POST',
-      url: this.url,
-      headers: this._auth.headers(),
-      contentType: 'application/json',
-      data: JSON.stringify(ids),
-
-      success: function(data: { [id: string]: T }) {
-
-        for (let id in data) {
+    const self = this;
+    this.httpGatewayService.post(this.url, JSON.stringify(ids)).subscribe(data => {
+      for (const id in data) {
+        if (data.hasOwnProperty(id)) {
           saveIdsToFetch[id].resolve(data[id]);
           self.addToCache(id, data[id]);
         }
-
       }
-
-      // TODO: Add error handling!
-
     });
   }
 }

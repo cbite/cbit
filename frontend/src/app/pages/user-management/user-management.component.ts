@@ -7,52 +7,53 @@ import {ChangePasswordComponent} from '../../common/components/change-password.c
 // import {ModalDirective} from 'ngx-bootstrap';
 import {URLService} from '../../services/url.service';
 import {AddUserComponent} from './add-user.component';
+import {HttpGatewayService} from '../../services/http-gateway.service';
 
 @Component({
   template: `
-  <h2>Manage Users</h2>
+    <h2>Manage Users</h2>
 
-  <div *ngIf="!ready">
-    Loading...
-    <spinner></spinner>
-  </div>
-  <div *ngIf="ready" class="container">
-    <cbit-user-editor
-      [users]="users"
-      [userState]="userState"
-      [userSpecificErrorMessage]="userSpecificErrorMessage"
-      [form]="form"
-      (deleteUser)="deleteUser($event)"
+    <div *ngIf="!ready">
+      Loading...
+      <spinner></spinner>
+    </div>
+    <div *ngIf="ready" class="container">
+      <cbit-user-editor
+        [users]="users"
+        [userState]="userState"
+        [userSpecificErrorMessage]="userSpecificErrorMessage"
+        [form]="form"
+        (deleteUser)="deleteUser($event)"
       ></cbit-user-editor>
-    <div class="row">
+      <div class="row">
 
-      <div class="col-xs-4">
-        <button type="submit" class="btn btn-success" (click)="addUserModal.show()">
-          <span class="glyphicon glyphicon-plus"></span> Add New User
-        </button>
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-success" (click)="addUserModal.show()">
+            <span class="glyphicon glyphicon-plus"></span> Add New User
+          </button>
 
-        <button type="submit" class="btn btn-primary" (click)="saveChanges()"
-          [attr.disabled]="savingChanges || null">
-          <span *ngIf="!savingChanges">Save Changes</span>
-          <span *ngIf=" savingChanges">Saving Changes...</span>
-        </button>
+          <button type="submit" class="btn btn-primary" (click)="saveChanges()"
+                  [attr.disabled]="savingChanges || null">
+            <span *ngIf="!savingChanges">Save Changes</span>
+            <span *ngIf=" savingChanges">Saving Changes...</span>
+          </button>
+        </div>
+
+        <div class="col-xs-8" *ngIf="!savingChanges && saveDone">
+          <div *ngIf=" !saveError" class="alert alert-success" role="alert">Changes saved!</div>
+          <div *ngIf="!!saveError" class="alert alert-danger" role="alert">Save failed: {{ saveError }}</div>
+        </div>
       </div>
-
-      <div class="col-xs-8" *ngIf="!savingChanges && saveDone">
-        <div *ngIf=" !saveError" class="alert alert-success" role="alert">Changes saved!</div>
-        <div *ngIf="!!saveError" class="alert alert-danger" role="alert">Save failed: {{ saveError }}</div>
+      <div class="row">
+        <div class="col-xs-12">
+          <!-- Footer whitespace -->
+        </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-xs-12">
-        <!-- Footer whitespace -->
-      </div>
-    </div>
-  </div>
 
-  <!--<div bsModal #addUserModal="bs-modal" class="modal fade" role="dialog" (onShow)="addUserPopup.refresh()">-->
+    <!--<div bsModal #addUserModal="bs-modal" class="modal fade" role="dialog" (onShow)="addUserPopup.refresh()">-->
     <!--<cbit-add-user [modal]="addUserModal" (userAdded)="userAdded($event)"></cbit-add-user>-->
-  <!--</div>-->
+    <!--</div>-->
   `
 })
 export class UserManagementComponent implements OnInit {
@@ -68,21 +69,14 @@ export class UserManagementComponent implements OnInit {
   saveDone = false;
   saveError = '';
 
-  constructor(
-    private _url: URLService,
-    private _auth: AuthenticationService,
-    private _changeDetectorRef: ChangeDetectorRef
-  ) { }
+  constructor(private _url: URLService,
+              private httpGatewayService: HttpGatewayService,
+              private _changeDetectorRef: ChangeDetectorRef) {
+  }
 
   ngOnInit(): void {
     const self = this;
-
-    $.ajax({
-      type: 'GET',
-      url: this._url.usersResource(),
-      headers: this._auth.headers(),
-      dataType: 'json',
-      success: (userList: User[]) => {
+    this.httpGatewayService.get(this._url.usersResource()).subscribe((userList: User[]) => {
         for (const user of userList) {
           self.users[user.username] = user;
           self.userState[user.username] = UserState.Present;
@@ -91,7 +85,7 @@ export class UserManagementComponent implements OnInit {
         self.ready = true;
         self._changeDetectorRef.detectChanges();
       }
-    });
+    );
   }
 
   userAdded(newUserInfo: User) {
@@ -105,8 +99,8 @@ export class UserManagementComponent implements OnInit {
 
   formGroupForUser(user: User): FormGroup {
     return new FormGroup({
-      username:        new FormControl(user.username),
-      realname:        new FormControl(user.realname)
+      username: new FormControl(user.username),
+      realname: new FormControl(user.realname)
     });
   }
 
@@ -127,7 +121,14 @@ export class UserManagementComponent implements OnInit {
     delete self.userSpecificErrorMessage[username];
     (<FormGroup>this.form.controls[username]).controls['realname'].disable();
 
-    $.ajax({
+    this.httpGatewayService.delete(this._url.userResource(username))
+      .subscribe(() => {
+        this.userState[username] = UserState.Deleted;
+        this._changeDetectorRef.detectChanges();
+      });
+
+    // TODO@Sam check what happens on error
+   /* $.ajax({
       type: 'DELETE',
       url: this._url.userResource(username),
       headers: this._auth.headers(),
@@ -143,7 +144,7 @@ export class UserManagementComponent implements OnInit {
       complete: () => {
         self._changeDetectorRef.detectChanges();
       }
-    });
+    });*/
   }
 
   saveChanges() {

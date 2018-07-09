@@ -4,6 +4,7 @@ import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {BusyIndicatorService} from '../../services/busy-indicator.service';
 import {LoggedInUser} from './loggedInUser';
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class AuthenticationService {
@@ -22,7 +23,7 @@ export class AuthenticationService {
         if (result.realname) {
           this.loggedInUser = new LoggedInUser(username, result.realname, authHeader);
           return true;
-        }else {
+        } else {
           return false;
         }
       });
@@ -33,11 +34,15 @@ export class AuthenticationService {
   }
 
   private performLogin(username: string, authHeader: string): Observable<any> {
-    const url = this.urlService.userResource(username);
+    const url = this.resolveUrl(this.urlService.userResource(username));
     const headers = new HttpHeaders({'Authorization': authHeader});
     return this.http
       .get(url, {headers: headers})
       .catch(this.loginFailed);
+  }
+
+  private resolveUrl(url: string) {
+    return environment.api_url + url;
   }
 
   protected loginFailed<T>(errorResponse: HttpErrorResponse): Observable<any> {
