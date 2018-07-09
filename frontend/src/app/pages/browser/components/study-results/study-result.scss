@@ -1,0 +1,47 @@
+@import '../../../../../variables';
+
+.study-panel {
+  border: 1px solid darken($color-gray, 10%);
+  border-radius: 5px;
+  cursor: pointer;
+
+  .header {
+    padding: 10px;
+    background-color: $color-blue;
+    color: white;
+  }
+
+  .body {
+    .authors {
+      padding: 10px 10px 5px 10px;
+      font-size: $font-size-small;
+    }
+
+    .samples {
+      padding: 5px 10px 10px 10px;
+      font-size: $font-size-small;
+    }
+
+    .links {
+      background-color: $color-gray;
+      padding: 10px;
+      border-top: 1px solid darken($color-gray, 10%);
+      font-size: $font-size-small;
+      color: $color-blue;
+
+      .link {
+        cursor: pointer;
+
+        &:hover {
+          color: $color-dark-blue;
+        }
+      }
+    }
+  }
+
+  &:hover {
+    .header {
+      background-color: $color-dark-blue;
+    }
+  }
+}

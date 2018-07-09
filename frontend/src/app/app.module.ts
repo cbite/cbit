@@ -9,9 +9,6 @@ import {AppRoutingModule} from './router/routing.module';
 import {FilterSidebarComponent} from './pages/browser/components/filters/filter-sidebar.component';
 import {MapToIterablePipe} from './common/mapToIterable.pipe';
 import {SampleFiltersComponent} from './pages/browser/components/filters/sample-filters.component';
-import {PubmedLinksDirective} from './pages/studies/components/study/pubmed-link.directive';
-import {DOILinkDirective} from './pages/studies/components/study/doi-link.directive';
-
 import {FileSelectDirective, FileDropDirective} from 'ng2-file-upload/ng2-file-upload';
 import {CollapseDirective} from './common/collapse.directive';
 import {SpinnerComponent} from './common/spinner.component';
@@ -69,6 +66,8 @@ import {FieldMetaService} from './core/services/field-meta.service';
 import {ChangePasswordComponent} from './popups/change-password/change-password.component';
 import {StudyManagementComponent} from './pages/studies/study-management.component';
 import {ConfirmationComponent} from './popups/confirmation/confirmation.component';
+import {SplitByThreePipe} from './shared/pipes/split-by-three-pipe';
+import {WindowRef} from './shared/util/WindowRef';
 
 @NgModule(
   {
@@ -96,6 +95,7 @@ import {ConfirmationComponent} from './popups/confirmation/confirmation.componen
       FAQPage,
       FAQQuestionComponent,
       BrowserPage,
+      SplitByThreePipe,
       DownloadComponent,
       UploadPage,
       FieldMetadataFormComponent,
@@ -103,8 +103,6 @@ import {ConfirmationComponent} from './popups/confirmation/confirmation.componen
       FieldMetadataEditorComponent,
       StudyManagementComponent,
       StudyMetadataEditorComponent,
-      PubmedLinksDirective,
-      DOILinkDirective,
       FilterSidebarComponent,
       LoginPopupComponent,
       AllFieldsComponent,
@@ -149,7 +147,8 @@ import {ConfirmationComponent} from './popups/confirmation/confirmation.componen
       CollapseStateService,
       UnitFormattingService,
       TooltipService,
-      PopupService
+      PopupService,
+      WindowRef
     ],
     bootstrap: [AppComponent]
   })

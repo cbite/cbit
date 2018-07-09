@@ -1,69 +1,20 @@
+@import '../../../variables';
+
+.container-fluid {
+  padding: 0;
+  margin: 0;
+}
+
 .sidebar {
+  margin-left: 0;
+  padding-left: 0;
   min-width: 280px;
-  position: fixed;
-  top: 51px;
-  bottom: 0;
-  margin-bottom: 50px;
-  left: 0;
-  z-index: 1000;
+  height: calc(100vh - 50px);
   display: block;
-  overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-  background-color: #f5f5f5;
-  border-right: 1px solid #eee;
+  background-color: $color-gray;
+  border-right: 1px solid darken($color-gray, 10%);
 }
-
-.footer-fixed-bottom {
-  position: fixed;
-  bottom: 0px;
-  height: 60px;
-  left: 0;
-  z-index: 1001;
-  display: block;
-  padding: 10px;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  background-color: #f5f5f5;
-  border-top: 1px solid #eee;
-  border-right: 1px solid #eee;
-}
-
-/*
- * Main content
- */
 
 .main {
-  padding-right: 20px;
-  padding-left: 20px;
-}
-.main .page-header {
-  margin-top: 0;
-}
-
-.resultsCounts {
-  font-size: 90%;
-  margin-bottom: 20px;
-  font-style: oblique;
-}
-
-.addAllResultsButton {
-  float: right;
-  margin-top: 20px;
-}
-
-/*
- * Corrections for panel headings
- */
-div.panel-heading {
-  position: relative;
-}
-
-div.panel-heading-plus-minus-buttons {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-div.panel-heading embargo {
-  font-style: italic;
+  padding: 20px;
 }

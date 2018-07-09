@@ -7,6 +7,7 @@ import 'rxjs/add/operator/finally';
 import 'rxjs/add/operator/distinct';
 import 'rxjs/Observable';
 import 'rxjs/Subject';
+import 'rxjs/add/observable/fromPromise';
 
 export {Subject} from 'rxjs/Subject';
 export {Observable} from 'rxjs/Observable';

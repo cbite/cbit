@@ -3,7 +3,7 @@
 
 // TODO: Stop hardcoding URLs for REST endpoints
 
-import {Study, Sample} from '../common/study.model';
+import {Study, Sample} from '../core/types/study.model';
 import {Injectable} from '@angular/core';
 import * as _ from 'lodash';
 import {FiltersState} from './filters.service';

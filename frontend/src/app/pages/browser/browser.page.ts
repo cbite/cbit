@@ -1,23 +1,25 @@
 import {Component, ChangeDetectorRef, OnInit, OnDestroy} from '@angular/core';
 import {StudyService, UnifiedMatch} from '../../services/study.service';
 import {Router} from '@angular/router';
-import {FiltersService} from '../../services/filters.service';
+import {FiltersService, FiltersState} from '../../services/filters.service';
 import {DownloadSelectionService} from '../../services/download-selection.service';
 import {CollapseStateService} from '../../services/collapse-state.service';
 import {AuthenticationService} from '../../core/authentication/authentication.service';
 import {FieldMetaService} from '../../core/services/field-meta.service';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
 
 @Component({
   styleUrls: ['./browser.scss'],
   template: `
-    <div class="container-fluid">
+    <div class="container-fluid no-gutters">
       <div class="row no-gutters">
         <div class="col-3 sidebar">
           <cbit-filter-sidebar></cbit-filter-sidebar>
         </div>
 
         <div class="col-9 main">
-          <cbit-study-results [results]="matches"></cbit-study-results>
+          <cbit-study-results [matches]="matches" (showDetails)="onShowDetails($event)"></cbit-study-results>
         </div>
       </div>
     </div>
@@ -31,12 +33,13 @@ export class BrowserPage implements OnInit {
   // commonKeys: { [studyId: string]: { [key: string]: any } };
   // valueRanges: { [studyId: string]: { [fieldName: string]: number } };
   // ready = false;
-  // stopStream = new Subject<string>();
   // fieldMetas: { [fieldName: string]: FieldMeta } = {};
+
+  private stopStream = new Subject<string>();
 
   constructor(private fieldMetaService: FieldMetaService,
               private _router: Router,
-              private _studyService: StudyService,
+              private studyService: StudyService,
               private _filtersService: FiltersService,
               private _downloadSelectionService: DownloadSelectionService,
               private changeDetectorRef: ChangeDetectorRef,
@@ -47,18 +50,16 @@ export class BrowserPage implements OnInit {
   ngOnInit(): void {
 
     this.fieldMetaService.getAllFieldMetas().then(fieldMetas => {
-      console.log(fieldMetas);
       // this.fieldMetas = fieldMetas;
 
       // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
-      // this._filtersService.filters
-      //   .switchMap(filters => {
-      //     this.ready = false;
-      //     this.changeDetectorRef.detectChanges();
-      //     return Observable.fromPromise(<Promise<UnifiedMatch[]>> this._studyService.getUnifiedMatchesAsync(filters));
-      //   })
-      //   .takeUntil(this.stopStream)
-      //   .subscribe(rawMatches => {
+      this._filtersService.filters.switchMap(filters => {
+           return Observable.fromPromise(<Promise<UnifiedMatch[]>>this.studyService.getUnifiedMatchesAsync(filters));
+      }).takeUntil(this.stopStream)
+        .subscribe(rawMatches => {
+          this.matches = rawMatches;
+        });
+
       //     this.updateMatches(rawMatches);
       //     this.ready = true;
       //
@@ -77,6 +78,10 @@ export class BrowserPage implements OnInit {
       //     this.changeDetectorRef.detectChanges();
       //   });
     });
+  }
+
+  public onShowDetails(match: UnifiedMatch) {
+    // todo show details..
   }
 
   // ngOnDestroy() {
@@ -230,20 +235,6 @@ export class BrowserPage implements OnInit {
   //
   // clearFilters(): void {
   //   this._filtersService.clearFilters();
-  // }
-  //
-  // pubmedIdsOf(study: Study): string[] {
-  //   return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
-  //       .filter((p: RawStudyPublication) => p['Study PubMed ID'])
-  //       .map((p: RawStudyPublication) => p['Study PubMed ID'])
-  //   );
-  // }
-  //
-  // doisOf(study: Study): string[] {
-  //   return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
-  //       .filter((p: RawStudyPublication) => p['Study Publication DOI'])
-  //       .map((p: RawStudyPublication) => p['Study Publication DOI'])
-  //   );
   // }
   //
   // isAdmin() {

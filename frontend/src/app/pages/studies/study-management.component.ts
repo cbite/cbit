@@ -1,7 +1,7 @@
 import {Component, OnInit, ChangeDetectorRef, OnChanges, Input, Output, EventEmitter} from '@angular/core';
 import {StudyService} from '../../services/study.service';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {Study} from '../../common/study.model';
+import {Study} from '../../core/types/study.model';
 import {AuthenticationService} from '../../core/authentication/authentication.service';
 import {URLService} from '../../services/url.service';
 import {HttpGatewayService} from '../../services/http-gateway.service';

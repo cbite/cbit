@@ -1,7 +1,7 @@
 import {Component, ChangeDetectorRef, OnInit, Input, ElementRef} from '@angular/core';
 import {DownloadSelectionService} from '../../services/download-selection.service';
 import {StudyService} from '../../services/study.service';
-import {Study, Sample} from '../study.model';
+import {Study, Sample} from '../../core/types/study.model';
 // import {ModalDirective} from 'ngx-bootstrap';
 import {AuthenticationService} from '../../core/authentication/authentication.service';
 import {URLService} from '../../services/url.service';

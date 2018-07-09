@@ -1,13 +1,25 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, SimpleChanges, Output} from '@angular/core';
 import {UnifiedMatch} from '../../../../services/study.service';
 
 @Component({
   selector: 'cbit-study-results',
   styleUrls: ['./study-results.scss'],
   template: `
-    <div>
-      <h1>Results</h1>
-      {{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples-->
+    <div class="title-panel">
+      <h3>Results</h3>
+      {{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples
+    </div>
+
+    <div class="container-fluid">
+      <ng-container *ngFor="let row of (matches | splitByThreePipe)">
+        <div class="row" style="margin-top: 20px">
+          <div class="col-4" *ngFor="let match of row">
+            <cbit-study-result [match]="match"
+              (showDetails)="onShowDetails(match)">
+            </cbit-study-result>
+          </div>
+        </div>
+      </ng-container>
     </div>
 
     <!--<div *ngIf="fieldMetasReady" class="row">-->
@@ -91,21 +103,6 @@ import {UnifiedMatch} from '../../../../services/study.service';
     <!--</ul>-->
     <!--</div>-->
     <!--</div>-->
-    <!--<div class="panel-footer">-->
-    <!--<div class="btn-group btn-group-xs" style="float:right">-->
-    <!--<a *ngFor="let pubmedId of pubmedIdsOf(studyMatch.study)"-->
-    <!--target="_blank"-->
-    <!--class="btn btn-default" role="button"-->
-    <!--pubmed-link [pubmedId]="pubmedId">-->
-    <!--PubMed-->
-    <!--</a>-->
-
-    <!--<a *ngFor="let doi of doisOf(studyMatch.study)"-->
-    <!--target="_blank"-->
-    <!--class="btn btn-default" role="button"-->
-    <!--doi-link [doi]="doi">-->
-    <!--DOI-->
-    <!--</a>-->
 
     <!--<a *ngIf="isAdmin()"-->
     <!--[href]="studyMatch.study._source['*Archive URL']"-->
@@ -178,12 +175,20 @@ import {UnifiedMatch} from '../../../../services/study.service';
 export class StudyResultsComponent implements OnChanges {
 
   @Input()
-  public results: UnifiedMatch[] = [];
+  public matches: UnifiedMatch[] = [];
+
+  @Output()
+  public showDetails = new EventEmitter<UnifiedMatch>();
+
   public numMatchingStudies = 0;
   public numMatchingSamples = 0;
 
   public ngOnChanges(changes: SimpleChanges): void {
-    this.numMatchingStudies = this.results.length;
-    this.numMatchingSamples = this.results.reduce((soFar, studyMatch) => soFar + studyMatch.sampleMatches.length, 0);
+    this.numMatchingStudies = this.matches.length;
+    this.numMatchingSamples = this.matches.reduce((soFar, studyMatch) => soFar + studyMatch.sampleMatches.length, 0);
+  }
+
+  public onShowDetails(match: UnifiedMatch) {
+    this.showDetails.emit(match);
   }
 }
