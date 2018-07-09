@@ -8,7 +8,7 @@ export class PopupService {
   constructor(private modalService: NgbModal) {
   }
 
-  public showLoginPopup(closeAction: Function) {
+  public showLoginPopup() {
     const popupInstance = <LoginPopupComponent> this.modalService.open(LoginPopupComponent, {
       backdrop: 'static',
       windowClass: 'small-window'

@@ -4,6 +4,9 @@ import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {BusyIndicatorService} from '../../services/busy-indicator.service';
 import {LoggedInUser} from './loggedInUser';
+import {Store} from '@ngrx/store';
+import {ApplicationState} from '../redux/reducers/index';
+import {LoginAction, LogoutAction} from '../redux/actions/application.actions';
 
 @Injectable()
 export class AuthenticationService {
@@ -11,6 +14,7 @@ export class AuthenticationService {
   private loggedInUser: LoggedInUser;
 
   constructor(private http: HttpClient,
+              private store: Store<ApplicationState>,
               private busyIndicatorService: BusyIndicatorService,
               private urlService: URLService) {
   }
@@ -20,16 +24,28 @@ export class AuthenticationService {
     return this.performLogin(username, authHeader)
       .map(result => {
         if (result.realname) {
+          // todo@Sam replaced by redux
           this.loggedInUser = new LoggedInUser(username, result.realname, authHeader);
+          this.store.dispatch(new LoginAction(this.loggedInUser));
           return true;
-        }else {
+        } else {
           return false;
         }
       });
   }
 
   public logout() {
+    // todo@Sam replaced by redux
     this.loggedInUser = null;
+    this.store.dispatch(new LogoutAction());
+  }
+
+  public isLoggedIn(): boolean {
+    return this.loggedInUser === null;
+  }
+
+  public getAdminName(): string {
+    return this.loggedInUser.displayName;
   }
 
   private performLogin(username: string, authHeader: string): Observable<any> {
