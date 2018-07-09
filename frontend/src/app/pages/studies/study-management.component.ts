@@ -7,6 +7,7 @@ import {URLService} from '../../services/url.service';
 import {HttpGatewayService} from '../../services/http-gateway.service';
 import {Observable} from 'rxjs/Observable';
 import {StudyState} from './components/study-mentadata-editor.component';
+import {PopupService} from '../../services/popup.service';
 
 @Component({
   styleUrls: ['./study-management.scss'],
@@ -66,6 +67,7 @@ export class StudyManagementComponent implements OnInit {
   constructor(private _url: URLService,
               private _studyService: StudyService,
               private httpGatewayService: HttpGatewayService,
+              private popupService: PopupService,
               private _changeDetectorRef: ChangeDetectorRef) {
   }
 
@@ -102,46 +104,25 @@ export class StudyManagementComponent implements OnInit {
   }
 
   deleteStudy(studyId: string) {
-    let self = this;
+    this.popupService.showConfirmationPoupup(`Are you sure you want to delete study ${studyId}?`, () => {
+      const onError = (err, caught) => {
+        this.studyState[studyId] = StudyState.Present;
+        (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].enable();
+        (<FormGroup>this.form.controls[studyId]).controls['visible'].enable();
+        this.studySpecificErrorMessage[studyId] = `Error: ${err.statusText}`;
+        this._changeDetectorRef.detectChanges();
+        return Observable.throw(err);
+      };
 
-    this.studyState[studyId] = StudyState.Deleting;
-    delete self.studySpecificErrorMessage[studyId];
-    (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].disable();
-    (<FormGroup>this.form.controls[studyId]).controls['visible'].disable();
-
-    const onError = (err, caught) => {
-      self.studyState[studyId] = StudyState.Present;
-      (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].enable();
-      (<FormGroup>this.form.controls[studyId]).controls['visible'].enable();
-      self.studySpecificErrorMessage[studyId] = `Error: ${err.statusText}`;
-      self._changeDetectorRef.detectChanges();
-      return Observable.throw(err);
-    };
-
-    this.httpGatewayService.delete(this._url.studyResource(studyId),  onError)
-      .subscribe(() => {
-        self.studyState[studyId] = StudyState.Deleted;
-        self._changeDetectorRef.detectChanges();
-      });
-
-    /* $.ajax({
-       type: 'DELETE',
-       url: this._url.studyResource(studyId),
-       headers: this._auth.headers(),
-       contentType: 'application/json',
-       success: (data: string[]) => {
-         self.studyState[studyId] = StudyState.Deleted;
-       },
-       error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
-         self.studyState[studyId] = StudyState.Present;
-         (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].enable();
-         (<FormGroup>this.form.controls[studyId]).controls['visible'].enable();
-         self.studySpecificErrorMessage[studyId] = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
-       },
-       complete: () => {
-         self._changeDetectorRef.detectChanges();
-       }
-     });*/
+      this.httpGatewayService.delete(this._url.studyResource(studyId),  onError)
+        .subscribe(() => {
+          this.studyState[studyId] = StudyState.Deleted;
+          delete this.studySpecificErrorMessage[studyId];
+          (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].disable();
+          (<FormGroup>this.form.controls[studyId]).controls['visible'].disable();
+          this._changeDetectorRef.detectChanges();
+        });
+    });
   }
 
   saveChanges() {
