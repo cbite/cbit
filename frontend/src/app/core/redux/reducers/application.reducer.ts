@@ -1,19 +1,24 @@
 import * as ApplicationActions from '../actions/application.actions';
+import {LoggedInUser} from '../../authentication/loggedInUser';
 export type  Action = ApplicationActions.All;
 
 export interface State {
-  showLoader: boolean;
+  loggedInUser: LoggedInUser;
 }
 
 export const initialState: State = {
-  showLoader: false,
+  loggedInUser: null,
 };
 
 export function Reducer(state = initialState, action: Action): State {
   switch (action.type) {
-    case ApplicationActions.APPLICATION_SHOW_LOADER:
+    case ApplicationActions.APPLICATION_LOGIN_ACTION:
       return {
-        showLoader: action.showLoader
+        loggedInUser: action.loggedInUser
+      };
+    case ApplicationActions.APPLICATION_LOGOUT_ACTION:
+      return {
+        loggedInUser: null
       };
     default:
       return state;

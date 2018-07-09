@@ -1,0 +1,47 @@
+@import '../../../../variables';
+
+.admin-link {
+  float: right;
+  vertical-align: top;
+  display: inline-block;
+  font-size: $font-size-normal;
+  padding: 0 20px;
+  text-align: center;
+  cursor: pointer;
+  outline: 0;
+
+  &:hover {
+    background-color: $color-blue;
+    color: white;
+  }
+
+  &.active {
+    background-color: $color-blue;
+    color: white;
+  }
+
+  &.menu {
+    width: 180px;
+    position: relative;
+  }
+}
+
+.header-menu {
+  position: absolute;
+  left: 0;
+  width: 180px;
+  cursor: pointer;
+  background-color: $color-dark-blue;
+  color: white;
+
+  .header-menu-link {
+    height: 50px;
+    line-height: 50px;
+    width: 180px;
+
+    &:hover {
+      color: white;
+      background-color: $color-blue;
+    }
+  }
+}
