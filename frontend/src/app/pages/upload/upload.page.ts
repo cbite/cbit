@@ -167,7 +167,7 @@ export class UploadPage implements OnInit {
       method: 'POST',
       queueLimit: 1,
       disableMultipart: true,  // Send the file body directly as request body, don't wrap it in any way
-      authToken: this._auth.headers()['Authorization'] // TODO@Sam check if header still works
+      authToken: this._auth.getAuthorizationHeader()
     });
   }
 
@@ -332,8 +332,10 @@ export class UploadPage implements OnInit {
     }
 
     metadataInsertionPromise.then(() => {
+      const authHeaderContent = this._auth.getAuthorizationHeader();
       const headers = new HttpHeaders({
-        'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+        'Authorization': authHeaderContent
       });
       this.httpGatewayService.put(this.confirm_upload_url, JSON.stringify({
         publicationDate: that.studyPublicationDate,

@@ -71,10 +71,4 @@ export class AuthenticationService {
   public getAuthorizationHeader(): string {
     return this.loggedInUser.authHeader ? this.loggedInUser.authHeader : '';
   }
-
-  // jQuery `headers` for authentication
-  // See http://stackoverflow.com/a/11960692
-  headers(): { Authorization?: string } {
-    return {};
-  }
 }
