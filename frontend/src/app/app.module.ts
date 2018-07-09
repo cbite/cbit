@@ -19,6 +19,8 @@ import {SelectionIndicatorComponent} from './core/components/app-header/selectio
 import {DropdownDirective} from './common/dropdown.directive';
 import {DropdownMenuDirective} from './common/dropdown-menu.directive';
 import {StudyMetadataEditorComponent, StudyManagementComponent} from './pages/studies/study-management.component';
+import {StudyManagementComponent} from './pages/studies/study-management.component';
+import {ChangePasswordComponent} from './common/components/change-password.component';
 import {Ng2SliderComponent} from './common/slider/ng2-slider.component';
 import {HorizontallySlidableDirective} from './common/slider/horizontally-slidable.directive';
 import {
@@ -65,6 +67,7 @@ import {FieldMetadataFormComponent} from './pages/upload/components/FieldMetadat
 import {UserManagementPage} from './pages/user-management/user-management.page';
 import {MetadataPage} from './pages/metadata/metadata.page';
 import {FieldMetadataEditorComponent} from './pages/metadata/components/FieldMetadataEditorComponent';
+import {StudyMetadataEditorComponent} from './pages/studies/components/study-mentadata-editor.component';
 import {ChangePasswordComponent} from './popups/change-password/change-password.component';
 
 @NgModule(

@@ -27,7 +27,7 @@ import {AppUrls} from '../../../router/app-urls';
         </div>
         <div class="header-link"
              routerLinkActive="active"
-             routerLink="/browse">Browse
+             routerLink="/browse">Bio Material
         </div>
       </div>
       <cbit-app-header-menu
@@ -54,7 +54,7 @@ export class AppHeaderComponent {
       case 'upload_study':
         this.router.navigateByUrl(AppUrls.uploadUrl);
         break;
-      case 'manage_studie':
+      case 'manage_studies':
         this.router.navigateByUrl(AppUrls.studiesUrl);
         break;
       case 'edit_metadata':
