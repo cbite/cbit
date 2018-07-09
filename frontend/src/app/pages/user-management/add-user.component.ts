@@ -8,6 +8,7 @@ import {ChangePasswordComponent} from '../../common/components/change-password.c
 import {URLService} from '../../services/url.service';
 import {User} from './user-management.component';
 import {HttpGatewayService} from '../../services/http-gateway.service';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'cbit-add-user',
@@ -96,10 +97,17 @@ export class AddUserComponent {
       const addedUserName = this.username;
       const addedRealName = this.realname;
 
+      const onError = (err, caught) => {
+        self.errorMessage = 'Failed to add new user!';
+        self.adding = false;
+        self.changeDetectorRef.detectChanges();
+        return Observable.of(null);
+      };
+
       this.httpGatewayService.put(this._url.userResource(this.username), JSON.stringify({
         'realname': this.realname,
         'password': this.password
-      }))
+      }),  onError)
         .subscribe(() => {
           // TODO@Sam Fix this!
           // self.modal.hide();
@@ -107,7 +115,6 @@ export class AddUserComponent {
             username: addedUserName,
             realname: addedRealName
           });
-          // TODO@Sam check what happens on error
           self.changeDetectorRef.detectChanges();
         });
 

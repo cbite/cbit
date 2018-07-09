@@ -14,6 +14,7 @@ import {HttpGatewayService} from '../../services/http-gateway.service';
 import {HttpHeaders} from '@angular/common/http';
 import {FieldAnalysisResults} from './types/FieldAnalysisResults';
 import {UploadsResponse} from './types/UploadsResponse';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   styleUrls: ['./upload.scss'],
@@ -108,7 +109,7 @@ import {UploadsResponse} from './types/UploadsResponse';
 
         <div *ngIf="unknownFields">
           <cbit-field-metadata-form [fieldNames]="unknownFields" [fieldAnalyses]="fieldAnalyses"
-                               (form)="fieldMetadataForm = $event"></cbit-field-metadata-form>
+                                    (form)="fieldMetadataForm = $event"></cbit-field-metadata-form>
         </div>
 
         <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">
@@ -172,11 +173,17 @@ export class UploadPage implements OnInit {
   }
 
   ngOnInit() {
-    this.httpGatewayService.get(this._url.iRODSListResource()).subscribe((iRODSList: string[]) => {
+    const onError = (err, caught) => {
+      this.iRODSStatus = `Failed to get list of studies from iRODS: ${err}!`;
+      this.iRODSListReady = true;
+      this.changeDetectorRef.detectChanges();
+      return Observable.of(null);
+    };
+
+    this.httpGatewayService.get(this._url.iRODSListResource(), onError).subscribe((iRODSList: string[]) => {
       this.iRODSStudyNames = iRODSList;
       this.iRODSListReady = true;
       this.changeDetectorRef.detectChanges();
-      // TODO@Sam check what happens on error
     });
 
     /* $.ajax({
@@ -232,11 +239,18 @@ export class UploadPage implements OnInit {
   kickOffIRODSUpload(iRODSStudyName: string) {
     this.iRODSStatus = 'Working on it (this can take quite a while!)...';
 
-    this.httpGatewayService.post(this._url.uploadsIRODSResource(iRODSStudyName), {}).subscribe((uploadsResponse: UploadsResponse) => {
+    const onError = (err, caught) => {
+      this.step = 4;
+      this.errorMessage = `iRODS upload failed: ${err}!`;
+      this.iRODSListReady = true;
+      this.changeDetectorRef.detectChanges();
+      return Observable.of(null);
+    };
+
+    this.httpGatewayService.post(this._url.uploadsIRODSResource(iRODSStudyName), {}, onError).subscribe((uploadsResponse: UploadsResponse) => {
       this.proceedToUploadsStep2(uploadsResponse);
       this.iRODSListReady = true;
       this.changeDetectorRef.detectChanges();
-      // TODO@Sam check what happens on error
     });
 
     /* $.ajax({
@@ -307,9 +321,16 @@ export class UploadPage implements OnInit {
       metadataInsertionPromise = Promise.resolve([]);
     } else {
       metadataInsertionPromise = new Promise((resolve, reject) => {
-        this.httpGatewayService.put(that._url.metadataFieldsMultiResource(), JSON.stringify(newFieldMetadata)).subscribe(() => {
+        const onError = (err, caught) => {
+          that.errorMessage = `Failed to create new fields: ${err}!`;
+          that.step = 4;
+          that.changeDetectorRef.detectChanges();
+          reject();
+          return Observable.of(null);
+        };
+
+        this.httpGatewayService.put(that._url.metadataFieldsMultiResource(), JSON.stringify(newFieldMetadata), onError).subscribe(() => {
           resolve();
-          // TODO@Sam check what happens on error
         });
 
         /* $.ajax({
@@ -337,13 +358,20 @@ export class UploadPage implements OnInit {
         'Content-Type': 'application/json',
         'Authorization': authHeaderContent
       });
+
+      const onError = (err, caught) => {
+        that.errorMessage = `Details ${err}`;
+        that.step = 4;
+        that.changeDetectorRef.detectChanges();
+        return Observable.of(null);
+      };
+
       this.httpGatewayService.put(this.confirm_upload_url, JSON.stringify({
         publicationDate: that.studyPublicationDate,
         visible: that.studyInitiallyVisible
-      }), undefined, headers).subscribe(() => {
+      }), onError, headers).subscribe(() => {
         that.step = 3;
         that.changeDetectorRef.detectChanges();
-        // TODO@Sam check what happens on error => go to step 4
       });
 
       /* $.ajax({

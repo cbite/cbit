@@ -8,6 +8,7 @@ import {ChangePasswordComponent} from '../../common/components/change-password.c
 import {URLService} from '../../services/url.service';
 import {AddUserComponent} from './add-user.component';
 import {HttpGatewayService} from '../../services/http-gateway.service';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   template: `
@@ -121,30 +122,37 @@ export class UserManagementComponent implements OnInit {
     delete self.userSpecificErrorMessage[username];
     (<FormGroup>this.form.controls[username]).controls['realname'].disable();
 
-    this.httpGatewayService.delete(this._url.userResource(username))
+    const onError = (err, caught) => {
+      self.userState[username] = UserState.Present;
+      (<FormGroup>this.form.controls[username]).controls['realname'].enable();
+      self.userSpecificErrorMessage[username] = `Error: ${err}`;
+      self._changeDetectorRef.detectChanges();
+      return Observable.of(null);
+    };
+
+    this.httpGatewayService.delete(this._url.userResource(username),  onError)
       .subscribe(() => {
         this.userState[username] = UserState.Deleted;
         this._changeDetectorRef.detectChanges();
       });
 
-    // TODO@Sam check what happens on error
-   /* $.ajax({
-      type: 'DELETE',
-      url: this._url.userResource(username),
-      headers: this._auth.headers(),
-      contentType: 'application/json',
-      success: () => {
-        self.userState[username] = UserState.Deleted;
-      },
-      error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
-        self.userState[username] = UserState.Present;
-        (<FormGroup>this.form.controls[username]).controls['realname'].enable();
-        self.userSpecificErrorMessage[username] = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
-      },
-      complete: () => {
-        self._changeDetectorRef.detectChanges();
-      }
-    });*/
+    /* $.ajax({
+       type: 'DELETE',
+       url: this._url.userResource(username),
+       headers: this._auth.headers(),
+       contentType: 'application/json',
+       success: () => {
+         self.userState[username] = UserState.Deleted;
+       },
+       error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
+         self.userState[username] = UserState.Present;
+         (<FormGroup>this.form.controls[username]).controls['realname'].enable();
+         self.userSpecificErrorMessage[username] = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
+       },
+       complete: () => {
+         self._changeDetectorRef.detectChanges();
+       }
+     });*/
   }
 
   saveChanges() {

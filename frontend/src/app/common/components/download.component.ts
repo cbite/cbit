@@ -11,6 +11,7 @@ import * as $ from 'jquery';
 import {CollapseStateService} from '../../services/collapse-state.service';
 import {FieldMeta} from '../field-meta.model';
 import {HttpGatewayService} from '../../services/http-gateway.service';
+import {Observable} from 'rxjs/Observable';
 
 interface DownloadPostResponse {
   download_uuid: string;
@@ -418,17 +419,24 @@ export class DownloadComponent {
       }
     }
 
+    const onError = (err, caught) => {
+      console.log(`Error: ${err}!`);
+      self.errorMessage = 'Error while initiating download preparation, please try again';
+      self.preparingDownload = false;
+      self.changeDetectorRef.detectChanges();
+      return Observable.of(null);
+    };
+
     this.httpGatewayService.post(this._url.downloadsResource(), JSON.stringify({
       onlyIncludeMetadata: this.onlyIncludeMetadata,
       sampleIds: sampleIds
-    })).subscribe((data: DownloadPostResponse) => {
+    }), onError).subscribe((data: DownloadPostResponse) => {
       self.download_uuid = data.download_uuid;
       self.downloadLocation = data.location;
       self.progressUrl = data.progressUrl;
 
       self.schedulePollForProgress();
 
-      // TODO@Sam check what happens on error
     });
 
     /*$.ajax({
@@ -465,7 +473,15 @@ export class DownloadComponent {
   doProgressPoll() {
     const self = this;
 
-    this.httpGatewayService.get(this.progressUrl)
+    const onError = (err, caught) => {
+      console.log(`Error: ${err}!`);
+      self.errorMessage = 'Error while preparing download, please try again';
+      self.preparingDownload = false;
+      self.changeDetectorRef.detectChanges();
+      return Observable.of(null);
+    };
+
+    this.httpGatewayService.get(this.progressUrl, onError)
       .subscribe((result: DownloadProgressResponse) => {
         self.preparationProgress = result.progress;
 
@@ -486,7 +502,6 @@ export class DownloadComponent {
         }
         self.changeDetectorRef.detectChanges();
       });
-    // TODO@Sam check what happens on error
 
     /*$.ajax({
       type: 'GET',

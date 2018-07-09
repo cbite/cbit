@@ -5,6 +5,7 @@ import {Study} from '../../common/study.model';
 import {AuthenticationService} from '../../core/authentication/authentication.service';
 import {URLService} from '../../services/url.service';
 import {HttpGatewayService} from '../../services/http-gateway.service';
+import {Observable} from 'rxjs/Observable';
 
 enum StudyState {
   Present,
@@ -186,31 +187,39 @@ export class StudyManagementComponent implements OnInit {
     (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].disable();
     (<FormGroup>this.form.controls[studyId]).controls['visible'].disable();
 
-    this.httpGatewayService.delete(this._url.studyResource(studyId))
+    const onError = (err, caught) => {
+      self.studyState[studyId] = StudyState.Present;
+      (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].enable();
+      (<FormGroup>this.form.controls[studyId]).controls['visible'].enable();
+      self.studySpecificErrorMessage[studyId] = `Error: ${err}`;
+      self._changeDetectorRef.detectChanges();
+      return Observable.of(null);
+    };
+
+    this.httpGatewayService.delete(this._url.studyResource(studyId),  onError)
       .subscribe(() => {
         self.studyState[studyId] = StudyState.Deleted;
         self._changeDetectorRef.detectChanges();
-        // TODO@Sam check what happens on error
       });
 
-   /* $.ajax({
-      type: 'DELETE',
-      url: this._url.studyResource(studyId),
-      headers: this._auth.headers(),
-      contentType: 'application/json',
-      success: (data: string[]) => {
-        self.studyState[studyId] = StudyState.Deleted;
-      },
-      error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
-        self.studyState[studyId] = StudyState.Present;
-        (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].enable();
-        (<FormGroup>this.form.controls[studyId]).controls['visible'].enable();
-        self.studySpecificErrorMessage[studyId] = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
-      },
-      complete: () => {
-        self._changeDetectorRef.detectChanges();
-      }
-    });*/
+    /* $.ajax({
+       type: 'DELETE',
+       url: this._url.studyResource(studyId),
+       headers: this._auth.headers(),
+       contentType: 'application/json',
+       success: (data: string[]) => {
+         self.studyState[studyId] = StudyState.Deleted;
+       },
+       error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
+         self.studyState[studyId] = StudyState.Present;
+         (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].enable();
+         (<FormGroup>this.form.controls[studyId]).controls['visible'].enable();
+         self.studySpecificErrorMessage[studyId] = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
+       },
+       complete: () => {
+         self._changeDetectorRef.detectChanges();
+       }
+     });*/
   }
 
   saveChanges() {
@@ -220,13 +229,21 @@ export class StudyManagementComponent implements OnInit {
     this.saveDone = false;
     this.saveError = '';
 
-    this.httpGatewayService.post(self._url.metadataStudiesResource(), JSON.stringify(Object.values(this.form.value).filter((info: { studyId: string }) => self.studyState[info.studyId] == StudyState.Present)))
+    const onError = (err, caught) => {
+      self.savingChanges = false;
+      self.saveDone = true;
+      self.saveError = `Error: ${err}`;
+      self._changeDetectorRef.detectChanges();
+      self._studyService.flushCaches();
+      return Observable.of(null);
+    };
+
+    this.httpGatewayService.post(self._url.metadataStudiesResource(), JSON.stringify(Object.values(this.form.value).filter((info: { studyId: string }) => self.studyState[info.studyId] == StudyState.Present)), onError)
       .subscribe(() => {
         self.savingChanges = false;
         self.saveDone = true;
         self._changeDetectorRef.detectChanges();
         self._studyService.flushCaches();
-        // TODO@Sam check what happens on error
       });
 
     /*$.ajax({
