@@ -188,7 +188,7 @@ def complete_upload(upload_uuid, db_conn, filepath, resp):
     resp_json = {
         'upload_uuid': upload_uuid,
         'status': UPLOAD_STATUS_UPLOADED,
-        'location': cfg.URL_BASE + resp.location,
+        'location': resp.location,
         'fieldNames': list(fieldNames),
         'knownFields': {
             f.fieldName: f.to_json()
