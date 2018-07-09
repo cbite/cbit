@@ -260,10 +260,10 @@ export class MetadataComponent implements OnInit {
     const onError = (err, caught) => {
       self.savingChanges = false;
       self.saveDone = true;
-      self.saveError = `Error: ${err}`;
+      self.saveError = `Error: ${err.statusText}`;
       self._changeDetectorRef.detectChanges();
       self._studyService.flushCaches();
-      return Observable.of(null);
+      return Observable.throw(err);
     };
 
     this.httpGatewayService.post(this._url.metadataFieldsMultiResource(), JSON.stringify(Object.values(this.form.value)), onError)

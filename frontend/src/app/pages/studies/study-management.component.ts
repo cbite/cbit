@@ -113,9 +113,9 @@ export class StudyManagementComponent implements OnInit {
       self.studyState[studyId] = StudyState.Present;
       (<FormGroup>this.form.controls[studyId]).controls['publicationDate'].enable();
       (<FormGroup>this.form.controls[studyId]).controls['visible'].enable();
-      self.studySpecificErrorMessage[studyId] = `Error: ${err}`;
+      self.studySpecificErrorMessage[studyId] = `Error: ${err.statusText}`;
       self._changeDetectorRef.detectChanges();
-      return Observable.of(null);
+      return Observable.throw(err);
     };
 
     this.httpGatewayService.delete(this._url.studyResource(studyId),  onError)
@@ -154,10 +154,10 @@ export class StudyManagementComponent implements OnInit {
     const onError = (err, caught) => {
       self.savingChanges = false;
       self.saveDone = true;
-      self.saveError = `Error: ${err}`;
+      self.saveError = `Error: ${err.statusText}`;
       self._changeDetectorRef.detectChanges();
       self._studyService.flushCaches();
-      return Observable.of(null);
+      return Observable.throw(err);
     };
 
     this.httpGatewayService.post(self._url.metadataStudiesResource(), JSON.stringify(Object.values(this.form.value).filter((info: { studyId: string }) => self.studyState[info.studyId] == StudyState.Present)), onError)
