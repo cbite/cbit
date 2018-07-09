@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {DownloadComponent} from '../common/components/download.component';
-import {MetadataComponent} from '../pages/metadata/metadata.component';
 import {StudyManagementComponent} from '../pages/studies/study-management.component';
 import {StudyRedirectComponent} from '../pages/studies/study-redirect.component';
 import {AppUrls} from './app-urls';
@@ -11,6 +10,7 @@ import {FAQPage} from '../pages/faq/faq.page';
 import {BrowserPage} from '../pages/browser/browser.page';
 import {UploadPage} from '../pages/upload/upload.page';
 import {UserManagementPage} from '../pages/user-management/user-management.page';
+import {MetadataPage} from '../pages/metadata/metadata.page';
 
 const routes: Routes = [
   { path: '',           redirectTo: '/welcome', pathMatch: 'full' },
@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: AppUrls.browseUrl, component: BrowserPage },
   { path: AppUrls.downloadUrl, component: DownloadComponent },
   { path: AppUrls.uploadUrl, component: UploadPage },
-  { path: AppUrls.metadataUrl, component: MetadataComponent },
+  { path: AppUrls.metadataUrl, component: MetadataPage },
   { path: AppUrls.studiesUrl, component: StudyManagementComponent },
   { path: AppUrls.usersUrl, component: UserManagementPage },
   { path: AppUrls.studyUrl, component: StudyRedirectComponent }

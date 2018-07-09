@@ -18,7 +18,6 @@ import {SpinnerComponent} from './common/spinner.component';
 import {SelectionIndicatorComponent} from './core/components/app-header/selection-indicator.component';
 import {DropdownDirective} from './common/dropdown.directive';
 import {DropdownMenuDirective} from './common/dropdown-menu.directive';
-import {MetadataComponent, FieldMetadataEditorComponent} from './pages/metadata/metadata.component';
 import {StudyMetadataEditorComponent, StudyManagementComponent} from './pages/studies/study-management.component';
 import {ChangePasswordComponent} from './common/components/change-password.component';
 import {Ng2SliderComponent} from './common/slider/ng2-slider.component';
@@ -65,6 +64,8 @@ import {AppHeaderMenuComponent} from './core/components/app-header/app-header-me
 import {UploadPage} from './pages/upload/upload.page';
 import {FieldMetadataFormComponent} from './pages/upload/components/FieldMetadataFormComponent';
 import {UserManagementPage} from './pages/user-management/user-management.page';
+import {MetadataPage} from './pages/metadata/metadata.page';
+import {FieldMetadataEditorComponent} from './pages/metadata/components/FieldMetadataEditorComponent';
 
 @NgModule(
   {
@@ -95,7 +96,7 @@ import {UserManagementPage} from './pages/user-management/user-management.page';
       DownloadComponent,
       UploadPage,
       FieldMetadataFormComponent,
-      MetadataComponent,
+      MetadataPage,
       FieldMetadataEditorComponent,
       StudyManagementComponent,
       StudyMetadataEditorComponent,
