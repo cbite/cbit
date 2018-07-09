@@ -10,22 +10,21 @@ export class AuthenticationService {
 
   private loggedInUser: LoggedInUser;
 
-  constructor(
-    private http: HttpClient,
-    private busyIndicatorService: BusyIndicatorService,
-    private urlService: URLService) {
+  constructor(private http: HttpClient,
+              private busyIndicatorService: BusyIndicatorService,
+              private urlService: URLService) {
   }
 
   public login(username: string, password: string): Observable<boolean> {
     const authHeader = `Basic ${btoa(`${username}:${password}`)}`;
     return this.performLogin(username, authHeader)
       .map(result => {
-        console.log(result);
-        if (result.success) {
-          this.loggedInUser = new LoggedInUser(username, '', authHeader);
+        if (result.realname) {
+          this.loggedInUser = new LoggedInUser(username, result.realname, authHeader);
+          return true;
+        }else {
+          return false;
         }
-
-        return false;
       });
   }
 
@@ -35,8 +34,7 @@ export class AuthenticationService {
 
   private performLogin(username: string, authHeader: string): Observable<any> {
     const url = this.urlService.userResource(username);
-    const headers = new HttpHeaders();
-    headers.append('Authorization', authHeader);
+    const headers = new HttpHeaders({'Authorization': authHeader});
     return this.http
       .get(url, {headers: headers})
       .catch(this.loginFailed);
