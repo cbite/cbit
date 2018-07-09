@@ -1,5 +1,5 @@
-import {FieldMeta} from '../../../common/field-meta.model';
 import {FieldAnalysisResults} from './FieldAnalysisResults';
+import {FieldMeta} from '../../../core/types/field-meta';
 
 export interface UploadsResponse {
   upload_uuid: string;

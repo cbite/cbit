@@ -5,7 +5,6 @@ import {
   ParsedResponseHeaders, FileUploaderOptions, Headers
 } from 'ng2-file-upload/ng2-file-upload';
 
-import {FieldMeta, DimensionsType} from '../../common/field-meta.model';
 import {FormGroup, FormControl, Validators, RequiredValidator} from '@angular/forms';
 import {DimensionsRegister, INVALID_DIMENSIONS} from '../../common/unit-conversions';
 import {AuthenticationService} from '../../core/authentication/authentication.service';
@@ -15,6 +14,7 @@ import {HttpHeaders} from '@angular/common/http';
 import {FieldAnalysisResults} from './types/FieldAnalysisResults';
 import {UploadsResponse} from './types/UploadsResponse';
 import {Observable} from 'rxjs/Observable';
+import {FieldMeta} from '../../core/types/field-meta';
 
 @Component({
   styleUrls: ['./upload.scss'],

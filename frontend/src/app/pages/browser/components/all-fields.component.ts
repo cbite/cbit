@@ -1,5 +1,6 @@
 import {Component, ChangeDetectorRef, Input} from '@angular/core';
 import {ClassifiedProperties, StudyService, ClassifiedPropertiesForGivenVisibility} from "../../../services/study.service";
+import {FieldMetaService} from '../../../core/services/field-meta.service';
 
 @Component({
   selector: 'all-fields-visibility-category',
@@ -44,13 +45,13 @@ export class AllFieldsForVisibilityCategoryComponent {
   description: { [fieldName: string]: string } = {};
 
   constructor(
-    private _studyService: StudyService
+    private fieldMetaService: FieldMetaService,
   ) {}
 
   ngOnChanges() {
     if (this.fields) {
       Promise.all(
-        this.fields.map(fieldName => this._studyService.getFieldMeta(fieldName))
+        this.fields.map(fieldName => this.fieldMetaService.getFieldMeta(fieldName))
       ).then(fieldMetasList => {
         this.description = {};
         for (let fieldMeta of fieldMetasList) {
@@ -179,14 +180,14 @@ export class AllFieldsComponent {
   classifiedProperties: ClassifiedProperties = {};
 
   constructor(
-    private _studyService: StudyService,
+    private fieldMetaService: FieldMetaService,
     private _changeDetectorRef: ChangeDetectorRef
   ) { }
 
   refresh() {
-    this._studyService.getAllFieldMetas()
+    this.fieldMetaService.getAllFieldMetas()
       .then(fieldMetas => {
-        this.classifiedProperties = this._studyService.classifyProperties(fieldMetas);
+        this.classifiedProperties = this.fieldMetaService.classifyProperties(fieldMetas);
         console.log(this.classifiedProperties);
         this.ready = true;
         this._changeDetectorRef.detectChanges();

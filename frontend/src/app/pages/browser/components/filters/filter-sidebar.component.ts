@@ -3,10 +3,11 @@ import {FormControl} from '@angular/forms';
 import {FiltersService, FiltersState} from '../../../../services/filters.service';
 import {StudyService, ManySampleCounts, ClassifiedProperties, ClassifiedPropertiesForGivenVisibility} from '../../../../services/study.service';
 import {Observable, Subject} from 'rxjs';
-import {FieldVisibility, FieldCategory, FieldMeta} from '../../../../common/field-meta.model';
 import * as _ from 'lodash';
 // import {ModalDirective} from "ngx-bootstrap";
 import {CollapseStateService} from '../../../../services/collapse-state.service';
+import {FieldMeta} from '../../../../core/types/field-meta';
+import {FieldMetaService} from '../../../../core/services/field-meta.service';
 
 @Component({
   styleUrls: ['./filter-sidebar.scss'],
@@ -81,6 +82,7 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
   stopStream = new Subject<string>();
 
   constructor(
+    private fieldMetaService: FieldMetaService,
     private _studyService: StudyService,
     private _filtersService: FiltersService,
     private changeDetectorRef: ChangeDetectorRef
@@ -105,13 +107,13 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
       .getAllCountsAsync()
       .then(unfilteredCounts => {
         this.unfilteredPropNamesAndValueCounts = unfilteredCounts;
-        return this._studyService.getAllFieldMetas(Object.keys(unfilteredCounts));
+        return this.fieldMetaService.getAllFieldMetas(Object.keys(unfilteredCounts));
       })
       .then(allFieldMetas => {
         this.allFieldMetas = allFieldMetas;
         this.visiblePropNames = this.calcVisiblePropNames(allFieldMetas);
 
-        this.classifiedProperties = this._studyService.classifyProperties(allFieldMetas);
+        this.classifiedProperties = this.fieldMetaService.classifyProperties(allFieldMetas);
 
         this.changeDetectorRef.detectChanges();
         this.startListening();

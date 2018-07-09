@@ -67,6 +67,7 @@ import {UserManagementPage} from './pages/user-management/user-management.page';
 import {MetadataPage} from './pages/metadata/metadata.page';
 import {FieldMetadataEditorComponent} from './pages/metadata/components/FieldMetadataEditorComponent';
 import {StudyMetadataEditorComponent} from './pages/studies/components/study-mentadata-editor.component';
+import {FieldMetaService} from './core/services/field-meta.service';
 
 @NgModule(
   {
@@ -140,6 +141,7 @@ import {StudyMetadataEditorComponent} from './pages/studies/components/study-men
       BusyIndicatorService,
       HttpGatewayService,
       AuthenticationService,
+      FieldMetaService,
       CollapseStateService,
       UnitFormattingService,
       TooltipService,

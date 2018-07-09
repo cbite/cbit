@@ -10,7 +10,8 @@ import {Ng2SliderComponent} from "../../../../common/slider/ng2-slider.component
 import {Subject} from "rxjs";
 import {CollapseStateService} from '../../../../services/collapse-state.service';
 import {UnitFormattingService} from "../../../../services/unit-formatting.service";
-import {FieldMeta} from "../../../../common/field-meta.model";
+import {FieldMeta} from '../../../../core/types/field-meta';
+import {FieldMetaService} from '../../../../core/services/field-meta.service';
 
 enum GlobalCheckboxState {
   All,
@@ -245,7 +246,7 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
 
   constructor(
     private _filtersService: FiltersService,
-    private _studyService: StudyService,
+    private fieldMetaService: FieldMetaService,
     private _elemRef: ElementRef,
     private _changeDetectorRef: ChangeDetectorRef,
     private _collapsedStateService: CollapseStateService,
@@ -288,7 +289,7 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
         : this.category);
     this.jqElem = $(this._elemRef.nativeElement);
 
-    let fieldMetaPromise = this._studyService.getFieldMeta(this.category);
+    let fieldMetaPromise = this.fieldMetaService.getFieldMeta(this.category);
     fieldMetaPromise.then(fieldMeta => {
       this.fieldMeta = fieldMeta;
       this.description = fieldMeta.description || "No description available";

@@ -9,11 +9,11 @@ import * as _ from 'lodash';
 import {FiltersState} from './filters.service';
 import * as $ from 'jquery';
 import {CacheableBulkRequester} from '../common/cacheable-bulk-request';
-import {FieldMeta} from '../common/field-meta.model';
 import {AuthenticationService} from '../core/authentication/authentication.service';
 import {URLService} from './url.service';
 import {UnitFormattingService} from './unit-formatting.service';
 import {HttpGatewayService} from './http-gateway.service';
+import {FieldMeta} from '../core/types/field-meta';
 
 // Should be a parseable number to play nicely with numeric fields
 // and it should survive a round-trip conversion in ES from string to double to string
@@ -66,7 +66,6 @@ export class StudyService {
     this.studyRequester.flushCache();
     this.sampleRequester.flushCache();
     this.sampleIdsRequester.flushCache();
-    this.fieldMetaRequester.flushCache();
   }
 
   getStudy(studyId: string): Promise<Study> {
@@ -81,19 +80,6 @@ export class StudyService {
     return this.sampleRequester.get(sampleId);
   }
 
-  getFieldMeta(fieldName: string): Promise<FieldMeta> {
-    return this.fieldMetaRequester.get(fieldName);
-  }
-
-  getAllFieldNames(): Promise<string[]> {
-    const self = this;
-    return new Promise(resolve => {
-      this.httpGatewayService.get(self._url.metadataFieldsResource()).subscribe(data => {
-        resolve(data);
-      });
-    });
-  }
-
   getAllStudyIds(): Promise<string[]> {
     const self = this;
 
@@ -102,30 +88,6 @@ export class StudyService {
         resolve(data);
       });
     });
-  }
-
-  getAllFieldMetas(explicitFieldNames: string[] = null): Promise<{ [fieldName: string]: FieldMeta }> {
-    const self = this;
-
-    let fieldNamesPromise: Promise<string[]>;
-    if (explicitFieldNames) {
-      fieldNamesPromise = Promise.resolve(explicitFieldNames);
-    } else {
-      fieldNamesPromise = this.getAllFieldNames();
-    }
-    return fieldNamesPromise
-      .then(fieldNames => {
-        const allPromises = fieldNames.map(fieldName => {
-          return self.getFieldMeta(fieldName).then(fieldMeta => {
-            return {[fieldName]: fieldMeta};
-          });
-        });
-
-        return Promise.all(allPromises).then(allFieldMetaObjects => {
-          const result: { [fieldName: string]: FieldMeta } = _.merge.apply(null, [{}].concat(allFieldMetaObjects));
-          return result;
-        });
-      });
   }
 
   getAllCountsAsync(): Promise<ManySampleCounts> {
@@ -184,57 +146,6 @@ export class StudyService {
         });
       });
     });
-  }
-
-  // result looks something like this:
-  // {
-  //   "main": {          <-- visibility from metadata
-  //     "Technical > General": [   <-- category from metadata
-  //        "NameOfMainTechnicalGeneralField1",
-  //        "NameOfMainTechnicalGeneralField2",
-  //        ...
-  //      ],
-  //      "Biological": [
-  //        ...
-  //      ],
-  //      ...
-  //   },
-  //   "additional": {
-  //     ...
-  //   },
-  //   ...
-  // }
-  classifyProperties(fieldMetas: { [fieldName: string]: FieldMeta }): ClassifiedProperties {
-    const self = this;
-
-    // See lodash docs for "_.mergeWith"
-    const customizer = function (objValue: any, srcValue: any) {
-      if (_.isArray(objValue)) {
-        return objValue.concat(srcValue);
-      }
-    };
-
-    let result: ClassifiedProperties = {};
-    for (const fieldName in fieldMetas) {
-      const fieldMeta = fieldMetas[fieldName];
-      result = _.mergeWith(result, {
-        [fieldMeta.visibility || 'additional']: {
-          [fieldMeta.category || 'Technical > General']: [
-            fieldName
-          ]
-        }
-      }, customizer);
-    }
-
-    for (const visibility in result) {
-      for (const category in result[visibility]) {
-        result[visibility][category] = result[visibility][category].sort(
-          (a: string, b: string) => this.withoutStar(a).localeCompare(this.withoutStar(b))
-        );
-      }
-    }
-
-    return result;
   }
 
   findCommonFieldValues(samples: Sample[]): { [fieldName: string]: any } {
@@ -337,7 +248,7 @@ export class StudyService {
   private studyRequester: CacheableBulkRequester<Study>;
   private sampleRequester: CacheableBulkRequester<Sample>;
   private sampleIdsRequester: CacheableBulkRequester<string[]>;
-  private fieldMetaRequester: CacheableBulkRequester<FieldMeta>;
+
 
   constructor(private _url: URLService,
               private httpGatewayService: HttpGatewayService,
@@ -366,21 +277,5 @@ export class StudyService {
       CACHE_LIFETIME_MS,
       REQUEST_BUFFER_MS
     );
-
-    this.fieldMetaRequester = new CacheableBulkRequester<FieldMeta>(
-      'fieldMeta',
-      this._url.metadataFieldsResource(),
-      this.httpGatewayService,
-      CACHE_LIFETIME_MS,
-      REQUEST_BUFFER_MS
-    );
-  }
-
-  withoutStar(s: string): string {
-    if (s.substr(0, 1) == '*') {
-      return s.substr(1);
-    } else {
-      return s;
-    }
   }
 }

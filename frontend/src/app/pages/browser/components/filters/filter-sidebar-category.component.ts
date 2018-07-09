@@ -3,7 +3,6 @@ import {FormControl} from '@angular/forms';
 import {FiltersService, FiltersState} from '../../../../services/filters.service';
 import {StudyService, ManySampleCounts, ClassifiedProperties, ClassifiedPropertiesForGivenVisibility} from '../../../../services/study.service';
 import {Observable, Subject} from 'rxjs';
-import {FieldVisibility, FieldCategory, FieldMeta} from '../../../../common/field-meta.model';
 import * as _ from 'lodash';
 // import {ModalDirective} from "ngx-bootstrap";
 import {CollapseStateService} from '../../../../services/collapse-state.service';
