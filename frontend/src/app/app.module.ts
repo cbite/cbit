@@ -67,6 +67,7 @@ import {FieldMetadataEditorComponent} from './pages/metadata/components/FieldMet
 import {StudyMetadataEditorComponent} from './pages/studies/components/study-mentadata-editor.component';
 import {ChangePasswordComponent} from './popups/change-password/change-password.component';
 import {StudyManagementComponent} from './pages/studies/study-management.component';
+import {ConfirmationComponent} from './popups/confirmation/confirmation.component';
 
 @NgModule(
   {
@@ -126,12 +127,14 @@ import {StudyManagementComponent} from './pages/studies/study-management.compone
       Ng2SliderComponent,
       HorizontallySlidableDirective,
       TooltipContainer,
-      MyTooltipDirective
+      MyTooltipDirective,
+      ConfirmationComponent
     ],
     entryComponents: [
       LoginPopupComponent,
       AddUserComponent,
-      ChangePasswordComponent
+      ChangePasswordComponent,
+      ConfirmationComponent
     ],
     providers: [
       URLService,

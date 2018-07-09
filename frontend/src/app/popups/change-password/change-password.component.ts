@@ -7,6 +7,7 @@ import {AuthenticationService} from '../../core/authentication/authentication.se
 
 @Component({
   selector: 'cbit-change-password',
+  styleUrls: ['./change-password.scss'],
   template: `
     <div class="modal-panel noselect">
       <div class="modal-header">

@@ -4,6 +4,7 @@ import {LoginPopupComponent} from '../popups/login/login-popup.component';
 import {AddUserComponent} from '../popups/add-user/add-user.component';
 import {User} from '../pages/user-management/types/User';
 import {ChangePasswordComponent} from '../popups/change-password/change-password.component';
+import {ConfirmationComponent} from '../popups/confirmation/confirmation.component';
 
 @Injectable()
 export class PopupService {
@@ -33,5 +34,16 @@ export class PopupService {
     }).componentInstance;
     popupInstance.username = username;
     popupInstance.successCallback = successCallback;
+  }
+
+  public showConfirmationPoupup(confirmationMessage: string, confirmCallback: any, cancelCallback: any = () => {
+  }) {
+    const popupInstance = <ConfirmationComponent> this.modalService.open(ConfirmationComponent, {
+      backdrop: 'static',
+      windowClass: 'small-window'
+    }).componentInstance;
+    popupInstance.confirmationMessage = confirmationMessage;
+    popupInstance.cancelCallback = cancelCallback;
+    popupInstance.confirmCallback = confirmCallback;
   }
 }

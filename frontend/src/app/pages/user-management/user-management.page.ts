@@ -49,9 +49,11 @@ export class UserManagementPage implements OnInit {
   }
 
   public onDeleteUserClicked(username: string) {
-    this.httpGatewayService.delete(this.urlService.userResource(username)).subscribe(() => {
-      const index = this.users.findIndex(u => u.username === username);
-      this.users.splice(index, 1);
+    this.popupService.showConfirmationPoupup(`Are you sure you want to delete user ${username}?`, () => {
+      this.httpGatewayService.delete(this.urlService.userResource(username)).subscribe(() => {
+        const index = this.users.findIndex(u => u.username === username);
+        this.users.splice(index, 1);
+      });
     });
   }
 
