@@ -69,6 +69,6 @@ export class AuthenticationService {
   }
 
   public getAuthorizationHeader(): string {
-    return this.loggedInUser.authHeader ? this.loggedInUser.authHeader : '';
+    return this.loggedInUser && this.loggedInUser.authHeader ? this.loggedInUser.authHeader : '';
   }
 }
