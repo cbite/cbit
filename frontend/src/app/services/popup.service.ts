@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {LoginPopupComponent} from '../popups/login/login-popup.component';
+import {AddUserComponent} from '../popups/add-user/add-user.component';
 
 @Injectable()
 export class PopupService {
@@ -20,5 +21,13 @@ export class PopupService {
       backdrop: 'static',
       windowClass: 'small-window'
     }).componentInstance;
+  }
+
+  public showAddUserPopup(successCallback: any) {
+    const popupInstance = <AddUserComponent> this.modalService.open(AddUserComponent, {
+      backdrop: 'static',
+      windowClass: 'small-window'
+    }).componentInstance;
+    popupInstance.successCallback = successCallback;
   }
 }

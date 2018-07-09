@@ -21,7 +21,6 @@ import {DropdownMenuDirective} from './common/dropdown-menu.directive';
 import {MetadataComponent, FieldMetadataEditorComponent} from './pages/metadata/metadata.component';
 import {StudyMetadataEditorComponent, StudyManagementComponent} from './pages/studies/study-management.component';
 import {ChangePasswordComponent} from './common/components/change-password.component';
-import {UserManagementComponent} from './pages/user-management/user-management.component';
 import {Ng2SliderComponent} from './common/slider/ng2-slider.component';
 import {HorizontallySlidableDirective} from './common/slider/horizontally-slidable.directive';
 import {
@@ -40,8 +39,8 @@ import {FiltersService} from './services/filters.service';
 import {StudyService} from './services/study.service';
 import {URLService} from './services/url.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {UserEditorComponent} from './pages/user-management/user-editor.component';
-import {AddUserComponent} from './pages/user-management/add-user.component';
+import {UserEditorComponent} from './pages/user-management/components/user-editor.component';
+import {AddUserComponent} from './popups/add-user/add-user.component';
 import {FilterSidebarAllULComponent} from './pages/browser/components/filters/filter-sidebar-all-ul.component';
 import {FilterSidebarCategoryComponent} from './pages/browser/components/filters/filter-sidebar-category.component';
 import {WelcomePage} from './pages/welcome/welcome.page';
@@ -65,6 +64,7 @@ import {reducers} from './core/redux/reducers/index';
 import {AppHeaderMenuComponent} from './core/components/app-header/app-header-menu.component';
 import {UploadPage} from './pages/upload/upload.page';
 import {FieldMetadataFormComponent} from './pages/upload/components/FieldMetadataFormComponent';
+import {UserManagementPage} from './pages/user-management/user-management.page';
 
 @NgModule(
   {
@@ -84,7 +84,7 @@ import {FieldMetadataFormComponent} from './pages/upload/components/FieldMetadat
       AppHeaderMenuComponent,
       AppFooterComponent,
       ChangePasswordComponent,
-      UserManagementComponent,
+      UserManagementPage,
       UserEditorComponent,
       AddUserComponent,
       WelcomePage,
@@ -127,7 +127,8 @@ import {FieldMetadataFormComponent} from './pages/upload/components/FieldMetadat
       MyTooltipDirective
     ],
     entryComponents: [
-      LoginPopupComponent
+      LoginPopupComponent,
+      AddUserComponent
     ],
     providers: [
       URLService,
