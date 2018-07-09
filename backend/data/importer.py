@@ -5,18 +5,22 @@ import config.config as cfg
 from archive import read_archive
 import reader
 from elasticsearch import helpers
-from data.study import StudyType
+from data.study import StudyType, determineStudyType
 
 
 def connect_to_postgres():
     return psycopg2.connect(host=cfg.DB_HOST, port=cfg.DB_PORT, user=cfg.DB_USER, password=cfg.DB_PASS,
                             database=cfg.DB_NAME)
 
-def import_archive(db_conn, es, archive_filename, study_uuid, study_type, publicationDate, visible):
+def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, visible):
     a = read_archive(archive_filename)
 
     # Import metadata into ElasticSearch
     result = a.investigation
+
+    # Determine the study type
+    geneExpressionType = a.study_sample['Characteristics[Gene expression type]'][0]
+    study_type = determineStudyType(geneExpressionType)
 
     # Add download URL for now
     result['*Archive URL'] = "{url_base}/studies/{study_uuid}/archive".format(

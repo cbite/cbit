@@ -1,10 +1,11 @@
 import zipfile
 import reader
+from data.study import determineStudyType, StudyType, GeneExpressionType
 from reader import (
     read_investigation,
     read_study_sample,
     read_assay,
-    #read_annotations,
+    # read_annotations,
     read_processed_data,
     read_raw_data
 )
@@ -208,6 +209,21 @@ def read_archive(archive_filename, only_metadata=True):
         with z.open(study_file_name, 'r') as f:
             study_sample = read_study_sample(f)
 
+        if 'Characteristics[Gene expression type]' not in study_sample.columns:
+            raise ValueError(
+                'Characteristics[Gene expression type] column does not exits in {0}.'
+                    .format(study_file_name))
+
+        if len(study_sample['Characteristics[Gene expression type]'].unique()) != 1:
+            raise ValueError('All rows should have the same value for Characteristics[Gene expression type].')
+
+        geneExpressionType = study_sample['Characteristics[Gene expression type]'][0]
+        study_type = determineStudyType(geneExpressionType)
+        if study_type not in [StudyType.biomaterial_rna_seq, StudyType.biomaterial_microarray]:
+            raise ValueError(
+                'Incorrect value specified for Characteristics[Gene expression type]: {0}. Should be {1} or {2}'
+                    .format(geneExpressionType, GeneExpressionType.microarray, GeneExpressionType.rna_seq))
+
         if 'STUDY ASSAYS' not in investigation:
             raise ValueError('No STUDY ASSAYS section defined in {0}'.format(
                 investigation_file_name))
@@ -223,8 +239,7 @@ def read_archive(archive_filename, only_metadata=True):
                     required_STUDY_ASSAYS_fields.difference(
                         investigation['STUDY ASSAYS'].keys())))
 
-        assay_file_name = investigation['STUDY ASSAYS'][
-            'Study Assay File Name']
+        assay_file_name = investigation['STUDY ASSAYS']['Study Assay File Name']
         if assay_file_name not in filenames:
             raise IOError('Assay file "{0}" is missing from archive'.format(
                 assay_file_name))
@@ -302,14 +317,14 @@ def read_archive(archive_filename, only_metadata=True):
             # the sample name as a prefix.  Don't bother
 
             # TODO: Support multiple annotation files per study
-            #if len(set(assay['Comment[Annotation file]'])) != 1:
+            # if len(set(assay['Comment[Annotation file]'])) != 1:
             #    raise NotImplementedError('Multiple annotation files per study')
-            #annotationFilename = assay['Comment[Annotation file]'].iloc[0]
-            #if annotationFilename not in filenames:
+            # annotationFilename = assay['Comment[Annotation file]'].iloc[0]
+            # if annotationFilename not in filenames:
             #    raise IOError(
             #        'Annotations file "{0}" is missing from archive'.format(
             #            annotationFilename))
-            #with z.open(annotationFilename, 'r') as f:
+            # with z.open(annotationFilename, 'r') as f:
             #    annotationData = read_annotations(f)
             annotationData = None
 

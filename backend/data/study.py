@@ -1,5 +1,18 @@
 class StudyType:
-    biomaterial = "Biomaterial"
-    biomaterial_rna_seq = "Biomaterial RNASeq"
-    tendons = "Tendons"
-    tendons_rna_seq = "Tendons RNASeq"
+    biomaterial_microarray = "Biomaterial DNA microarray"
+    biomaterial_rna_seq = "Biomaterial RNA sequencing "
+    tendons_microarray = "Tendons DNA microarray"
+    tendons_rna_seq = "Tendons RNA sequencing"
+
+
+class GeneExpressionType:
+    microarray = "Microarray"
+    rna_seq = "RNASequencing"
+
+
+def determineStudyType(geneExpressionType):
+    switcher = {
+        GeneExpressionType.microarray: StudyType.biomaterial_microarray,
+        GeneExpressionType.rna_seq: StudyType.biomaterial_rna_seq,
+    }
+    return switcher.get(geneExpressionType, "Invalid gene expression type")
