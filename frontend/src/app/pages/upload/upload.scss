@@ -1,0 +1,61 @@
+.well {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05)
+}
+
+.my-drop-zone {
+  border: dotted 3px lightgray;
+}
+
+.nv-file-over {
+  border: dotted 3px red;
+}
+
+/* Default class applied to drop zones on over */
+.w3-progress-container {
+  width: 200px;
+  height: 1.5em;
+  position: relative;
+  background-color: #f1f1f1;
+  display: inline-block
+}
+
+.w3-progressbar {
+  background-color: #757575;
+  height: 100%;
+  position: absolute;
+  line-height: inherit
+}
+
+.disabled {
+  color: rgb(128, 128, 128)
+}
+
+.disabled .well {
+  background-color: #fcfcfc
+}
+
+.hidden {
+  display: none
+}
+
+.status {
+  color: red;
+}
+
+.irods-list {
+  padding: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.irods-list ul {
+  padding-left: 20px;
+  margin: 0;
+}
