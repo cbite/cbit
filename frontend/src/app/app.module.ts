@@ -63,6 +63,7 @@ import {StudyResultsComponent} from './pages/browser/components/study-results/st
 import {StudyResultComponent} from './pages/browser/components/study-results/study-result.component';
 import {StoreModule} from '@ngrx/store';
 import {reducers} from './core/redux/reducers/index';
+import {AppHeaderMenuComponent} from './core/components/app-header/app-header-menu.component';
 
 @NgModule(
   {
@@ -79,6 +80,7 @@ import {reducers} from './core/redux/reducers/index';
     declarations: [
       AppComponent,
       AppHeaderComponent,
+      AppHeaderMenuComponent,
       AppFooterComponent,
       ChangePasswordComponent,
       UserManagementComponent,

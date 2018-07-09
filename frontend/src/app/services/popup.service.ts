@@ -14,4 +14,11 @@ export class PopupService {
       windowClass: 'small-window'
     }).componentInstance;
   }
+
+  public showChangePwdPopup() {
+    const popupInstance = <LoginPopupComponent> this.modalService.open(LoginPopupComponent, {
+      backdrop: 'static',
+      windowClass: 'small-window'
+    }).componentInstance;
+  }
 }
