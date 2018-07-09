@@ -1,9 +1,10 @@
 import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef} from '@angular/core';
-import {FieldMeta} from '../../common/field-meta.model';
 import {StudyService} from '../../services/study.service';
 import {FormGroup, FormControl, Validators, Form} from '@angular/forms';
 import {URLService} from '../../services/url.service';
 import {HttpGatewayService} from '../../services/http-gateway.service';
+import {FieldMeta} from '../../core/types/field-meta';
+import {FieldMetaService} from '../../core/services/field-meta.service';
 
 @Component({
   styleUrls: ['./metadata.scss'],
@@ -52,14 +53,14 @@ export class MetadataPage implements OnInit {
   saveError = '';
 
   constructor(private _url: URLService,
-              private _studyService: StudyService,
+              private fieldMetaService: FieldMetaService,
               private httpGatewayService: HttpGatewayService,
               private _changeDetectorRef: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
     const self = this;
-    this._studyService.getAllFieldMetas().then(fieldMetas => {
+    this.fieldMetaService.getAllFieldMetas().then(fieldMetas => {
       this.fieldMetas = fieldMetas;
       this.ready = true;
     });
@@ -81,7 +82,7 @@ export class MetadataPage implements OnInit {
         self.savingChanges = false;
         self.saveDone = true;
         self._changeDetectorRef.detectChanges();
-        self._studyService.flushCaches();
+        self.fieldMetaService.flushCaches();
         // TODO@Sam check what happens on error
       });
 

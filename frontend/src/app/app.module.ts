@@ -65,6 +65,7 @@ import {UserManagementPage} from './pages/user-management/user-management.page';
 import {MetadataPage} from './pages/metadata/metadata.page';
 import {FieldMetadataEditorComponent} from './pages/metadata/components/FieldMetadataEditorComponent';
 import {StudyMetadataEditorComponent} from './pages/studies/components/study-mentadata-editor.component';
+import {FieldMetaService} from './core/services/field-meta.service';
 import {ChangePasswordComponent} from './popups/change-password/change-password.component';
 import {StudyManagementComponent} from './pages/studies/study-management.component';
 import {ConfirmationComponent} from './popups/confirmation/confirmation.component';
@@ -144,6 +145,7 @@ import {ConfirmationComponent} from './popups/confirmation/confirmation.componen
       BusyIndicatorService,
       HttpGatewayService,
       AuthenticationService,
+      FieldMetaService,
       CollapseStateService,
       UnitFormattingService,
       TooltipService,

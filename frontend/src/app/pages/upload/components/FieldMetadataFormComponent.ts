@@ -1,10 +1,10 @@
 import {Component, OnInit, Input, Output, OnChanges, EventEmitter} from '@angular/core';
-import {FieldMeta, DimensionsType} from '../../../common/field-meta.model';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import * as _ from 'lodash';
 import {DimensionsRegister} from '../../../common/unit-conversions';
 import {KNOWN_METADATA_FIELDS, isTranscriptomicsAssayDetail, TRANSCRIPTOMIC_ASSY_DETAIL_DEFAULT_METADATA} from '../types/metadata-fields';
 import {FieldAnalysisResults} from '../types/FieldAnalysisResults';
+import {DimensionsType, FieldMeta} from '../../../core/types/field-meta';
 
 @Component({
   selector: 'cbit-field-metadata-form',

@@ -1,4 +1,6 @@
-import {FieldMeta} from '../../../common/field-meta.model';
+
+
+import {FieldMeta} from '../../../core/types/field-meta';
 
 export function isTranscriptomicsAssayDetail(fieldName: string): boolean {
   return fieldName.startsWith('Transcriptomics Assay Detail: ');

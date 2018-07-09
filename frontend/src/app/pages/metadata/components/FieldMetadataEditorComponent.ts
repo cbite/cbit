@@ -1,5 +1,4 @@
 import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef} from '@angular/core';
-import {FieldMeta} from '../../../common/field-meta.model';
 import {StudyService} from '../../../services/study.service';
 import {FormGroup, FormControl, Validators, Form} from '@angular/forms';
 import {DimensionsRegister} from '../../../common/unit-conversions';
@@ -7,6 +6,8 @@ import {AuthenticationService} from '../../../core/authentication/authentication
 import {URLService} from '../../../services/url.service';
 import {HttpGatewayService} from '../../../services/http-gateway.service';
 import {Observable} from 'rxjs/Observable';
+import {FieldMeta} from '../../../core/types/field-meta';
+import {FieldMetaService} from '../../../core/services/field-meta.service';
 
 
 // TODO: Refactor this component and the uploader's field-metadata-form into a single metadata editor
@@ -233,6 +234,7 @@ export class MetadataComponent implements OnInit {
   saveError = '';
 
   constructor(private _url: URLService,
+              private fieldMetaService: FieldMetaService,
               private _studyService: StudyService,
               private httpGatewayService: HttpGatewayService,
               private _changeDetectorRef: ChangeDetectorRef) {
@@ -240,7 +242,7 @@ export class MetadataComponent implements OnInit {
 
   ngOnInit(): void {
     let self = this;
-    this._studyService.getAllFieldMetas().then(fieldMetas => {
+    this.fieldMetaService.getAllFieldMetas().then(fieldMetas => {
       this.fieldMetas = fieldMetas;
       this.ready = true;
     });
