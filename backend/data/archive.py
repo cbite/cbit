@@ -1,6 +1,6 @@
 import zipfile
 import reader
-from data.study import determineStudyType, StudyType, GeneExpressionType
+from data.study_type import determineStudyType, StudyType, GeneExpressionType
 from reader import (
     read_investigation,
     read_study_sample,
@@ -12,6 +12,7 @@ from reader import (
 import re
 from data.unit_conversions import DimensionsRegister, INVALID_DIMENSIONS
 import math
+
 
 class FieldAnalysisResults(object):
     def __init__(self, fieldName, isUnitful, possibleDimensions, looksNumeric):
@@ -28,12 +29,15 @@ class FieldAnalysisResults(object):
             'looksNumeric': self.looksNumeric
         }
 
+
 class Archive(object):
-    def __init__(self, investigation_file_name, study_file_name, assay_file_name, processedDataFilename, rawDataFilename,
+    def __init__(self, investigation_file_name, study_file_name, study_type, assay_file_name, processedDataFilename,
+                 rawDataFilename,
                  investigation, study_samples, assay, processed_data_set, raw_data_set, annotations):
 
         self.investigation_file_name = investigation_file_name
         self.study_file_name = study_file_name
+        self.study_type = study_type
         self.assay_file_name = assay_file_name
         self.processedDataFilename = processedDataFilename
         self.rawDataFilename = rawDataFilename
@@ -52,10 +56,10 @@ class Archive(object):
 
         clean_column_names = {
             f: re.sub(r'^Factor Value\[(.*)\]$', r'\1',
-                   re.sub(r'^Characteristics\[(.*)\]$', r'\1', f))
+                      re.sub(r'^Characteristics\[(.*)\]$', r'\1', f))
             for f in self.study_sample.columns.values
         }
-        reverse_clean_column_names = {v: k for (k,v) in clean_column_names.iteritems()}
+        reverse_clean_column_names = {v: k for (k, v) in clean_column_names.iteritems()}
 
         # Fields in study_sample
         for origName in self.study_sample.columns.values:
@@ -103,12 +107,13 @@ class Archive(object):
                 result.append(FieldAnalysisResults(cleanName, isUnitful, possibleDimensions, looksNumeric))
 
         # Special 'Protocols' field that coalesces all Protocol.REFs
-        result.append(FieldAnalysisResults(fieldName='Protocols', isUnitful=False, possibleDimensions=[], looksNumeric=False))
+        result.append(
+            FieldAnalysisResults(fieldName='Protocols', isUnitful=False, possibleDimensions=[], looksNumeric=False))
 
         # Fields in assay
         clean_column_names = {
             f: re.sub(r'^Parameter Value\[(.*)\]$', r'\1',
-                   re.sub(r'^Comment\[(.*)\]$', r'\1', f))
+                      re.sub(r'^Comment\[(.*)\]$', r'\1', f))
             for f in self.assay.columns.values
         }
 
@@ -128,7 +133,6 @@ class Archive(object):
 
             finalName = u'Transcriptomics Assay Detail: {0}'.format(cleanName)
 
-
             isUnitful = False
             possibleDimensions = []
 
@@ -147,9 +151,9 @@ class Archive(object):
         # TODO: Refactor all this stuff so that merged fields and synthetic fields
         # are defined in exactly one place
         merged_fields = {
-            '*Material':    ('Material abbrevation',     'Material Name'),
+            '*Material': ('Material abbrevation', 'Material Name'),
             '*Cell strain': ('Cell strain abbreviation', 'Cell strain full name'),
-            '*Compound':    ('Compound abbreviation',    'Compound'),
+            '*Compound': ('Compound abbreviation', 'Compound'),
         }
         for mergedFieldName, (firstFieldName, secondFieldName) in merged_fields.iteritems():
             if firstFieldName in reverse_clean_column_names or secondFieldName in reverse_clean_column_names:
@@ -264,7 +268,8 @@ def read_archive(archive_filename, only_metadata=True):
                 def isNaN(x):
                     return x != x
 
-                processedDataFilename = assay[derivedArrayDataMatrixFileNameColumn].iloc[0] if derivedArrayDataMatrixFileNameColumn else None
+                processedDataFilename = assay[derivedArrayDataMatrixFileNameColumn].iloc[
+                    0] if derivedArrayDataMatrixFileNameColumn else None
                 if not processedDataFilename or isNaN(processedDataFilename):
                     processed_data_set = None
                 elif processedDataFilename not in filenames:
@@ -274,7 +279,6 @@ def read_archive(archive_filename, only_metadata=True):
                 else:
                     with z.open(processedDataFilename, 'r') as f:
                         processed_data_set = read_processed_data(f)
-
 
             rawArrayDataMatrixFileNameColumn = None
             if 'Array Data Matrix File' in assay.columns:
@@ -286,7 +290,8 @@ def read_archive(archive_filename, only_metadata=True):
                 def isNaN(x):
                     return x != x
 
-                rawDataFilename = assay[rawArrayDataMatrixFileNameColumn].iloc[0] if rawArrayDataMatrixFileNameColumn else None
+                rawDataFilename = assay[rawArrayDataMatrixFileNameColumn].iloc[
+                    0] if rawArrayDataMatrixFileNameColumn else None
                 if not rawDataFilename or isNaN(rawDataFilename):
                     raw_data_set = None
                 elif rawDataFilename not in filenames:
@@ -336,6 +341,6 @@ def read_archive(archive_filename, only_metadata=True):
             raw_data_set = None
             annotationData = None
 
-
-        return Archive(investigation_file_name, study_file_name, assay_file_name, processedDataFilename, rawDataFilename,
+        return Archive(investigation_file_name, study_file_name, study_type, assay_file_name, processedDataFilename,
+                       rawDataFilename,
                        investigation, study_sample, assay, processed_data_set, raw_data_set, annotationData)

@@ -15,7 +15,7 @@ from data.fieldmeta import FieldMeta
 import requests
 import zipfile
 
-from data.study import StudyType
+from data.study_type import StudyType
 
 # Possible upload statuses
 UPLOAD_STATUS_UPLOADING = 'uploading'
