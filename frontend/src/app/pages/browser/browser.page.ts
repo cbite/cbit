@@ -4,6 +4,7 @@ import {FiltersService} from './services/filters.service';
 import {FieldMetaService} from '../../core/services/field-meta.service';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
+import {Study} from '../../core/types/study.model';
 import {PopupService} from '../../core/services/popup.service';
 
 @Component({
@@ -16,7 +17,8 @@ import {PopupService} from '../../core/services/popup.service';
         </div>
 
         <div class="col-9 main">
-          <cbit-study-results [matches]="matches" (showDetails)="onShowDetailsClicked($event)"></cbit-study-results>
+          <cbit-study-results [matches]="matches" (showDetails)="onShowDetailsClicked($event)"
+                              (download)="onDownload($event)"></cbit-study-results>
         </div>
       </div>
     </div>
@@ -40,7 +42,7 @@ export class BrowserPage implements OnInit, OnDestroy {
 
       // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
       this.filtersService.filters.switchMap(filters => {
-           return Observable.fromPromise(<Promise<UnifiedMatch[]>>this.studyService.getUnifiedMatchesAsync(filters));
+        return Observable.fromPromise(<Promise<UnifiedMatch[]>>this.studyService.getUnifiedMatchesAsync(filters));
       }).takeUntil(this.stopStream)
         .subscribe(rawMatches => {
           this.updateMatches(rawMatches);
@@ -54,6 +56,10 @@ export class BrowserPage implements OnInit, OnDestroy {
 
   public onFullPropertiesListClicked() {
     this.popupService.showPropertiesDescriptionPopup();
+  }
+
+  public onDownload(study: Study) {
+    this.studyService.downloadStudy(study);
   }
 
   public ngOnDestroy() {

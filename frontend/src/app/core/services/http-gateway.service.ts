@@ -20,7 +20,24 @@ export class HttpGatewayService {
     })
       .map(this.checkResponseBody.bind(this))
       .catch(errorHandler ? errorHandler : this.handleError)
-      .finally(() => {});
+      .finally(() => {
+      });
+  }
+
+  public getFile(url: string, mimeType: string, errorHandler?: (err: any, caught: Observable<{}>) => ObservableInput<{}>): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': mimeType
+    });
+    return this.http.get(this.resolveUrl(url), {
+      headers: headers,
+      responseType: 'blob',
+      withCredentials: true
+    })
+      .map((resp) => resp)
+      .catch(errorHandler ? errorHandler : this.handleError)
+      .finally(() => {
+      });
   }
 
   public delete(url: string, errorHandler?: (err: any, caught: Observable<{}>) => ObservableInput<{}>,
@@ -31,7 +48,8 @@ export class HttpGatewayService {
     })
       .map(this.checkResponseBody.bind(this))
       .catch(errorHandler ? errorHandler : this.handleError)
-      .finally(() => {});
+      .finally(() => {
+      });
   }
 
   public post(url: string, body: any, errorHandler?: (err: any, caught: Observable<{}>) => ObservableInput<{}>,
@@ -42,7 +60,8 @@ export class HttpGatewayService {
     })
       .map(this.checkResponseBody.bind(this))
       .catch(errorHandler ? errorHandler : this.handleError)
-      .finally(() => {});
+      .finally(() => {
+      });
   }
 
   public put(url: string, body: any, errorHandler?: (err: any, caught: Observable<{}>) => ObservableInput<{}>,
@@ -53,7 +72,8 @@ export class HttpGatewayService {
     })
       .map(this.checkResponseBody.bind(this))
       .catch(errorHandler ? errorHandler : this.handleError)
-      .finally(() => {});
+      .finally(() => {
+      });
   }
 
   private withAuthHeader(): HttpHeaders {

@@ -14,6 +14,8 @@ import {URLService} from './url.service';
 import {UnitFormattingService} from '../../services/unit-formatting.service';
 import {HttpGatewayService} from './http-gateway.service';
 import {FieldMeta} from '../types/field-meta';
+import * as FileSaver from 'file-saver';
+import {getTitle} from '../util/study-helper';
 
 // Should be a parseable number to play nicely with numeric fields
 // and it should survive a round-trip conversion in ES from string to double to string
@@ -62,6 +64,20 @@ export class StudyService {
 
   // PUBLIC INTERFACE
   // ================
+  downloadStudy(study: Study) {
+    this.httpGatewayService.getFile(this._url.studyArchiveResource(study._id), 'application/zip')
+      .subscribe((blob) => {
+        FileSaver.saveAs(blob, `${getTitle(study)}.zip`);
+      });
+  }
+
+  downloadProtocols(study: Study) {
+    this.httpGatewayService.getFile(this._url.studyProtocolsResource(study._id), 'text/plain')
+      .subscribe((blob) => {
+        FileSaver.saveAs(blob, `${getTitle(study)}.txt`);
+      });
+  }
+
   flushCaches(): void {
     this.studyRequester.flushCache();
     this.sampleRequester.flushCache();

@@ -22,6 +22,7 @@ from resources.downloads import (
 from resources.samples import SamplesResource
 from resources.studies import StudiesResource, StudyResource
 from resources.study_archive import StudyArchiveResource
+from resources.study_protocols import StudyProtocolsResource
 from resources.metadata import (
     MetadataAllCountsResource,
     MetadataFilteredCountsResource,
@@ -74,6 +75,7 @@ app.add_route('/samples', SamplesResource())
 app.add_route('/studies', StudiesResource())
 app.add_route('/studies/{study_uuid}', StudyResource())
 app.add_route('/studies/{study_uuid}/archive', StudyArchiveResource())
+app.add_route('/studies/{study_uuid}/protocols', StudyProtocolsResource())
 
 app.add_route('/metadata/all_counts', MetadataAllCountsResource())
 app.add_route('/metadata/filtered_counts', MetadataFilteredCountsResource())
