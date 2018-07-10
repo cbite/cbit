@@ -10,8 +10,8 @@ import {FieldMeta} from '../../../../core/types/field-meta';
 import {FieldMetaService} from '../../../../core/services/field-meta.service';
 
 @Component({
-  styleUrls: ['./filter-sidebar.scss'],
-  selector: 'cbit-filter-sidebar',
+  styleUrls: ['./browser-sidebar.scss'],
+  selector: 'cbit-browser-sidebar',
   template: `
     <div class="sidebar">
       <div class="searchbox">
@@ -61,7 +61,7 @@ import {FieldMetaService} from '../../../../core/services/field-meta.service';
     </div>
   `
 })
-export class FilterSidebarComponent implements OnInit, OnDestroy {
+export class BrowserSidebarComponent implements OnInit, OnDestroy {
 
   // For inspiration, see: http://blog.thoughtram.io/angular/2016/01/06/taking-advantage-of-observables-in-angular2.html
   searchTextInForm = new FormControl();

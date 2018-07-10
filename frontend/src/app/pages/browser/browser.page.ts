@@ -12,7 +12,7 @@ import {PopupService} from '../../services/popup.service';
     <div class="container-fluid no-gutters">
       <div class="row no-gutters">
         <div class="col-3 sidebar">
-          <cbit-filter-sidebar></cbit-filter-sidebar>
+          <cbit-browser-sidebar></cbit-browser-sidebar>
         </div>
 
         <div class="col-9 main">

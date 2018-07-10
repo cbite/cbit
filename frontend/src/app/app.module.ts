@@ -6,7 +6,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {StudyComponent} from './pages/upload/components/study.component';
 import {DownloadComponent} from './common/components/download.component';
 import {AppRoutingModule} from './router/routing.module';
-import {FilterSidebarComponent} from './pages/browser/components/filters/filter-sidebar.component';
+import {BrowserSidebarComponent} from './pages/browser/components/browser-sidebar/browser-sidebar.component';
 import {MapToIterablePipe} from './common/mapToIterable.pipe';
 import {SampleFiltersComponent} from './pages/browser/components/filters/sample-filters.component';
 import {FileSelectDirective, FileDropDirective} from 'ng2-file-upload/ng2-file-upload';
@@ -68,7 +68,8 @@ import {StudyManagementComponent} from './pages/study-management/study-managemen
 import {ConfirmationComponent} from './popups/confirmation/confirmation.component';
 import {SplitByTwoPipe} from './shared/pipes/split-by-two-pipe';
 import {WindowRef} from './shared/util/WindowRef';
-import {StudyDetailsComponent} from './popups/study-details/study-details.component';
+import {StudyDetailsComponent} from './pages/browser/popups/study-details/study-details.component';
+import {FieldsDescriptionComponent} from './pages/browser/popups/fields-description/fields-description.component';
 
 @NgModule(
   {
@@ -95,6 +96,7 @@ import {StudyDetailsComponent} from './popups/study-details/study-details.compon
       AboutPage,
       FAQPage,
       FAQQuestionComponent,
+      FieldsDescriptionComponent,
       BrowserPage,
       SplitByTwoPipe,
       DownloadComponent,
@@ -104,7 +106,7 @@ import {StudyDetailsComponent} from './popups/study-details/study-details.compon
       FieldMetadataEditorComponent,
       StudyManagementComponent,
       StudyMetadataEditorComponent,
-      FilterSidebarComponent,
+      BrowserSidebarComponent,
       LoginPopupComponent,
       AllFieldsComponent,
       AllFieldsForVisibilityComponent,

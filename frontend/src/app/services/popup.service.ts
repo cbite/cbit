@@ -5,8 +5,9 @@ import {AddUserComponent} from '../popups/add-user/add-user.component';
 import {User} from '../pages/user-management/types/User';
 import {ChangePasswordComponent} from '../popups/change-password/change-password.component';
 import {ConfirmationComponent} from '../popups/confirmation/confirmation.component';
-import {StudyDetailsComponent} from '../popups/study-details/study-details.component';
+import {StudyDetailsComponent} from '../pages/browser/popups/study-details/study-details.component';
 import {Study} from '../core/types/study.model';
+import {FieldsDescriptionComponent} from '../pages/browser/popups/fields-description/fields-description.component';
 
 @Injectable()
 export class PopupService {
@@ -55,5 +56,12 @@ export class PopupService {
       windowClass: 'large-window'
     }).componentInstance;
     popupInstance.setStudy(study);
+  }
+
+  public showFieldDescriptionPopup() {
+    const popupInstance = <FieldsDescriptionComponent> this.modalService.open(FieldsDescriptionComponent, {
+      backdrop: 'static',
+      windowClass: 'small-window'
+    }).componentInstance;
   }
 }
