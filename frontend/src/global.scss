@@ -22,6 +22,21 @@ ngb-modal-window {
       }
     }
   }
+
+  &.medium-window {
+    max-height: calc(100vh - 270px);
+
+    .modal-dialog {
+      min-width: 600px;
+      width: calc(100vw - 300px);
+      max-width: 600px;
+      margin: 60px auto;
+
+      .modal-content {
+        border-radius: 10px;
+      }
+    }
+  }
 }
 
 @import '../node_modules/bootstrap/scss/bootstrap';

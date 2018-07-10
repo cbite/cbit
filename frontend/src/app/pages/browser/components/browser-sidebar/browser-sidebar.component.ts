@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectorRef, OnDestroy, Input, OnChanges} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, OnDestroy, Input, OnChanges, EventEmitter, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {FiltersService, FiltersState} from '../../../../services/filters.service';
 import {StudyService, ManySampleCounts, ClassifiedProperties, ClassifiedPropertiesForGivenVisibility} from '../../../../services/study.service';
@@ -14,16 +14,21 @@ import {FieldMetaService} from '../../../../core/services/field-meta.service';
   selector: 'cbit-browser-sidebar',
   template: `
     <div class="sidebar">
-      <div class="searchbox">
-        <label for="searchText">Search for:</label>
-        <!--<spinner *ngIf="!ready"></spinner>-->
-        <span>
-          <input id="searchText"
-                 type="text"
-                 placeholder="e.g., BCP, stromal cell"
-                 name='searchText'
-                 [formControl]="searchTextInForm"/>
-        </span>
+      <div class="sidebar-header">
+        <div class="searchbox">
+          <label for="searchText">Search for:</label>
+          <div class="input">
+            <input id="searchText"
+                   class="searchText"
+                   type="text"
+                   placeholder="e.g., BCP, stromal cell"
+                   name='searchText'
+                   [formControl]="searchTextInForm"/>
+          </div>
+        </div>
+        <div class="properties-description">
+          <a href="#" (click)="$event.preventDefault(); onFullPropertiesListClicked()">Full list of properties</a>
+        </div>
       </div>
 
       <!--<div class="nopadding">-->
@@ -81,6 +86,9 @@ export class BrowserSidebarComponent implements OnInit, OnDestroy {
   ready = false;
   stopStream = new Subject<string>();
 
+  @Output()
+  public fullPropertiesListClick = new EventEmitter();
+
   constructor(
     private fieldMetaService: FieldMetaService,
     private _studyService: StudyService,
@@ -100,6 +108,10 @@ export class BrowserSidebarComponent implements OnInit, OnDestroy {
     //   .takeUntil(this.stopStream)
     //   .subscribe(newIncludeControls => _filtersService.setIncludeControls(newIncludeControls));
 
+  }
+
+  public onFullPropertiesListClicked() {
+    this.fullPropertiesListClick.emit();
   }
 
   ngOnInit(): void {

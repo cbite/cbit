@@ -12,11 +12,11 @@ import {PopupService} from '../../services/popup.service';
     <div class="container-fluid no-gutters">
       <div class="row no-gutters">
         <div class="col-3 sidebar">
-          <cbit-browser-sidebar></cbit-browser-sidebar>
+          <cbit-browser-sidebar (fullPropertiesListClick)="onFullPropertiesListClicked()"></cbit-browser-sidebar>
         </div>
 
         <div class="col-9 main">
-          <cbit-study-results [matches]="matches" (showDetails)="onShowDetails($event)"></cbit-study-results>
+          <cbit-study-results [matches]="matches" (showDetails)="onShowDetailsClicked($event)"></cbit-study-results>
         </div>
       </div>
     </div>
@@ -48,8 +48,12 @@ export class BrowserPage implements OnInit, OnDestroy {
     });
   }
 
-  public onShowDetails(match: UnifiedMatch) {
+  public onShowDetailsClicked(match: UnifiedMatch) {
     this.popupService.showStudyDetailsPopup(match.study);
+  }
+
+  public onFullPropertiesListClicked() {
+    this.popupService.showPropertiesDescriptionPopup();
   }
 
   public ngOnDestroy() {

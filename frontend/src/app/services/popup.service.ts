@@ -2,12 +2,11 @@ import {Injectable} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {LoginPopupComponent} from '../popups/login/login-popup.component';
 import {AddUserComponent} from '../popups/add-user/add-user.component';
-import {User} from '../pages/user-management/types/User';
 import {ChangePasswordComponent} from '../popups/change-password/change-password.component';
 import {ConfirmationComponent} from '../popups/confirmation/confirmation.component';
 import {StudyDetailsComponent} from '../pages/browser/popups/study-details/study-details.component';
 import {Study} from '../core/types/study.model';
-import {FieldsDescriptionComponent} from '../pages/browser/popups/fields-description/fields-description.component';
+import {PropertiesDescriptionComponent} from '../pages/browser/popups/properties-description/properties-description.component';
 
 @Injectable()
 export class PopupService {
@@ -58,10 +57,10 @@ export class PopupService {
     popupInstance.setStudy(study);
   }
 
-  public showFieldDescriptionPopup() {
-    const popupInstance = <FieldsDescriptionComponent> this.modalService.open(FieldsDescriptionComponent, {
+  public showPropertiesDescriptionPopup() {
+    const popupInstance = <PropertiesDescriptionComponent> this.modalService.open(PropertiesDescriptionComponent, {
       backdrop: 'static',
-      windowClass: 'small-window'
+      windowClass: 'medium-window'
     }).componentInstance;
   }
 }

@@ -17,10 +17,6 @@ import {DropdownDirective} from './common/dropdown.directive';
 import {DropdownMenuDirective} from './common/dropdown-menu.directive';
 import {Ng2SliderComponent} from './common/slider/ng2-slider.component';
 import {HorizontallySlidableDirective} from './common/slider/horizontally-slidable.directive';
-import {
-  AllFieldsComponent, AllFieldsForVisibilityComponent,
-  AllFieldsForVisibilityCategoryComponent
-} from './pages/browser/components/all-fields.component';
 import {StudyRedirectComponent} from './pages/study-management/study-redirect.component';
 import {TooltipContainer} from './common/tooltip-container.component';
 import {MyTooltipDirective} from './common/my-tooltip.directive';
@@ -69,7 +65,9 @@ import {ConfirmationComponent} from './popups/confirmation/confirmation.componen
 import {SplitByTwoPipe} from './shared/pipes/split-by-two-pipe';
 import {WindowRef} from './shared/util/WindowRef';
 import {StudyDetailsComponent} from './pages/browser/popups/study-details/study-details.component';
-import {FieldsDescriptionComponent} from './pages/browser/popups/fields-description/fields-description.component';
+import {PropertiesDescriptionComponent} from './pages/browser/popups/properties-description/properties-description.component';
+import {AllFieldsForVisibilityComponent} from './pages/browser/popups/properties-description/properties-visibility.component';
+import {AllFieldsForVisibilityCategoryComponent} from './pages/browser/popups/properties-description/properties-visibility-category.component';
 
 @NgModule(
   {
@@ -96,7 +94,7 @@ import {FieldsDescriptionComponent} from './pages/browser/popups/fields-descript
       AboutPage,
       FAQPage,
       FAQQuestionComponent,
-      FieldsDescriptionComponent,
+      PropertiesDescriptionComponent,
       BrowserPage,
       SplitByTwoPipe,
       DownloadComponent,
@@ -108,7 +106,6 @@ import {FieldsDescriptionComponent} from './pages/browser/popups/fields-descript
       StudyMetadataEditorComponent,
       BrowserSidebarComponent,
       LoginPopupComponent,
-      AllFieldsComponent,
       AllFieldsForVisibilityComponent,
       AllFieldsForVisibilityCategoryComponent,
       FilterSidebarCategoryComponent,
@@ -138,7 +135,8 @@ import {FieldsDescriptionComponent} from './pages/browser/popups/fields-descript
       AddUserComponent,
       ChangePasswordComponent,
       StudyDetailsComponent,
-      ConfirmationComponent
+      ConfirmationComponent,
+      PropertiesDescriptionComponent
     ],
     providers: [
       URLService,
