@@ -21,8 +21,9 @@
   }
 
   &.menu {
-    width: 180px;
+    width: 230px;
     position: relative;
+    text-align: left;
   }
 }
 
@@ -30,19 +31,31 @@
   z-index: 1000;
   position: absolute;
   left: 0;
-  width: 180px;
+  width: 230px;
   cursor: pointer;
   background-color: $color-dark-blue;
   color: white;
 
   .header-menu-link {
+    text-align: left;
     height: 50px;
     line-height: 50px;
-    width: 180px;
+    width: 230px;
+    padding: 0 20px;
 
     &:hover {
       color: white;
       background-color: $color-blue;
     }
   }
+}
+
+.icon {
+  text-align: center;
+  width: 40px;
+  display: inline-block;
+}
+
+.label {
+  display: inline-block;
 }

@@ -12,14 +12,31 @@ import {LoggedInUser} from '../../authentication/loggedInUser';
     <div class="admin-link menu" *ngIf="loggedInUser"
          (mouseenter)="onMouseEnter()"
          (mouseleave)="onMouseLeave()">
-      <span style="margin-right: 5px">
-        <i class="far fa-angle-down"></i></span> {{loggedInUser.displayName}}
+      <div>
+        <div class="icon"><i class="far fa-angle-down"></i></div>
+        <div class="label">{{loggedInUser.displayName}}</div>
+      </div>
       <div class="header-menu" *ngIf="isOpen">
-        <div class="header-menu-link" (click)="onMenuClick('upload_study')">Upload Study</div>
-        <div class="header-menu-link" (click)="onMenuClick('manage_studies')">Manage Studies</div>
-        <div class="header-menu-link" (click)="onMenuClick('edit_metadata')">Edit Field Metadata</div>
-        <div class="header-menu-link" (click)="onMenuClick('manage_users')">Manage Users</div>
-        <div class="header-menu-link" (click)="onLogoutClick()">Logout</div>
+        <div class="header-menu-link" (click)="onMenuClick('upload_study')">
+          <div class="icon"><i class="far fa-upload"></i></div>
+          <div class="label">Upload Study</div>
+        </div>
+        <div class="header-menu-link" (click)="onMenuClick('manage_studies')">
+          <div class="icon"><i class="far fa-edit"></i></div>
+          <div class="label">Manage Studies</div>
+        </div>
+        <div class="header-menu-link" (click)="onMenuClick('edit_metadata')">
+          <div class="icon"><i class="far fa-edit"></i></div>
+          <div class="label">Edit Field Labels</div>
+        </div>
+        <div class="header-menu-link" (click)="onMenuClick('manage_users')">
+          <div class="icon"><i class="far fa-users"></i></div>
+          <div class="label">Manage Users</div>
+        </div>
+        <div class="header-menu-link" (click)="onLogoutClick()">
+          <div class="icon"><i class="far fa-sign-out"></i></div>
+          <div class="label">Logout</div>
+        </div>
       </div>
     </div>
   `
