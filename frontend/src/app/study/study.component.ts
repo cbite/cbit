@@ -119,6 +119,7 @@ export class StudyComponent implements OnInit {
     // TODO: Really need to refactor this
     delete this.studyCategoryMap['*Archive URL'];
     delete this.studyCategoryMap['*Publication Date'];
+    delete this.studyCategoryMap['*Study Type'];
     delete this.studyCategoryMap['*Visible'];
 
     // YUCK! Despite what the mappings in ElasticSearch say, 'Sample Name' in the JSON results can be an integer!
