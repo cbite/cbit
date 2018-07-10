@@ -71,6 +71,13 @@ export class StudyService {
       });
   }
 
+  downloadProtocols(study: Study) {
+    this.httpGatewayService.getFile(this._url.studyProtocolsResource(study._id), 'text/plain')
+      .subscribe((blob) => {
+        FileSaver.saveAs(blob, `${getTitle(study)}.txt`);
+      });
+  }
+
   flushCaches(): void {
     this.studyRequester.flushCache();
     this.sampleRequester.flushCache();

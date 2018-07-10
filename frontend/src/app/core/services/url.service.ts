@@ -62,6 +62,10 @@ export class URLService {
     return `studies/${studyId}/archive`;
   }
 
+  studyProtocolsResource(studyId: string): string {
+    return `studies/${studyId}/protocols`;
+  }
+
   samplesResource(): string {
     return `samples`;
   }
