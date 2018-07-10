@@ -1,11 +1,11 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {StudyService, UnifiedMatch} from '../../services/study.service';
-import {FiltersService} from '../../services/filters.service';
+import {StudyService, UnifiedMatch} from '../../core/services/study.service';
+import {FiltersService} from './services/filters.service';
 import {FieldMetaService} from '../../core/services/field-meta.service';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
-import {PopupService} from '../../services/popup.service';
 import {Study} from '../../core/types/study.model';
+import {PopupService} from '../../core/services/popup.service';
 
 @Component({
   styleUrls: ['./browser.scss'],
@@ -13,11 +13,11 @@ import {Study} from '../../core/types/study.model';
     <div class="container-fluid no-gutters">
       <div class="row no-gutters">
         <div class="col-3 sidebar">
-          <cbit-browser-sidebar></cbit-browser-sidebar>
+          <cbit-browser-sidebar (fullPropertiesListClick)="onFullPropertiesListClicked()"></cbit-browser-sidebar>
         </div>
 
         <div class="col-9 main">
-          <cbit-study-results [matches]="matches" (showDetails)="onShowDetails($event)"
+          <cbit-study-results [matches]="matches" (showDetails)="onShowDetailsClicked($event)"
                               (download)="onDownload($event)"></cbit-study-results>
         </div>
       </div>
@@ -50,8 +50,12 @@ export class BrowserPage implements OnInit, OnDestroy {
     });
   }
 
-  public onShowDetails(match: UnifiedMatch) {
+  public onShowDetailsClicked(match: UnifiedMatch) {
     this.popupService.showStudyDetailsPopup(match.study);
+  }
+
+  public onFullPropertiesListClicked() {
+    this.popupService.showPropertiesDescriptionPopup();
   }
 
   public onDownload(study: Study) {

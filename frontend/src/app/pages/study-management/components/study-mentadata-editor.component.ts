@@ -1,10 +1,10 @@
 import {Component, OnInit, ChangeDetectorRef, OnChanges, Input, Output, EventEmitter} from '@angular/core';
-import {StudyService} from '../../../services/study.service';
+import {StudyService} from '../../../core/services/study.service';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {Study} from '../../../core/types/study.model';
 import {AuthenticationService} from '../../../core/authentication/authentication.service';
-import {URLService} from '../../../services/url.service';
-import {HttpGatewayService} from '../../../services/http-gateway.service';
+import {URLService} from '../../../core/services/url.service';
+import {HttpGatewayService} from '../../../core/services/http-gateway.service';
 import {Observable} from 'rxjs/Observable';
 
 export enum StudyState {

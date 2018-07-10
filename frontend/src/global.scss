@@ -14,7 +14,22 @@ ngb-modal-window {
     .modal-dialog {
       min-width: 1080px;
       width: calc(100vw - 300px);
-      max-width: 1400px;
+      max-width: 1200px;
+      margin: 60px auto;
+
+      .modal-content {
+        border-radius: 10px;
+      }
+    }
+  }
+
+  &.medium-window {
+    max-height: calc(100vh - 270px);
+
+    .modal-dialog {
+      min-width: 600px;
+      width: calc(100vw - 300px);
+      max-width: 600px;
       margin: 60px auto;
 
       .modal-content {

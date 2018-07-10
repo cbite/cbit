@@ -17,21 +17,17 @@ import {DropdownDirective} from './common/dropdown.directive';
 import {DropdownMenuDirective} from './common/dropdown-menu.directive';
 import {Ng2SliderComponent} from './common/slider/ng2-slider.component';
 import {HorizontallySlidableDirective} from './common/slider/horizontally-slidable.directive';
-import {
-  AllFieldsComponent, AllFieldsForVisibilityComponent,
-  AllFieldsForVisibilityCategoryComponent
-} from './pages/browser/components/all-fields.component';
 import {StudyRedirectComponent} from './pages/study-management/study-redirect.component';
 import {TooltipContainer} from './common/tooltip-container.component';
 import {MyTooltipDirective} from './common/my-tooltip.directive';
 import {TooltipService} from './services/tooltip.service';
 import {UnitFormattingService} from './services/unit-formatting.service';
-import {CollapseStateService} from './services/collapse-state.service';
+import {CollapseStateService} from './core/services/collapse-state.service';
 import {AuthenticationService} from './core/authentication/authentication.service';
 import {DownloadSelectionService} from './services/download-selection.service';
-import {FiltersService} from './services/filters.service';
-import {StudyService} from './services/study.service';
-import {URLService} from './services/url.service';
+import {FiltersService} from './pages/browser/services/filters.service';
+import {StudyService} from './core/services/study.service';
+import {URLService} from './core/services/url.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {UserEditorComponent} from './pages/user-management/components/user-editor.component';
 import {AddUserComponent} from './popups/add-user/add-user.component';
@@ -46,11 +42,11 @@ import {AppComponent} from './app.component';
 import {AppHeaderComponent} from './core/components/app-header/app-header.component';
 import {AppFooterComponent} from './core/components/app-footer/app-footer.component';
 import {LoginPopupComponent} from './popups/login/login-popup.component';
-import {PopupService} from './services/popup.service';
+import {PopupService} from './core/services/popup.service';
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
-import {BusyIndicatorService} from './services/busy-indicator.service';
-import {HttpGatewayService} from './services/http-gateway.service';
+import {BusyIndicatorService} from './core/services/busy-indicator.service';
+import {HttpGatewayService} from './core/services/http-gateway.service';
 import {StudyResultsComponent} from './pages/browser/components/study-results/study-results.component';
 import {StudyResultComponent} from './pages/browser/components/study-results/study-result.component';
 import {StoreModule} from '@ngrx/store';
@@ -69,7 +65,9 @@ import {ConfirmationComponent} from './popups/confirmation/confirmation.componen
 import {SplitByTwoPipe} from './shared/pipes/split-by-two-pipe';
 import {WindowRef} from './shared/util/WindowRef';
 import {StudyDetailsComponent} from './pages/browser/popups/study-details/study-details.component';
-import {FieldsDescriptionComponent} from './pages/browser/popups/fields-description/fields-description.component';
+import {PropertiesDescriptionComponent} from './pages/browser/popups/properties-description/properties-description.component';
+import {AllFieldsForVisibilityComponent} from './pages/browser/popups/properties-description/properties-visibility.component';
+import {AllFieldsForVisibilityCategoryComponent} from './pages/browser/popups/properties-description/properties-visibility-category.component';
 
 @NgModule(
   {
@@ -96,7 +94,7 @@ import {FieldsDescriptionComponent} from './pages/browser/popups/fields-descript
       AboutPage,
       FAQPage,
       FAQQuestionComponent,
-      FieldsDescriptionComponent,
+      PropertiesDescriptionComponent,
       BrowserPage,
       SplitByTwoPipe,
       DownloadComponent,
@@ -108,7 +106,6 @@ import {FieldsDescriptionComponent} from './pages/browser/popups/fields-descript
       StudyMetadataEditorComponent,
       BrowserSidebarComponent,
       LoginPopupComponent,
-      AllFieldsComponent,
       AllFieldsForVisibilityComponent,
       AllFieldsForVisibilityCategoryComponent,
       FilterSidebarCategoryComponent,
@@ -138,7 +135,8 @@ import {FieldsDescriptionComponent} from './pages/browser/popups/fields-descript
       AddUserComponent,
       ChangePasswordComponent,
       StudyDetailsComponent,
-      ConfirmationComponent
+      ConfirmationComponent,
+      PropertiesDescriptionComponent
     ],
     providers: [
       URLService,

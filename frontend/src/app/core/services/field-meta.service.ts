@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {FieldMeta} from '../types/field-meta';
-import {URLService} from '../../services/url.service';
-import {HttpGatewayService} from '../../services/http-gateway.service';
+import {URLService} from './url.service';
+import {HttpGatewayService} from './http-gateway.service';
 import {CacheableBulkRequester} from '../../common/cacheable-bulk-request';
 import * as _ from 'lodash';
-import {ClassifiedProperties} from '../../services/study.service';
+import {ClassifiedProperties} from './study.service';
 
 const CACHE_LIFETIME_MS = 60 * 1000;  // Cache study and sample metadata for this long
 const REQUEST_BUFFER_MS = 100;        // After a first request for study/sample info, delay this long and buffer other requests

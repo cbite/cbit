@@ -1,6 +1,6 @@
 import {Component, OnInit, ChangeDetectorRef, OnChanges, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {URLService} from '../../services/url.service';
-import {HttpGatewayService} from '../../services/http-gateway.service';
+import {URLService} from '../../core/services/url.service';
+import {HttpGatewayService} from '../../core/services/http-gateway.service';
 import {User} from '../../pages/user-management/types/User';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Observable} from 'rxjs/Observable';

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, SimpleChanges, Output} from '@angular/core';
-import {UnifiedMatch} from '../../../../services/study.service';
+import {UnifiedMatch} from '../../../../core/services/study.service';
 import {Study} from '../../../../core/types/study.model';
 
 @Component({

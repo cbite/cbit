@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FiltersService, EMPTY_FILTERS} from "../../services/filters.service";
+import {FiltersService, EMPTY_FILTERS} from "../browser/services/filters.service";
 import {Router, ActivatedRoute} from "@angular/router";
 
 @Component({

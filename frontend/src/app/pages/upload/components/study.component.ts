@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ChangeDetectorRef} from '@angular/core';
 import {Study, Sample, RawStudy} from '../../../core/types/study.model';
-import {StudyService, StudyAndSamples} from '../../../services/study.service';
+import {StudyService, StudyAndSamples} from '../../../core/services/study.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import { Location } from '@angular/common';
 

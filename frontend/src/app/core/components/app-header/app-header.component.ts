@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../../authentication/authentication.service';
-import {PopupService} from '../../../services/popup.service';
+import {PopupService} from '../../services/popup.service';
 import {ApplicationState} from '../../redux/reducers/index';
 import {Store} from '@ngrx/store';
 import {AppUrls} from '../../../router/app-urls';
@@ -10,7 +10,7 @@ import {AppUrls} from '../../../router/app-urls';
   selector: 'cbit-app-header',
   styleUrls: ['app-header.scss'],
   template: `
-    <div class="header">
+    <div class="header noselect">
       <img src="../../../../assets/images/logo_dark.png" class="logo">
       <div class="header-links">
         <div class="header-link"

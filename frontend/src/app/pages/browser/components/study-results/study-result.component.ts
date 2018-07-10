@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {UnifiedMatch} from '../../../../services/study.service';
+import {UnifiedMatch} from '../../../../core/services/study.service';
 import {WindowRef} from '../../../../shared/util/WindowRef';
 import {getAuthors, getDoisIds, getPubmedIds, getTitle} from '../../../../core/util/study-helper';
 import {Study} from '../../../../core/types/study.model';

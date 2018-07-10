@@ -1,43 +1,34 @@
-import {Component, OnInit, ChangeDetectorRef, OnDestroy, Input, OnChanges} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, OnDestroy, EventEmitter, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {FiltersService, FiltersState} from '../../../../services/filters.service';
-import {StudyService, ManySampleCounts, ClassifiedProperties, ClassifiedPropertiesForGivenVisibility} from '../../../../services/study.service';
-import {Observable, Subject} from 'rxjs';
+import {FiltersService, FiltersState} from '../../services/filters.service';
+import {StudyService, ClassifiedProperties} from '../../../../core/services/study.service';
 import * as _ from 'lodash';
-// import {ModalDirective} from "ngx-bootstrap";
-import {CollapseStateService} from '../../../../services/collapse-state.service';
 import {FieldMeta} from '../../../../core/types/field-meta';
 import {FieldMetaService} from '../../../../core/services/field-meta.service';
+import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   styleUrls: ['./browser-sidebar.scss'],
   selector: 'cbit-browser-sidebar',
   template: `
     <div class="sidebar">
-      <div class="searchbox">
-        <label for="searchText">Search for:</label>
-        <!--<spinner *ngIf="!ready"></spinner>-->
-        <span>
-          <input id="searchText"
-                 type="text"
-                 placeholder="e.g., BCP, stromal cell"
-                 name='searchText'
-                 [formControl]="searchTextInForm"/>
-        </span>
+      <div class="sidebar-header">
+        <div class="searchbox">
+          <label for="searchText">Search for:</label>
+          <div class="input">
+            <input id="searchText"
+                   class="searchText"
+                   type="text"
+                   placeholder="e.g., BCP, stromal cell"
+                   name='searchText'
+                   [formControl]="searchTextInForm"/>
+          </div>
+        </div>
+        <div class="properties-description">
+          <a href="#" (click)="$event.preventDefault(); onFullPropertiesListClicked()">Full list of properties</a>
+        </div>
       </div>
-
-      <!--<div class="nopadding">-->
-        <!--<a class="nopadding" href="#" (click)="$event.preventDefault(); allFieldsModal && allFieldsModal.show()">-->
-          <!--Full list of properties-->
-        <!--</a>-->
-      <!--</div>-->
-
-      <!--<div class="checkbox nav-header nopadding">-->
-        <!--<label>-->
-          <!--<input id="includeControls" type="checkbox" name="includeControls" [formControl]="includeControlsInForm"/>-->
-          <!--Include associated controls-->
-        <!--</label>-->
-      <!--</div>-->
 
       <div class="filter-panel">
         <div class="filter-heading">MAIN FILTERS</div>
@@ -72,14 +63,14 @@ export class BrowserSidebarComponent implements OnInit, OnDestroy {
   allFieldMetas: {[fieldName: string]: FieldMeta} = {};
   visiblePropNames: string[] = [];
 
-  //TODO@Sam Fix it!
-  //@Input() allFieldsModal: ModalDirective = null;
-
   // See comment in StudyService.classifyProperties
   classifiedProperties: ClassifiedProperties = {};
 
   ready = false;
   stopStream = new Subject<string>();
+
+  @Output()
+  public fullPropertiesListClick = new EventEmitter();
 
   constructor(
     private fieldMetaService: FieldMetaService,
@@ -88,17 +79,16 @@ export class BrowserSidebarComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef
   ) {
 
-    //TODO@Sam Fix it!
-    // this.searchTextInForm.valueChanges
-    //   .debounceTime(200)       // Don't propagate changes until this many ms have elapsed without change
-    //   .distinctUntilChanged()  // Don't emit the same value twice
-    //   .takeUntil(this.stopStream)
-    //   .subscribe(newSearchText => _filtersService.setSearchText(newSearchText));
+    this.searchTextInForm.valueChanges
+      .debounceTime(200)       // Don't propagate changes until this many ms have elapsed without change
+      .distinctUntilChanged()  // Don't emit the same value twice
+      .takeUntil(this.stopStream)
+      .subscribe(newSearchText => _filtersService.setSearchText(newSearchText));
 
-    // this.includeControlsInForm.valueChanges
-    //   .distinctUntilChanged()  // Don't emit the same value twice
-    //   .takeUntil(this.stopStream)
-    //   .subscribe(newIncludeControls => _filtersService.setIncludeControls(newIncludeControls));
+    this.includeControlsInForm.valueChanges
+      .distinctUntilChanged()  // Don't emit the same value twice
+      .takeUntil(this.stopStream)
+      .subscribe(newIncludeControls => _filtersService.setIncludeControls(newIncludeControls));
 
   }
 
@@ -118,6 +108,10 @@ export class BrowserSidebarComponent implements OnInit, OnDestroy {
         this.changeDetectorRef.detectChanges();
         this.startListening();
       });
+  }
+
+  public onFullPropertiesListClicked() {
+    this.fullPropertiesListClick.emit();
   }
 
   ngOnDestroy() {

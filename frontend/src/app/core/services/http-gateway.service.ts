@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, ObservableInput} from 'rxjs/Observable';
-import {AuthenticationService} from '../core/authentication/authentication.service';
-import {environment} from '../../environments/environment';
-import {ResponseContentType} from '@angular/http';
+import {AuthenticationService} from '../authentication/authentication.service';
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class HttpGatewayService {
