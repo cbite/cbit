@@ -3,7 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 
-import {StudyComponent} from './pages/studies/components/study/study.component';
+import {StudyComponent} from './pages/upload/components/study.component';
 import {DownloadComponent} from './common/components/download.component';
 import {AppRoutingModule} from './router/routing.module';
 import {FilterSidebarComponent} from './pages/browser/components/filters/filter-sidebar.component';
@@ -21,7 +21,7 @@ import {
   AllFieldsComponent, AllFieldsForVisibilityComponent,
   AllFieldsForVisibilityCategoryComponent
 } from './pages/browser/components/all-fields.component';
-import {StudyRedirectComponent} from './pages/studies/study-redirect.component';
+import {StudyRedirectComponent} from './pages/study-management/study-redirect.component';
 import {TooltipContainer} from './common/tooltip-container.component';
 import {MyTooltipDirective} from './common/my-tooltip.directive';
 import {TooltipService} from './services/tooltip.service';
@@ -61,12 +61,12 @@ import {FieldMetadataFormComponent} from './pages/upload/components/FieldMetadat
 import {UserManagementPage} from './pages/user-management/user-management.page';
 import {MetadataPage} from './pages/metadata/metadata.page';
 import {FieldMetadataEditorComponent} from './pages/metadata/components/FieldMetadataEditorComponent';
-import {StudyMetadataEditorComponent} from './pages/studies/components/study-mentadata-editor.component';
+import {StudyMetadataEditorComponent} from './pages/study-management/components/study-mentadata-editor.component';
 import {FieldMetaService} from './core/services/field-meta.service';
 import {ChangePasswordComponent} from './popups/change-password/change-password.component';
-import {StudyManagementComponent} from './pages/studies/study-management.component';
+import {StudyManagementComponent} from './pages/study-management/study-management.component';
 import {ConfirmationComponent} from './popups/confirmation/confirmation.component';
-import {SplitByThreePipe} from './shared/pipes/split-by-three-pipe';
+import {SplitByTwoPipe} from './shared/pipes/split-by-two-pipe';
 import {WindowRef} from './shared/util/WindowRef';
 import {StudyDetailsComponent} from './popups/study-details/study-details.component';
 
@@ -96,7 +96,7 @@ import {StudyDetailsComponent} from './popups/study-details/study-details.compon
       FAQPage,
       FAQQuestionComponent,
       BrowserPage,
-      SplitByThreePipe,
+      SplitByTwoPipe,
       DownloadComponent,
       UploadPage,
       FieldMetadataFormComponent,

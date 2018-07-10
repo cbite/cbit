@@ -54,6 +54,6 @@ export class PopupService {
       backdrop: 'static',
       windowClass: 'large-window'
     }).componentInstance;
-    popupInstance.study = study;
+    popupInstance.setStudy(study);
   }
 }

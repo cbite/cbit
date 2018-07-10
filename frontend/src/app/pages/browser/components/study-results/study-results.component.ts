@@ -11,9 +11,9 @@ import {UnifiedMatch} from '../../../../services/study.service';
     </div>
 
     <div class="container-fluid">
-      <ng-container *ngFor="let row of (matches | splitByThreePipe)">
+      <ng-container *ngFor="let row of (matches | splitByTwoPipe)">
         <div class="row" style="margin-top: 20px">
-          <div class="col-4" *ngFor="let match of row">
+          <div class="col-6" *ngFor="let match of row">
             <cbit-study-result [match]="match"
               (showDetails)="onShowDetails(match)">
             </cbit-study-result>

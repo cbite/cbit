@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ChangeDetectorRef} from '@angular/core';
-import {Study, Sample, RawStudy} from '../../../../core/types/study.model';
-import {StudyService, StudyAndSamples} from "../../../../services/study.service";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {Study, Sample, RawStudy} from '../../../core/types/study.model';
+import {StudyService, StudyAndSamples} from '../../../services/study.service';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import { Location } from '@angular/common';
 
 @Component({
@@ -10,16 +10,16 @@ import { Location } from '@angular/common';
     <div *ngIf="!ready">
       <span style="color: red;font-style: italic">Fetching study data...</span>
     </div>
-    
+
     <div *ngIf="ready && study">
       <h3 *ngIf="showTitle">{{ study._source['STUDY']['Study Title'] }}</h3>
       <h4>{{ study._source['STUDY']['Study Researchers Involved'] }}</h4>
-    
+
       <h5>Extra Info</h5>
       <ul>
         <li *ngFor="let categoryKV of studyCategoryMap | mapToIterable">
           <b>{{ categoryKV.key }}:</b>
-    
+
           <div *ngIf="isCategoryIsMultiValued(categoryKV.key)">
             <ol>
               <li *ngFor="let item of study._source[categoryKV.key]">
@@ -31,7 +31,7 @@ import { Location } from '@angular/common';
               </li>
             </ol>
           </div>
-    
+
           <div *ngIf="!isCategoryIsMultiValued(categoryKV.key)">
             <ul>
               <li *ngFor="let subcategoryKV of study._source[categoryKV.key] | mapToIterable">
@@ -41,7 +41,7 @@ import { Location } from '@angular/common';
           </div>
         </li>
       </ul>
-    
+
       <h5>Samples</h5>
       <h6>Common Properties:</h6>
       <ul>
@@ -66,13 +66,13 @@ import { Location } from '@angular/common';
 })
 export class StudyComponent implements OnInit {
   @Input() studyId: string;
-  @Input() showTitle: boolean = false;
+  @Input() showTitle = false;
   study: Study;
   studyCategoryMap: RawStudy;
   samples: Sample[];
   sampleKeys: string[];
   commonKeys: { [key: string]: any };
-  ready = false
+  ready = false;
 
   constructor(
     private _router: Router,
@@ -85,20 +85,20 @@ export class StudyComponent implements OnInit {
   ngOnInit(): void {
     //this._route.params.forEach((params: Params) => {
       //let id: string = params['id'];
-    let id = this.studyId;
+    const id = this.studyId;
       //this._studyService.getStudy(id)
       //  .then(study => this.study = study);
 
-      let studyPromise = this._studyService.getStudy(id);
-      let samplesPromise = this._studyService.getIdsOfSamplesInStudy(id).then(sampleIds => {
+      const studyPromise = this._studyService.getStudy(id);
+      const samplesPromise = this._studyService.getIdsOfSamplesInStudy(id).then(sampleIds => {
         return Promise.all(sampleIds.map(sampleId => this._studyService.getSample(sampleId)));
       });
 
       Promise.all([studyPromise, samplesPromise]).then(results => {
-        let study = results[0];
-        let samples = results[1];
+        const study = results[0];
+        const samples = results[1];
 
-        let result: StudyAndSamples = {
+        const result: StudyAndSamples = {
           study: study,
           samples: samples
         };
@@ -124,22 +124,22 @@ export class StudyComponent implements OnInit {
     // YUCK! Despite what the mappings in ElasticSearch say, 'Sample Name' in the JSON results can be an integer!
     this.samples = studyAndSamples.samples.sort((a, b) => (a._source['Sample Name'] + '').localeCompare((b._source['Sample Name'] + '')));
 
-    let keys = new Set<string>();
+    const keys = new Set<string>();
     this.samples.forEach(sample => Object.keys(sample._source).forEach(key => keys.add(key)));
     keys.delete('Sample Name');
     this.sampleKeys = Array.from(keys);
 
     this.commonKeys = {};
     if (this.samples.length > 0) {
-      let firstSample = this.samples[0];
-      for (let key in firstSample._source) {
+      const firstSample = this.samples[0];
+      for (const key in firstSample._source) {
         if (key.substr(0, 1) !== '*') {
           this.commonKeys[key] = firstSample._source[key];
         }
       }
 
-      for (let sample of this.samples) {
-        for (let commonKey in this.commonKeys) {
+      for (const sample of this.samples) {
+        for (const commonKey in this.commonKeys) {
           if (!(commonKey in sample._source) ||
             (sample._source[commonKey] !== this.commonKeys[commonKey])) {
             delete this.commonKeys[commonKey];
@@ -152,12 +152,12 @@ export class StudyComponent implements OnInit {
   }
 
   distinctKeys(sample: Sample): string[] {
-    let ignoreSampleKeys = {
+    const ignoreSampleKeys = {
       'Sample ID': true
-    }
+    };
     return (
       Object.keys(sample._source)
-        .filter(key => key.substr(0,1) !== '*')
+        .filter(key => key.substr(0, 1) !== '*')
         .filter(key => !(key in this.commonKeys))
         .filter(key => !(key in ignoreSampleKeys))
         .filter(key => sample._source[key] !== sample._source['Sample Name'])

@@ -1,13 +1,14 @@
 import {Component} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Study} from '../../core/types/study.model';
+import {getTitle} from '../../core/util/study-helper';
 
 @Component({
     styleUrls: ['./study-details.scss'],
     template: `
       <div class="modal-panel noselect">
         <div class="modal-header">
-          <div class="title">{{study._source.STUDY['Study Title']}}
+          <div class="title">{{title}}
           </div>
           <span class="close" (click)="onCloseClick()"><i class="fal fa-times"></i></span>
         </div>
@@ -19,9 +20,13 @@ import {Study} from '../../core/types/study.model';
 )
 export class StudyDetailsComponent {
 
-  public study: Study;
+  public title: string;
 
   constructor(public activeModal: NgbActiveModal) {
+  }
+
+  public setStudy(study: Study) {
+    this.title = getTitle(study);
   }
 
   public onCloseClick() {

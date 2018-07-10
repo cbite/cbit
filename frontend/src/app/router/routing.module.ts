@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {DownloadComponent} from '../common/components/download.component';
-import {StudyManagementComponent} from '../pages/studies/study-management.component';
-import {StudyRedirectComponent} from '../pages/studies/study-redirect.component';
+import {StudyManagementComponent} from '../pages/study-management/study-management.component';
+import {StudyRedirectComponent} from '../pages/study-management/study-redirect.component';
 import {AppUrls} from './app-urls';
 import {WelcomePage} from '../pages/welcome/welcome.page';
 import {AboutPage} from '../pages/about/about.page';

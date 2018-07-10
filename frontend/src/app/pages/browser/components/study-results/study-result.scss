@@ -4,6 +4,8 @@
   border: 1px solid darken($color-gray, 10%);
   border-radius: 5px;
   cursor: pointer;
+  max-width: 750px;
+  margin: 0 auto;
 
   .header {
     padding: 10px;

@@ -1,7 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
-@Pipe({name: 'splitByThreePipe'})
-export class SplitByThreePipe implements PipeTransform {
+@Pipe({name: 'splitByTwoPipe'})
+export class SplitByTwoPipe implements PipeTransform {
 
   constructor() {}
 
@@ -9,7 +9,7 @@ export class SplitByThreePipe implements PipeTransform {
     const result = [];
     let row = [];
     for (let i = 0; i < values.length; i++) {
-      if ((i) % 3 === 0) {
+      if ((i) % 2 === 0) {
         result.push(row);
         row = [];
       }

@@ -1,17 +1,17 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {UnifiedMatch} from '../../../../services/study.service';
-import {RawStudyPublication, Study} from '../../../../core/types/study.model';
 import {WindowRef} from '../../../../shared/util/WindowRef';
+import {getAuthors, getDoisIds, getPubmedIds, getTitle} from '../../../../core/util/study-helper';
 
 @Component({
   selector: 'cbit-study-result',
   styleUrls: ['./study-result.scss'],
   template: `
     <div class="study-panel noselect">
-      <div class="header" (click)="onShowStudyDetails()">{{match.study._source.STUDY['Study Title']}}</div>
+      <div class="header" (click)="onShowStudyDetails()">{{studyTitle}}</div>
       <div class="body">
         <div class="authors" (click)="onShowStudyDetails()">
-            by {{ match.study._source['STUDY']['Study Researchers Involved'] }}
+            by {{authors}}
         </div>
         <div class="samples" (click)="onShowStudyDetails()">
           <span style="margin-right: 5px;"><i class="far fa-ellipsis-v"></i></span> {{ match.sampleMatches.length }} matching samples
@@ -40,27 +40,18 @@ export class StudyResultComponent implements OnChanges {
   public doiIds = [];
   private nativeWindow: any;
 
+  public studyTitle: string;
+  public authors: string;
+
   constructor(private winRef: WindowRef){
     this.nativeWindow = winRef.getNativeWindow();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    this.pubmedIds = this.pubmedIdsOf(this.match.study);
-    this.doiIds = this.doisOf(this.match.study);
-  }
-
-  private pubmedIdsOf(study: Study): string[] {
-    return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
-        .filter((p: RawStudyPublication) => p['Study PubMed ID'])
-        .map((p: RawStudyPublication) => p['Study PubMed ID'])
-    );
-  }
-
-  private doisOf(study: Study): string[] {
-    return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
-        .filter((p: RawStudyPublication) => p['Study Publication DOI'])
-        .map((p: RawStudyPublication) => p['Study Publication DOI'])
-    );
+    this.studyTitle = getTitle(this.match.study);
+    this.authors = getAuthors(this.match.study);
+    this.pubmedIds = getPubmedIds(this.match.study);
+    this.doiIds = getDoisIds(this.match.study);
   }
 
   public onOpenExternal(source: string, id: string) {
