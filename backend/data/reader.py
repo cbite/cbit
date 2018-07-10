@@ -256,6 +256,9 @@ def clean_up_study_samples(df, db_conn=None):
         except ValueError:
             return False
 
+    def float_to_str(f):
+        return "{:.20f}".format(f).rstrip('0').rstrip('.') or '0'
+
     all_results = {}
     for i, row in df.iterrows():
         result = {}
@@ -278,9 +281,7 @@ def clean_up_study_samples(df, db_conn=None):
 
                 dimensions = fieldMetas[colname].dimensions
                 unit_converter = DimensionsRegister[dimensions]  # type: UnitCoverter
-                result[colname] = (
-                    unit_converter.toCanonicalUnit(float(value), row[unit_colnames[colname]])
-                )
+                result[colname] = float_to_str(unit_converter.toCanonicalUnit(float(value), row[unit_colnames[colname]]))
             elif not isFloaty(value) or not np.isnan(float(value)):
                 if fieldMetas and colname in fieldMetas and fieldMetas[colname].dataType == 'double' and colname not in ('Phase composition', 'Elements composition', 'Wettability'):
                     result[colname] = float(value)
