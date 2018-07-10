@@ -1,0 +1,11 @@
+@import '../../../../../variables';
+
+.category-label {
+  color: $color-blue;
+  cursor: pointer;
+  line-height: 26px;
+
+  &:hover {
+    color: $color-dark-blue;
+  }
+}

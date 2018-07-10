@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Sample, Study} from '../../../../core/types/study.model';
-import {getAuthors, getTitle} from '../../../../core/util/study-helper';
+import {getAuthors, getDoisIds, getPubmedIds, getTitle} from '../../../../core/util/study-helper';
 import {StudyAndSamples, StudyService} from '../../../../core/services/study.service';
 import {getCategoriesToDisplay, StudyCategory} from '../../../../core/util/study-display-category-helper';
 import {getCommonKeys} from '../../../../core/util/samples-helper';
+import {WindowRef} from '../../../../shared/util/WindowRef';
 
 @Component({
     styleUrls: ['./study-details.scss'],
@@ -16,52 +17,33 @@ import {getCommonKeys} from '../../../../core/util/samples-helper';
           <span class="close" (click)="onCloseClick()"><i class="fal fa-times"></i></span>
         </div>
         <div class="modal-body">
-          <h5>{{authors}}</h5>
-          <h5>Extra Info</h5>
-          <ul>
-            <li *ngFor="let category of studyCategories">
-              <b>{{category.label}}:</b>
+          <div class="content">
+            <div class="authors">by {{authors}}</div>
 
-              <div *ngIf="category.isIsMultiValued()">
-                <ol>
-                  <li *ngFor="let multiValue of category.value">
-                    <ul>
-                      <li *ngFor="let itemValue of multiValue | mapToIterable">
-                        <i>{{ itemValue.key }}</i>: {{ itemValue.val }}
-                      </li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
+            <div class="information">
+              <h6><b>Information</b></h6>
+              <ng-container *ngFor="let category of studyCategories">
+                <cbit-study-category [category]="category"></cbit-study-category>
+              </ng-container>
+            </div>
 
-              <div *ngIf="!category.isIsMultiValued()">
-                <ul>
-                  <li *ngFor="let value of category.value | mapToIterable">
-                    <i>{{ value.key }}</i>: {{ value.val }}
-                  </li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-
-          <h5>Samples</h5>
-          <h6>Common Properties:</h6>
-          <ul>
-            <li *ngFor="let kv of commonKeys | mapToIterable">
-              <i>{{ kv.key }}</i>: {{ kv.val }}
-            </li>
-          </ul>
-          <h6>Distinguishing properties:</h6>
-          <ol>
-            <li *ngFor="let sample of samples">
-              <b>{{ sample._source['Sample Name'] }}</b>:
-              <span *ngFor="let propName of distinctKeys(sample); let isLast = last">
-                <span *ngIf="sample._source[propName]">
-                  <i>{{ propName }}</i>: {{ sample._source[propName] }}<span *ngIf="!isLast">, </span>
-                </span>
-              </span>
-            </li>
-          </ol>
+            <div class="samples">
+              <h6><b>Samples</b></h6>
+              <cbit-common-properties
+                [commonKeys]="commonKeys"></cbit-common-properties>
+              <cbit-distinguishing-properties
+                [commonKeys]="commonKeys"
+                [samples]="samples"></cbit-distinguishing-properties>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', doi)">
+            <i class="far fa-link"></i> PubMed
+          </div>
+          <div class="link" *ngFor="let doi of doiIds" (click)="onOpenExternal('DOI', doi)">
+            <i class="far fa-link"></i> DOI
+          </div>
         </div>
       </div>
     `
@@ -74,19 +56,25 @@ export class StudyDetailsComponent {
   public studyCategories: StudyCategory[] = [];
   public samples: Sample[];
   public commonKeys: any;
+  public pubmedIds = [];
+  public doiIds = [];
+  private nativeWindow: any;
 
-  constructor(public activeModal: NgbActiveModal, private studyService: StudyService) {
+  constructor(public activeModal: NgbActiveModal, private studyService: StudyService, private winRef: WindowRef) {
+    this.nativeWindow = winRef.getNativeWindow();
   }
 
   public setStudy(study: Study) {
     const getCommonKeysFunction = getCommonKeys;
     this.title = getTitle(study);
     this.authors = getAuthors(study);
+    this.pubmedIds = getPubmedIds(study);
+    this.doiIds = getDoisIds(study);
     this.studyCategories = getCategoriesToDisplay(study);
     this.studyService.getIdsOfSamplesInStudy(study._id).then(sampleIds => {
       Promise.all(sampleIds.map(sampleId => this.studyService.getSample(sampleId))).then(results => {
-          this.samples = this.sortSamples(results);
-          this.commonKeys = getCommonKeysFunction(this.samples);
+        this.samples = this.sortSamples(results);
+        this.commonKeys = getCommonKeysFunction(this.samples);
       });
     });
   }
@@ -100,16 +88,11 @@ export class StudyDetailsComponent {
     this.activeModal.close();
   }
 
-  public distinctKeys(sample: Sample): string[] {
-    const ignoreSampleKeys = {
-      'Sample ID': true
-    };
-    return (
-      Object.keys(sample._source)
-        .filter(key => key.substr(0, 1) !== '*')
-        .filter(key => !(key in this.commonKeys))
-        .filter(key => !(key in ignoreSampleKeys))
-        .filter(key => sample._source[key] !== sample._source['Sample Name'])
-    );
+  public onOpenExternal(source: string, id: string) {
+    if (source === 'DOI') {
+      this.nativeWindow.open(`https://dx.doi.org/${id}`);
+    } else if (source === 'PubMed') {
+      this.nativeWindow.open(`https://www.ncbi.nlm.nih.gov/pubmed/${id}`);
+    }
   }
 }

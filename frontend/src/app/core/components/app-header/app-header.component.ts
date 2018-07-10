@@ -27,7 +27,7 @@ import {AppUrls} from '../../../router/app-urls';
         </div>
         <div class="header-link"
              routerLinkActive="active"
-             routerLink="/browse">Bio Material
+             routerLink="/browse">Enter cBiT
         </div>
       </div>
       <cbit-app-header-menu
