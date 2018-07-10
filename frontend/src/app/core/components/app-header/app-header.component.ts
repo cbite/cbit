@@ -10,7 +10,7 @@ import {AppUrls} from '../../../router/app-urls';
   selector: 'cbit-app-header',
   styleUrls: ['app-header.scss'],
   template: `
-    <div class="header">
+    <div class="header noselect">
       <img src="../../../../assets/images/logo_dark.png" class="logo">
       <div class="header-links">
         <div class="header-link"
