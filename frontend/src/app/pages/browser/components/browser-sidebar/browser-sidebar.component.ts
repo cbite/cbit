@@ -15,7 +15,9 @@ import {Observable} from 'rxjs/Observable';
     <div class="sidebar noselect">
       <div class="sidebar-header">
         <div class="searchbox">
-          <div class="search-title">SEARCH</div>
+          <div class="search-title">SEARCH
+            <div class="shortcut" (click)="onFullPropertiesListClicked()">All Properties</div>
+          </div>
           <div class="search-content">
             <input id="searchText"
                    class="searchText"
@@ -25,14 +27,11 @@ import {Observable} from 'rxjs/Observable';
                    [formControl]="searchTextInForm"/>
           </div>
         </div>
-        <!--<div class="properties-description">-->
-          <!--<a href="#" (click)="$event.preventDefault(); onFullPropertiesListClicked()">Full list of properties</a>-->
-        <!--</div>-->
       </div>
 
       <div class="filter-panel">
         <div class="filter-heading">FILTERS
-          <div class="shortcut">Clear all</div>
+          <div class="shortcut" (click)="onClearFiltersClicked()">Clear all</div>
         </div>
         <div class="filter-content">
           <cbit-filter-sidebar-all-ul name="main"
@@ -84,7 +83,7 @@ export class BrowserSidebarComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this._studyService
       .getAllCountsAsync()
       .then(unfilteredCounts => {
@@ -106,19 +105,15 @@ export class BrowserSidebarComponent implements OnInit, OnDestroy {
     this.fullPropertiesListClick.emit();
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this.stopStream.next('stop');
   }
 
-  withoutStar(s: string): string {
-    if (s.substr(0, 1) == '*') {
-      return s.substr(1);
-    } else {
-      return s;
-    }
+  public onClearFiltersClicked(): void {
+    this._filtersService.clearFilters();
   }
 
-  calcVisiblePropNames(fieldMetas: { [fieldName: string]: FieldMeta }): string[] {
+  public calcVisiblePropNames(fieldMetas: { [fieldName: string]: FieldMeta }): string[] {
     return Object.keys(fieldMetas).filter(fieldName => {
       const visibility = fieldMetas[fieldName].visibility;
       return (visibility === 'visible');

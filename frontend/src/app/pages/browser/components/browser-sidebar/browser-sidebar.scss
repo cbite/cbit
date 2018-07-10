@@ -11,10 +11,16 @@
       .search-title {
         background-color: $color-blue;
         color: white;
-        padding-left: 20px;
+        padding: 0 20px;
         line-height: 40px;
         height: 40px;
 
+        .info-icon {
+          float: right;
+          font-size: $font-size-small;
+          color: $color-gray;
+          margin-right: 10px;
+        }
       }
 
       .search-content {
@@ -62,17 +68,21 @@
       height: 40px;
       line-height: 40px;
       padding: 0 20px;
-
-      .shortcut {
-        float: right;
-        cursor: pointer;
-        font-size: $font-size-small;
-        color: $color-gray;
-      }
     }
 
     .filter-content {
       background-color: $color-gray;
+    }
+  }
+
+  .shortcut {
+    float: right;
+    cursor: pointer;
+    font-size: $font-size-small;
+    color: $color-gray;
+
+    &:hover {
+      color: white;
     }
   }
 }
