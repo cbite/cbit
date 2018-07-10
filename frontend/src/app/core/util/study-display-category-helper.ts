@@ -1,6 +1,6 @@
 import {Study} from '../types/study.model';
 
-export function getDisplayFields(study: Study): StudyField[] {
+export function getCategoriesToDisplay(study: Study): StudyCategory[] {
   const categoryMap = Object.assign({}, study._source);
   delete categoryMap['*Archive URL'];
   delete categoryMap['*Publication Date'];
@@ -10,14 +10,14 @@ export function getDisplayFields(study: Study): StudyField[] {
   const result = [];
   for (const key in categoryMap) {
     if (categoryMap.hasOwnProperty(key)) {
-      result.push(new StudyField(key, categoryMap[key]));
+      result.push(new StudyCategory(key, categoryMap[key]));
     }
   }
 
   return result;
 }
 
-export class StudyField {
+export class StudyCategory {
   constructor (public label: string, public value: any) {}
 
   isIsMultiValued(): boolean {

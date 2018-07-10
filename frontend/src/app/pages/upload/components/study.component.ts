@@ -70,7 +70,6 @@ export class StudyComponent implements OnInit {
   study: Study;
   studyCategoryMap: RawStudy;
   samples: Sample[];
-  sampleKeys: string[];
   commonKeys: { [key: string]: any };
   ready = false;
 
@@ -125,10 +124,11 @@ export class StudyComponent implements OnInit {
     // YUCK! Despite what the mappings in ElasticSearch say, 'Sample Name' in the JSON results can be an integer!
     this.samples = studyAndSamples.samples.sort((a, b) => (a._source['Sample Name'] + '').localeCompare((b._source['Sample Name'] + '')));
 
-    const keys = new Set<string>();
-    this.samples.forEach(sample => Object.keys(sample._source).forEach(key => keys.add(key)));
-    keys.delete('Sample Name');
-    this.sampleKeys = Array.from(keys);
+    // todo@Sam - are you sure this can be commented?
+    // const keys = new Set<string>();
+    // this.samples.forEach(sample => Object.keys(sample._source).forEach(key => keys.add(key)));
+    // keys.delete('Sample Name');
+    // this.sampleKeys = Array.from(keys);
 
     this.commonKeys = {};
     if (this.samples.length > 0) {
