@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthenticationService} from '../../core/authentication/authentication.service';
 
@@ -19,7 +19,7 @@ import {AuthenticationService} from '../../core/authentication/authentication.se
           </div>
           <form>
             <div class="form-group">
-              <input type="text" name="user" class="form-control" placeholder="Username" [(ngModel)]="username">
+              <input type="text" #usernameInput name="user" class="form-control" placeholder="Username" [(ngModel)]="username">
             </div>
             <div class="form-group">
               <input type="password" name="pass" class="form-control" placeholder="Password" [(ngModel)]="password">
@@ -35,15 +35,22 @@ import {AuthenticationService} from '../../core/authentication/authentication.se
     `
   }
 )
-export class LoginPopupComponent {
+export class LoginPopupComponent implements AfterViewInit {
 
   public username: string;
   public password: string;
   public errorMessage: string;
   public loginProgress: boolean;
 
+  @ViewChild('usernameInput')
+  private usernameInput;
+
   constructor(private authenticationService: AuthenticationService,
               public activeModal: NgbActiveModal) {
+  }
+
+  public ngAfterViewInit(): void {
+    this.usernameInput.nativeElement.focus();
   }
 
   public refresh(): void {
