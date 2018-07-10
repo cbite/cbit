@@ -8,7 +8,7 @@ export function isTranscriptomicsAssayDetail(fieldName: string): boolean {
 
 export const TRANSCRIPTOMIC_ASSY_DETAIL_DEFAULT_METADATA: FieldMeta = {
   description: '',
-  visibility: 'additional',
+  visibility: 'visible',
   category: 'Technical > General',
   dataType: 'string',
   dimensions: 'none',
@@ -22,7 +22,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > General',
     'dataType': 'string',
     'description': 'Gene expression technology used for the samples, e.g. Microarray, RNA sequencing.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -30,7 +30,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > General',
     'dataType': 'string',
     'description': 'Type of platform/manufacturer used, e.g. Illumina, Affymetrix, Agilent.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -40,7 +40,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > Microarray',
     'dataType': 'string',
     'description': 'The design of the microarray or RNAseq chip, e.g. Illumina HT12v4',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -93,7 +93,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > Microarray',
     'dataType': 'string',
     'description': 'No description available',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -101,7 +101,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > Microarray',
     'dataType': 'string',
     'description': 'No description available',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -109,7 +109,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > Microarray',
     'dataType': 'string',
     'description': 'No description available',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -117,7 +117,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > Microarray',
     'dataType': 'string',
     'description': 'No description available',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -145,7 +145,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > RNA sequencing',
     'dataType': 'string',
     'description': 'Sequencing instrument name',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -153,7 +153,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > RNA sequencing',
     'dataType': 'string',
     'description': 'No description available',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -161,7 +161,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > RNA sequencing',
     'dataType': 'string',
     'description': 'No description available',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -169,7 +169,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > RNA sequencing',
     'dataType': 'string',
     'description': 'No description available',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -177,7 +177,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Technical > RNA sequencing',
     'dataType': 'string',
     'description': 'No description available',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -244,7 +244,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Cell line name for cell line work, donor name (e.g. a human stem cell donor, coded name), or isolated cell type name for human subjects or animals.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -269,7 +269,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'The name of the animal strain used for in vivo experiments.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -277,7 +277,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Type of cells (not cell line), e.g. bone marrow cells, osteosarcoma cells, etc.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none',
     'nameInSampleMiniSummary': 'Cell type'
@@ -286,7 +286,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Type of tissue the sample comes from (i.e. one of the four basic tissue types: epithelium, connective, muscular, or nervous).',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -294,7 +294,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Organ from which the sample originates.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none',
     'nameInSampleMiniSummary': 'Organ'
@@ -303,7 +303,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Organism from which the sample originates.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none',
     'nameInSampleMiniSummary': 'Organism'
@@ -312,7 +312,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Sex of the original source sample. “unknown” means it is either not known or possibly mixed, e.g. when a pool of cells is used with multiple sexes.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -320,7 +320,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'double',
     'description': 'Age of animal or human subject in case of in vivo or ex vivo studies.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'time',
     'preferredUnit': 'year'
   },
@@ -328,7 +328,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'double',
     'description': 'Treatment time for animal experiments or human experiments (not compound exposure study).',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'time',
     'preferredUnit': 'hour'
   },
@@ -336,7 +336,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'The passage number of the cell line at which the experiments took place (in case of in vitro experiments).',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -344,7 +344,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Type of assay (in vitro, in vivo or ex vivo).',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none',
     'nameInSampleMiniSummary': 'Assay Type'
@@ -353,7 +353,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'The type of culture medium used.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -361,7 +361,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'double',
     'description': 'Time allowed for cell attachment before start of compound exposure and/or start of culture duration experiment.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'time',
     'preferredUnit': 'hour'
   },
@@ -394,7 +394,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Compound name and abbreviation (for exposure studies).',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -419,7 +419,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Compound CAS (Chemical Abstracts Service) number.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -427,7 +427,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'double',
     'description': 'Dose per administration of compound (for exposure studies).',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'concentration',
     'preferredUnit': 'millimolar',
     'nameInSampleMiniSummary': 'Dose'
@@ -436,7 +436,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'double',
     'description': 'Duration of dose treatment (for exposure studies).',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'time',
     'preferredUnit': 'hour'
   },
@@ -444,7 +444,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Dose frequency (for repeat exposure studies).',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -452,7 +452,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Vehicle used to dilute the compound (water, dimethyl sulfoxide, etc.).',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -460,7 +460,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'string',
     'description': 'Administration route in animal experiment (gavage, injection, etc.).',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -468,7 +468,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Biological',
     'dataType': 'double',
     'description': 'Culture time on biomaterial (after attachment) until isolation of cells.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'time',
     'preferredUnit': 'hour'
   },
@@ -503,7 +503,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > General',
     'dataType': 'string',
     'description': 'Class of material, e.g. ceramic, metal, polymer, composite, natural graft.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none',
     'nameInSampleMiniSummary': 'Material Class'
@@ -512,7 +512,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > General',
     'dataType': 'string',
     'description': 'Material name and abbreviation.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -537,7 +537,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > General',
     'dataType': 'string',
     'description': 'The shape of the material, e.g. flat, particle, disc, cylinder, block, coating, paste/injectable, cement, hydrogel.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none',
     'nameInSampleMiniSummary': 'Material Shape'
@@ -546,7 +546,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > General',
     'dataType': 'double',
     'description': 'Sintering temperature of the material in degree Celsius.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'temperature',
     'preferredUnit': 'degree Celsius'
   },
@@ -554,7 +554,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > General',
     'dataType': 'string',
     'description': 'Manufacturer of the material.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -562,7 +562,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > General',
     'dataType': 'string',
     'description': 'Type of etching process used on material.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -570,7 +570,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > General',
     'dataType': 'string',
     'description': 'Type of coating applied on base material.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -578,7 +578,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > General',
     'dataType': 'string',
     'description': 'Has the material been clinically applied?',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -586,7 +586,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > General',
     'dataType': 'string',
     'description': 'Is the material biologically degradable?',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -596,7 +596,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Chemical',
     'dataType': 'double',
     'description': 'Percentage of each phase in the material.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'percentage',
     'preferredUnit': '%'
   },
@@ -612,7 +612,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Chemical',
     'dataType': 'double',
     'description': 'Element concentrations in material in parts per million (ppm).',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'parts_per',
     'preferredUnit': 'parts per million'
   },
@@ -628,7 +628,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Chemical',
     'dataType': 'string',
     'description': 'Elements composition of the surface as measured by EDS: a graph plotting the intensity (counts) versus the energy (keV). Are data available yes/no?',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -636,7 +636,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Chemical',
     'dataType': 'string',
     'description': 'The molecular structure of the material as determined by FTIR (graph). Are data available yes/no?',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -644,7 +644,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Chemical',
     'dataType': 'string',
     'description': 'Degradation or ion release in for example SPS, SBF, PBS, water, medium (graph). Are data available yes/no?',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -660,7 +660,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Chemical',
     'dataType': 'string',
     'description': 'The distribution of molecular weight as measured by GPC (graph). Are data available yes/no?',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -668,7 +668,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Chemical',
     'dataType': 'string',
     'description': 'The amount of oxide formed in SPS, SBF, PBS, water, medium (graph). Are data available yes/no?',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -684,7 +684,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Chemical',
     'dataType': 'double',
     'description': 'The percentage of weight loss of the material per time unit.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'weight_loss',
     'preferredUnit': '% / week'
   },
@@ -694,7 +694,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'double',
     'description': 'The percentage of amorphous/crystalline material.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'percentage',
     'preferredUnit': '%'
   },
@@ -710,7 +710,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'string',
     'description': 'Crystal structure, followed by lattice parameters (a,b,c).',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -718,7 +718,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'double',
     'description': 'The percentage of porosity of the material.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'percentage',
     'preferredUnit': '%'
   },
@@ -734,7 +734,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'double',
     'description': 'Pore diameter size.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'length',
     'preferredUnit': 'micrometer'
   },
@@ -750,7 +750,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'double',
     'description': 'The grain size of the material as measured by SEM.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'length',
     'preferredUnit': 'nanometer'
   },
@@ -766,7 +766,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'double',
     'description': 'Surface roughness: average profile roughness parameter Ra.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'length',
     'preferredUnit': 'micrometer'
   },
@@ -774,7 +774,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'double',
     'description': 'Surface roughness, average area roughness parameter Sa.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'length',
     'preferredUnit': 'micrometer'
   },
@@ -782,7 +782,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'string',
     'description': 'Surface roughness (graph). Are data available yes/no?',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -798,7 +798,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'double',
     'description': 'Specific surface area of the material.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'area',
     'preferredUnit': 'square millimeter'
   },
@@ -814,7 +814,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'double',
     'description': 'Wettability of the material (contact angle) with a liquid.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'angle',
     'preferredUnit': 'degree'
   },
@@ -822,7 +822,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'double',
     'description': 'The surface charge of the material measured as zeta potential.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'electric_potential_difference',
     'preferredUnit': 'millivolt'
   },
@@ -838,7 +838,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'string',
     'description': 'Distribution of densities as measured by microCT (graph). Are data available yes/no?',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -846,7 +846,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'string',
     'description': 'The mechanism of polymerization, e.g. condensation polymerization, addition (chain-growth) polymerization, ring opening polymerization, etc.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -854,7 +854,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'double',
     'description': 'Degree of crosslinking (%).',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'percentage',
     'preferredUnit': '%'
   },
@@ -870,7 +870,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Physical',
     'dataType': 'string',
     'description': 'Homogeneity of ceramic distribution in composite materials, i.e. are ceramic particles distributed homogenously (yes) or do they form aggregates (no)?',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -880,7 +880,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'double',
     'description': 'Elasticity of the material (elastic modulus, average).',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'pressure',
     'preferredUnit': 'pascal'
   },
@@ -888,7 +888,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'string',
     'description': 'Distribution of stiffnesses (elastic modulus) (graph). Are data available yes/no?',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -904,7 +904,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'double',
     'description': 'Toughness of the material as measured by Nanoindentator.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'pressure',
     'preferredUnit': 'pascal'
   },
@@ -912,7 +912,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'double',
     'description': 'Knoop hardness as measured by Nanoindentator.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'pressure',
     'preferredUnit': 'pascal'
   },
@@ -920,7 +920,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'double',
     'description': 'Compressive strength as measured by mechanical tester.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'pressure',
     'preferredUnit': 'pascal'
   },
@@ -928,7 +928,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'string',
     'description': 'Compressive strength as measured by mechanical tester (graph). Are data available yes/no?',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -936,7 +936,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'double',
     'description': 'Tensile strength as measured by mechanical tester.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'pressure',
     'preferredUnit': 'pascal'
   },
@@ -944,7 +944,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'string',
     'description': 'Tensile strength as measured by mechanical tester (graph). Are data available yes/no?',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -952,7 +952,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'string',
     'description': 'Rheology (Reynolds number) as measured by rheometer.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -960,7 +960,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'string',
     'description': 'Rheology as measured by rheometer (graph). Are data available yes/no?',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -968,7 +968,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'double',
     'description': 'Torsion as measured by mechanical tester.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'pressure',
     'preferredUnit': 'pascal'
   },
@@ -976,7 +976,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'string',
     'description': 'Torsion as measured by mechanical tester (graph). Are data available yes/no?',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -984,7 +984,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'double',
     'description': 'Shear stress as measured by rheometer or mechanical tester.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'pressure',
     'preferredUnit': 'pascal'
   },
@@ -992,7 +992,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'string',
     'description': 'Shear stress as measured by rheometer or mechanical tester (graph). Are data available yes/no?',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -1008,7 +1008,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'double',
     'description': 'Bending strength as measured by mechanical tester.',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'pressure',
     'preferredUnit': 'pascal'
   },
@@ -1016,7 +1016,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'string',
     'description': 'Bending strength as measured by mechanical tester. Are data available yes/no?',
-    'visibility': 'main',
+    'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
@@ -1024,7 +1024,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'category': 'Material > Mechanical',
     'dataType': 'double',
     'description': 'Stress rupture as measued by mechanical tester.',
-    'visibility': 'additional',
+    'visibility': 'visible',
     'dimensions': 'pressure',
     'preferredUnit': 'pascal'
   },

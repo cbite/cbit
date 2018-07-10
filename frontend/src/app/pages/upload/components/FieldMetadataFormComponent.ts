@@ -54,8 +54,7 @@ import {DimensionsType, FieldMeta} from '../../../core/types/field-meta';
                 <select [id]="'visibility-' + fieldName"
                         formControlName="visibility"
                         class="form-control">
-                  <option value="main">Main Filters</option>
-                  <option value="additional">Additional Filters</option>
+                  <option value="visible">Visible</option>
                   <option value="hidden">Hidden</option>
                 </select>
               </div>
@@ -228,7 +227,7 @@ export class FieldMetadataFormComponent implements OnInit, OnChanges {
     let result: FieldMeta = {
       description: '',
       dataType: 'string',
-      visibility: 'additional',
+      visibility: 'visible',
       category: 'Technical > General',
       dimensions: 'none',
       preferredUnit: 'none',

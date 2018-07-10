@@ -11,8 +11,7 @@ export type FieldCategory = (
 
 export type FieldVisibility = (
   'hidden' |
-  'main' |
-  'additional'
+  'visible'
 );
 
 export type FieldDataType = (

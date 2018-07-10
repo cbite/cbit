@@ -13,12 +13,8 @@ import {ClassifiedProperties} from '../../../../core/services/study.service';
           <span class="close" (click)="onCloseClick()"><i class="fal fa-times"></i></span>
         </div>
         <div class="modal-body">
-            <cbit-properties-visibility title="MAIN FILTERS"
-                                   [classifiedPropertiesForGivenVisibility]="classifiedProperties['main'] || {}">
-            </cbit-properties-visibility>
-
-            <cbit-properties-visibility title="ADDITIONAL FILTERS"
-                                   [classifiedPropertiesForGivenVisibility]="classifiedProperties['additional'] || {}">
+            <cbit-properties-visibility title="FILTERS"
+                                   [classifiedPropertiesForGivenVisibility]="classifiedProperties['visible'] || {}">
             </cbit-properties-visibility>
         </div>
       </div>

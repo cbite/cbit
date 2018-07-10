@@ -16,8 +16,7 @@ class FieldMeta(object):
 
     validVisibilities = frozenset((
         'hidden',
-        'main',
-        'additional',
+        'visible'
     ))
 
     validDataTypes = frozenset((

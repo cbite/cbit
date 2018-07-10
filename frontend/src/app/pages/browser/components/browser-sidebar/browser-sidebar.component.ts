@@ -31,21 +31,11 @@ import {Observable} from 'rxjs/Observable';
       </div>
 
       <div class="filter-panel">
-        <div class="filter-heading">MAIN FILTERS</div>
+        <div class="filter-heading">FILTERS</div>
         <cbit-filter-sidebar-all-ul name="main"
                                [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
                                [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
-                               [classifiedProperties]="classifiedProperties.main || {}"
-                               [initCollapsed]="true"
-        ></cbit-filter-sidebar-all-ul>
-      </div>
-
-      <div class="filter-panel">
-        <div class="filter-heading">ADDITIONAL FILTERS</div>
-        <cbit-filter-sidebar-all-ul name="additional"
-                               [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
-                               [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
-                               [classifiedProperties]="classifiedProperties.additional || {}"
+                               [classifiedProperties]="classifiedProperties.visible || {}"
                                [initCollapsed]="true"
         ></cbit-filter-sidebar-all-ul>
       </div>
@@ -129,7 +119,7 @@ export class BrowserSidebarComponent implements OnInit, OnDestroy {
   calcVisiblePropNames(fieldMetas: {[fieldName: string]: FieldMeta}): string[] {
     return Object.keys(fieldMetas).filter(fieldName => {
       const visibility = fieldMetas[fieldName].visibility;
-      return (visibility === 'main' || visibility === 'additional');
+      return (visibility === 'visible');
     });
   }
 
