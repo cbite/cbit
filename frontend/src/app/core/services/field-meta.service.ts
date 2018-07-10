@@ -96,7 +96,7 @@ export class FieldMetaService {
     for (const fieldName in fieldMetas) {
       const fieldMeta = fieldMetas[fieldName];
       result = _.mergeWith(result, {
-        [fieldMeta.visibility || 'additional']: {
+        [fieldMeta.visibility || 'visible']: {
           [fieldMeta.category || 'Technical > General']: [
             fieldName
           ]

@@ -56,8 +56,7 @@ import {FieldMetaService} from '../../../core/services/field-meta.service';
                 <select [id]="'visibility-' + kv.key"
                         formControlName="visibility"
                         class="form-control">
-                  <option value="main">Main Filters</option>
-                  <option value="additional">Additional Filters</option>
+                  <option value="visible">Visible</option>
                   <option value="hidden">Hidden</option>
                 </select>
               </div>
