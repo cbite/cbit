@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, SimpleChanges, Output} from '@angular/core';
 import {UnifiedMatch} from '../../../../services/study.service';
+import {Study} from '../../../../core/types/study.model';
 
 @Component({
   selector: 'cbit-study-results',
@@ -15,7 +16,8 @@ import {UnifiedMatch} from '../../../../services/study.service';
         <div class="row" style="margin-top: 20px">
           <div class="col-6" *ngFor="let match of row">
             <cbit-study-result [match]="match"
-              (showDetails)="onShowDetails(match)">
+                               (showDetails)="onShowDetails(match)"
+                               (download)="onDownload($event)">
             </cbit-study-result>
           </div>
         </div>
@@ -180,6 +182,9 @@ export class StudyResultsComponent implements OnChanges {
   @Output()
   public showDetails = new EventEmitter<UnifiedMatch>();
 
+  @Output()
+  public download = new EventEmitter<Study>();
+
   public numMatchingStudies = 0;
   public numMatchingSamples = 0;
 
@@ -190,5 +195,9 @@ export class StudyResultsComponent implements OnChanges {
 
   public onShowDetails(match: UnifiedMatch) {
     this.showDetails.emit(match);
+  }
+
+  public onDownload(study: Study) {
+    this.download.emit(study);
   }
 }

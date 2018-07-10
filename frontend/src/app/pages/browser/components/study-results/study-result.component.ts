@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '
 import {UnifiedMatch} from '../../../../services/study.service';
 import {WindowRef} from '../../../../shared/util/WindowRef';
 import {getAuthors, getDoisIds, getPubmedIds, getTitle} from '../../../../core/util/study-helper';
+import {Study} from '../../../../core/types/study.model';
 
 @Component({
   selector: 'cbit-study-result',
@@ -11,17 +12,21 @@ import {getAuthors, getDoisIds, getPubmedIds, getTitle} from '../../../../core/u
       <div class="header" (click)="onShowStudyDetails()">{{studyTitle}}</div>
       <div class="body">
         <div class="authors" (click)="onShowStudyDetails()">
-            by {{authors}}
+          by {{authors}}
         </div>
         <div class="samples" (click)="onShowStudyDetails()">
-          <span style="margin-right: 5px;"><i class="far fa-ellipsis-v"></i></span> {{ match.sampleMatches.length }} matching samples
+          <span style="margin-right: 5px;"><i class="far fa-ellipsis-v"></i></span> {{ match.sampleMatches.length }}
+          matching samples
         </div>
         <div class="links">
-          <div class="link" *ngFor="let doi of doiIds" (click)="onOpenExternal('DOI', doi)">
-            <i class="far fa-link"></i> DOI
+          <div class="download" (click)="onDownloadStudy()">
+            <i class="far fa-download"></i> Download study
           </div>
           <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', doi)">
             <i class="far fa-link"></i> PubMed
+          </div>
+          <div class="link" *ngFor="let doi of doiIds" (click)="onOpenExternal('DOI', doi)">
+            <i class="far fa-link"></i> DOI
           </div>
         </div>
       </div>
@@ -36,6 +41,9 @@ export class StudyResultComponent implements OnChanges {
   @Output()
   public showDetails = new EventEmitter<UnifiedMatch>();
 
+  @Output()
+  public download = new EventEmitter<Study>();
+
   public pubmedIds = [];
   public doiIds = [];
   private nativeWindow: any;
@@ -43,7 +51,7 @@ export class StudyResultComponent implements OnChanges {
   public studyTitle: string;
   public authors: string;
 
-  constructor(private winRef: WindowRef){
+  constructor(private winRef: WindowRef) {
     this.nativeWindow = winRef.getNativeWindow();
   }
 
@@ -60,6 +68,10 @@ export class StudyResultComponent implements OnChanges {
     } else if (source === 'PubMed') {
       this.nativeWindow.open(`https://www.ncbi.nlm.nih.gov/pubmed/${id}`);
     }
+  }
+
+  public onDownloadStudy() {
+    this.download.emit(this.match.study);
   }
 
   public onShowStudyDetails() {
