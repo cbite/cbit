@@ -5,26 +5,28 @@
   width: 100%;
 
   .sidebar-header {
-    padding: 10px 20px;
-
     .searchbox {
       position: relative;
-      line-height: 40px;
-      height: 40px;
 
-      label {
-        vertical-align: top;
-        display: inline-block;
+      .search-title {
+        background-color: $color-blue;
+        color: white;
+        padding-left: 20px;
+        line-height: 40px;
+        height: 40px;
+
       }
 
-      .input {
+      .search-content {
         vertical-align: top;
-        display: inline-block;
         overflow: hidden;
+        height: 50px;
+        line-height: 50px;
+        padding: 0 20px;
 
         .searchText {
           height: 30px;
-          width: 200px;
+          width: 100%;
         }
       }
     }
@@ -34,7 +36,9 @@
       line-height: 30px;
       text-align: left;
 
-      a { outline: none; }
+      a {
+        outline: none;
+      }
     }
   }
 
@@ -58,7 +62,17 @@
       height: 40px;
       line-height: 40px;
       padding: 0 20px;
-      margin-bottom: 10px;
+
+      .shortcut {
+        float: right;
+        cursor: pointer;
+        font-size: $font-size-small;
+        color: $color-gray;
+      }
+    }
+
+    .filter-content {
+      background-color: $color-gray;
     }
   }
 }

@@ -12,11 +12,11 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./browser-sidebar.scss'],
   selector: 'cbit-browser-sidebar',
   template: `
-    <div class="sidebar">
+    <div class="sidebar noselect">
       <div class="sidebar-header">
         <div class="searchbox">
-          <label for="searchText">Search for:</label>
-          <div class="input">
+          <div class="search-title">SEARCH</div>
+          <div class="search-content">
             <input id="searchText"
                    class="searchText"
                    type="text"
@@ -25,19 +25,23 @@ import {Observable} from 'rxjs/Observable';
                    [formControl]="searchTextInForm"/>
           </div>
         </div>
-        <div class="properties-description">
-          <a href="#" (click)="$event.preventDefault(); onFullPropertiesListClicked()">Full list of properties</a>
-        </div>
+        <!--<div class="properties-description">-->
+          <!--<a href="#" (click)="$event.preventDefault(); onFullPropertiesListClicked()">Full list of properties</a>-->
+        <!--</div>-->
       </div>
 
       <div class="filter-panel">
-        <div class="filter-heading">FILTERS</div>
-        <cbit-filter-sidebar-all-ul name="main"
-                               [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
-                               [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
-                               [classifiedProperties]="classifiedProperties.visible || {}"
-                               [initCollapsed]="true"
-        ></cbit-filter-sidebar-all-ul>
+        <div class="filter-heading">FILTERS
+          <div class="shortcut">Clear all</div>
+        </div>
+        <div class="filter-content">
+          <cbit-filter-sidebar-all-ul name="main"
+                                      [unfilteredPropNamesAndValueCounts]="unfilteredPropNamesAndValueCounts"
+                                      [allSampleFilterMatchCounts]="allSampleFilterMatchCounts"
+                                      [classifiedProperties]="classifiedProperties.visible || {}"
+                                      [initCollapsed]="true">
+          </cbit-filter-sidebar-all-ul>
+        </div>
       </div>
     </div>
   `
@@ -50,7 +54,7 @@ export class BrowserSidebarComponent implements OnInit, OnDestroy {
   allSampleFilterMatchCounts = {};
 
   unfilteredPropNamesAndValueCounts = {};
-  allFieldMetas: {[fieldName: string]: FieldMeta} = {};
+  allFieldMetas: { [fieldName: string]: FieldMeta } = {};
   visiblePropNames: string[] = [];
 
   // See comment in StudyService.classifyProperties
@@ -62,12 +66,10 @@ export class BrowserSidebarComponent implements OnInit, OnDestroy {
   @Output()
   public fullPropertiesListClick = new EventEmitter();
 
-  constructor(
-    private fieldMetaService: FieldMetaService,
-    private _studyService: StudyService,
-    private _filtersService: FiltersService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {
+  constructor(private fieldMetaService: FieldMetaService,
+              private _studyService: StudyService,
+              private _filtersService: FiltersService,
+              private changeDetectorRef: ChangeDetectorRef) {
 
     this.searchTextInForm.valueChanges
       .debounceTime(200)       // Don't propagate changes until this many ms have elapsed without change
@@ -116,7 +118,7 @@ export class BrowserSidebarComponent implements OnInit, OnDestroy {
     }
   }
 
-  calcVisiblePropNames(fieldMetas: {[fieldName: string]: FieldMeta}): string[] {
+  calcVisiblePropNames(fieldMetas: { [fieldName: string]: FieldMeta }): string[] {
     return Object.keys(fieldMetas).filter(fieldName => {
       const visibility = fieldMetas[fieldName].visibility;
       return (visibility === 'visible');
