@@ -3,17 +3,17 @@
 
 // TODO: Stop hardcoding URLs for REST endpoints
 
-import {Study, Sample} from '../core/types/study.model';
+import {Study, Sample} from '../types/study.model';
 import {Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {FiltersState} from './filters.service';
+import {FiltersState} from '../../pages/browser/services/filters.service';
 import * as $ from 'jquery';
-import {CacheableBulkRequester} from '../common/cacheable-bulk-request';
-import {AuthenticationService} from '../core/authentication/authentication.service';
+import {CacheableBulkRequester} from '../../common/cacheable-bulk-request';
+import {AuthenticationService} from '../authentication/authentication.service';
 import {URLService} from './url.service';
-import {UnitFormattingService} from './unit-formatting.service';
+import {UnitFormattingService} from '../../services/unit-formatting.service';
 import {HttpGatewayService} from './http-gateway.service';
-import {FieldMeta} from '../core/types/field-meta';
+import {FieldMeta} from '../types/field-meta';
 
 // Should be a parseable number to play nicely with numeric fields
 // and it should survive a round-trip conversion in ES from string to double to string

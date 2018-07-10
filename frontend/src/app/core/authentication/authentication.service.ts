@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {URLService} from '../../services/url.service';
+import {URLService} from '../services/url.service';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
-import {BusyIndicatorService} from '../../services/busy-indicator.service';
+import {BusyIndicatorService} from '../services/busy-indicator.service';
 import {LoggedInUser} from './loggedInUser';
 import {environment} from '../../../environments/environment';
 import {Store} from '@ngrx/store';

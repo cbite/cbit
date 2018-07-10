@@ -1,11 +1,11 @@
 import {Component, OnInit, ChangeDetectorRef, OnDestroy, Input, OnChanges} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {FiltersService, FiltersState} from '../../../../services/filters.service';
-import {StudyService, ManySampleCounts, ClassifiedProperties, ClassifiedPropertiesForGivenVisibility} from '../../../../services/study.service';
+import {FiltersService, FiltersState} from '../../services/filters.service';
+import {StudyService, ManySampleCounts, ClassifiedProperties, ClassifiedPropertiesForGivenVisibility} from '../../../../core/services/study.service';
 import {Observable, Subject} from 'rxjs';
 import * as _ from 'lodash';
 // import {ModalDirective} from "ngx-bootstrap";
-import {CollapseStateService} from '../../../../services/collapse-state.service';
+import {CollapseStateService} from '../../../../core/services/collapse-state.service';
 
 @Component({
   selector: 'cbit-filter-sidebar-category',

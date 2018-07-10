@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FieldMetaService} from '../../../../core/services/field-meta.service';
-import {ClassifiedProperties} from '../../../../services/study.service';
+import {ClassifiedProperties} from '../../../../core/services/study.service';
 
 @Component({
     styleUrls: ['./properties-description.scss'],

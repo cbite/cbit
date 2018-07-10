@@ -1,7 +1,7 @@
 import {Component, OnInit, ChangeDetectorRef, OnDestroy, EventEmitter, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {FiltersService, FiltersState} from '../../../../services/filters.service';
-import {StudyService, ClassifiedProperties} from '../../../../services/study.service';
+import {FiltersService, FiltersState} from '../../services/filters.service';
+import {StudyService, ClassifiedProperties} from '../../../../core/services/study.service';
 import * as _ from 'lodash';
 import {FieldMeta} from '../../../../core/types/field-meta';
 import {FieldMetaService} from '../../../../core/services/field-meta.service';

@@ -1,10 +1,10 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {StudyService, UnifiedMatch} from '../../services/study.service';
-import {FiltersService} from '../../services/filters.service';
+import {StudyService, UnifiedMatch} from '../../core/services/study.service';
+import {FiltersService} from './services/filters.service';
 import {FieldMetaService} from '../../core/services/field-meta.service';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
-import {PopupService} from '../../services/popup.service';
+import {PopupService} from '../../core/services/popup.service';
 
 @Component({
   styleUrls: ['./browser.scss'],

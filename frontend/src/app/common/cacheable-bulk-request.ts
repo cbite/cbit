@@ -1,5 +1,5 @@
 import {AuthenticationService} from '../core/authentication/authentication.service';
-import {HttpGatewayService} from '../services/http-gateway.service';
+import {HttpGatewayService} from '../core/services/http-gateway.service';
 
 /**
  * Allow bufferable requests to a REST end-point, caching responses.

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, SimpleChanges, Output} from '@angular/core';
-import {UnifiedMatch} from '../../../../services/study.service';
+import {UnifiedMatch} from '../../../../core/services/study.service';
 
 @Component({
   selector: 'cbit-study-results',

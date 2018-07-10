@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {CollapseStateService} from '../../services/collapse-state.service';
+import {CollapseStateService} from '../../core/services/collapse-state.service';
 
 @Component({
   styleUrls: ['./about.scss'],

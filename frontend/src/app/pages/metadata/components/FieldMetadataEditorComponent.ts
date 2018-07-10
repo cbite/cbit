@@ -1,10 +1,10 @@
 import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef} from '@angular/core';
-import {StudyService} from '../../../services/study.service';
+import {StudyService} from '../../../core/services/study.service';
 import {FormGroup, FormControl, Validators, Form} from '@angular/forms';
 import {DimensionsRegister} from '../../../common/unit-conversions';
 import {AuthenticationService} from '../../../core/authentication/authentication.service';
-import {URLService} from '../../../services/url.service';
-import {HttpGatewayService} from '../../../services/http-gateway.service';
+import {URLService} from '../../../core/services/url.service';
+import {HttpGatewayService} from '../../../core/services/http-gateway.service';
 import {Observable} from 'rxjs/Observable';
 import {FieldMeta} from '../../../core/types/field-meta';
 import {FieldMetaService} from '../../../core/services/field-meta.service';

@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {URLService} from '../../services/url.service';
-import {HttpGatewayService} from '../../services/http-gateway.service';
+import {URLService} from '../../core/services/url.service';
+import {HttpGatewayService} from '../../core/services/http-gateway.service';
 import {User} from './types/User';
-import {PopupService} from '../../services/popup.service';
+import {PopupService} from '../../core/services/popup.service';
 
 @Component({
   styleUrls: ['./user-management.scss'],

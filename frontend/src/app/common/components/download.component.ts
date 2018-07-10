@@ -1,15 +1,15 @@
 import {Component, ChangeDetectorRef, OnInit, Input, ElementRef} from '@angular/core';
 import {DownloadSelectionService} from '../../services/download-selection.service';
-import {StudyService} from '../../services/study.service';
+import {StudyService} from '../../core/services/study.service';
 import {Study, Sample} from '../../core/types/study.model';
 // import {ModalDirective} from 'ngx-bootstrap';
 import {AuthenticationService} from '../../core/authentication/authentication.service';
-import {URLService} from '../../services/url.service';
+import {URLService} from '../../core/services/url.service';
 import {FormGroup, FormControl} from '@angular/forms';
 import * as _ from 'lodash';
 import * as $ from 'jquery';
-import {CollapseStateService} from '../../services/collapse-state.service';
-import {HttpGatewayService} from '../../services/http-gateway.service';
+import {CollapseStateService} from '../../core/services/collapse-state.service';
+import {HttpGatewayService} from '../../core/services/http-gateway.service';
 import {Observable} from 'rxjs/Observable';
 
 interface DownloadPostResponse {

@@ -2,13 +2,13 @@ import {
   Component, Input, OnInit, ChangeDetectorRef, OnChanges, DoCheck, ViewChild, ElementRef,
   AfterViewChecked, OnDestroy
 } from "@angular/core";
-import {FiltersService, FilterMode, FiltersState} from "../../../../services/filters.service";
-import {NULL_CATEGORY_NAME, StudyService} from "../../../../services/study.service";
+import {FiltersService, FilterMode, FiltersState} from "../../services/filters.service";
+import {NULL_CATEGORY_NAME, StudyService} from "../../../../core/services/study.service";
 import * as $ from 'jquery';
 import {DimensionsRegister} from "../../../../common/unit-conversions";
 import {Ng2SliderComponent} from "../../../../common/slider/ng2-slider.component";
 import {Subject} from "rxjs";
-import {CollapseStateService} from '../../../../services/collapse-state.service';
+import {CollapseStateService} from '../../../../core/services/collapse-state.service';
 import {UnitFormattingService} from "../../../../services/unit-formatting.service";
 import {FieldMeta} from '../../../../core/types/field-meta';
 import {FieldMetaService} from '../../../../core/services/field-meta.service';

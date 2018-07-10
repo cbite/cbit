@@ -1,5 +1,5 @@
 import {Component, ChangeDetectorRef, Input} from '@angular/core';
-import {ClassifiedProperties, StudyService, ClassifiedPropertiesForGivenVisibility} from '../../../../services/study.service';
+import {ClassifiedProperties, StudyService, ClassifiedPropertiesForGivenVisibility} from '../../../../core/services/study.service';
 import {FieldMetaService} from '../../../../core/services/field-meta.service';
 
 // Need title="" to remove annoying automatic browser tooltip

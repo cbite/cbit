@@ -8,8 +8,8 @@ import {
 import {FormGroup, FormControl, Validators, RequiredValidator} from '@angular/forms';
 import {DimensionsRegister, INVALID_DIMENSIONS} from '../../common/unit-conversions';
 import {AuthenticationService} from '../../core/authentication/authentication.service';
-import {URLService} from '../../services/url.service';
-import {HttpGatewayService} from '../../services/http-gateway.service';
+import {URLService} from '../../core/services/url.service';
+import {HttpGatewayService} from '../../core/services/http-gateway.service';
 import {HttpHeaders} from '@angular/common/http';
 import {FieldAnalysisResults} from './types/FieldAnalysisResults';
 import {UploadsResponse} from './types/UploadsResponse';
