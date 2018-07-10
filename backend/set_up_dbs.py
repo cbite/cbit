@@ -64,6 +64,12 @@ def set_up_elasticsearch():
                         "include_in_all": False
                     },
 
+                    "*Study Type": {
+                        "type": "string",
+                        "index": "not_analyzed",
+                        "include_in_all": False
+                    },
+
                     "*Publication Date": {
                         "type": "date",
                         "index": "not_analyzed",
