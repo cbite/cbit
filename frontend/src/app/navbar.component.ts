@@ -40,7 +40,7 @@ import {ChangePasswordComponent} from "./change-password.component";
               <a routerLink="/faq">FAQ</a>
             </li>
             <li [class.active]="isCurrentRoute('/browse')">
-              <a routerLink="/browse"  >Browse</a>
+              <a routerLink="/browse"  >Enter cBiT</a>
             </li>
             
             <li *ngIf="!isAdmin()">

@@ -144,7 +144,10 @@ pg_ctl -D /usr/local/var/postgres start
 pg_ctl -D /usr/local/var/postgres stop
 ```
 
-- Credentials: admin/admin
+- Install ansible
+```
+sudo pip install ansible
+```
 
 Debugging Python Backend
 -------------------------
