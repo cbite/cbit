@@ -68,6 +68,9 @@ import {StudyDetailsComponent} from './pages/browser/popups/study-details/study-
 import {PropertiesDescriptionComponent} from './pages/browser/popups/properties-description/properties-description.component';
 import {AllFieldsForVisibilityComponent} from './pages/browser/popups/properties-description/properties-visibility.component';
 import {AllFieldsForVisibilityCategoryComponent} from './pages/browser/popups/properties-description/properties-visibility-category.component';
+import {StudyCategoryComponent} from './pages/browser/popups/study-details/study-category.component';
+import {CommonPropertiesComponent} from './pages/browser/popups/study-details/common-properties.component';
+import {DistinguishingPropertiesComponent} from './pages/browser/popups/study-details/distinguishing-properties.component';
 
 @NgModule(
   {
@@ -124,6 +127,9 @@ import {AllFieldsForVisibilityCategoryComponent} from './pages/browser/popups/pr
       DropdownDirective,
       DropdownMenuDirective,
       StudyRedirectComponent,
+      StudyCategoryComponent,
+      CommonPropertiesComponent,
+      DistinguishingPropertiesComponent,
       Ng2SliderComponent,
       HorizontallySlidableDirective,
       TooltipContainer,
