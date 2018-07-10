@@ -15,6 +15,7 @@ import {UnitFormattingService} from '../../services/unit-formatting.service';
 import {HttpGatewayService} from './http-gateway.service';
 import {FieldMeta} from '../types/field-meta';
 import * as FileSaver from 'file-saver';
+import {getTitle} from '../util/study-helper';
 
 // Should be a parseable number to play nicely with numeric fields
 // and it should survive a round-trip conversion in ES from string to double to string
