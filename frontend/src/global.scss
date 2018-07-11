@@ -9,7 +9,6 @@ ngb-modal-window {
   overflow-x: auto !important;
 
   &.large-window {
-
     .modal-dialog {
       min-width: 1080px;
       width: calc(100vw - 300px);
@@ -23,8 +22,6 @@ ngb-modal-window {
   }
 
   &.medium-window {
-    max-height: calc(100vh - 270px);
-
     .modal-dialog {
       min-width: 600px;
       width: calc(100vw - 300px);
