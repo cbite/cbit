@@ -163,6 +163,12 @@ class BiomaterialsStudyResource(object):
         study_path = os.path.join(cfg.FILES_PATH, study_uuid)
         shutil.rmtree(study_path)
 
+        # Delete study from DB
+        db_conn = req.context["db"]
+        with db_conn.cursor() as cur:
+            cur.execute("DELETE FROM studies WHERE uuid = %s", (study_uuid,))
+        db_conn.commit()
+
         resp.status = falcon.HTTP_OK
         resp.body = json.dumps({
             'studyId': study_uuid

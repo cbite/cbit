@@ -31,7 +31,6 @@ from biomaterials.resources.study_protocols import BiomaterialsStudyProtocolsRes
 
 from common.resources.irods import IRODSListResource
 from tendons.resources.studies import TendonsStudyResource, TendonsStudiesResource
-from tendons.resources.uploads import TendonsUploadsResource
 
 ES_TRACE_LOGGING = False
 if ES_TRACE_LOGGING:
@@ -84,7 +83,6 @@ app.add_route('/biomaterials/metadata/fields/_multi', BiomaterialsMetadataFields
 app.add_route('/biomaterials/metadata/fields/{field_name}', BiomaterialsMetadataField())
 
 # TENDONS ROUTES
-app.add_route('/tendons/uploads', TendonsUploadsResource())
 app.add_route('/tendons/studies', TendonsStudiesResource())
 app.add_route('/tendons/studies/{study_uuid}', TendonsStudyResource())
 
