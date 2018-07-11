@@ -1,4 +1,3 @@
-import os
 from collections import defaultdict
 
 import config.config as cfg
@@ -7,16 +6,16 @@ import elasticsearch
 from elasticsearch import helpers
 import json
 
-from data.filters import FiltersState, SampleFilter, FilterMode
-from data.unit_conversions import DimensionsRegister
-from data.fieldmeta import FieldMeta
 
 # Should be a parseable number to play nicely with numeric fields
 # and it should survive a round-trip conversion in ES from string to double to string
 # (hence the '.0')
+from biomaterials.data.fieldmeta import FieldMeta
+from biomaterials.data.filters import FilterMode, FiltersState
+
 NULL_CATEGORY_NAME = '-123456.0'
 
-class MetadataAllCountsResource(object):
+class BiomaterialsMetadataAllCountsResource(object):
     def on_get(self, req, resp):
         """
         Return a JSON response with all metadata property names and
@@ -102,7 +101,7 @@ class MetadataAllCountsResource(object):
         resp.body = json.dumps(processed_results, indent=2, sort_keys=True)
 
 
-class MetadataFilteredCountsResource(object):
+class BiomaterialsMetadataFilteredCountsResource(object):
     def on_post(self, req, resp):
         """
         Request data
@@ -249,7 +248,7 @@ class MetadataFilteredCountsResource(object):
         resp.body = json.dumps(result, indent=2, sort_keys=2)
 
 
-class MetadataStudiesResource(object):
+class BiomaterialsMetadataStudiesResource(object):
     def on_post(self, req, resp):
         """
         Alter study metadata in one go
@@ -302,7 +301,7 @@ class MetadataStudiesResource(object):
         resp.body = json.dumps({}, indent=2, sort_keys=True)
 
 
-class MetadataSamplesInStudies(object):
+class BiomaterialsMetadataSamplesInStudies(object):
     def on_post(self, req, resp):
         """
         Get Sample IDs of samples associate with multiple studies
@@ -370,7 +369,7 @@ class MetadataSamplesInStudies(object):
         resp.body = json.dumps(result, indent=2, sort_keys=True)
 
 
-class MetadataSearch(object):
+class BiomaterialsMetadataSearch(object):
     def on_post(self, req, resp):
         """
         Search for all samples that match the given filters
@@ -438,7 +437,7 @@ class MetadataSearch(object):
         resp.body = json.dumps(result, indent=2, sort_keys=True)
 
 
-class MetadataFields(object):
+class BiomaterialsMetadataFields(object):
     def on_get(self, req, resp):
         """
         Return a list of all known fields with metadata
@@ -521,7 +520,7 @@ class MetadataFields(object):
         resp.body = json.dumps(results, indent=2, sort_keys=True)
 
 
-class MetadataFieldsMulti(object):
+class BiomaterialsMetadataFieldsMulti(object):
     def on_put(self, req, resp):
         """
         Create multiple field with the given metadata
@@ -655,7 +654,7 @@ class MetadataFieldsMulti(object):
         resp.body = "{}"   # Empty JSON body
 
 
-class MetadataField(object):
+class BiomaterialsMetadataField(object):
     def on_get(self, req, resp, field_name):
         """
         Return metadata about a field

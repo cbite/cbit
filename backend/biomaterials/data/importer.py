@@ -5,7 +5,6 @@ import config.config as cfg
 from archive import read_archive
 import reader
 from elasticsearch import helpers
-from data.study_type import StudyType, determineStudyType
 
 
 def connect_to_postgres():
@@ -22,7 +21,7 @@ def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, v
     study_type = a.study_type
 
     # Add download URL for now
-    result['*Archive URL'] = "{url_base}/studies/{study_uuid}/archive".format(
+    result['*Archive URL'] = "{url_base}/biomaterials/studies/{study_uuid}/archive".format(
         url_base=cfg.URL_BASE,
         study_uuid=study_uuid
     )

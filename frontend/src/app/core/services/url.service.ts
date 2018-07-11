@@ -1,14 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 
-// TODO@Sam Fix this!
-let BASE_URL: string;
-// if (process.env.ENV === 'production') {
-//   BASE_URL = "/api";                     // Production
-// } else {
-  BASE_URL = 'http://localhost:23456';   // Development
-// }
-
 /*
   Central location for URLs to access back-end API
  */
@@ -22,67 +14,67 @@ export class URLService {
     return `users/${username}`;
   }
 
+  iRODSListResource(): string {
+    return `irods/list`;
+  }
+
   metadataAllCountsResource(): string {
-    return `metadata/all_counts`;
+    return `biomaterials/metadata/all_counts`;
   }
 
   metadataFilteredCountsResource(): string {
-    return `metadata/filtered_counts`;
+    return `biomaterials/metadata/filtered_counts`;
   }
 
   metadataFieldsResource(): string {
-    return `metadata/fields`;
+    return `biomaterials/metadata/fields`;
   }
 
   metadataFieldsMultiResource(): string {
-    return `metadata/fields/_multi`;
+    return `biomaterials/metadata/fields/_multi`;
   }
 
   metadataSearchResource(): string {
-    return `metadata/search`;
+    return `biomaterials/metadata/search`;
   }
 
   metadataStudiesResource(): string {
-    return `metadata/studies`;
+    return `biomaterials/metadata/studies`;
   }
 
   metadataSamplesInStudiesResource(): string {
-    return `metadata/samples_in_studies`;
+    return `biomaterials/metadata/samples_in_studies`;
   }
 
   studiesResource(): string {
-    return `studies`;
+    return `biomaterials/studies`;
   }
 
   studyResource(studyId: string): string {
-    return `studies/${studyId}`;
+    return `biomaterials/studies/${studyId}`;
   }
 
   studyArchiveResource(studyId: string): string {
-    return `studies/${studyId}/archive`;
+    return `biomaterials/studies/${studyId}/archive`;
   }
 
   studyProtocolsResource(studyId: string): string {
-    return `studies/${studyId}/protocols`;
+    return `biomaterials/studies/${studyId}/protocols`;
   }
 
   samplesResource(): string {
-    return `samples`;
+    return `biomaterials/samples`;
   }
 
   downloadsResource(): string {
-    return `downloads`;
+    return `biomaterials/downloads`;
   }
 
   uploadsResource(): string {
-    return environment.api_url + 'uploads';
+    return environment.api_url + 'biomaterials/uploads';
   }
 
   uploadsIRODSResource(iRODSStudyName: string): string {
-    return `uploads/_irods/${iRODSStudyName}`;
-  }
-
-  iRODSListResource(): string {
-    return `irods/list`;
+    return `biomaterials/uploads/_irods/${iRODSStudyName}`;
   }
 }

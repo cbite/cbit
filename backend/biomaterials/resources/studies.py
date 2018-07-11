@@ -6,7 +6,7 @@ from elasticsearch import helpers
 import json
 import shutil
 
-class StudiesResource(object):
+class BiomaterialsStudiesResource(object):
     def on_get(self, req, resp):
         """
         Get a list of all study IDs.
@@ -103,7 +103,7 @@ class StudiesResource(object):
         resp.body = json.dumps(result, indent=2, sort_keys=True)
 
 
-class StudyResource(object):
+class BiomaterialsStudyResource(object):
     def on_delete(self, req, resp, study_uuid):
         """
         Status of 403 (Forbidden) if the request is not made as an admin

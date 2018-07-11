@@ -5,16 +5,14 @@ import psycopg2
 import sys
 import os
 import json
-import time
 import zipfile
 import re
-from data.archive import read_archive
-from data import reader
-import tempfile
+from biomaterials.data import read_archive
+from biomaterials.data import reader
 import pandas as pd
 from StringIO import StringIO
-from data.fieldmeta import FieldMeta
-import csv
+
+from biomaterials.data.fieldmeta import FieldMeta
 
 INIT_PROGRESS = 10   # % progress represented just by kickstarting bundling process
 MAX_FILENAME_LEN = 31

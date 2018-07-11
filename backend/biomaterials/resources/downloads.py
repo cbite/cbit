@@ -6,10 +6,9 @@ import uuid
 import os
 from collections import defaultdict
 import subprocess
-import shutil
-from data.fieldmeta import FieldMeta
+from biomaterials.data.fieldmeta import FieldMeta
 
-class DownloadsResource(object):
+class BiomaterialsDownloadsResource(object):
     def on_post(self, req, resp):
         """
         Start creating a download bundle with the given studies and samples.
@@ -205,8 +204,7 @@ class DownloadsResource(object):
         }
         resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 
-
-class DownloadProgressResource(object):
+class BiomaterialsDownloadProgressResource(object):
     def on_get(self, req, resp, download_uuid):
 
         db_conn = req.context["db"]
@@ -232,8 +230,7 @@ class DownloadProgressResource(object):
             }
             resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 
-
-class DownloadResource(object):
+class BiomaterialsDownloadResource(object):
     def on_get(self, req, resp, download_uuid):
 
         db_conn = req.context["db"]

@@ -1,4 +1,4 @@
-from data.unit_conversions import DimensionsRegister
+from biomaterials.data.unit_conversions import DimensionsRegister
 import config.config as cfg
 import elasticsearch
 

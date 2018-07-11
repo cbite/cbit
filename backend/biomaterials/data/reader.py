@@ -10,9 +10,8 @@ import pandas as pd
 import re
 import numpy as np
 import config.config as cfg
-from unit_conversions import UnitConverter, DimensionsRegister
-from data.fieldmeta import FieldMeta
-import json
+from biomaterials.data.fieldmeta import FieldMeta
+from unit_conversions import DimensionsRegister
 
 # Explicit list of NA-like values.  We'd originally talked about rejecting
 # any blank fields (to require "N/A", "None" or "unknown"), but this turns out

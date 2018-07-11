@@ -1,11 +1,12 @@
-import os
 import config.config as cfg
 import falcon
 import elasticsearch
 import json
-from resources.metadata import fetchInvisibleStudyIds
 
-class SamplesResource(object):
+from biomaterials.resources.metadata import fetchInvisibleStudyIds
+
+
+class BiomaterialsSamplesResource(object):
     def on_post(self, req, resp):
         """
         Fetches metadata for multiple samples in one request

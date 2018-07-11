@@ -1,6 +1,6 @@
 import zipfile
 import reader
-from data.study_type import determineStudyType, StudyType, GeneExpressionType
+from common.data.study_type import determineStudyType, StudyType, GeneExpressionType
 from reader import (
     read_investigation,
     read_study_sample,
@@ -10,8 +10,7 @@ from reader import (
     read_raw_data
 )
 import re
-from data.unit_conversions import DimensionsRegister, INVALID_DIMENSIONS
-import math
+from biomaterials.data.unit_conversions import DimensionsRegister, INVALID_DIMENSIONS
 
 
 class FieldAnalysisResults(object):

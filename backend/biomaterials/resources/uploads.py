@@ -7,23 +7,21 @@ import elasticsearch
 import falcon
 
 import config.config as cfg
-from data import importer
-from data.archive import read_archive
-from data import reader
-from data.fieldmeta import FieldMeta
+from biomaterials.data import importer
 
 import requests
 import zipfile
 
-from data.study_type import StudyType
-
 # Possible upload statuses
+from biomaterials.data.archive import read_archive
+from biomaterials.data.fieldmeta import FieldMeta
+
 UPLOAD_STATUS_UPLOADING = 'uploading'
 UPLOAD_STATUS_UPLOADED = 'uploaded'
 UPLOAD_STATUS_INGESTING = 'ingesting'
 UPLOAD_STATUS_INGESTED = 'ingested'
 
-class UploadsIRODSResource(object):
+class BiomaterialsUploadsIRODSResource(object):
     def on_post(self, req, resp, folder_name):
         """
         Kick off an upload from iRODS
@@ -86,7 +84,7 @@ class UploadsIRODSResource(object):
         complete_upload(upload_uuid, db_conn, filepath, resp)
 
 
-class UploadsResource(object):
+class BiomaterialsUploadsResource(object):
     """
     Upload should work like this:
 
@@ -184,7 +182,7 @@ def complete_upload(upload_uuid, db_conn, filepath, resp):
 
     # Final response
     resp.status = falcon.HTTP_CREATED
-    resp.location = '/uploads/{0}'.format(upload_uuid)
+    resp.location = 'biomaterials/uploads/{0}'.format(upload_uuid)
     resp_json = {
         'upload_uuid': upload_uuid,
         'status': UPLOAD_STATUS_UPLOADED,
@@ -200,7 +198,7 @@ def complete_upload(upload_uuid, db_conn, filepath, resp):
     resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 
 
-class UploadResource(object):
+class BiomaterialsUploadResource(object):
     def on_get(self, req, resp, upload_uuid):
         """Get info about a particular upload"""
 
