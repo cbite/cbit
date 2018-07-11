@@ -63,3 +63,4 @@ export class TendonsStudiesComponent implements OnInit {
       this.nativeWindow.open(`https://www.ncbi.nlm.nih.gov/pubmed/${id}`);
     }
   }
+}
