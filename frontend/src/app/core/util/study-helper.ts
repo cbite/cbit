@@ -4,6 +4,10 @@ export function getTitle(study: Study): string {
   return study._source.STUDY['Study Title'];
 }
 
+export function getPublicationDate(study: Study): string {
+  return study._source['*Publication Date'];
+}
+
 export function getAuthors(study: Study): string {
    return study._source['STUDY']['Study Researchers Involved'];
 }

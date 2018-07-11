@@ -6,6 +6,7 @@ import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {Study} from '../../core/types/study.model';
 import {PopupService} from '../../core/services/popup.service';
+import {getPublicationDate, getTitle} from '../../core/util/study-helper';
 
 @Component({
   styleUrls: ['./browser.scss'],
@@ -70,10 +71,8 @@ export class BrowserPage implements OnInit, OnDestroy {
     // Sort descending by Publication Date then ascending by Study Title
     this.matches = rawMatches.sort((a, b) =>
       (
-        -(a.study._source['*Publication Date']
-          .localeCompare(b.study._source['*Publication Date'])) ||
-        (a.study._source['STUDY']['Study Title']
-          .localeCompare(b.study._source['STUDY']['Study Title']))
+        -(getPublicationDate(a.study).localeCompare(getPublicationDate(b.study)))
+        || (getTitle(a.study).localeCompare(getTitle(b.study)))
       )
     );
   }

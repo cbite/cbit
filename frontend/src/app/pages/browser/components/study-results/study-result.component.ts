@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {UnifiedMatch} from '../../../../core/services/study.service';
 import {WindowRef} from '../../../../shared/util/WindowRef';
-import {getAuthors, getDoisIds, getPubmedIds, getTitle} from '../../../../core/util/study-helper';
+import {getAuthors, getDoisIds, getPublicationDate, getPubmedIds, getTitle} from '../../../../core/util/study-helper';
 import {Study} from '../../../../core/types/study.model';
 
 @Component({
@@ -12,7 +12,8 @@ import {Study} from '../../../../core/types/study.model';
       <div class="header" (click)="onShowStudyDetails()">{{studyTitle}}</div>
       <div class="body">
         <div class="authors" (click)="onShowStudyDetails()">
-          by {{authors}}
+          <b>Published by</b> {{authors}}<br>
+          <b>Published on</b> {{publicationDate | dateFormatPipe}}
         </div>
         <div class="samples" (click)="onShowStudyDetails()">
           <span style="margin-right: 5px;"><i class="far fa-ellipsis-v"></i></span> {{ match.sampleMatches.length }}
@@ -50,6 +51,7 @@ export class StudyResultComponent implements OnChanges {
 
   public studyTitle: string;
   public authors: string;
+  public publicationDate: string;
 
   constructor(private winRef: WindowRef) {
     this.nativeWindow = winRef.getNativeWindow();
@@ -58,6 +60,7 @@ export class StudyResultComponent implements OnChanges {
   public ngOnChanges(changes: SimpleChanges): void {
     this.studyTitle = getTitle(this.match.study);
     this.authors = getAuthors(this.match.study);
+    this.publicationDate = getPublicationDate(this.match.study);
     this.pubmedIds = getPubmedIds(this.match.study);
     this.doiIds = getDoisIds(this.match.study);
   }

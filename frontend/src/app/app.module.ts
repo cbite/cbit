@@ -71,6 +71,7 @@ import {AllFieldsForVisibilityCategoryComponent} from './pages/browser/popups/pr
 import {StudyCategoryComponent} from './pages/browser/popups/study-details/study-category.component';
 import {CommonPropertiesComponent} from './pages/browser/popups/study-details/common-properties.component';
 import {DistinguishingPropertiesComponent} from './pages/browser/popups/study-details/distinguishing-properties.component';
+import {DateFormatPipe} from './shared/pipes/date-format-pipe';
 
 @NgModule(
   {
@@ -133,6 +134,7 @@ import {DistinguishingPropertiesComponent} from './pages/browser/popups/study-de
       Ng2SliderComponent,
       HorizontallySlidableDirective,
       TooltipContainer,
+      DateFormatPipe,
       MyTooltipDirective,
       ConfirmationComponent
     ],

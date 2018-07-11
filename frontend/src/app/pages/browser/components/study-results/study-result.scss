@@ -56,7 +56,17 @@
 
   &:hover {
     .header {
-      background-color: $color-dark-blue;
+      background-color: darken($color-blue, 10%);
     }
+
+    //.body {
+    //  background-color: lighten($color-blue, 20%);
+    //  color: white;
+    //
+    //  .links {
+    //    background-color: lighten($color-blue, 20%);
+    //    color: white;
+    //  }
+    //}
   }
 }
