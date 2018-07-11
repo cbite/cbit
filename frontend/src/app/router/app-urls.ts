@@ -7,6 +7,10 @@ export class AppUrls {
   public static uploadUrl = 'upload';
   public static metadataUrl = 'metadata';
   public static studiesUrl = 'studies';
+  public static tendonsStudiesUrl = 'tendons/studies';
+  public static newTendonsStudyUrl = 'tendons/new';
+  public static tendonsStudyUrl = 'tendons/:id';
+  public static manageTendonsStudiesUrl = 'manage_tendons';
   public static usersUrl = 'users';
   public static studyUrl = 'study/:id';
 

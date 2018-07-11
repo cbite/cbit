@@ -1,6 +1,6 @@
 import zipfile
 import reader
-from common.data.study_type import determineStudyType, StudyType, GeneExpressionType
+from common.data.study_type import StudyType, GeneExpressionType, determineBiomaterialsStudyType
 from reader import (
     read_investigation,
     read_study_sample,
@@ -221,7 +221,7 @@ def read_archive(archive_filename, only_metadata=True):
             raise ValueError('All rows should have the same value for Characteristics[Gene expression type].')
 
         geneExpressionType = study_sample['Characteristics[Gene expression type]'][0]
-        study_type = determineStudyType(geneExpressionType)
+        study_type = determineBiomaterialsStudyType(geneExpressionType)
         if study_type not in [StudyType.biomaterial_rna_seq, StudyType.biomaterial_microarray]:
             raise ValueError(
                 'Incorrect value specified for Characteristics[Gene expression type]: {0}. Should be {1} or {2}'

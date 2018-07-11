@@ -44,6 +44,7 @@ CREATE TABLE tendons_metadata (
   ,cellOrigin VARCHAR NOT NULL
   ,year NUMERIC NOT NULL
   ,sampleSize NUMERIC NOT NULL
+  ,visible BOOLEAN NOT NULL
 );
 
 -- Metadata for metadata

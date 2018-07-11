@@ -11,6 +11,9 @@ import {BrowserPage} from '../pages/browser/browser.page';
 import {UploadPage} from '../pages/upload/upload.page';
 import {UserManagementPage} from '../pages/user-management/user-management.page';
 import {MetadataPage} from '../pages/metadata/metadata.page';
+import {ManageTendonsStudiesComponent} from '../pages/tendons/manage-tendons-studies.component';
+import {TendonsStudyComponent} from '../pages/tendons/tendons-study.component';
+import {TendonsStudiesComponent} from '../pages/tendons/tendons-studies.component';
 
 const routes: Routes = [
   { path: '',           redirectTo: '/welcome', pathMatch: 'full' },
@@ -22,8 +25,12 @@ const routes: Routes = [
   { path: AppUrls.uploadUrl, component: UploadPage },
   { path: AppUrls.metadataUrl, component: MetadataPage },
   { path: AppUrls.studiesUrl, component: StudyManagementComponent },
+  { path: AppUrls.manageTendonsStudiesUrl, component: ManageTendonsStudiesComponent },
   { path: AppUrls.usersUrl, component: UserManagementPage },
-  { path: AppUrls.studyUrl, component: StudyRedirectComponent }
+  { path: AppUrls.studyUrl, component: StudyRedirectComponent },
+  { path: AppUrls.tendonsStudiesUrl, component: TendonsStudiesComponent },
+  { path: AppUrls.newTendonsStudyUrl, component: TendonsStudyComponent },
+  { path: AppUrls.tendonsStudyUrl, component: TendonsStudyComponent }
 ];
 
 @NgModule({

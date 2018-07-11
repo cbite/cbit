@@ -1,0 +1,36 @@
+@import '../../../variables';
+
+.page {
+  margin-top: 40px;
+  margin-bottom: 80px;
+
+  .page-content {
+    max-width: 1000px;
+    margin: auto;
+
+    .header {
+      height: 40px;
+      line-height: 40px;
+      margin-top: 20px;
+    }
+
+    .study {
+      height: 40px;
+      line-height: 40px;
+
+      .action {
+        display: inline-block;
+        cursor: pointer;
+        margin-right: 10px;
+
+        &:hover {
+          color: $color-blue;
+        }
+      }
+    }
+
+    .add-button{
+      margin-top: 40px;
+    }
+  }
+}

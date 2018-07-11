@@ -72,6 +72,10 @@ import {StudyCategoryComponent} from './pages/browser/popups/study-details/study
 import {CommonPropertiesComponent} from './pages/browser/popups/study-details/common-properties.component';
 import {DistinguishingPropertiesComponent} from './pages/browser/popups/study-details/distinguishing-properties.component';
 import {DateFormatPipe} from './shared/pipes/date-format-pipe';
+import {ManageTendonsStudiesComponent} from './pages/tendons/manage-tendons-studies.component';
+import {TendonsStudyService} from './core/services/tendons-study.service';
+import {TendonsStudyComponent} from './pages/tendons/tendons-study.component';
+import {TendonsStudiesComponent} from './pages/tendons/tendons-studies.component';
 
 @NgModule(
   {
@@ -136,7 +140,10 @@ import {DateFormatPipe} from './shared/pipes/date-format-pipe';
       TooltipContainer,
       DateFormatPipe,
       MyTooltipDirective,
-      ConfirmationComponent
+      ConfirmationComponent,
+      ManageTendonsStudiesComponent,
+      TendonsStudyComponent,
+      TendonsStudiesComponent
     ],
     entryComponents: [
       LoginPopupComponent,
@@ -159,7 +166,8 @@ import {DateFormatPipe} from './shared/pipes/date-format-pipe';
       UnitFormattingService,
       TooltipService,
       PopupService,
-      WindowRef
+      WindowRef,
+      TendonsStudyService
     ],
     bootstrap: [AppComponent]
   })

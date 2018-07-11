@@ -18,6 +18,12 @@ export class URLService {
     return `irods/list`;
   }
 
+
+
+
+
+
+
   metadataAllCountsResource(): string {
     return `biomaterials/metadata/all_counts`;
   }
@@ -77,4 +83,17 @@ export class URLService {
   uploadsIRODSResource(iRODSStudyName: string): string {
     return `biomaterials/uploads/_irods/${iRODSStudyName}`;
   }
+
+
+
+
+
+  tendonsStudiesResource(): string {
+    return `tendons/studies`;
+  }
+
+  tendonsStudyResource(studyId: string): string {
+    return `tendons/studies/${studyId}`;
+  }
+
 }

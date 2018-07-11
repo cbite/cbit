@@ -29,6 +29,10 @@ import {AppUrls} from '../../../router/app-urls';
              routerLinkActive="active"
              routerLink="/browse">Enter cBiT
         </div>
+        <div class="header-link"
+             routerLinkActive="active"
+             routerLink="/tendons/studies">Tendons Studies
+        </div>
       </div>
       <cbit-app-header-menu
         [loggedInUser]="(loggedInUser$ | async)"
@@ -59,6 +63,9 @@ export class AppHeaderComponent {
         break;
       case 'edit_metadata':
         this.router.navigateByUrl(AppUrls.metadataUrl);
+        break;
+      case 'manage_tendons_studies':
+        this.router.navigateByUrl(AppUrls.manageTendonsStudiesUrl);
         break;
      case 'manage_users':
         this.router.navigateByUrl(AppUrls.usersUrl);

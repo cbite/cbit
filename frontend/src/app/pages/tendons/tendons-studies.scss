@@ -1,0 +1,41 @@
+@import '../../../variables';
+
+.page {
+  margin-top: 40px;
+  margin-bottom: 80px;
+
+  .page-content {
+    max-width: 1000px;
+    margin: auto;
+
+    .row{
+      margin: 10px 0;
+    }
+
+    .study {
+      background-color: $color-gray;
+      margin: 10px 0;
+      padding: 10px;
+
+      .title{
+        font-size: $font-size-big;
+        text-align: left;
+      }
+
+      .year{
+        text-align: right;
+      }
+
+      .link {
+        color: $color-blue;
+        display: inline-block;
+        margin-right: 10px;
+        cursor: pointer;
+
+        &:hover {
+          color: $color-dark-blue;
+        }
+      }
+    }
+  }
+}

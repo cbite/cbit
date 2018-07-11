@@ -10,9 +10,16 @@ class GeneExpressionType:
     rna_seq = "RNASequencing"
 
 
-def determineStudyType(geneExpressionType):
+def determineBiomaterialsStudyType(geneExpressionType):
     switcher = {
         GeneExpressionType.microarray: StudyType.biomaterial_microarray,
         GeneExpressionType.rna_seq: StudyType.biomaterial_rna_seq,
+    }
+    return switcher.get(geneExpressionType, "Invalid gene expression type")
+
+def determineTendonsStudyType(geneExpressionType):
+    switcher = {
+        GeneExpressionType.microarray: StudyType.tendons_microarray,
+        GeneExpressionType.rna_seq: StudyType.tendons_rna_seq,
     }
     return switcher.get(geneExpressionType, "Invalid gene expression type")
