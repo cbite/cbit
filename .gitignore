@@ -9,3 +9,4 @@
 /backend/files
 /backend/uploads
 /backend/**/*.pyc
+/backend/**/*.pyi
