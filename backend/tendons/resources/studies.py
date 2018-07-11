@@ -58,7 +58,7 @@ class TendonsStudiesResource(object):
 
         # Check if the study has a valid type
         study_type = determineTendonsStudyType(study['geneExpressionType'])
-        if study_type not in [StudyType.biomaterial_rna_seq, StudyType.biomaterial_microarray]:
+        if study_type not in [StudyType.tendons_rna_seq, StudyType.tendons_microarray]:
             raise ValueError(
                 'Incorrect value specified for Gene expression type: {0}. Should be {1} or {2}'
                     .format(study['geneExpressionType'], GeneExpressionType.microarray, GeneExpressionType.rna_seq))
