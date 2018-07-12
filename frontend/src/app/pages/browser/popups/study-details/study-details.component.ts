@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Sample, Study} from '../../../../core/types/study.model';
-import {getAuthors, getDoisIds, getPubmedIds, getTitle} from '../../../../core/util/study-helper';
+import {getAuthors, getDoisIds, getPubmedIds, getTitle, getArrayExpressId} from '../../../../core/util/study-helper';
 import {StudyAndSamples, StudyService} from '../../../../core/services/study.service';
 import {getCategoriesToDisplay, StudyCategory} from '../../../../core/util/study-display-category-helper';
 import {getCommonKeys} from '../../../../core/util/samples-helper';
@@ -38,7 +38,10 @@ import {WindowRef} from '../../../../shared/util/WindowRef';
           </div>
         </div>
         <div class="modal-footer">
-          <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', doi)">
+          <div class="link" (click)="onOpenExternal('ArrayExpress', arrayExpressId)">
+            <i class="far fa-link"></i> Array Express
+          </div>
+          <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', pubmedId)">
             <i class="far fa-link"></i> PubMed
           </div>
           <div class="link" *ngFor="let doi of doiIds" (click)="onOpenExternal('DOI', doi)">
@@ -56,6 +59,7 @@ export class StudyDetailsComponent {
   public studyCategories: StudyCategory[] = [];
   public samples: Sample[];
   public commonKeys: any;
+  public arrayExpressId: string;
   public pubmedIds = [];
   public doiIds = [];
   private nativeWindow: any;
@@ -68,6 +72,7 @@ export class StudyDetailsComponent {
     const getCommonKeysFunction = getCommonKeys;
     this.title = getTitle(study);
     this.authors = getAuthors(study);
+    this.arrayExpressId = getArrayExpressId(study);
     this.pubmedIds = getPubmedIds(study);
     this.doiIds = getDoisIds(study);
     this.studyCategories = getCategoriesToDisplay(study);
@@ -93,6 +98,8 @@ export class StudyDetailsComponent {
       this.nativeWindow.open(`https://dx.doi.org/${id}`);
     } else if (source === 'PubMed') {
       this.nativeWindow.open(`https://www.ncbi.nlm.nih.gov/pubmed/${id}`);
+    } else if (source === 'ArrayExpress') {
+      this.nativeWindow.open(`https://www.ebi.ac.uk/arrayexpress/experiments/${id}`);
     }
   }
 }

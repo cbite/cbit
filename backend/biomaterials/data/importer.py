@@ -17,8 +17,9 @@ def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, v
     # Import metadata into ElasticSearch
     result = a.investigation
 
-    # Determine the study type
+    # Geyt the study type and array express id
     study_type = a.study_type
+    arrayExpressId = a.arrayExpressId
 
     # Add download URL for now
     result['*Archive URL'] = "{url_base}/biomaterials/studies/{study_uuid}/archive".format(
@@ -28,6 +29,7 @@ def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, v
 
     # Add extra metadata
     result['*Study Type'] = study_type
+    result['*Array Express Id'] = arrayExpressId
     result['*Publication Date'] = publicationDate
     result['*Visible'] = visible
 

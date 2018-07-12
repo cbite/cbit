@@ -12,6 +12,10 @@ export function getAuthors(study: Study): string {
    return study._source['STUDY']['Study Researchers Involved'];
 }
 
+export function getArrayExpressId(study: Study): string {
+  return study._source['*Array Express Id'];
+}
+
 export function getPubmedIds(study: Study): string[] {
   return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
       .filter((p: RawStudyPublication) => p['Study PubMed ID'])
