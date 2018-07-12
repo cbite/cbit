@@ -1,7 +1,10 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {UnifiedMatch} from '../../../../core/services/study.service';
 import {WindowRef} from '../../../../shared/util/WindowRef';
-import {getAuthors, getDoisIds, getPublicationDate, getPubmedIds, getTitle} from '../../../../core/util/study-helper';
+import {
+  getArrayExpressId, getAuthors, getDoisIds, getPublicationDate, getPubmedIds,
+  getTitle
+} from '../../../../core/util/study-helper';
 import {Study} from '../../../../core/types/study.model';
 
 @Component({
@@ -23,11 +26,14 @@ import {Study} from '../../../../core/types/study.model';
           <div class="download" (click)="onDownloadStudy()">
             <i class="far fa-download"></i> Download study
           </div>
-          <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', doi)">
+          <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', pubmedId)">
             <i class="far fa-link"></i> PubMed
           </div>
           <div class="link" *ngFor="let doi of doiIds" (click)="onOpenExternal('DOI', doi)">
             <i class="far fa-link"></i> DOI
+          </div>
+          <div class="link" (click)="onOpenExternal('ArrayExpress', arrayExpressId)">
+            <i class="far fa-link"></i> Array Express
           </div>
         </div>
       </div>
@@ -45,6 +51,7 @@ export class StudyResultComponent implements OnChanges {
   @Output()
   public download = new EventEmitter<Study>();
 
+  public arrayExpressId: string;
   public pubmedIds = [];
   public doiIds = [];
   private nativeWindow: any;
@@ -61,6 +68,7 @@ export class StudyResultComponent implements OnChanges {
     this.studyTitle = getTitle(this.match.study);
     this.authors = getAuthors(this.match.study);
     this.publicationDate = getPublicationDate(this.match.study);
+    this.arrayExpressId = getArrayExpressId(this.match.study);
     this.pubmedIds = getPubmedIds(this.match.study);
     this.doiIds = getDoisIds(this.match.study);
   }
@@ -70,6 +78,8 @@ export class StudyResultComponent implements OnChanges {
       this.nativeWindow.open(`https://dx.doi.org/${id}`);
     } else if (source === 'PubMed') {
       this.nativeWindow.open(`https://www.ncbi.nlm.nih.gov/pubmed/${id}`);
+    } else if (source === 'ArrayExpress') {
+      this.nativeWindow.open(`https://www.ebi.ac.uk/arrayexpress/experiments/${id}`);
     }
   }
 

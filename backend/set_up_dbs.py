@@ -9,8 +9,8 @@ import config.config as cfg
 import psycopg2
 import elasticsearch
 
-def set_up_elasticsearch():
 
+def set_up_elasticsearch():
     print("** SETTING UP ELASTICSEARCH **")
     es = elasticsearch.Elasticsearch(
         hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
@@ -65,6 +65,12 @@ def set_up_elasticsearch():
                     },
 
                     "*Study Type": {
+                        "type": "string",
+                        "index": "not_analyzed",
+                        "include_in_all": False
+                    },
+
+                    "*Array Express Id": {
                         "type": "string",
                         "index": "not_analyzed",
                         "include_in_all": False
@@ -222,6 +228,5 @@ def set_up_postgres():
 
 
 if __name__ == "__main__":
-
     set_up_elasticsearch()
     set_up_postgres()

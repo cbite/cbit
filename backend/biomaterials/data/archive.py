@@ -26,7 +26,7 @@ class FieldAnalysisResults(object):
 
 
 class Archive(object):
-    def __init__(self, investigation_file_name, study_file_name, study_type, investigation, study_samples):
+    def __init__(self, investigation_file_name, study_file_name, study_type, investigation, study_samples, arrayExpressId):
 
         self.investigation_file_name = investigation_file_name
         self.study_file_name = study_file_name
@@ -34,6 +34,7 @@ class Archive(object):
 
         self.investigation = investigation
         self.study_sample = study_samples
+        self.arrayExpressId = arrayExpressId
 
     def analyse_fields(self):
         # TODO: Produce analysis for merged fields (e.g., '*Material') if one of the
@@ -177,6 +178,16 @@ def read_archive(archive_filename):
                 'Incorrect value specified for Characteristics[Gene expression type]: {0}. Should be {1} or {2}'
                     .format(geneExpressionType, GeneExpressionType.microarray, GeneExpressionType.rna_seq))
 
+        if 'Characteristics[ArrayExpress Accession ID]' not in study_sample.columns:
+            raise ValueError(
+                'Characteristics[ArrayExpress Accession ID] column does not exits in {0}.'
+                    .format(study_file_name))
+
+        if len(study_sample['Characteristics[ArrayExpress Accession ID]'].unique()) != 1:
+            raise ValueError('All rows should have the same value for Characteristics[ArrayExpress Accession ID].')
+
+        arrayExpressId = study_sample['Characteristics[ArrayExpress Accession ID]'][0]
+
         if 'STUDY ASSAYS' not in investigation:
             raise ValueError('No STUDY ASSAYS section defined in {0}'.format(
                 investigation_file_name))
@@ -185,4 +196,4 @@ def read_archive(archive_filename):
                 raise NotImplementedError(
                     'Only support 1 assay per investigation')
 
-        return Archive(investigation_file_name, study_file_name, study_type, investigation, study_sample)
+        return Archive(investigation_file_name, study_file_name, study_type, investigation, study_sample, arrayExpressId)
