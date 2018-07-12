@@ -3,6 +3,7 @@ import {TendonsStudy} from '../../core/types/Tendons-study';
 import {TendonsStudyService} from '../../core/services/tendons-study.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AppUrls} from '../../router/app-urls';
 
 @Component({
   styleUrls: ['./tendons-study.scss'],
@@ -153,18 +154,20 @@ export class TendonsStudyComponent implements OnInit {
 
   onSave() {
     this.submitted = true;
-
+   // TODO@MT handle errors
     if (this.registerForm.invalid) {
       return;
     } else {
       if (this.study.uuid) {
         // Existing study => update
         this.tendonsStudyService.updateStudy(this.study).subscribe(result => {
+          this.router.navigateByUrl(AppUrls.manageTendonsStudiesUrl);
         });
       } else {
         // New study => create
         this.tendonsStudyService.createStudy(this.study).subscribe(result => {
           this.study.uuid = result.study_uuid;
+          this.router.navigateByUrl(AppUrls.manageTendonsStudiesUrl);
         });
       }
     }
