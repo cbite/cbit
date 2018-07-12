@@ -2,7 +2,6 @@ export class AppUrls {
   public static welcomeUrl = 'welcome';
   public static aboutUrl = 'about';
   public static faqUrl = 'faq';
-  public static downloadUrl = 'download';
   public static uploadUrl = 'upload';
   public static metadataUrl = 'metadata';
   public static studiesUrl = 'studies';

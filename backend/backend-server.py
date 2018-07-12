@@ -2,8 +2,6 @@
 
 import falcon
 
-from biomaterials.resources.downloads import BiomaterialsDownloadsResource, BiomaterialsDownloadResource, \
-    BiomaterialsDownloadProgressResource
 from biomaterials.resources.metadata import BiomaterialsMetadataAllCountsResource, \
     BiomaterialsMetadataFilteredCountsResource, BiomaterialsMetadataSamplesInStudies, BiomaterialsMetadataFields, \
     BiomaterialsMetadataFieldsMulti, BiomaterialsMetadataField, BiomaterialsMetadataSearch, \
@@ -61,10 +59,6 @@ app = falcon.API(middleware=middleware)
 app.add_route('/biomaterials/uploads', BiomaterialsUploadsResource())
 app.add_route('/biomaterials/uploads/_irods/{folder_name}', BiomaterialsUploadsIRODSResource())
 app.add_route('/biomaterials/uploads/{upload_uuid}', BiomaterialsUploadResource())
-
-app.add_route('/biomaterials/downloads', BiomaterialsDownloadsResource())
-app.add_route('/biomaterials/downloads/{download_uuid}', BiomaterialsDownloadResource())
-app.add_route('/biomaterials/downloads/{download_uuid}/_progress', BiomaterialsDownloadProgressResource())
 
 app.add_route('/biomaterials/samples', BiomaterialsSamplesResource())
 

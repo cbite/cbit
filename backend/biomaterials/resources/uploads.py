@@ -152,7 +152,7 @@ def complete_upload(upload_uuid, db_conn, filepath, resp):
 
     # Check that archive is valid
     try:
-        a = read_archive(filepath, only_metadata=False)
+        a = read_archive(filepath)
     except Exception as e:
         raise falcon.HTTPBadRequest(
             description="Malformed archive: {0}".format(str(e))

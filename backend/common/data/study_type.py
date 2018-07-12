@@ -7,7 +7,7 @@ class StudyType:
 
 class GeneExpressionType:
     microarray = "Microarray"
-    rna_seq = "RNASequencing"
+    rna_seq = "RNA sequencing"
 
 
 def determineBiomaterialsStudyType(geneExpressionType):
