@@ -72,10 +72,6 @@ export class URLService {
     return `biomaterials/samples`;
   }
 
-  downloadsResource(): string {
-    return `biomaterials/downloads`;
-  }
-
   uploadsResource(): string {
     return environment.api_url + 'biomaterials/uploads';
   }

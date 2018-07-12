@@ -35,12 +35,8 @@ def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, v
                         body=result)
 
     # 4. Load all sample metadata
-    d = reader.apply_special_treatments_to_study_sample(
-        reader.join_study_sample_and_assay(
-            reader.clean_up_study_samples(a.study_sample, db_conn),
-            reader.clean_up_assay(a.assay)
-        )
-    )
+    clean_study_sample = reader.clean_up_study_samples(a.study_sample, db_conn)
+    d = reader.apply_special_treatments_to_study_sample(clean_study_sample)
 
     result = []
 

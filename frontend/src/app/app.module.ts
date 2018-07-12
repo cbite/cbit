@@ -4,7 +4,6 @@ import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 
 import {StudyComponent} from './pages/upload/components/study.component';
-import {DownloadComponent} from './common/components/download.component';
 import {AppRoutingModule} from './router/routing.module';
 import {BrowserSidebarComponent} from './pages/browser/components/browser-sidebar/browser-sidebar.component';
 import {MapToIterablePipe} from './common/mapToIterable.pipe';
@@ -12,7 +11,6 @@ import {SampleFiltersComponent} from './pages/browser/components/filters/sample-
 import {FileSelectDirective, FileDropDirective} from 'ng2-file-upload/ng2-file-upload';
 import {CollapseDirective} from './common/collapse.directive';
 import {SpinnerComponent} from './common/spinner.component';
-import {SelectionIndicatorComponent} from './core/components/app-header/selection-indicator.component';
 import {DropdownDirective} from './common/dropdown.directive';
 import {DropdownMenuDirective} from './common/dropdown-menu.directive';
 import {Ng2SliderComponent} from './common/slider/ng2-slider.component';
@@ -24,7 +22,6 @@ import {TooltipService} from './services/tooltip.service';
 import {UnitFormattingService} from './services/unit-formatting.service';
 import {CollapseStateService} from './core/services/collapse-state.service';
 import {AuthenticationService} from './core/authentication/authentication.service';
-import {DownloadSelectionService} from './services/download-selection.service';
 import {FiltersService} from './pages/browser/services/filters.service';
 import {StudyService} from './core/services/study.service';
 import {URLService} from './core/services/url.service';
@@ -105,7 +102,6 @@ import {TendonsStudiesComponent} from './pages/tendons/tendons-studies.component
       PropertiesDescriptionComponent,
       BrowserPage,
       SplitByTwoPipe,
-      DownloadComponent,
       UploadPage,
       FieldMetadataFormComponent,
       MetadataPage,
@@ -128,7 +124,6 @@ import {TendonsStudiesComponent} from './pages/tendons/tendons-studies.component
       SpinnerComponent,
       StudyResultsComponent,
       StudyResultComponent,
-      SelectionIndicatorComponent,
       DropdownDirective,
       DropdownMenuDirective,
       StudyRedirectComponent,
@@ -157,7 +152,6 @@ import {TendonsStudiesComponent} from './pages/tendons/tendons-studies.component
       URLService,
       StudyService,
       FiltersService,
-      DownloadSelectionService,
       BusyIndicatorService,
       HttpGatewayService,
       AuthenticationService,

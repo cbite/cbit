@@ -30,7 +30,7 @@ class BiomaterialsStudyProtocolsResource(object):
         studyArchivePath = os.path.join(cfg.FILES_PATH, study_uuid, 'archive.zip')
 
         if os.path.exists(studyArchivePath):
-            a = read_archive(studyArchivePath, only_metadata=True)
+            a = read_archive(studyArchivePath)
             # TODO@MT switch this to the protocols file
             with zipfile.ZipFile(studyArchivePath, "r") as archiveZf:
                 file_content = archiveZf.read(a.investigation_file_name)
