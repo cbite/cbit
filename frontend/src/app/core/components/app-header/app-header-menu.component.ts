@@ -17,15 +17,7 @@ import {LoggedInUser} from '../../authentication/loggedInUser';
         <div class="label">{{loggedInUser.displayName}}</div>
       </div>
       <div class="header-menu" *ngIf="isOpen">
-        <!--<div class="header-menu-link" (click)="onMenuClick('upload_study')">-->
-          <!--<div class="icon"><i class="far fa-upload"></i></div>-->
-          <!--<div class="label">Upload Study</div>-->
-        <!--</div>-->
-        <!--<div class="header-menu-link" (click)="onMenuClick('manage_studies')">-->
-          <!--<div class="icon"><i class="far fa-edit"></i></div>-->
-          <!--<div class="label">Manage Studies</div>-->
-        <!--</div>-->
-        <div class="header-menu-link" (click)="onMenuClick('edit_metadata')">
+        <div class="header-menu-link" (click)="onMenuClick('manage_biomaterial_studies')">
           <div class="icon"><i class="far fa-edit"></i></div>
           <div class="label">Bio Material Studies</div>
         </div>

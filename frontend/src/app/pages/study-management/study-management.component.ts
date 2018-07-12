@@ -8,6 +8,8 @@ import {HttpGatewayService} from '../../core/services/http-gateway.service';
 import {Observable} from 'rxjs/Observable';
 import {StudyState} from './components/study-mentadata-editor.component';
 import {PopupService} from '../../core/services/popup.service';
+import {Router} from '@angular/router';
+import {AppUrls} from '../../router/app-urls';
 
 @Component({
   styleUrls: ['./study-management.scss'],
@@ -35,6 +37,12 @@ import {PopupService} from '../../core/services/popup.service';
                       [attr.disabled]="savingChanges || null">
                 <span *ngIf="!savingChanges">Save Changes</span>
                 <span *ngIf=" savingChanges">Saving Changes...</span>
+              </button>
+              <button  class="add-button btn btn-primary" (click)="onAddNewStudy()">
+                Add new study
+              </button>
+              <button  class="add-button btn btn-primary" (click)="onEditMetaFields()">
+                Edit Field Metadata
               </button>
             </div>
 
@@ -68,10 +76,11 @@ export class StudyManagementComponent implements OnInit {
               private _studyService: StudyService,
               private httpGatewayService: HttpGatewayService,
               private popupService: PopupService,
-              private _changeDetectorRef: ChangeDetectorRef) {
+              private _changeDetectorRef: ChangeDetectorRef,
+              private router: Router) {
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     let self = this;
     this._studyService
       .getAllStudyIds()
@@ -89,7 +98,15 @@ export class StudyManagementComponent implements OnInit {
       });
   }
 
-  makeFormGroup(): FormGroup {
+  public onAddNewStudy() {
+    this.router.navigateByUrl(AppUrls.newBioMaterialStudyUrl);
+  }
+
+  public onEditMetaFields() {
+    this.router.navigateByUrl(AppUrls.metadataUrl);
+  }
+
+  public makeFormGroup(): FormGroup {
     let group: any = {};
 
     for (let studyId in this.studies) {
@@ -125,7 +142,7 @@ export class StudyManagementComponent implements OnInit {
     });
   }
 
-  saveChanges() {
+  public saveChanges() {
     let self = this;
 
     this.savingChanges = true;

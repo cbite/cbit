@@ -33,12 +33,12 @@ import {AppUrls} from '../../../router/app-urls';
              [class.active]="browseActive"
              (mouseenter)="onMouseEnterCBiT()"
              (mouseleave)="onMouseLeaveCBiT()">
-            <div class="link" routerLink="/browse/biomaterial"><i class="fas fa-caret-down" style="margin-right: 10px"></i> Enter cBiT</div>
+            <div class="link" routerLink="biomaterial/browse">Enter cBiT</div>
             <div class="header-submenu" *ngIf="isCBITMenuOpen">
-              <div class="header-submenu-link" routerLink="/browse/biomaterial">
+              <div class="header-submenu-link" routerLink="biomaterial/browse">
                 <i class="fas fa-caret-right" style="margin-right: 10px"></i> Bio Material Studies
               </div>
-              <div class="header-submenu-link" routerLink="/browse/tendons">
+              <div class="header-submenu-link" routerLink="tendons/browse">
                 <i class="fas fa-caret-right" style="margin-right: 10px"></i> Tendon Studies
               </div>
             </div>
@@ -73,14 +73,8 @@ export class AppHeaderComponent {
 
   public onMenuClick(target) {
     switch (target) {
-      case 'upload_study':
-        this.router.navigateByUrl(AppUrls.uploadUrl);
-        break;
-      case 'manage_studies':
-        this.router.navigateByUrl(AppUrls.studiesUrl);
-        break;
-      case 'edit_metadata':
-        this.router.navigateByUrl(AppUrls.metadataUrl);
+      case 'manage_biomaterial_studies':
+        this.router.navigateByUrl(AppUrls.manageBioMaterialStudiesUrl);
         break;
       case 'manage_tendons_studies':
         this.router.navigateByUrl(AppUrls.manageTendonsStudiesUrl);
