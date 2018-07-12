@@ -21,7 +21,6 @@ const routes: Routes = [
   { path: AppUrls.welcomeUrl, component: WelcomePage },
   { path: AppUrls.aboutUrl, component: AboutPage },
   { path: AppUrls.faqUrl, component: FAQPage },
-  { path: AppUrls.browseUrl, component: BrowserPage },
   { path: AppUrls.downloadUrl, component: DownloadComponent },
   { path: AppUrls.uploadUrl, component: UploadPage },
   { path: AppUrls.metadataUrl, component: MetadataPage },
@@ -29,7 +28,8 @@ const routes: Routes = [
   { path: AppUrls.manageTendonsStudiesUrl, component: ManageTendonsStudiesComponent },
   { path: AppUrls.usersUrl, component: UserManagementPage },
   { path: AppUrls.studyUrl, component: StudyRedirectComponent },
-  { path: AppUrls.tendonsStudiesUrl, component: TendonsStudiesComponent },
+  { path: AppUrls.browseTendonsUrl, component: TendonsStudiesComponent },
+  { path: AppUrls.browseBiomaterialUrl, component: BrowserPage },
   { path: AppUrls.newTendonsStudyUrl, component: TendonsStudyComponent },
   { path: AppUrls.tendonsStudyUrl, component: TendonsStudyComponent },
   { path: AppUrls.peopleUrl, component: PeoplePage }
