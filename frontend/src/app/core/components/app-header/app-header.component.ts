@@ -39,7 +39,7 @@ import {AppUrls} from '../../../router/app-urls';
                 <i class="fas fa-caret-right" style="margin-right: 10px"></i> Bio Material Studies
               </div>
               <div class="header-submenu-link" routerLink="/browse/tendons">
-                <i class="fas fa-caret-right" style="margin-right: 10px"></i> Tendons Studies
+                <i class="fas fa-caret-right" style="margin-right: 10px"></i> Tendon Studies
               </div>
             </div>
         </div>
