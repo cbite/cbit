@@ -65,14 +65,14 @@ import {StudyCategoryComponent} from './pages/biomaterial/browse/popups/study-de
 import {CommonPropertiesComponent} from './pages/biomaterial/browse/popups/study-details/common-properties.component';
 import {DistinguishingPropertiesComponent} from './pages/biomaterial/browse/popups/study-details/distinguishing-properties.component';
 import {DateFormatPipe} from './shared/pipes/date-format-pipe';
-import {ManageTendonsStudiesComponent} from './pages/tendons/manage-tendons-studies.component';
+import {TendonsStudiesManagementPage} from './pages/tendons/management/tendons-studies-management.page';
 import {TendonsStudyService} from './core/services/tendons-study.service';
-import {TendonsStudyComponent} from './pages/tendons/tendons-study.component';
-import {TendonsStudiesComponent} from './pages/tendons/tendons-studies.component';
+import {TendonsStudyEditorPage} from './pages/tendons/editor/tendons-study-editor.page';
+import {TendonsStudiesBrowsePage} from './pages/tendons/browse/tendons-studies-browse.page';
 import {PeoplePage} from './pages/people/people.page';
 import {PersonComponent} from './pages/people/components/person.component';
 import {BioMaterialStudyManagementPage} from './pages/biomaterial/management/biomaterial-study-management.page';
-import {BioMaterialStudyBrowsePage} from './pages/biomaterial/browse/biomaterial-study-browse.page';
+import {BioMaterialStudiesBrowsePage} from './pages/biomaterial/browse/biomaterial-studies-browse.page';
 import {BioMaterialStudyUploadPage} from './pages/biomaterial/upload/biomaterial-study-upload.page';
 import {BioMaterialMetadataPage} from './pages/biomaterial/metadata/biomaterial-metadata.page';
 
@@ -102,7 +102,7 @@ import {BioMaterialMetadataPage} from './pages/biomaterial/metadata/biomaterial-
       FAQPage,
       FAQQuestionComponent,
       PropertiesDescriptionComponent,
-      BioMaterialStudyBrowsePage,
+      BioMaterialStudiesBrowsePage,
       SplitByTwoPipe,
       BioMaterialStudyUploadPage,
       FieldMetadataFormComponent,
@@ -140,9 +140,9 @@ import {BioMaterialMetadataPage} from './pages/biomaterial/metadata/biomaterial-
       DateFormatPipe,
       MyTooltipDirective,
       ConfirmationComponent,
-      ManageTendonsStudiesComponent,
-      TendonsStudyComponent,
-      TendonsStudiesComponent
+      TendonsStudiesManagementPage,
+      TendonsStudyEditorPage,
+      TendonsStudiesBrowsePage
     ],
     entryComponents: [
       LoginPopupComponent,

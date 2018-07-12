@@ -9,7 +9,7 @@ import {PopupService} from '../../../core/services/popup.service';
 import {getPublicationDate, getTitle} from '../../../core/util/study-helper';
 
 @Component({
-  styleUrls: ['./biomaterial-study-browse.scss'],
+  styleUrls: ['./biomaterial-studies-browse.scss'],
   template: `
     <div class="container-fluid no-gutters">
       <div class="row no-gutters">
@@ -25,7 +25,7 @@ import {getPublicationDate, getTitle} from '../../../core/util/study-helper';
     </div>
   `
 })
-export class BioMaterialStudyBrowsePage implements OnInit, OnDestroy {
+export class BioMaterialStudiesBrowsePage implements OnInit, OnDestroy {
 
   public matches: UnifiedMatch[] = [];
 

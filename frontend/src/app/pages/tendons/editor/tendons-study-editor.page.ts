@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {TendonsStudy} from '../../core/types/Tendons-study';
-import {TendonsStudyService} from '../../core/services/tendons-study.service';
+import {TendonsStudy} from '../../../core/types/Tendons-study';
+import {TendonsStudyService} from '../../../core/services/tendons-study.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AppUrls} from '../../router/app-urls';
+import {AppUrls} from '../../../router/app-urls';
 
 @Component({
-  styleUrls: ['./tendons-study.scss'],
+  styleUrls: ['./tendons-study-editor.scss'],
   template: `
     <div class="page">
       <div class="page-content">
@@ -109,7 +109,7 @@ import {AppUrls} from '../../router/app-urls';
     </div>
   `
 })
-export class TendonsStudyComponent implements OnInit {
+export class TendonsStudyEditorPage implements OnInit {
   study: TendonsStudy;
   registerForm: FormGroup;
   submitted = false;

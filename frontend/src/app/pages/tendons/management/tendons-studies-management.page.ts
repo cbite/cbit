@@ -1,14 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {TendonsStudy} from '../../core/types/Tendons-study';
-import {TendonsStudyService} from '../../core/services/tendons-study.service';
-import {Study} from '../../core/types/study.model';
-import {PopupService} from '../../core/services/popup.service';
-import {Observable} from 'rxjs/Observable';
+import {TendonsStudy} from '../../../core/types/Tendons-study';
+import {TendonsStudyService} from '../../../core/services/tendons-study.service';
+import {PopupService} from '../../../core/services/popup.service';
 import {Router} from '@angular/router';
-import {AppUrls} from '../../router/app-urls';
+import {AppUrls} from '../../../router/app-urls';
 
 @Component({
-  styleUrls: ['./manage-tendons-studies.scss'],
+  styleUrls: ['./tendons-studies-management.scss'],
   template: `
     <div class="page">
       <div class="page-content">
@@ -35,7 +33,7 @@ import {AppUrls} from '../../router/app-urls';
     </div>
   `
 })
-export class ManageTendonsStudiesComponent implements OnInit {
+export class TendonsStudiesManagementPage implements OnInit {
 
   public studies: TendonsStudy[];
 

@@ -7,11 +7,11 @@ import {WelcomePage} from '../pages/welcome/welcome.page';
 import {AboutPage} from '../pages/about/about.page';
 import {FAQPage} from '../pages/faq/faq.page';
 import {UserManagementPage} from '../pages/user-management/user-management.page';
-import {ManageTendonsStudiesComponent} from '../pages/tendons/manage-tendons-studies.component';
-import {TendonsStudyComponent} from '../pages/tendons/tendons-study.component';
-import {TendonsStudiesComponent} from '../pages/tendons/tendons-studies.component';
+import {TendonsStudiesManagementPage} from '../pages/tendons/management/tendons-studies-management.page';
+import {TendonsStudyEditorPage} from '../pages/tendons/editor/tendons-study-editor.page';
+import {TendonsStudiesBrowsePage} from '../pages/tendons/browse/tendons-studies-browse.page';
 import {PeoplePage} from '../pages/people/people.page';
-import {BioMaterialStudyBrowsePage} from '../pages/biomaterial/browse/biomaterial-study-browse.page';
+import {BioMaterialStudiesBrowsePage} from '../pages/biomaterial/browse/biomaterial-studies-browse.page';
 import {BioMaterialStudyUploadPage} from '../pages/biomaterial/upload/biomaterial-study-upload.page';
 import {BioMaterialMetadataPage} from '../pages/biomaterial/metadata/biomaterial-metadata.page';
 
@@ -24,12 +24,12 @@ const routes: Routes = [
   { path: AppUrls.usersUrl, component: UserManagementPage },
   { path: AppUrls.studyUrl, component: StudyRedirectComponent },
   { path: AppUrls.manageBioMaterialStudiesUrl, component: BioMaterialStudyManagementPage },
-  { path: AppUrls.manageTendonsStudiesUrl, component: ManageTendonsStudiesComponent },
-  { path: AppUrls.browseTendonStudiesUrl, component: TendonsStudiesComponent },
-  { path: AppUrls.browseBioMaterialStudiesUrl, component: BioMaterialStudyBrowsePage },
-  { path: AppUrls.newTendonsStudyUrl, component: TendonsStudyComponent },
+  { path: AppUrls.manageTendonsStudiesUrl, component: TendonsStudiesManagementPage },
+  { path: AppUrls.browseTendonStudiesUrl, component: TendonsStudiesBrowsePage },
+  { path: AppUrls.browseBioMaterialStudiesUrl, component: BioMaterialStudiesBrowsePage },
+  { path: AppUrls.newTendonsStudyUrl, component: TendonsStudyEditorPage },
   { path: AppUrls.newBioMaterialStudyUrl, component: BioMaterialStudyUploadPage },
-  { path: AppUrls.tendonsStudyUrl, component: TendonsStudyComponent },
+  { path: AppUrls.tendonsStudyUrl, component: TendonsStudyEditorPage },
   { path: AppUrls.peopleUrl, component: PeoplePage }
 ];
 

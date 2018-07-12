@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {TendonsStudy} from '../../core/types/Tendons-study';
-import {TendonsStudyService} from '../../core/services/tendons-study.service';
+import {TendonsStudy} from '../../../core/types/Tendons-study';
+import {TendonsStudyService} from '../../../core/services/tendons-study.service';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {WindowRef} from '../../shared/util/WindowRef';
+import {WindowRef} from '../../../shared/util/WindowRef';
 
 @Component({
-  styleUrls: ['./tendons-studies.scss'],
+  styleUrls: ['./tendons-studies-browse.scss'],
   template: `
     <div class="page">
       <div class="page-content">
@@ -39,7 +39,7 @@ import {WindowRef} from '../../shared/util/WindowRef';
     </div>
   `
 })
-export class TendonsStudiesComponent implements OnInit {
+export class TendonsStudiesBrowsePage implements OnInit {
 
   public studies: TendonsStudy[];
   private nativeWindow: any;
