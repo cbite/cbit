@@ -22,6 +22,10 @@ import {AppUrls} from '../../../router/app-urls';
              routerLink="/about">About
         </div>
         <div class="header-link"
+             routerLinkActive="people"
+             routerLink="/people">People
+        </div>
+        <div class="header-link"
              routerLinkActive="active"
              routerLink="/faq">FAQ
         </div>

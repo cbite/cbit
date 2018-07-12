@@ -1,0 +1,66 @@
+@import '../../../../variables';
+
+.profile-panel {
+  margin: 30px 0;
+  width: 80%;
+  //background-color: $color-gray;
+  //border: 1px solid darken($color-gray, 10%);
+  border-radius: 10px;
+  padding: 20px;
+  font-size: 0;
+  position: relative;
+
+  .picture-panel {
+    vertical-align: top;
+    width: 200px;
+    display: inline-block;
+    text-align: center;
+
+    .contacts {
+      text-align: center;
+      margin-top: 20px;
+      color: $color-blue;
+
+      .icon {
+        font-size: $font-size-huge;
+        margin: 0 5px;
+        cursor: pointer;
+
+        &:hover {
+          color: $color-dark-blue;
+        }
+      }
+    }
+
+    .picture {
+      margin-top: 15px;
+      border-radius: 50%;
+      -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+      filter: grayscale(100%);
+    }
+  }
+
+  .text-panel {
+    vertical-align: top;
+    width: calc(100% - 200px);
+    font-size: $font-size-normal;
+    display: inline-block;
+
+    .title {
+      color: $color-blue;
+      font-size: $font-size-huge;
+    }
+
+    .subtitle {
+      font-size: $font-size-big;
+      //font-style: italic;
+    }
+
+    .description {
+      margin-top: 15px;
+      justify-content: center;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+  }
+}

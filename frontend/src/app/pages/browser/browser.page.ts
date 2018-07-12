@@ -12,12 +12,21 @@ import {getPublicationDate, getTitle} from '../../core/util/study-helper';
   styleUrls: ['./browser.scss'],
   template: `
     <div class="container-fluid no-gutters">
+      <!--<div class="row no-gutters submenu">-->
+        <!--<div class="col-3 sidebar">-->
+          <!--<div class="submenu-menu">-->
+            <!--<div class="link active"><i class="fas fa-caret-down"></i> BIO-MATERIAL</div>-->
+            <!--<div class="link">TENDONS</div>-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-9 main"></div>-->
+      <!--</div>-->
       <div class="row no-gutters">
         <div class="col-3 sidebar">
           <cbit-browser-sidebar (fullPropertiesListClick)="onFullPropertiesListClicked()"></cbit-browser-sidebar>
         </div>
-
         <div class="col-9 main">
+
           <cbit-study-results [matches]="matches" (showDetails)="onShowDetailsClicked($event)"
                               (download)="onDownload($event)"></cbit-study-results>
         </div>

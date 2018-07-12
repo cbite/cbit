@@ -1,0 +1,11 @@
+@import '../../../variables';
+
+.page {
+  margin-top: 40px;
+  margin-bottom: 80px;
+
+  .page-content {
+    max-width: 1000px;
+    margin: auto;
+  }
+}

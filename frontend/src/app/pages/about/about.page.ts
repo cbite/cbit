@@ -128,8 +128,7 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
           <div class="disclaimers">
             <h5>Licensing information</h5>
             <p>
-              The use of cBiT is free of charge for academic users. Commercial users should
-              contact Prof. Jan de Boer (<code>jan.deboer [at] maastrichtuniversity.nl</code>).
+              The use of cBiT is free of charge for academic users.
             </p>
 
             <p>

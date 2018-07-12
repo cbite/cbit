@@ -73,6 +73,8 @@ import {ManageTendonsStudiesComponent} from './pages/tendons/manage-tendons-stud
 import {TendonsStudyService} from './core/services/tendons-study.service';
 import {TendonsStudyComponent} from './pages/tendons/tendons-study.component';
 import {TendonsStudiesComponent} from './pages/tendons/tendons-studies.component';
+import {PeoplePage} from './pages/people/people.page';
+import {PersonComponent} from './pages/people/components/person.component';
 
 @NgModule(
   {
@@ -124,9 +126,11 @@ import {TendonsStudiesComponent} from './pages/tendons/tendons-studies.component
       SpinnerComponent,
       StudyResultsComponent,
       StudyResultComponent,
+      PersonComponent,
       DropdownDirective,
       DropdownMenuDirective,
       StudyRedirectComponent,
+      PeoplePage,
       StudyCategoryComponent,
       CommonPropertiesComponent,
       DistinguishingPropertiesComponent,
