@@ -4,9 +4,9 @@ import {LoginPopupComponent} from '../../popups/login/login-popup.component';
 import {AddUserComponent} from '../../popups/add-user/add-user.component';
 import {ChangePasswordComponent} from '../../popups/change-password/change-password.component';
 import {ConfirmationComponent} from '../../popups/confirmation/confirmation.component';
-import {StudyDetailsComponent} from '../../pages/browser/popups/study-details/study-details.component';
+import {StudyDetailsComponent} from '../../pages/biomaterial/browse/popups/study-details/study-details.component';
 import {Study} from '../types/study.model';
-import {PropertiesDescriptionComponent} from '../../pages/browser/popups/properties-description/properties-description.component';
+import {PropertiesDescriptionComponent} from '../../pages/biomaterial/browse/popups/properties-description/properties-description.component';
 
 @Injectable()
 export class PopupService {

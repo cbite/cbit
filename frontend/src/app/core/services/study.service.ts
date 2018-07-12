@@ -6,7 +6,7 @@
 import {Study, Sample} from '../types/study.model';
 import {Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {FiltersState} from '../../pages/browser/services/filters.service';
+import {FiltersState} from '../../pages/biomaterial/browse/services/filters.service';
 import * as $ from 'jquery';
 import {CacheableBulkRequester} from '../../common/cacheable-bulk-request';
 import {AuthenticationService} from '../authentication/authentication.service';

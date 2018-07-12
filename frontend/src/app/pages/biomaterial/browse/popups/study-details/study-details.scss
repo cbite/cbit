@@ -1,0 +1,51 @@
+@import '../../../../../../variables';
+
+.modal-header {
+  background-color: $color-blue;
+  color: white;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
+
+  .close {
+    color: white;
+  }
+
+  .title {
+    font-size: $font-size-big;
+  }
+}
+
+.content {
+  max-height: calc(100vh - 300px);
+  overflow: scroll;
+  padding-bottom: 20px;
+
+  .authors {
+    margin-bottom: 20px;
+  }
+}
+
+.link {
+  color: $color-blue;
+  display: inline-block;
+  margin: 0 10px;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-dark-blue;
+  }
+}
+
+.samples {
+  margin-top: 20px;
+
+  .samples-category {
+    color: $color-blue;
+    cursor: pointer;
+    line-height: 26px;
+
+    &:hover {
+      color: $color-dark-blue;
+    }
+  }
+}

@@ -2,7 +2,6 @@ export class AppUrls {
   public static welcomeUrl = 'welcome';
   public static aboutUrl = 'about';
   public static faqUrl = 'faq';
-  public static metadataUrl = 'metadata';
   public static usersUrl = 'users';
   public static studyUrl = 'study/:id';
   public static peopleUrl = 'people';
@@ -11,6 +10,7 @@ export class AppUrls {
   public static manageBioMaterialStudiesUrl = 'biomaterial/manage';
   public static newBioMaterialStudyUrl = 'biomaterial/new';
   public static browseBioMaterialStudiesUrl = 'biomaterial/browse';
+  public static bioMaterialMetadataUrl = 'biomaterial/metadata';
 
   // tendons study
   public static manageTendonsStudiesUrl = 'tendons/manage';
