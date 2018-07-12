@@ -13,6 +13,7 @@ export class AppUrls {
   public static manageTendonsStudiesUrl = 'manage_tendons';
   public static usersUrl = 'users';
   public static studyUrl = 'study/:id';
+  public static peopleUrl = 'people';
 
   public static replaceStudyId(url: string, studyId: string) {
     return url.replace(':id', studyId);
