@@ -2,11 +2,11 @@ export class AppUrls {
   public static welcomeUrl = 'welcome';
   public static aboutUrl = 'about';
   public static faqUrl = 'faq';
-  public static browseUrl = 'browse';
   public static uploadUrl = 'upload';
   public static metadataUrl = 'metadata';
   public static studiesUrl = 'studies';
-  public static tendonsStudiesUrl = 'tendons/studies';
+  public static browseBiomaterialUrl = 'browse/biomaterial';
+  public static browseTendonsUrl = 'browse/tendons';
   public static newTendonsStudyUrl = 'tendons/new';
   public static tendonsStudyUrl = 'tendons/:id';
   public static manageTendonsStudiesUrl = 'manage_tendons';

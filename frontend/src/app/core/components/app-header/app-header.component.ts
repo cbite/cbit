@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, NavigationStart, Router} from '@angular/router';
 import {AuthenticationService} from '../../authentication/authentication.service';
 import {PopupService} from '../../services/popup.service';
 import {ApplicationState} from '../../redux/reducers/index';
@@ -29,13 +29,19 @@ import {AppUrls} from '../../../router/app-urls';
              routerLinkActive="active"
              routerLink="/faq">FAQ
         </div>
-        <div class="header-link"
-             routerLinkActive="active"
-             routerLink="/browse">Enter cBiT
-        </div>
-        <div class="header-link"
-             routerLinkActive="active"
-             routerLink="/tendons/studies">Tendons Studies
+        <div class="header-link studies"
+             [class.active]="browseActive"
+             (mouseenter)="onMouseEnterCBiT()"
+             (mouseleave)="onMouseLeaveCBiT()">
+            <div class="link" routerLink="/browse/biomaterial"><i class="fas fa-caret-down" style="margin-right: 10px"></i> Enter cBiT</div>
+            <div class="header-submenu" *ngIf="isCBITMenuOpen">
+              <div class="header-submenu-link" routerLink="/browse/biomaterial">
+                <i class="fas fa-caret-right" style="margin-right: 10px"></i> Bio Material Studies
+              </div>
+              <div class="header-submenu-link" routerLink="/browse/tendons">
+                <i class="fas fa-caret-right" style="margin-right: 10px"></i> Tendon Studies
+              </div>
+            </div>
         </div>
       </div>
       <cbit-app-header-menu
@@ -49,12 +55,20 @@ import {AppUrls} from '../../../router/app-urls';
 })
 export class AppHeaderComponent {
 
+  public browseActive = false;
+  public isCBITMenuOpen = false;
   public loggedInUser$ = this.store.select(state => state.application.loggedInUser);
 
   constructor(private authenticationService: AuthenticationService,
               private store: Store<ApplicationState>,
               private router: Router,
               private popupService: PopupService) {
+
+    this.router.events
+      .filter(e => e instanceof   NavigationStart)
+      .subscribe((event: NavigationStart) => {
+        this.browseActive = event.url.includes('browse');
+      });
   }
 
   public onMenuClick(target) {
@@ -76,6 +90,14 @@ export class AppHeaderComponent {
         break;
       default:
     }
+  }
+
+  public onMouseEnterCBiT() {
+    this.isCBITMenuOpen = true;
+  }
+
+  public onMouseLeaveCBiT() {
+    this.isCBITMenuOpen = false;
   }
 
   public onLogoutClick() {

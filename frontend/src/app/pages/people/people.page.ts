@@ -6,7 +6,7 @@ import {WindowRef} from '../../shared/util/WindowRef';
   template: `
     <div class="page">
       <div class="page-content">
-        <div style="margin-bottom: 20px;"><h4>Our Team</h4></div>
+        <div style="margin-bottom: 20px;"><h4>cBiT Staff</h4></div>
         <cbit-person [name]="'Jan De Boer'"
                      [jobtitle]="'Professor of applied cell biology at the MERLN Institute.'"
                      [email]="'jan.deboer@maastrichtuniversity.nl'"
