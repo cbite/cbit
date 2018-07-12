@@ -7,35 +7,46 @@ from common.data.study_type import StudyType, GeneExpressionType, determineTendo
 
 class TendonsStudiesResource(object):
     def on_get(self, req, resp):
-        db_conn = req.context["db"]
-        with db_conn.cursor() as cur:
-            cur.execute("SELECT * FROM tendons_metadata")
-            results = cur.fetchall()
-        db_conn.commit()
+        is_admin = req.context["isAdmin"]
+        try:
+            db_conn = req.context["db"]
+            with db_conn.cursor() as cur:
+                query = "SELECT uuid, name, arrayExpressId, pubMedId, description, geneExpressionType, platform,organism, " \
+                        "cellOrigin, year, sampleSize, visible FROM tendons_metadata "
+                if is_admin:
+                    cur.execute(query)
+                else:
+                    newQuery = query + "WHERE visible = %s"
+                    cur.execute(newQuery, (True,))
+                results = cur.fetchall()
+            db_conn.commit()
 
-        resp_json = [
-            {
-                "uuid": uuid,
-                "name": name,
-                "arrayExpressId": arrayExpressId,
-                "pubMedId": pubMedId,
-                "description": description,
-                "geneExpressionType": geneExpressionType,
-                "platform": platform,
-                "organism": organism,
-                "cellOrigin": cellOrigin,
-                "year": int(year),
-                "sampleSize": int(sampleSize),
-                "visible": visible
-            }
-            for (
-                uuid, name, arrayExpressId, pubMedId, description, geneExpressionType, platform, organism, cellOrigin,
-                year,
-                sampleSize, visible) in results
-        ]
+            resp_json = [
+                {
+                    "uuid": uuid,
+                    "name": name,
+                    "arrayExpressId": arrayExpressId,
+                    "pubMedId": pubMedId,
+                    "description": description,
+                    "geneExpressionType": geneExpressionType,
+                    "platform": platform,
+                    "organism": organism,
+                    "cellOrigin": cellOrigin,
+                    "year": int(year),
+                    "sampleSize": int(sampleSize),
+                    "visible": visible
+                }
+                for (
+                    uuid, name, arrayExpressId, pubMedId, description, geneExpressionType, platform, organism, cellOrigin,
+                    year,
+                    sampleSize, visible) in results
+            ]
 
-        resp.status = falcon.HTTP_OK
-        resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
+            resp.status = falcon.HTTP_OK
+            resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
+
+        except Exception as e:
+            raise falcon.HTTPBadRequest(description="{0}".format(str(e)))
 
     def on_post(self, req, resp):
         if not req.context["isAdmin"]:
@@ -114,7 +125,10 @@ class TendonsStudyResource(object):
         try:
             db_conn = req.context["db"]
             with db_conn.cursor() as cur:
-                cur.execute("SELECT * FROM tendons_metadata WHERE uuid = %s", (study_uuid,))
+                cur.execute(
+                    "SELECT uuid, name, arrayExpressId, pubMedId, description, geneExpressionType, platform, "
+                    "organism, cellOrigin, year, sampleSize, visible FROM tendons_metadata WHERE uuid = %s",
+                    (study_uuid,))
                 results = cur.fetchall()
             db_conn.commit()
 
