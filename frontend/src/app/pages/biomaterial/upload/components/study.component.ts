@@ -2,7 +2,8 @@ import {Component, Input, OnInit, ChangeDetectorRef} from '@angular/core';
 import {Study, Sample, RawStudy} from '../../../../core/types/study.model';
 import {StudyService, StudyAndSamples} from '../../../../core/services/study.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import { Location } from '@angular/common';
+import {Location} from '@angular/common';
+import {getSupplementaryFiles} from '../../../../core/util/study-helper';
 
 @Component({
   selector: 'study',
@@ -60,6 +61,13 @@ import { Location } from '@angular/common';
           </span>
         </li>
       </ol>
+
+      <h5>Supplementary Files</h5>
+      <ul>
+        <li *ngFor="let supplementaryFile of supplementaryFiles">
+          {{supplementaryFile}}
+        </li>
+      </ul>
       <!--<button (click)="goBack()">Back</button>-->
     </div>
   `
@@ -70,44 +78,44 @@ export class StudyComponent implements OnInit {
   study: Study;
   studyCategoryMap: RawStudy;
   samples: Sample[];
+  supplementaryFiles: string[];
   commonKeys: { [key: string]: any };
   ready = false;
 
-  constructor(
-    private _router: Router,
-    private _studyService: StudyService,
-    private _route: ActivatedRoute,
-    private _location: Location,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private _router: Router,
+              private _studyService: StudyService,
+              private _route: ActivatedRoute,
+              private _location: Location,
+              private changeDetectorRef: ChangeDetectorRef) {
+  }
 
   ngOnInit(): void {
     //this._route.params.forEach((params: Params) => {
-      //let id: string = params['id'];
+    //let id: string = params['id'];
     const id = this.studyId;
-      //this._studyService.getStudy(id)
-      //  .then(study => this.study = study);
+    //this._studyService.getStudy(id)
+    //  .then(study => this.study = study);
 
-      const studyPromise = this._studyService.getStudy(id);
-      const samplesPromise = this._studyService.getIdsOfSamplesInStudy(id).then(sampleIds => {
-        return Promise.all(sampleIds.map(sampleId => this._studyService.getSample(sampleId)));
-      });
+    const studyPromise = this._studyService.getStudy(id);
+    const samplesPromise = this._studyService.getIdsOfSamplesInStudy(id).then(sampleIds => {
+      return Promise.all(sampleIds.map(sampleId => this._studyService.getSample(sampleId)));
+    });
 
-      Promise.all([studyPromise, samplesPromise]).then(results => {
-        const study = results[0];
-        const samples = results[1];
+    Promise.all([studyPromise, samplesPromise]).then(results => {
+      const study = results[0];
+      const samples = results[1];
 
-        const result: StudyAndSamples = {
-          study: study,
-          samples: samples
-        };
+      const result: StudyAndSamples = {
+        study: study,
+        samples: samples
+      };
 
-        this.processStudyAndSamples(result);
+      this.processStudyAndSamples(result);
 
-        // Force Angular2 change detection to see ready = true change.
-        // Not sure why it's not being picked up automatically
-        this.changeDetectorRef.detectChanges();
-      });
+      // Force Angular2 change detection to see ready = true change.
+      // Not sure why it's not being picked up automatically
+      this.changeDetectorRef.detectChanges();
+    });
     //});
   }
 
@@ -120,6 +128,7 @@ export class StudyComponent implements OnInit {
     delete this.studyCategoryMap['*Publication Date'];
     delete this.studyCategoryMap['*Study Type'];
     delete this.studyCategoryMap['*Array Express Id'];
+    delete this.studyCategoryMap['*Supplementary Files'];
     delete this.studyCategoryMap['*Visible'];
 
     // YUCK! Despite what the mappings in ElasticSearch say, 'Sample Name' in the JSON results can be an integer!
@@ -149,6 +158,8 @@ export class StudyComponent implements OnInit {
         }
       }
     }
+
+    this.supplementaryFiles = getSupplementaryFiles(this.study);
 
     this.ready = true;
   }

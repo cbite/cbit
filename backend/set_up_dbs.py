@@ -88,6 +88,12 @@ def set_up_elasticsearch():
                         "include_in_all": False
                     },
 
+                    "*Supplementary Files": {
+                        "type": "string",
+                        "index": "not_analyzed",
+                        "include_in_all": False
+                    },
+
                 },
 
                 # Allow creation of dynamic fields, mapped as string

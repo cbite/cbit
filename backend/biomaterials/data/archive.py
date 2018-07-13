@@ -27,7 +27,7 @@ class FieldAnalysisResults(object):
 
 class Archive(object):
     def __init__(self, investigation_file_name, study_file_name, protocol_file_name, study_type, investigation, study_samples,
-                 arrayExpressId):
+                 arrayExpressId, file_names):
 
         self.investigation_file_name = investigation_file_name
         self.study_file_name = study_file_name
@@ -37,6 +37,7 @@ class Archive(object):
         self.investigation = investigation
         self.study_sample = study_samples
         self.arrayExpressId = arrayExpressId
+        self.file_names = file_names
 
     def analyse_fields(self):
         # TODO: Produce analysis for merged fields (e.g., '*Material') if one of the
@@ -219,4 +220,4 @@ def read_archive(archive_filename):
                 protocol_file_name))
 
         return Archive(investigation_file_name, study_file_name, protocol_file_name,study_type, investigation, study_sample,
-                       arrayExpressId)
+                       arrayExpressId, filenames)

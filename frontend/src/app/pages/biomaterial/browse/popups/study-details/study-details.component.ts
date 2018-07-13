@@ -1,7 +1,10 @@
 import {Component} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Sample, Study} from '../../../../../core/types/study.model';
-import {getAuthors, getDoisIds, getPubmedIds, getTitle, getArrayExpressId} from '../../../../../core/util/study-helper';
+import {
+  getAuthors, getDoisIds, getPubmedIds, getTitle, getArrayExpressId,
+  getSupplementaryFiles
+} from '../../../../../core/util/study-helper';
 import {StudyAndSamples, StudyService} from '../../../../../core/services/study.service';
 import {getCategoriesToDisplay, StudyCategory} from '../../../../../core/util/study-display-category-helper';
 import {getCommonKeys} from '../../../../../core/util/samples-helper';
@@ -35,6 +38,13 @@ import {WindowRef} from '../../../../../shared/util/WindowRef';
                 [commonKeys]="commonKeys"
                 [samples]="samples"></cbit-distinguishing-properties>
             </div>
+
+            <div *ngIf="supplementaryFiles.length>0" class="files">
+              <h6><b>Supplementary Files</b></h6>
+              <div class="file" *ngFor="let supplementaryFile of supplementaryFiles">
+                {{supplementaryFile}}
+              </div>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -58,6 +68,7 @@ export class StudyDetailsComponent {
   public authors: string;
   public studyCategories: StudyCategory[] = [];
   public samples: Sample[];
+  public supplementaryFiles: string[];
   public commonKeys: any;
   public arrayExpressId: string;
   public pubmedIds = [];
@@ -75,6 +86,7 @@ export class StudyDetailsComponent {
     this.arrayExpressId = getArrayExpressId(study);
     this.pubmedIds = getPubmedIds(study);
     this.doiIds = getDoisIds(study);
+    this.supplementaryFiles = getSupplementaryFiles(study);
     this.studyCategories = getCategoriesToDisplay(study);
     this.studyService.getIdsOfSamplesInStudy(study._id).then(sampleIds => {
       Promise.all(sampleIds.map(sampleId => this.studyService.getSample(sampleId))).then(results => {

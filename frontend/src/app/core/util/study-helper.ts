@@ -8,8 +8,12 @@ export function getPublicationDate(study: Study): string {
   return study._source['*Publication Date'];
 }
 
+export function getSupplementaryFiles(study: Study): string[] {
+  return study._source['*Supplementary Files'].split(',').filter(x => x !== '');
+}
+
 export function getAuthors(study: Study): string {
-   return study._source['STUDY']['Study Researchers Involved'];
+  return study._source['STUDY']['Study Researchers Involved'];
 }
 
 export function getArrayExpressId(study: Study): string {
