@@ -26,20 +26,20 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
     'dimensions': 'none',
     'preferredUnit': 'none'
   },
-  'Platform': {
-    'category': 'Technical > General',
-    'dataType': 'string',
-    'description': 'Type of platform/manufacturer used, e.g. Illumina, Affymetrix, Agilent.',
-    'visibility': 'visible',
-    'dimensions': 'none',
-    'preferredUnit': 'none'
-  },
 
   // Technical properties - Microarray
   'Array or chip design': {
     'category': 'Technical > Microarray',
     'dataType': 'string',
-    'description': 'The design of the microarray or RNAseq chip, e.g. Illumina HT12v4',
+    'description': 'The design of the microarray, e.g. Illumina HT12v4', // TODO@MT change
+    'visibility': 'visible',
+    'dimensions': 'none',
+    'preferredUnit': 'none'
+  },
+  'Platform': {
+    'category': 'Technical > Microarray',
+    'dataType': 'string',
+    'description': 'Type of platform/manufacturer used, e.g. Illumina, Affymetrix, Agilent.', // TODO@MT change
     'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
@@ -123,6 +123,22 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   },
 
   // Technical properties - RNA sequencing
+  'RNAseq Platform': {
+    'category': 'Technical > RNA sequencing',
+    'dataType': 'string',
+    'description': 'Type of platform/manufacturer used, e.g. Illumina, Affymetrix, Agilent.', // TODO@MT change
+    'visibility': 'visible',
+    'dimensions': 'none',
+    'preferredUnit': 'none'
+  },
+  'RNAseq System': {
+    'category': 'Technical > RNA sequencing',
+    'dataType': 'string',
+    'description': 'The design of the RNAseq chip, e.g. Illumina HT12v4', // TODO@MT change
+    'visibility': 'visible',
+    'dimensions': 'none',
+    'preferredUnit': 'none'
+  },
   'Transcriptomics Assay Detail: Raw Data File': {
     'category': 'Technical > RNA sequencing',
     'dataType': 'string',
