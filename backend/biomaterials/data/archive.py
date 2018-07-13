@@ -26,10 +26,12 @@ class FieldAnalysisResults(object):
 
 
 class Archive(object):
-    def __init__(self, investigation_file_name, study_file_name, study_type, investigation, study_samples, arrayExpressId):
+    def __init__(self, investigation_file_name, study_file_name, protocol_file_name, study_type, investigation, study_samples,
+                 arrayExpressId):
 
         self.investigation_file_name = investigation_file_name
         self.study_file_name = study_file_name
+        self.protocol_file_name = protocol_file_name
         self.study_type = study_type
 
         self.investigation = investigation
@@ -196,4 +198,25 @@ def read_archive(archive_filename):
                 raise NotImplementedError(
                     'Only support 1 assay per investigation')
 
-        return Archive(investigation_file_name, study_file_name, study_type, investigation, study_sample, arrayExpressId)
+        if 'STUDY PROTOCOLS' not in investigation:
+            raise ValueError('No STUDY PROTOCOLS section defined in {0}'.format(
+                investigation_file_name))
+
+        def getDescription(d):
+            return d['Study Protocol Description']
+
+        descriptions = map(getDescription, investigation['STUDY PROTOCOLS'])
+        if len(descriptions) == 0:
+            raise ValueError('There should at least be 1 "Study Protocol Description" specified.')
+
+        if descriptions.count(descriptions[0]) != len(descriptions):
+            raise ValueError('All specified "Study Protocol Description" values should be equal.')
+
+        protocol_file_name = descriptions[0]
+
+        if protocol_file_name not in filenames:
+            raise IOError('Protocol file "{0}" is missing from archive'.format(
+                protocol_file_name))
+
+        return Archive(investigation_file_name, study_file_name, protocol_file_name,study_type, investigation, study_sample,
+                       arrayExpressId)

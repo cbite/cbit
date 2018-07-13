@@ -31,9 +31,8 @@ class BiomaterialsStudyProtocolsResource(object):
 
         if os.path.exists(studyArchivePath):
             a = read_archive(studyArchivePath)
-            # TODO@MT switch this to the protocols file
             with zipfile.ZipFile(studyArchivePath, "r") as archiveZf:
-                file_content = archiveZf.read(a.investigation_file_name)
+                file_content = archiveZf.read(a.protocol_file_name)
                 resp.content_type = 'text/plain'
                 resp.append_header("Content-Disposition", 'attachment; filename="{0}"'.format(a.investigation_file_name))
                 resp.stream = file_content
