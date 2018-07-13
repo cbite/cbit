@@ -34,11 +34,6 @@ import {FieldMetaService} from '../../../core/services/field-meta.service';
               <div *ngIf="!!saveError" class="alert alert-danger" role="alert">Save failed: {{ saveError }}</div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-xs-12">
-              <!-- Footer whitespace -->
-            </div>
-          </div>
         </div>
       </div>
     </div>
