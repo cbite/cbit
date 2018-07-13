@@ -31,7 +31,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   'Array or chip design': {
     'category': 'Technical > Microarray',
     'dataType': 'string',
-    'description': 'The design of the microarray, e.g. Illumina HT12v4', // TODO@MT change
+    'description': 'The design of the microarray, e.g. Illumina HT12v4',
     'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
@@ -39,7 +39,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   'Platform': {
     'category': 'Technical > Microarray',
     'dataType': 'string',
-    'description': 'Type of platform/manufacturer used, e.g. Illumina, Affymetrix, Agilent.', // TODO@MT change
+    'description': 'Type of platform/manufacturer used, e.g. Illumina, Affymetrix, Agilent.',
     'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
@@ -126,7 +126,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   'RNAseq Platform': {
     'category': 'Technical > RNA sequencing',
     'dataType': 'string',
-    'description': 'Type of platform/manufacturer used, e.g. Illumina, Affymetrix, Agilent.', // TODO@MT change
+    'description': 'Type of RNAseq platform/manufacturer used, e.g. Illumina.',
     'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
@@ -134,7 +134,7 @@ export const KNOWN_METADATA_FIELDS: { [fieldName: string]: FieldMeta } = {
   'RNAseq System': {
     'category': 'Technical > RNA sequencing',
     'dataType': 'string',
-    'description': 'The design of the RNAseq chip, e.g. Illumina HT12v4', // TODO@MT change
+    'description': 'Type of RNAseq system used, e.g. HiSeq 2000.',
     'visibility': 'visible',
     'dimensions': 'none',
     'preferredUnit': 'none'
