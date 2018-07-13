@@ -14,6 +14,8 @@
   }
 
   .body {
+    padding: 10px 0;
+
     .authors {
       padding: 10px 10px 5px 10px;
       font-size: $font-size-small;
@@ -23,33 +25,33 @@
       padding: 5px 10px 10px 10px;
       font-size: $font-size-small;
     }
+  }
 
-    .links {
-      background-color: $color-gray;
-      padding: 10px;
-      border-top: 1px solid darken($color-gray, 10%);
-      font-size: $font-size-small;
-      color: $color-blue;
+  .links {
+    background-color: $color-gray;
+    padding: 10px;
+    border-top: 1px solid darken($color-gray, 10%);
+    font-size: $font-size-small;
+    color: $color-blue;
 
-      .download {
-        display: inline-block;
-        margin: 0 10px;
-        cursor: pointer;
+    .download {
+      display: inline-block;
+      margin: 0 10px;
+      cursor: pointer;
 
-        &:hover {
-          color: $color-dark-blue;
-        }
+      &:hover {
+        color: $color-dark-blue;
       }
+    }
 
-      .link {
-        display: inline-block;
-        margin: 0 10px;
-        cursor: pointer;
-        float: right;
+    .link {
+      display: inline-block;
+      margin: 0 10px;
+      cursor: pointer;
+      float: right;
 
-        &:hover {
-          color: $color-dark-blue;
-        }
+      &:hover {
+        color: $color-dark-blue;
       }
     }
   }

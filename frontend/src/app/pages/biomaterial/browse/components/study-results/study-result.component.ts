@@ -22,19 +22,19 @@ import {Study} from '../../../../../core/types/study.model';
           <span style="margin-right: 5px;"><i class="far fa-ellipsis-v"></i></span> {{ match.sampleMatches.length }}
           matching samples
         </div>
-        <div class="links">
-          <div class="download" (click)="onDownloadStudy()">
-            <i class="far fa-download"></i> Download study
-          </div>
-          <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', pubmedId)">
-            <i class="far fa-link"></i> PubMed
-          </div>
-          <div class="link" *ngFor="let doi of doiIds" (click)="onOpenExternal('DOI', doi)">
-            <i class="far fa-link"></i> DOI
-          </div>
-          <div class="link" (click)="onOpenExternal('ArrayExpress', arrayExpressId)">
-            <i class="far fa-link"></i> Array Express
-          </div>
+      </div>
+      <div class="links">
+        <div class="download" (click)="onDownloadStudy()">
+          <i class="far fa-download"></i> Download study
+        </div>
+        <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', pubmedId)">
+          <i class="far fa-link"></i> PubMed
+        </div>
+        <div class="link" *ngFor="let doi of doiIds" (click)="onOpenExternal('DOI', doi)">
+          <i class="far fa-link"></i> DOI
+        </div>
+        <div class="link" (click)="onOpenExternal('ArrayExpress', arrayExpressId)">
+          <i class="far fa-link"></i> Array Express
         </div>
       </div>
     </div>

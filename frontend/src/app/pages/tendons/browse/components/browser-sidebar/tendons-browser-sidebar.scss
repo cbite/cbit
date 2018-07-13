@@ -36,42 +36,5 @@
         }
       }
     }
-
-    .properties-description {
-      height: 30px;
-      line-height: 30px;
-      text-align: left;
-
-      a {
-        outline: none;
-      }
-    }
-  }
-
-  .filter-panel {
-
-    .filter-heading {
-      width: 100%;
-      background-color: $color-blue;
-      color: white;
-      height: 40px;
-      line-height: 40px;
-      padding: 0 20px;
-    }
-
-    .filter-content {
-      background-color: $color-gray;
-    }
-  }
-
-  .shortcut {
-    float: right;
-    cursor: pointer;
-    font-size: $font-size-small;
-    color: $color-gray;
-
-    &:hover {
-      color: white;
-    }
   }
 }

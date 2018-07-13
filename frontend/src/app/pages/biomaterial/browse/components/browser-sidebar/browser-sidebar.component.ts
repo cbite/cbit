@@ -47,7 +47,6 @@ import {Observable} from 'rxjs/Observable';
 })
 export class BrowserSidebarComponent implements OnInit, OnDestroy {
 
-  // For inspiration, see: http://blog.thoughtram.io/angular/2016/01/06/taking-advantage-of-observables-in-angular2.html
   searchTextInForm = new FormControl();
   includeControlsInForm = new FormControl();
   allSampleFilterMatchCounts = {};
