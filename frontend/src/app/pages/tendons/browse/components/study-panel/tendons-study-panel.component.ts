@@ -18,7 +18,7 @@ import {TendonsStudy} from '../../../../../core/types/Tendons-study';
           <div class="detail-column"><span class="field-label">Cell Origin</span> {{study.cellOrigin}}</div>
         </div>
         <div class="detail-row">
-            <div class="detail-column"><span class="field-label">Sample Size</span> {{study.sampleSize}}</div>
+          <div class="detail-column"><span class="field-label">Sample Size</span> {{study.sampleSize}}</div>
         </div>
       </div>
       <div class="footer">

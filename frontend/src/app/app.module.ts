@@ -77,6 +77,7 @@ import {BioMaterialStudyUploadPage} from './pages/biomaterial/upload/biomaterial
 import {BioMaterialMetadataPage} from './pages/biomaterial/metadata/biomaterial-metadata.page';
 import {TendonsStudyPanelComponent} from './pages/tendons/browse/components/study-panel/tendons-study-panel.component';
 import {TendonsBrowserSidebarComponent} from './pages/tendons/browse/components/browser-sidebar/tendons-browser-sidebar.component';
+import {TendonsStudyResultsHeaderComponent} from './pages/tendons/browse/components/study-results-header/tendons-study-results-header.component';
 
 @NgModule(
   {
@@ -112,6 +113,7 @@ import {TendonsBrowserSidebarComponent} from './pages/tendons/browse/components/
       BioMaterialMetadataPage,
       FieldMetadataEditorComponent,
       BioMaterialStudyManagementPage,
+      TendonsStudyResultsHeaderComponent,
       StudyMetadataEditorComponent,
       BrowserSidebarComponent,
       LoginPopupComponent,
