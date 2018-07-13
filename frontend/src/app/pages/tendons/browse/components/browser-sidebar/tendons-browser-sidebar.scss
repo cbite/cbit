@@ -3,4 +3,38 @@
 .sidebar {
   min-width: 280px;
   width: 100%;
+
+  .sidebar-header {
+    .searchbox {
+      position: relative;
+
+      .search-title {
+        background-color: $color-blue;
+        color: white;
+        padding: 0 20px;
+        line-height: 40px;
+        height: 40px;
+
+        .info-icon {
+          float: right;
+          font-size: $font-size-small;
+          color: $color-gray;
+          margin-right: 10px;
+        }
+      }
+
+      .search-content {
+        vertical-align: top;
+        overflow: hidden;
+        height: 50px;
+        line-height: 50px;
+        padding: 0 20px;
+
+        .searchText {
+          height: 30px;
+          width: 100%;
+        }
+      }
+    }
+  }
 }

@@ -17,4 +17,17 @@
 
 .main {
   padding: 20px;
+
+  .title-panel {
+    margin-bottom: 40px;
+  }
+
+  .sorting {
+    color: $color-blue;
+    cursor: pointer;
+
+    &:hover {
+      color: $color-dark-blue;
+    }
+  }
 }
