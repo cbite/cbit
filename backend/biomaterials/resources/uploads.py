@@ -11,6 +11,7 @@ from biomaterials.data import importer
 
 import requests
 import zipfile
+import tempfile
 
 # Possible upload statuses
 from biomaterials.data.archive import read_archive
@@ -20,6 +21,7 @@ UPLOAD_STATUS_UPLOADING = 'uploading'
 UPLOAD_STATUS_UPLOADED = 'uploaded'
 UPLOAD_STATUS_INGESTING = 'ingesting'
 UPLOAD_STATUS_INGESTED = 'ingested'
+
 
 class BiomaterialsUploadsIRODSResource(object):
     def on_post(self, req, resp, folder_name):
@@ -158,16 +160,38 @@ def complete_upload(upload_uuid, db_conn, filepath, resp):
             description="Malformed archive: {0}".format(str(e))
         )
 
+    try:
+        # Update the investigation file by removing some lines
+        lines = None
+        with zipfile.ZipFile(filepath, mode='r') as z:
+            with z.open(a.investigation_file_name, 'r') as f:
+                lines = f.readlines()
+
+        filteredLines = []
+        for line in lines:
+            if not line.startswith(('Study Assay File Name',
+                                    'Study Protocol Name',
+                                    'Study Protocol Type',
+                                    'Study Protocol Parameters Name')):
+                filteredLines.append(line)
+
+        updateArchive(filepath, 'i_Investigation.txt', filteredLines)
+
+    except Exception as e:
+        raise falcon.HTTPBadRequest(
+            description="Error during update of investigation file: {0}".format(str(e))
+        )
+
     # Enumerate all fields in upload
-    #d = reader.apply_special_treatments_to_study_sample(
+    # d = reader.apply_special_treatments_to_study_sample(
     #    reader.join_study_sample_and_assay(
     #        reader.clean_up_study_samples(a.study_sample),
     #        reader.clean_up_assay(a.assay)
     #    )
-    #)
+    # )
     #
-    #fieldNames = set(('Sample Name',))
-    #for i, (k, v) in enumerate(d.iteritems()):
+    # fieldNames = set(('Sample Name',))
+    # for i, (k, v) in enumerate(d.iteritems()):
     #    fieldNames = fieldNames.union(set(v.keys()))
 
     # Analyze fields
@@ -198,6 +222,49 @@ def complete_upload(upload_uuid, db_conn, filepath, resp):
     resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 
 
+def updateArchive(zip_file_path, filename, lines):
+    zip_name = os.path.basename(zip_file_path)
+    zip_dir = os.path.dirname(zip_file_path)
+
+    # Create a temporary directory
+    temp_dir = os.path.join(zip_dir, 'temp')
+    os.makedirs(temp_dir)
+
+    # Temporarily create a copy of the zip archive
+    shutil.copy(zip_file_path, temp_dir)
+    temp_zip_file_path = os.path.join(temp_dir, zip_name)
+
+    # Create a dir for the temporary archive content
+    temp_zip_content_dir = os.path.join(temp_dir, 'arch')
+    os.makedirs(temp_zip_content_dir)
+
+    # Unzip the temporary archive
+    temp_zip_ref = zipfile.ZipFile(temp_zip_file_path, 'r')
+    temp_zip_ref.extractall(temp_zip_content_dir)
+    temp_zip_ref.close()
+
+    # Remove temporary zip archive
+    os.remove(temp_zip_file_path)
+
+    # Update the specified file with the new lines
+    inv_file_path = os.path.join(temp_zip_content_dir, filename)
+    inv_file = open(inv_file_path, "w")
+
+    for line in lines:
+        inv_file.write(line)
+    inv_file.close()
+
+    # Create new archive
+    shutil.make_archive(temp_zip_file_path.strip('.zip'), 'zip', temp_zip_content_dir)
+
+    # Remove original zip archive and replace with new one
+    os.remove(zip_file_path)
+    shutil.move(temp_zip_file_path, zip_dir)
+
+    # Clean up temporary directory
+    shutil.rmtree(temp_dir)
+
+
 class BiomaterialsUploadResource(object):
     def on_get(self, req, resp, upload_uuid):
         """Get info about a particular upload"""
@@ -224,7 +291,6 @@ class BiomaterialsUploadResource(object):
         else:
             raise falcon.HTTPNotFound(description='No upload {0} in progress (or upload went stale after {1})'
                                       .format(upload_uuid, cfg.UPLOAD_STALE_INTERVAL))
-
 
     def on_put(self, req, resp, upload_uuid):
         """
@@ -264,8 +330,9 @@ class BiomaterialsUploadResource(object):
         status = result[0]
         if status != UPLOAD_STATUS_UPLOADED:
             if status == UPLOAD_STATUS_UPLOADING:
-                raise falcon.HTTPBadRequest(description='Upload {0} still in progress, please GET /uploads/{0} until status is "{1}"'
-                                            .format(upload_uuid, UPLOAD_STATUS_UPLOADED))
+                raise falcon.HTTPBadRequest(
+                    description='Upload {0} still in progress, please GET /uploads/{0} until status is "{1}"'
+                        .format(upload_uuid, UPLOAD_STATUS_UPLOADED))
             else:
                 raise falcon.HTTPBadRequest(description='Unexpected status for upload {0}.  Expected {1}, saw {2}'
                                             .format(upload_uuid, UPLOAD_STATUS_UPLOADED, status))
@@ -322,13 +389,12 @@ class BiomaterialsUploadResource(object):
             }
         resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 
-
     def _ingest_archive(self, filename, db_conn, study_uuid, publicationDate, visible):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
         if not es.indices.exists(cfg.ES_INDEX):
-            raise falcon.HTTPInternalServerError(description='ElasticSearch database not ready.  Have you run set_up_dbs.py?')
+            raise falcon.HTTPInternalServerError(
+                description='ElasticSearch database not ready.  Have you run set_up_dbs.py?')
 
         importer.import_archive(db_conn, es, filename, study_uuid, publicationDate, visible)
-
