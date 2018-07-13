@@ -1,41 +1,20 @@
 @import '../../../../variables';
 
-.page {
-  margin-top: 40px;
-  margin-bottom: 80px;
+.container-fluid {
+  padding: 0;
+  margin: 0;
+}
 
-  .page-content {
-    max-width: 1000px;
-    margin: auto;
+.sidebar {
+  margin-left: 0;
+  padding-left: 0;
+  min-width: 280px;
+  height: calc(100vh - 50px);
+  display: block;
+  background-color: $color-gray;
+  border-right: 1px solid darken($color-gray, 10%);
+}
 
-    .row{
-      margin: 10px 0;
-    }
-
-    .study {
-      background-color: $color-gray;
-      margin: 10px 0;
-      padding: 10px;
-
-      .title{
-        font-size: $font-size-big;
-        text-align: left;
-      }
-
-      .year{
-        text-align: right;
-      }
-
-      .link {
-        color: $color-blue;
-        display: inline-block;
-        margin-right: 10px;
-        cursor: pointer;
-
-        &:hover {
-          color: $color-dark-blue;
-        }
-      }
-    }
-  }
+.main {
+  padding: 20px;
 }

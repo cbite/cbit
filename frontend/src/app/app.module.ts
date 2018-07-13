@@ -75,6 +75,8 @@ import {BioMaterialStudyManagementPage} from './pages/biomaterial/management/bio
 import {BioMaterialStudiesBrowsePage} from './pages/biomaterial/browse/biomaterial-studies-browse.page';
 import {BioMaterialStudyUploadPage} from './pages/biomaterial/upload/biomaterial-study-upload.page';
 import {BioMaterialMetadataPage} from './pages/biomaterial/metadata/biomaterial-metadata.page';
+import {TendonsStudyPanelComponent} from './pages/tendons/browse/components/study-panel/tendons-study-panel.component';
+import {TendonsBrowserSidebarComponent} from './pages/tendons/browse/components/browser-sidebar/tendons-browser-sidebar.component';
 
 @NgModule(
   {
@@ -94,6 +96,7 @@ import {BioMaterialMetadataPage} from './pages/biomaterial/metadata/biomaterial-
       AppHeaderMenuComponent,
       AppFooterComponent,
       ChangePasswordComponent,
+      TendonsBrowserSidebarComponent,
       UserManagementPage,
       UserEditorComponent,
       AddUserComponent,
@@ -130,6 +133,7 @@ import {BioMaterialMetadataPage} from './pages/biomaterial/metadata/biomaterial-
       DropdownDirective,
       DropdownMenuDirective,
       StudyRedirectComponent,
+      TendonsStudyPanelComponent,
       PeoplePage,
       StudyCategoryComponent,
       CommonPropertiesComponent,
