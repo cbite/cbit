@@ -9,17 +9,4 @@ input {
 
 .button-panel {
   margin-top: 30px;
-
-  .login {
-    background-color: $color-blue;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    min-width: 80px;
-
-    &:hover {
-      background-color: $color-dark-blue;
-    }
-  }
 }

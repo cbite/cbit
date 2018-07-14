@@ -8,6 +8,11 @@
     max-width: 1000px;
     margin: auto;
 
+    .page-title {
+      font-size: $font-size-huge;
+      margin-bottom: 20px;
+    }
+
     .header {
       height: 40px;
       line-height: 40px;

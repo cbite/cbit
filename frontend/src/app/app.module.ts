@@ -50,7 +50,6 @@ import {reducers} from './core/redux/reducers/index';
 import {AppHeaderMenuComponent} from './core/components/app-header/app-header-menu.component';
 import {FieldMetadataFormComponent} from './pages/biomaterial/upload/components/FieldMetadataFormComponent';
 import {UserManagementPage} from './pages/user-management/user-management.page';
-import {StudyMetadataEditorComponent} from './pages/biomaterial/management/components/study-mentadata-editor.component';
 import {FieldMetaService} from './core/services/field-meta.service';
 import {ChangePasswordComponent} from './popups/change-password/change-password.component';
 import {ConfirmationComponent} from './popups/confirmation/confirmation.component';
@@ -78,6 +77,7 @@ import {TendonsStudyPanelComponent} from './pages/tendons/browse/components/stud
 import {TendonsBrowserSidebarComponent} from './pages/tendons/browse/components/browser-sidebar/tendons-browser-sidebar.component';
 import {TendonsStudyResultsHeaderComponent} from './pages/tendons/browse/components/study-results-header/tendons-study-results-header.component';
 import {FieldMetadataEditorComponent} from './pages/biomaterial/metadata/components/metadata-editor-form.component';
+import {StudyManagementListComponent} from './pages/biomaterial/management/components/study-management-list.component';
 
 @NgModule(
   {
@@ -114,7 +114,7 @@ import {FieldMetadataEditorComponent} from './pages/biomaterial/metadata/compone
       FieldMetadataEditorComponent,
       BioMaterialStudyManagementPage,
       TendonsStudyResultsHeaderComponent,
-      StudyMetadataEditorComponent,
+      StudyManagementListComponent,
       BrowserSidebarComponent,
       LoginPopupComponent,
       AllFieldsForVisibilityComponent,

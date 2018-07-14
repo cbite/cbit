@@ -10,7 +10,11 @@ import {AppUrls} from '../../../router/app-urls';
   template: `
     <div class="page">
       <div class="page-content">
-        <h3>Tendons Study</h3>
+        <div class="page-header">
+          <div class="page-title">Tendons Study</div>
+          <div class="back-link" (click)="onBackClicked()"><i class="far fa-angle-left"></i> Back</div>
+        </div>
+
         <form *ngIf="loaded" [formGroup]="registerForm" (ngSubmit)="onSave()">
           <div class="form-group">
             <label>Name</label>
@@ -102,7 +106,7 @@ import {AppUrls} from '../../../router/app-urls';
             <input type="checkbox" formControlName="visible" class="form-control" [(ngModel)]="study.visible"/>
           </div>
           <div class="form-group">
-            <button [disabled]="loading" class="btn btn-primary">Save</button>
+            <button [disabled]="loading" class="button-standard">Save</button>
           </div>
         </form>
       </div>
@@ -146,6 +150,10 @@ export class TendonsStudyEditorPage implements OnInit {
       visible: [this.study.visible],
     });
     this.loaded = true;
+  }
+
+  public onBackClicked(): void {
+    this.router.navigateByUrl(AppUrls.manageTendonsStudiesUrl);
   }
 
   get f() {

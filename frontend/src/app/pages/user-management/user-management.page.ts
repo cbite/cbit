@@ -9,7 +9,9 @@ import {PopupService} from '../../core/services/popup.service';
   template: `
     <div class="page">
       <div class="page-content">
-        <h2>Manage Users</h2>
+        <div class="page-title">
+          Users
+        </div>
 
         <div *ngIf="inProgress">Loading...
           <spinner></spinner>
@@ -21,8 +23,8 @@ import {PopupService} from '../../core/services/popup.service';
                             (deleteUser)="onDeleteUserClicked($event)">
           </cbit-user-editor>
 
-          <button class="btn btn-success" (click)="onAddUserClicked()">
-            <span class="glyphicon glyphicon-plus"></span> Add New User
+          <button class="button-standard" (click)="onAddUserClicked()">
+            <span class="glyphicon glyphicon-plus"></span>New User
           </button>
 
         </div>

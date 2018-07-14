@@ -1,11 +1,6 @@
 import {Component, OnInit, ChangeDetectorRef, OnChanges, Input, Output, EventEmitter} from '@angular/core';
-import {StudyService} from '../../../../core/services/study.service';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {Study} from '../../../../core/types/study.model';
-import {AuthenticationService} from '../../../../core/authentication/authentication.service';
-import {URLService} from '../../../../core/services/url.service';
-import {HttpGatewayService} from '../../../../core/services/http-gateway.service';
-import {Observable} from 'rxjs/Observable';
 
 export enum StudyState {
   Present,
@@ -13,9 +8,9 @@ export enum StudyState {
   Deleted
 };
 
-// TODO: Refactor this component and the uploader's field-metadata-form into a single metadata editor
 @Component({
-  selector: 'study-metadata-editor',
+  styleUrls: ['./study-management-list.scss'],
+  selector: 'cbit-study-management-list',
   template: `
     <div *ngIf="form" [formGroup]="form">
 
@@ -45,8 +40,8 @@ export enum StudyState {
           </td>
           <td>
             <div *ngIf="!isDeletingStudy(kv.key)">
-              <button *ngIf="!isDeleted(kv.key)" class="btn btn-danger" (click)="doDeleteStudy(kv.key)">Delete</button>
-              <button *ngIf=" isDeleted(kv.key)" class="btn btn-danger" disabled="true">Deleted</button>
+              <button *ngIf="!isDeleted(kv.key)" class="button-standard delete" (click)="doDeleteStudy(kv.key)">Delete</button>
+              <button *ngIf=" isDeleted(kv.key)" class="button-standard delete" disabled="true">Deleted</button>
             </div>
             <div *ngIf=" isDeletingStudy(kv.key)">
               <button class="btn btn-danger" disabled>Deleting...</button>
@@ -56,20 +51,9 @@ export enum StudyState {
         </tbody>
       </table>
     </div>
-  `,
-  styles: [`
-    .deletedStudyLabel {
-      text-decoration: line-through;
-    }
-
-    .deletedStudyPublicationDate {
-      text-decoration: line-through;
-      background-color: #eee;
-      color: #888;
-    }
-  `]
+  `
 })
-export class StudyMetadataEditorComponent {
+export class StudyManagementListComponent {
   @Input() studies: { [studyId: string]: Study } = {};
   @Input() form: FormGroup;
   @Input() studyState: { [studyId: string]: StudyState } = {};

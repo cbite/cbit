@@ -67,3 +67,36 @@ body {
 a {
   color: $color-blue;
 }
+
+//============================//
+//======= ButtonL ==========//
+//============================//
+
+.button-standard {
+  background-color: $color-blue;
+  color: white;
+  padding: 0 20px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  min-width: 80px;
+  outline: none;
+
+  &:hover {
+    background-color: $color-dark-blue;
+  }
+
+  &:focus {
+    outline:0;
+  }
+
+  &.delete {
+    background-color: #d72e3d;
+
+    &:hover {
+      background-color: darken(#d72e3d, 10%);
+    }
+  }
+}

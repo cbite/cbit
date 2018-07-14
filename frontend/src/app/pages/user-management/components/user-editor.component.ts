@@ -20,12 +20,12 @@ import {User, UserState} from '../types/User';
           <td>{{user.username}}</td>
           <td>{{user.realname}}</td>
           <td>
-            <button (click)="onChangePwdClicked(user.username)" class="btn btn-primary">
+            <button (click)="onChangePwdClicked(user.username)" class="button-standard">
               Change Password
             </button>
           </td>
           <td>
-            <button (click)="onDeleteClicked(user.username)" class="btn btn-danger">
+            <button (click)="onDeleteClicked(user.username)" class="button-standard delete">
               Delete
             </button>
           </td>

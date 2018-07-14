@@ -5,20 +5,26 @@ import {URLService} from '../../../core/services/url.service';
 import {HttpGatewayService} from '../../../core/services/http-gateway.service';
 import {FieldMeta} from '../../../core/types/field-meta';
 import {FieldMetaService} from '../../../core/services/field-meta.service';
+import {AppUrls} from '../../../router/app-urls';
+import {Router} from '@angular/router';
 
 @Component({
   styleUrls: ['./biomaterial-metadata.scss'],
   template: `
     <div class="page">
       <div class="page-content">
-        <h3>Edit Field Metadata</h3>
+        <div class="page-header">
+          <div class="page-title">Edit Field Metadata</div>
+          <div class="back-link" (click)="onBackClicked()"><i class="far fa-angle-left"></i> Back</div>
+        </div>
 
         <div *ngIf="!ready">
           Loading...
           <spinner></spinner>
         </div>
         <div *ngIf="ready" class="container">
-          <cbit-field-metadata-editor [fieldMetas]="fieldMetas" (form)="updateForm($event)"></cbit-field-metadata-editor>
+          <cbit-field-metadata-editor [fieldMetas]="fieldMetas"
+                                      (form)="updateForm($event)"></cbit-field-metadata-editor>
           <div class="row">
 
             <div class="col-xs-2">
@@ -48,17 +54,23 @@ export class BioMaterialMetadataPage implements OnInit {
   saveError = '';
 
   constructor(private _url: URLService,
+              private router: Router,
               private fieldMetaService: FieldMetaService,
               private httpGatewayService: HttpGatewayService,
               private _changeDetectorRef: ChangeDetectorRef) {
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     const self = this;
     this.fieldMetaService.getAllFieldMetas().then(fieldMetas => {
       this.fieldMetas = fieldMetas;
       this.ready = true;
     });
+  }
+
+
+  public onBackClicked(): void {
+    this.router.navigateByUrl(AppUrls.manageBioMaterialStudiesUrl);
   }
 
   updateForm(form: FormGroup) {

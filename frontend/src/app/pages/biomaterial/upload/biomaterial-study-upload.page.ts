@@ -15,44 +15,52 @@ import {FieldAnalysisResults} from './types/FieldAnalysisResults';
 import {UploadsResponse} from './types/UploadsResponse';
 import {Observable} from 'rxjs/Observable';
 import {FieldMeta} from '../../../core/types/field-meta';
+import {AppUrls} from '../../../router/app-urls';
 
 @Component({
   styleUrls: ['./biomaterial-study-upload.scss'],
   template: `
     <div class="page">
       <div class="page-content">
+        <div class="page-header">
+          <div class="page-title">Biomaterial Study</div>
+          <div class="back-link" (click)="onBackClicked()"><i class="far fa-angle-left"></i> Back</div>
+        </div>
         <div class="container">
-          <h3>Upload New Study</h3>
 
-          <div [class.hidden]="step !== 1">
-            <h4>Step 1a: Upload a .zip archive in ISAtab format from RIT (iRODS)</h4>
-            <p>Click on an iRODS folder name to start upload:</p>
-            <div class="row">
-              <div class="col-md-8 col-md-offset-2 well irods-list">
-                <div *ngIf="!iRODSListReady">
-                  Fetching study list from iRODS...
-                  <spinner></spinner>
+          <div style="margin-bottom: 20px">
+            <div [class.hidden]="step !== 1">
+              <h5>Step 1a: Upload a .zip archive in ISAtab format from RIT (iRODS)</h5>
+              <p>Click on an iRODS folder name to start upload:</p>
+              <div class="row">
+                <div class="col-md-8 col-md-offset-2 well irods-list">
+                  <div *ngIf="!iRODSListReady">
+                    Fetching study list from iRODS...
+                    <spinner></spinner>
+                  </div>
+                  <div *ngIf="iRODSListReady">
+                    <ul>
+                      <li *ngFor="let iRODSStudyName of iRODSStudyNames">
+                        <a href="#" (click)="$event.preventDefault(); kickOffIRODSUpload(iRODSStudyName)">
+                          {{ iRODSStudyName }}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-                <div *ngIf="iRODSListReady">
-                  <ul>
-                    <li *ngFor="let iRODSStudyName of iRODSStudyNames">
-                      <a href="#" (click)="$event.preventDefault(); kickOffIRODSUpload(iRODSStudyName)">
-                        {{ iRODSStudyName }}
-                      </a>
-                    </li>
-                  </ul>
+              </div>
+              <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                  <span class="status" *ngIf="iRODSStatus">Status: {{ iRODSStatus }}</span>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-8 col-md-offset-2">
-                <span class="status" *ngIf="iRODSStatus">Status: {{ iRODSStatus }}</span>
-              </div>
-            </div>
+          </div>
 
-            <h3>OR...</h3>
+          <h4>OR...</h4>
 
-            <h4>Step 1b: Upload a .zip archive in ISAtab format from this computer</h4>
+          <div style="margin-top: 20px">
+            <h5>Step 1b: Upload a .zip archive in ISAtab format from this computer</h5>
             <div [class.disabled]="uploadFileChooserDisabled">
               <div ng2FileDrop
                    [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
@@ -81,55 +89,55 @@ import {FieldMeta} from '../../../core/types/field-meta';
               </div>
             </div>
           </div>
-
-          <div [class.hidden]="step !== 2">
-            <h2>Step 2: Enter metadata</h2>
-
-            <h3>Study Metadata</h3>
-            <div class="form-inline">
-              <div class="row">
-                <div class="form-group col-sm-5 col-sm-offset-1">
-                  <label for="studyPublicationDate">Publication Date</label>
-                  <input type="text" id="studyPublicationDate" [(ngModel)]="studyPublicationDate" class="form-control">
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="checkbox col-sm-5 col-sm-offset-1">
-                  <label for="studyInitiallyVisible">
-                    <input type="checkbox" id="studyInitiallyVisible" [(ngModel)]="studyInitiallyVisible">
-                    Visible
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <h3>New Fields</h3>
-
-            <div *ngIf="!unknownFields">
-              No new fields in this study
-            </div>
-
-        <div *ngIf="unknownFields">
-          <cbit-field-metadata-form [fieldNames]="unknownFields" [fieldAnalyses]="fieldAnalyses"
-                               (form)="fieldMetadataForm = $event"></cbit-field-metadata-form>
         </div>
 
-            <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">
-              {{ confirmMetadataButtonName }}
-            </button>
-          </div>
+        <div [class.hidden]="step !== 2">
+          <h2>Step 2: Enter metadata</h2>
 
-          <div *ngIf="step === 3">
-            <h2>Upload succeeded!</h2>
-            <study [studyId]="upload_uuid" [showTitle]="true"></study>
-          </div>
-
-          <div *ngIf="step === 4">
-            <h2>Upload failed!</h2>
-            <div class="alert alert-danger">
-              {{ errorMessage }}
+          <h3>Study Metadata</h3>
+          <div class="form-inline">
+            <div class="row">
+              <div class="form-group col-sm-5 col-sm-offset-1">
+                <label for="studyPublicationDate">Publication Date</label>
+                <input type="text" id="studyPublicationDate" [(ngModel)]="studyPublicationDate" class="form-control">
+              </div>
             </div>
+
+            <div class="row">
+              <div class="checkbox col-sm-5 col-sm-offset-1">
+                <label for="studyInitiallyVisible">
+                  <input type="checkbox" id="studyInitiallyVisible" [(ngModel)]="studyInitiallyVisible">
+                  Visible
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <h3>New Fields</h3>
+
+          <div *ngIf="!unknownFields">
+            No new fields in this study
+          </div>
+
+          <div *ngIf="unknownFields">
+            <cbit-field-metadata-form [fieldNames]="unknownFields" [fieldAnalyses]="fieldAnalyses"
+                                      (form)="fieldMetadataForm = $event"></cbit-field-metadata-form>
+          </div>
+
+          <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">
+            {{ confirmMetadataButtonName }}
+          </button>
+        </div>
+
+        <div *ngIf="step === 3">
+          <h2>Upload succeeded!</h2>
+          <study [studyId]="upload_uuid" [showTitle]="true"></study>
+        </div>
+
+        <div *ngIf="step === 4">
+          <h2>Upload failed!</h2>
+          <div class="alert alert-danger">
+            {{ errorMessage }}
           </div>
         </div>
       </div>
@@ -164,7 +172,7 @@ export class BioMaterialStudyUploadPage implements OnInit {
   studyInitiallyVisible = true;
 
   constructor(private _url: URLService,
-              private _router: Router,
+              private router: Router,
               private _auth: AuthenticationService,
               private httpGatewayService: HttpGatewayService,
               private changeDetectorRef: ChangeDetectorRef) {
@@ -177,7 +185,7 @@ export class BioMaterialStudyUploadPage implements OnInit {
     });
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     const onError = (err, caught) => {
       this.iRODSStatus = `Failed to get list of studies from iRODS: ${err.statusText}!`;
       this.iRODSListReady = true;
@@ -190,23 +198,10 @@ export class BioMaterialStudyUploadPage implements OnInit {
       this.iRODSListReady = true;
       this.changeDetectorRef.detectChanges();
     });
+  }
 
-    /* $.ajax({
-       type: 'GET',
-       url: this._url.iRODSListResource(),
-       headers: this._auth.headers(),
-       dataType: 'json',
-       success: (iRODSList: string[]) => {
-         this.iRODSStudyNames = iRODSList;
-       },
-       error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
-         this.iRODSStatus = `Failed to get list of studies from iRODS: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
-       },
-       complete: () => {
-         this.iRODSListReady = true;
-         this.changeDetectorRef.detectChanges();
-       }
-     });*/
+  public onBackClicked(): void {
+    this.router.navigateByUrl(AppUrls.manageBioMaterialStudiesUrl);
   }
 
   fileOverBase(e: any): void {

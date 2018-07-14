@@ -10,7 +10,9 @@ import {AppUrls} from '../../../router/app-urls';
   template: `
     <div class="page">
       <div class="page-content">
-        <h3>Manage Tendons Studies</h3>
+        <div class="page-title">
+          Tendons Studies
+        </div>
         <div class="row header">
           <div class="col-4">Study Title</div>
           <div class="col-4">Gene Expression Type</div>
@@ -26,8 +28,8 @@ import {AppUrls} from '../../../router/app-urls';
             <div class="action" (click)="onDelete(study)">Delete</div>
           </div>
         </div>
-        <button  class="add-button btn btn-primary" (click)="onAddNewStudy()">
-          Add new study
+        <button  class="button-standard" (click)="onAddNewStudy()">
+          New Study
         </button>
       </div>
     </div>
