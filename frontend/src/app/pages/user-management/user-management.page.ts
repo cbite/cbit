@@ -17,16 +17,20 @@ import {PopupService} from '../../core/services/popup.service';
           <spinner></spinner>
         </div>
         <div *ngIf="!inProgress" class="container">
+          <div class="container">
+            <cbit-user-editor [users]="users"
+                              (changePwd)="onChangePwdClicked($event)"
+                              (deleteUser)="onDeleteUserClicked($event)">
+            </cbit-user-editor>
 
-          <cbit-user-editor [users]="users"
-                            (changePwd)="onChangePwdClicked($event)"
-                            (deleteUser)="onDeleteUserClicked($event)">
-          </cbit-user-editor>
-
-          <button class="button-standard" (click)="onAddUserClicked()">
-            <span class="glyphicon glyphicon-plus"></span>New User
-          </button>
-
+            <div class="row" style="margin-top: 30px;">
+              <div class="col-12" style="text-align:right">
+                <button class="button-standard" (click)="onAddUserClicked()">
+                  <span class="glyphicon glyphicon-plus"></span>New User
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -83,6 +83,7 @@ a {
   border: none;
   min-width: 80px;
   outline: none;
+  margin: 0 5px;
 
   &:hover {
     background-color: $color-dark-blue;
@@ -90,6 +91,24 @@ a {
 
   &:focus {
     outline:0;
+  }
+
+  &.cancel {
+    border: 1px solid $color-blue;
+    background-color: white;
+    color: $color-blue;
+
+    &:hover {
+      background-color: $color-blue;
+      color: white;
+    }
+  }
+
+  &.small {
+    font-size: $font-size-small;
+    height: 30px;
+    line-height: 30px;
+    min-width: 80px;
   }
 
   &.delete {

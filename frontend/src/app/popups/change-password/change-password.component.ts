@@ -27,11 +27,11 @@ import {AuthenticationService} from '../../core/authentication/authentication.se
           <div *ngIf="errorMessage">
             <div class="alert alert-danger">{{ errorMessage }}</div>
           </div>
-          <div class="button-panel">
-            <input *ngIf="!loginProgress" type="submit" name="login" class="btn btn-primary" (click)="changePassword()"
-                   value="Change Password">
-            <input *ngIf=" loginProgress" type="submit" name="login" class="btn btn-primary" disabled
-                   value="Changing Password...">
+          <div class="buttons-panel">
+            <input type="button" class="button-standard cancel"
+                   (click)="onCloseClick()" value="Cancel">
+            <input type="submit" name="login" class="button-standard"
+                   (click)="changePassword()" value="Submit">
           </div>
         </form>
       </div>

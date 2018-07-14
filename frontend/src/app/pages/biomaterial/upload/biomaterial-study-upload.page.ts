@@ -28,8 +28,8 @@ import {AppUrls} from '../../../router/app-urls';
         </div>
         <div class="container">
 
-          <div style="margin-bottom: 20px">
-            <div [class.hidden]="step !== 1">
+          <div [class.hidden]="step !== 1">
+            <div style="margin-bottom: 20px">
               <h5>Step 1a: Upload a .zip archive in ISAtab format from RIT (iRODS)</h5>
               <p>Click on an iRODS folder name to start upload:</p>
               <div class="row">
@@ -55,37 +55,35 @@ import {AppUrls} from '../../../router/app-urls';
                 </div>
               </div>
             </div>
-          </div>
-
-          <h4>OR...</h4>
-
-          <div style="margin-top: 20px">
-            <h5>Step 1b: Upload a .zip archive in ISAtab format from this computer</h5>
-            <div [class.disabled]="uploadFileChooserDisabled">
-              <div ng2FileDrop
-                   [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-                   (fileOver)="fileOverBase($event)"
-                   [uploader]="uploader"
-                   class="well my-drop-zone"
-                   style="display: inline-block">
-                Drag a file here
-              </div>
-              or select a file here: <input type="file" ng2FileSelect [uploader]="uploader"
-                                            [disabled]="uploadFileChooserDisabled"/>
-            </div>
-            <p>
-              <b>File to upload: </b>{{ uploadFileName }}
-            </p>
-            <div>
-              Then click here:
-              <button type="button" (click)="doUpload()" [disabled]="!uploader.getNotUploadedItems().length">Upload
-              </button>
-              <div>
-                Progress:
-                <div class="w3-progress-container">
-                  <div class="w3-progressbar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
+            <h4>OR...</h4>
+            <div style="margin-top: 20px">
+              <h5>Step 1b: Upload a .zip archive in ISAtab format from this computer</h5>
+              <div [class.disabled]="uploadFileChooserDisabled">
+                <div ng2FileDrop
+                     [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                     (fileOver)="fileOverBase($event)"
+                     [uploader]="uploader"
+                     class="well my-drop-zone"
+                     style="display: inline-block">
+                  Drag a file here
                 </div>
-                <span class="status" *ngIf="status">Status: {{ status }}</span>
+                or select a file here: <input type="file" ng2FileSelect [uploader]="uploader"
+                                              [disabled]="uploadFileChooserDisabled"/>
+              </div>
+              <p>
+                <b>File to upload: </b>{{ uploadFileName }}
+              </p>
+              <div>
+                Then click here:
+                <button type="button" (click)="doUpload()" [disabled]="!uploader.getNotUploadedItems().length">Upload
+                </button>
+                <div>
+                  Progress:
+                  <div class="w3-progress-container">
+                    <div class="w3-progressbar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
+                  </div>
+                  <span class="status" *ngIf="status">Status: {{ status }}</span>
+                </div>
               </div>
             </div>
           </div>

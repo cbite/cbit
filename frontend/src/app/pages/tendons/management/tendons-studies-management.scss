@@ -17,25 +17,50 @@
       height: 40px;
       line-height: 40px;
       margin-top: 20px;
-    }
+      font-weight: bolder;
 
-    .study {
-      height: 40px;
-      line-height: 40px;
+      .field {
+        padding-left: 20px;
 
-      .action {
-        display: inline-block;
-        cursor: pointer;
-        margin-right: 10px;
-
-        &:hover {
-          color: $color-blue;
+        &.centered {
+          text-align: center;
         }
       }
     }
 
-    .add-button{
-      margin-top: 40px;
+    .study:nth-child(odd) {
+    }
+
+    .study:nth-child(even) {
+      background: $color-gray;
+    }
+
+    .study {
+      height: 60px;
+      line-height: 60px;
+
+      .field {
+        padding-left: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &.centered {
+          text-align: center;
+        }
+      }
+
+      .text-input {
+        width: 140px;
+        text-align: left;
+        padding-left: 20px;
+        height: 40px;
+        line-height: 40px;
+
+        &:focus {
+          outline: none;
+        }
+      }
     }
   }
 }

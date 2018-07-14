@@ -1,3 +1,5 @@
+@import '../../../../../variables';
+
 .deletedStudyLabel {
   text-decoration: line-through;
 }
@@ -6,4 +8,54 @@
   text-decoration: line-through;
   background-color: #eee;
   color: #888;
+}
+
+.header {
+  height: 40px;
+  line-height: 40px;
+  margin-top: 20px;
+  font-weight: bolder;
+
+  .field {
+    padding-left: 20px;
+
+    &.centered {
+      text-align: center;
+    }
+  }
+}
+
+.study:nth-child(odd) {
+}
+
+.study:nth-child(even) {
+  background: $color-gray;
+}
+
+.study {
+  height: 60px;
+  line-height: 60px;
+
+  .field {
+    padding-left: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.centered {
+      text-align: center;
+    }
+  }
+
+  .text-input {
+    width: 140px;
+    text-align: left;
+    padding-left: 20px;
+    height: 40px;
+    line-height: 40px;
+
+    &:focus {
+      outline: none;
+    }
+  }
 }

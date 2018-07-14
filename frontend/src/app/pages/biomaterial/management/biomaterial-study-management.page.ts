@@ -24,31 +24,31 @@ import {StudyState} from './components/study-management-list.component';
           <spinner></spinner>
         </div>
 
-        <cbit-study-management-list
-          [studies]="studies"
-          [studyState]="studyState"
-          [studySpecificErrorMessage]="studySpecificErrorMessage"
-          [form]="form"
-          (deleteStudy)="deleteStudy($event)">
-        </cbit-study-management-list>
-
         <div *ngIf="ready" class="container">
-          <div class="row">
-            <div class="col-12" *ngIf="!savingChanges && saveDone">
-              <div *ngIf=" !saveError" class="alert alert-success" role="alert">Changes saved!</div>
-              <div *ngIf="!!saveError" class="alert alert-danger" role="alert">Save failed: {{ saveError }}</div>
-            </div>
-          </div>
 
-          <div class="row">
-            <div class="col-4">
+          <cbit-study-management-list
+            [studies]="studies"
+            [studyState]="studyState"
+            [studySpecificErrorMessage]="studySpecificErrorMessage"
+            [form]="form"
+            (deleteStudy)="deleteStudy($event)">
+          </cbit-study-management-list>
+
+          <div class="row" style="margin-top: 30px;">
+            <div class="col-2">
               <button type="submit" class="button-standard" (click)="saveChanges()"
                       [attr.disabled]="savingChanges || null">
                 <span *ngIf="!savingChanges">Save Changes</span>
                 <span *ngIf=" savingChanges">Saving Changes...</span>
               </button>
             </div>
-            <div class="col-8" style="text-align: right">
+            <div class="col-6">
+              <ng-container *ngIf="!savingChanges && saveDone">
+                <div *ngIf=" !saveError" class="alert alert-success" role="alert">Changes saved!</div>
+                <div *ngIf="!!saveError" class="alert alert-danger" role="alert">Save failed: {{ saveError }}</div>
+              </ng-container>
+            </div>
+            <div class="col-4" style="text-align: right">
               <button class="button-standard" (click)="onAddNewStudy()">New Study</button>
               <button class="button-standard" (click)="onEditMetaFields()">Edit Metadata</button>
             </div>

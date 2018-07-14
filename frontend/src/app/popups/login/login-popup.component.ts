@@ -25,6 +25,8 @@ import {AuthenticationService} from '../../core/authentication/authentication.se
               <input type="password" name="pass" class="form-control" placeholder="Password" [(ngModel)]="password">
             </div>
             <div class="button-panel">
+              <input type="button" class="button-standard cancel"
+                     (click)="onCloseClick()" value="Cancel">
               <input *ngIf="!loginProgress" type="submit" name="login" class="button-standard" (click)="login()"
                      value="Login">
               <input *ngIf=" loginProgress" type="submit" name="login" class="button-standard" disabled value="Logging in...">

@@ -6,32 +6,24 @@ import {User, UserState} from '../types/User';
   styleUrls: ['./user-editor.scss'],
   template: `
     <div>
-      <table class="table table-striped">
-        <thead>
-        <tr>
-          <th>Username</th>
-          <th>Real name</th>
-          <th>Change password?</th>
-          <th>Delete?</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let user of users">
-          <td>{{user.username}}</td>
-          <td>{{user.realname}}</td>
-          <td>
-            <button (click)="onChangePwdClicked(user.username)" class="button-standard">
-              Change Password
-            </button>
-          </td>
-          <td>
-            <button (click)="onDeleteClicked(user.username)" class="button-standard delete">
-              Delete
-            </button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div class="row header">
+        <div class="col-6 field">Username</div>
+        <div class="col-2 field">Real name</div>
+        <div class="col-4 field"></div>
+      </div>
+
+      <div class="row study" *ngFor="let user of users">
+        <div class="col-6 field">{{user.username}}</div>
+        <div class="col-2 field">{{user.realname}}</div>
+        <div class="col-4 field" style="text-align: right;">
+          <button (click)="onChangePwdClicked(user.username)" class="button-standard small">
+            Change Password
+          </button>
+          <button (click)="onDeleteClicked(user.username)" class="button-standard small delete">
+            Delete
+          </button>
+        </div>
+      </div>
     </div>
   `
 })

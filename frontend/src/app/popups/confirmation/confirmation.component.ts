@@ -6,19 +6,14 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./confirmation.scss'],
   template: `
     <div class="modal-panel noselect">
-      <div class="modal-header">
-        <div class="title">Are you sure?
-        </div>
-        <span class="close" (click)="onCloseClick()"><i class="fal fa-times"></i></span>
-      </div>
       <div class="modal-body">
         <form>
           <div>{{confirmationMessage}}</div>
-          <div class="button-panel">
-            <input type="submit" name="ok" class="btn btn-primary" (click)="onConfirm()"
-                   value="Yes">
-            <input type="submit" name="cancel" class="btn btn-secondary" (click)="onCancel()"
+          <div class="buttons-panel">
+            <input type="submit" name="cancel" class="button-standard small cancel" (click)="onCancel()"
                    value="No">
+            <input type="submit" name="ok" class="button-standard small" (click)="onConfirm()"
+                   value="Yes">
           </div>
         </form>
       </div>

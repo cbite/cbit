@@ -6,7 +6,7 @@ export enum StudyState {
   Present,
   Deleting,
   Deleted
-};
+}
 
 @Component({
   styleUrls: ['./study-management-list.scss'],
@@ -14,42 +14,37 @@ export enum StudyState {
   template: `
     <div *ngIf="form" [formGroup]="form">
 
-      <table class="table table-striped">
-        <thead>
-        <tr>
-          <th>Study Title</th>
-          <th>Publication Date</th>
-          <th>Visible</th>
-          <th>Delete?</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let kv of studies | mapToIterable" [formGroupName]="kv.key">
-          <td [class.deletedStudyLabel]="isDeleted(kv.key)">
+      <div class="row header">
+        <div class="col-7 field">Name</div>
+        <div class="col-2 field">Publication</div>
+        <div class="col-1 field centered">Visible</div>
+        <div class="col-2 field"></div>
+      </div>
+
+      <div class="row study" *ngFor="let kv of studies | mapToIterable" [formGroupName]="kv.key">
+          <div class="col-7 field" [class.deletedStudyLabel]="isDeleted(kv.key)">
             {{ kv.val._source['STUDY']['Study Title'] }}
             <div *ngIf="studySpecificErrorMessage[kv.key]" class="alert alert-danger">
               {{ studySpecificErrorMessage[kv.key] }}
             </div>
-          </td>
-          <td>
-            <input type="text" formControlName="publicationDate"
+          </div>
+          <div class="col-2 field">
+            <input type="text" class="text-input" formControlName="publicationDate"
                    [class.deletedStudyPublicationDate]="isDeleted(kv.key)">
-          </td>
-          <td style="align-content: center">
+          </div>
+          <div class="col-1 field centered" style="padding-left: 35px">
             <input type="checkbox" formControlName="visible">
-          </td>
-          <td>
+          </div>
+          <div class="col-2 field" style="text-align: right;">
             <div *ngIf="!isDeletingStudy(kv.key)">
-              <button *ngIf="!isDeleted(kv.key)" class="button-standard delete" (click)="doDeleteStudy(kv.key)">Delete</button>
-              <button *ngIf=" isDeleted(kv.key)" class="button-standard delete" disabled="true">Deleted</button>
+              <button *ngIf="!isDeleted(kv.key)" class="button-standard small delete" (click)="doDeleteStudy(kv.key)">Delete</button>
+              <button *ngIf=" isDeleted(kv.key)" class="button-standard small delete" disabled="true">Deleted</button>
             </div>
             <div *ngIf=" isDeletingStudy(kv.key)">
               <button class="btn btn-danger" disabled>Deleting...</button>
             </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+          </div>
+      </div>
     </div>
   `
 })

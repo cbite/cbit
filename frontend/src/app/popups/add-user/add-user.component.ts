@@ -7,6 +7,7 @@ import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'cbit-add-user',
+  styleUrls: ['./add-user.scss'],
   template: `
     <div class="modal-panel noselect">
       <div class="modal-header">
@@ -34,7 +35,8 @@ import {Observable} from 'rxjs/Observable';
             <div class="alert alert-danger">{{ errorMessage }}</div>
           </div>
 
-          <div class="button-panel">
+          <div class="buttons-panel">
+            <input type="button" class="button-standard cancel" (click)="onCloseClick()" value="Cancel">
             <input *ngIf="!loginProgress" type="submit" name="login" class="button-standard" (click)="addUser()"
                    value="Add User">
             <input *ngIf=" loginProgress" type="submit" name="login" class="button-standard" disabled
