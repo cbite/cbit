@@ -3,8 +3,9 @@ export class AppUrls {
   public static aboutUrl = 'about';
   public static faqUrl = 'faq';
   public static usersUrl = 'users';
-  public static studyUrl = 'study/:id';
   public static peopleUrl = 'people';
+
+  public static studyUrl = 'study/:studyId';
 
   // bio material study
   public static manageBioMaterialStudiesUrl = 'biomaterial/manage';
@@ -19,6 +20,6 @@ export class AppUrls {
   public static tendonsStudyUrl = 'tendons/:id';
 
   public static replaceStudyId(url: string, studyId: string) {
-    return url.replace(':id', studyId);
+    return url.replace(':studyId', studyId);
   }
 }

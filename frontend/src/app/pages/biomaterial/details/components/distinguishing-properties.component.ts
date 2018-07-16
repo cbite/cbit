@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Sample} from '../../../../../core/types/study.model';
+import {Sample} from '../../../../core/types/study.model';
 
 @Component({
     selector: 'cbit-distinguishing-properties',

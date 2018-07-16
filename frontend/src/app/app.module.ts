@@ -15,7 +15,6 @@ import {DropdownDirective} from './common/dropdown.directive';
 import {DropdownMenuDirective} from './common/dropdown-menu.directive';
 import {Ng2SliderComponent} from './common/slider/ng2-slider.component';
 import {HorizontallySlidableDirective} from './common/slider/horizontally-slidable.directive';
-import {StudyRedirectComponent} from './pages/biomaterial/management/study-redirect.component';
 import {TooltipContainer} from './common/tooltip-container.component';
 import {MyTooltipDirective} from './common/my-tooltip.directive';
 import {TooltipService} from './services/tooltip.service';
@@ -55,13 +54,9 @@ import {ChangePasswordComponent} from './popups/change-password/change-password.
 import {ConfirmationComponent} from './popups/confirmation/confirmation.component';
 import {SplitByTwoPipe} from './shared/pipes/split-by-two-pipe';
 import {WindowRef} from './shared/util/WindowRef';
-import {StudyDetailsComponent} from './pages/biomaterial/browse/popups/study-details/study-details.component';
 import {PropertiesDescriptionComponent} from './pages/biomaterial/browse/popups/properties-description/properties-description.component';
 import {AllFieldsForVisibilityComponent} from './pages/biomaterial/browse/popups/properties-description/properties-visibility.component';
 import {AllFieldsForVisibilityCategoryComponent} from './pages/biomaterial/browse/popups/properties-description/properties-visibility-category.component';
-import {StudyCategoryComponent} from './pages/biomaterial/browse/popups/study-details/study-category.component';
-import {CommonPropertiesComponent} from './pages/biomaterial/browse/popups/study-details/common-properties.component';
-import {DistinguishingPropertiesComponent} from './pages/biomaterial/browse/popups/study-details/distinguishing-properties.component';
 import {DateFormatPipe} from './shared/pipes/date-format-pipe';
 import {TendonsStudiesManagementPage} from './pages/tendons/management/tendons-studies-management.page';
 import {TendonsStudyService} from './core/services/tendons-study.service';
@@ -78,6 +73,10 @@ import {TendonsBrowserSidebarComponent} from './pages/tendons/browse/components/
 import {TendonsStudyResultsHeaderComponent} from './pages/tendons/browse/components/study-results-header/tendons-study-results-header.component';
 import {FieldMetadataEditorComponent} from './pages/biomaterial/metadata/components/metadata-editor-form.component';
 import {StudyManagementListComponent} from './pages/biomaterial/management/components/study-management-list.component';
+import {StudyDetailsPage} from './pages/biomaterial/details/study-details.page';
+import {StudyCategoryComponent} from './pages/biomaterial/details/components/study-category.component';
+import {CommonPropertiesComponent} from './pages/biomaterial/details/components/common-properties.component';
+import {DistinguishingPropertiesComponent} from './pages/biomaterial/details/components/distinguishing-properties.component';
 
 @NgModule(
   {
@@ -106,6 +105,7 @@ import {StudyManagementListComponent} from './pages/biomaterial/management/compo
       FAQPage,
       FAQQuestionComponent,
       PropertiesDescriptionComponent,
+      StudyDetailsPage,
       BioMaterialStudiesBrowsePage,
       SplitByTwoPipe,
       BioMaterialStudyUploadPage,
@@ -124,7 +124,6 @@ import {StudyManagementListComponent} from './pages/biomaterial/management/compo
       SampleFiltersComponent,
       StudyComponent,
       MapToIterablePipe,
-      StudyDetailsComponent,
       FileSelectDirective,
       FileDropDirective,
       CollapseDirective,
@@ -134,7 +133,6 @@ import {StudyManagementListComponent} from './pages/biomaterial/management/compo
       PersonComponent,
       DropdownDirective,
       DropdownMenuDirective,
-      StudyRedirectComponent,
       TendonsStudyPanelComponent,
       PeoplePage,
       StudyCategoryComponent,
@@ -154,7 +152,6 @@ import {StudyManagementListComponent} from './pages/biomaterial/management/compo
       LoginPopupComponent,
       AddUserComponent,
       ChangePasswordComponent,
-      StudyDetailsComponent,
       ConfirmationComponent,
       PropertiesDescriptionComponent
     ],

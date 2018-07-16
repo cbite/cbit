@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {StudyCategory} from '../../../../../core/util/study-display-category-helper';
+import {StudyCategory} from '../../../../core/util/study-display-category-helper';
 
 @Component({
     selector: 'cbit-study-category',

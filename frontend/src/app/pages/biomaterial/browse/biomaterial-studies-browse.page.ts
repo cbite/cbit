@@ -7,6 +7,8 @@ import {Subject} from 'rxjs/Subject';
 import {Study} from '../../../core/types/study.model';
 import {PopupService} from '../../../core/services/popup.service';
 import {getPublicationDate, getTitle} from '../../../core/util/study-helper';
+import {AppUrls} from '../../../router/app-urls';
+import {Router} from '@angular/router';
 
 @Component({
   styleUrls: ['./biomaterial-studies-browse.scss'],
@@ -34,7 +36,8 @@ export class BioMaterialStudiesBrowsePage implements OnInit, OnDestroy {
   constructor(private fieldMetaService: FieldMetaService,
               private studyService: StudyService,
               private filtersService: FiltersService,
-              private popupService: PopupService) {
+              private popupService: PopupService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -52,7 +55,7 @@ export class BioMaterialStudiesBrowsePage implements OnInit, OnDestroy {
   }
 
   public onShowDetailsClicked(match: UnifiedMatch) {
-    this.popupService.showStudyDetailsPopup(match.study);
+    this.router.navigateByUrl(AppUrls.replaceStudyId(AppUrls.studyUrl, match.study._id))
   }
 
   public onFullPropertiesListClicked() {

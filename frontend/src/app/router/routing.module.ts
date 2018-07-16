@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {BioMaterialStudyManagementPage} from '../pages/biomaterial/management/biomaterial-study-management.page';
-import {StudyRedirectComponent} from '../pages/biomaterial/management/study-redirect.component';
 import {AppUrls} from './app-urls';
 import {WelcomePage} from '../pages/welcome/welcome.page';
 import {AboutPage} from '../pages/about/about.page';
@@ -14,6 +13,7 @@ import {PeoplePage} from '../pages/people/people.page';
 import {BioMaterialStudiesBrowsePage} from '../pages/biomaterial/browse/biomaterial-studies-browse.page';
 import {BioMaterialStudyUploadPage} from '../pages/biomaterial/upload/biomaterial-study-upload.page';
 import {BioMaterialMetadataPage} from '../pages/biomaterial/metadata/biomaterial-metadata.page';
+import {StudyDetailsPage} from '../pages/biomaterial/details/study-details.page';
 
 const routes: Routes = [
   { path: '',           redirectTo: '/welcome', pathMatch: 'full' },
@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: AppUrls.faqUrl, component: FAQPage },
   { path: AppUrls.bioMaterialMetadataUrl, component: BioMaterialMetadataPage },
   { path: AppUrls.usersUrl, component: UserManagementPage },
-  { path: AppUrls.studyUrl, component: StudyRedirectComponent },
+  { path: AppUrls.studyUrl, component: StudyDetailsPage },
   { path: AppUrls.manageBioMaterialStudiesUrl, component: BioMaterialStudyManagementPage },
   { path: AppUrls.manageTendonsStudiesUrl, component: TendonsStudiesManagementPage },
   { path: AppUrls.browseTendonStudiesUrl, component: TendonsStudiesBrowsePage },

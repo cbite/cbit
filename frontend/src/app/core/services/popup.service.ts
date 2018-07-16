@@ -4,7 +4,6 @@ import {LoginPopupComponent} from '../../popups/login/login-popup.component';
 import {AddUserComponent} from '../../popups/add-user/add-user.component';
 import {ChangePasswordComponent} from '../../popups/change-password/change-password.component';
 import {ConfirmationComponent} from '../../popups/confirmation/confirmation.component';
-import {StudyDetailsComponent} from '../../pages/biomaterial/browse/popups/study-details/study-details.component';
 import {Study} from '../types/study.model';
 import {PropertiesDescriptionComponent} from '../../pages/biomaterial/browse/popups/properties-description/properties-description.component';
 
@@ -47,14 +46,6 @@ export class PopupService {
     popupInstance.confirmationMessage = confirmationMessage;
     popupInstance.cancelCallback = cancelCallback;
     popupInstance.confirmCallback = confirmCallback;
-  }
-
-  public showStudyDetailsPopup(study: Study) {
-    const popupInstance = <StudyDetailsComponent> this.modalService.open(StudyDetailsComponent, {
-      backdrop: 'static',
-      windowClass: 'large-window'
-    }).componentInstance;
-    popupInstance.setStudy(study);
   }
 
   public showPropertiesDescriptionPopup() {
