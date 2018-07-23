@@ -7,6 +7,7 @@ export function getCategoriesToDisplay(study: Study): StudyCategory[] {
   delete categoryMap['*Study Type'];
   delete categoryMap['*Array Express Id'];
   delete categoryMap['*Supplementary Files'];
+  delete categoryMap['*Protocol File'];
   delete categoryMap['*Visible'];
 
   const result = [];

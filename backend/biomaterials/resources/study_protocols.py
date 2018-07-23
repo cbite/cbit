@@ -33,7 +33,7 @@ class BiomaterialsStudyProtocolsResource(object):
             a = read_archive(studyArchivePath)
             with zipfile.ZipFile(studyArchivePath, "r") as archiveZf:
                 file_content = archiveZf.read(a.protocol_file_name)
-                resp.content_type = 'text/plain'
+                resp.content_type = 'application/pdf'
                 resp.append_header("Content-Disposition", 'attachment; filename="{0}"'.format(a.investigation_file_name))
                 resp.stream = file_content
                 resp.stream_len = len(file_content)

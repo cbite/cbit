@@ -71,10 +71,10 @@ export class StudyService {
       });
   }
 
-  downloadProtocols(study: Study) {
-    this.httpGatewayService.getFile(this._url.studyProtocolsResource(study._id), 'text/plain')
+  downloadProtocols(study: Study, filename: String) {
+    this.httpGatewayService.getFile(this._url.studyProtocolsResource(study._id), 'application/pdf')
       .subscribe((blob) => {
-        FileSaver.saveAs(blob, `${getTitle(study)}.txt`);
+        FileSaver.saveAs(blob, filename);
       });
   }
 

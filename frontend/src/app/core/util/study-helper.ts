@@ -12,6 +12,10 @@ export function getSupplementaryFiles(study: Study): string[] {
   return study._source['*Supplementary Files'].split(',').filter(x => x !== '');
 }
 
+export function getProtocolFile(study: Study): string {
+  return study._source['*Protocol File'];
+}
+
 export function getAuthors(study: Study): string {
   return study._source['STUDY']['Study Researchers Involved'];
 }

@@ -14,10 +14,16 @@
   margin-bottom: 20px;
 }
 
+.links{
+}
+
+.downloads{
+}
+
 .link {
   color: $color-blue;
   display: inline-block;
-  margin: 0 10px;
+  margin-right: 10px;
   cursor: pointer;
 
   &:hover {

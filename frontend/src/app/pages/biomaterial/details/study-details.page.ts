@@ -5,7 +5,7 @@ import {StudyService} from '../../../core/services/study.service';
 import {WindowRef} from '../../../shared/util/WindowRef';
 import {getCommonKeys} from '../../../core/util/samples-helper';
 import {
-  getArrayExpressId, getAuthors, getDoisIds, getPubmedIds, getSupplementaryFiles,
+  getArrayExpressId, getAuthors, getDoisIds, getProtocolFile, getPubmedIds, getSupplementaryFiles,
   getTitle
 } from '../../../core/util/study-helper';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -15,23 +15,37 @@ import {AppUrls} from '../../../router/app-urls';
   styleUrls: ['./study-details.scss'],
   template: `
     <div class="page">
-      <div class="page-content">
+      <div *ngIf="study" class="page-content">
         <div style="margin-bottom: 15px">
-            <div class="back-button" (click)="onBackClicked()"><span style="margin-right: 5px;">
-              <i class="far fa-angle-left"></i></span>Back to list</div>
+          <div class="back-button" (click)="onBackClicked()"><span style="margin-right: 5px;">
+              <i class="far fa-angle-left"></i></span>Back to list
+          </div>
         </div>
         <h4>{{title}}</h4>
         <div class="authors">by {{authors}}</div>
 
-        <div style="margin: 20px 0">
-          <div class="link" (click)="onOpenExternal('ArrayExpress', arrayExpressId)">
-            <i class="far fa-link"></i> Array Express
+        <div style="margin: 20px 0 10px 0">
+          <div class="downloads">
+            <div class="link" (click)="onDownloadStudy()">
+              <i class="far fa-download"></i> Study
+            </div>
+            <div class="link" (click)="onDownloadProtocol()">
+              <i class="far fa-download"></i> Protocol
+            </div>
           </div>
-          <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', pubmedId)">
-            <i class="far fa-link"></i> PubMed
-          </div>
-          <div class="link" *ngFor="let doi of doiIds" (click)="onOpenExternal('DOI', doi)">
-            <i class="far fa-link"></i> DOI
+        </div>
+
+        <div style="margin: 10px 0">
+          <div class="links">
+            <div class="link" (click)="onOpenExternal('ArrayExpress', arrayExpressId)">
+              <i class="far fa-link"></i> Array Express
+            </div>
+            <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', pubmedId)">
+              <i class="far fa-link"></i> PubMed
+            </div>
+            <div class="link" *ngFor="let doi of doiIds" (click)="onOpenExternal('DOI', doi)">
+              <i class="far fa-link"></i> DOI
+            </div>
           </div>
         </div>
 
@@ -73,6 +87,7 @@ export class StudyDetailsPage implements OnInit {
   public pubmedIds = [];
   public doiIds = [];
   private nativeWindow: any;
+  private study: Study;
 
   constructor(private studyService: StudyService,
               private winRef: WindowRef,
@@ -91,6 +106,7 @@ export class StudyDetailsPage implements OnInit {
   }
 
   public setStudy(study: Study) {
+    this.study = study;
     const getCommonKeysFunction = getCommonKeys;
     this.title = getTitle(study);
     this.authors = getAuthors(study);
@@ -124,5 +140,13 @@ export class StudyDetailsPage implements OnInit {
 
   public onBackClicked() {
     this.router.navigateByUrl(AppUrls.browseBioMaterialStudiesUrl);
+  }
+
+  public onDownloadStudy() {
+    this.studyService.downloadStudy(this.study);
+  }
+
+  public onDownloadProtocol() {
+    this.studyService.downloadProtocols(this.study, getProtocolFile(this.study));
   }
 }

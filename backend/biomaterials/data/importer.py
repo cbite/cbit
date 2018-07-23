@@ -21,6 +21,7 @@ def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, v
     # Geyt the study type and array express id
     study_type = a.study_type
     arrayExpressId = a.arrayExpressId
+    protocol_file_name = a.protocol_file_name
 
     # Add download URL for now
     study_result['*Archive URL'] = "{url_base}/biomaterials/studies/{study_uuid}/archive".format(
@@ -62,6 +63,7 @@ def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, v
                     supplementary_files.append(supplementary_file_name)
 
     study_result['*Supplementary Files'] = ",".join(supplementary_files)
+    study_result['*Protocol File'] = protocol_file_name
 
     # Insert Study
     response = es.index(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, id=str(study_uuid), refresh=True,

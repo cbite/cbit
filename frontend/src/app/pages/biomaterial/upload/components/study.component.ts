@@ -129,6 +129,7 @@ export class StudyComponent implements OnInit {
     delete this.studyCategoryMap['*Study Type'];
     delete this.studyCategoryMap['*Array Express Id'];
     delete this.studyCategoryMap['*Supplementary Files'];
+    delete this.studyCategoryMap['*Protocol File'];
     delete this.studyCategoryMap['*Visible'];
 
     // YUCK! Despite what the mappings in ElasticSearch say, 'Sample Name' in the JSON results can be an integer!
