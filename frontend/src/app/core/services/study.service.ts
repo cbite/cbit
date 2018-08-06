@@ -3,11 +3,10 @@
 
 // TODO: Stop hardcoding URLs for REST endpoints
 
-import {Study, Sample} from '../types/study.model';
+import {Sample, Study} from '../types/study.model';
 import {Injectable} from '@angular/core';
 import * as _ from 'lodash';
 import {FiltersState} from '../../pages/biomaterial/browse/services/filters.service';
-import * as $ from 'jquery';
 import {CacheableBulkRequester} from '../../common/cacheable-bulk-request';
 import {AuthenticationService} from '../authentication/authentication.service';
 import {URLService} from './url.service';
@@ -16,6 +15,7 @@ import {HttpGatewayService} from './http-gateway.service';
 import {FieldMeta} from '../types/field-meta';
 import * as FileSaver from 'file-saver';
 import {getTitle} from '../util/study-helper';
+import {GoogleAnalyticsService} from '../../services/google-analytics.service';
 
 // Should be a parseable number to play nicely with numeric fields
 // and it should survive a round-trip conversion in ES from string to double to string
@@ -61,10 +61,42 @@ const REQUEST_BUFFER_MS = 100;        // After a first request for study/sample 
 
 @Injectable()
 export class StudyService {
+  private studyRequester: CacheableBulkRequester<Study>;
+  private sampleRequester: CacheableBulkRequester<Sample>;
+  private sampleIdsRequester: CacheableBulkRequester<string[]>;
 
-  // PUBLIC INTERFACE
-  // ================
+  constructor(private _url: URLService,
+              private httpGatewayService: HttpGatewayService,
+              private googleAnalyticsService: GoogleAnalyticsService,
+              private _auth: AuthenticationService,
+              private _unitFormattingService: UnitFormattingService) {
+    this.studyRequester = new CacheableBulkRequester<Study>(
+      'study',
+      this._url.studiesResource(),
+      this.httpGatewayService,
+      CACHE_LIFETIME_MS,
+      REQUEST_BUFFER_MS
+    );
+
+    this.sampleRequester = new CacheableBulkRequester<Sample>(
+      'sample',
+      this._url.samplesResource(),
+      this.httpGatewayService,
+      CACHE_LIFETIME_MS,
+      REQUEST_BUFFER_MS
+    );
+
+    this.sampleIdsRequester = new CacheableBulkRequester<string[]>(
+      'idsOfSamplesInStudy',
+      this._url.metadataSamplesInStudiesResource(),
+      this.httpGatewayService,
+      CACHE_LIFETIME_MS,
+      REQUEST_BUFFER_MS
+    );
+  }
+
   downloadStudy(study: Study) {
+    this.googleAnalyticsService.emitDownloadStudyEvent(study._id);
     this.httpGatewayService.getFile(this._url.studyArchiveResource(study._id), 'application/zip')
       .subscribe((blob) => {
         FileSaver.saveAs(blob, `${getTitle(study)}.zip`);
@@ -72,6 +104,7 @@ export class StudyService {
   }
 
   downloadProtocols(study: Study, filename: String) {
+    this.googleAnalyticsService.emitDownloadProtocolsEvent(study._id);
     this.httpGatewayService.getFile(this._url.studyProtocolsResource(study._id), 'application/pdf')
       .subscribe((blob) => {
         FileSaver.saveAs(blob, filename);
@@ -134,6 +167,7 @@ export class StudyService {
     // (i.e., postpone calls to getStudy() and getSample() as long as possible)
     const self = this;
     return new Promise(resolve => {
+      this.googleAnalyticsService.emitSearchBiomaterialsEvent();
       this.httpGatewayService.post(self._url.metadataSearchResource(), JSON.stringify({
         filters: filters
       })).subscribe(data => {
@@ -244,54 +278,14 @@ export class StudyService {
     const result = {};
     for (const fieldName of Object.keys(sample._source)) {
       if (((fieldName in fieldMetas) && fieldMetaFilter(fieldMetas[fieldName]) &&
-          !(fieldName in commonFieldValues) &&
-          (sample._source[fieldName] !== sample._source['Sample Name']))) {
+        !(fieldName in commonFieldValues) &&
+        (sample._source[fieldName] !== sample._source['Sample Name']))) {
 
         const fieldMeta = fieldMetas[fieldName];
         const value = sample._source[fieldName];
-        const formattedValue = this._unitFormattingService.formatValue(value, fieldMeta, valueRanges);
-
-        result[fieldNameGen(fieldMeta)] = formattedValue;
+        result[fieldNameGen(fieldMeta)] = this._unitFormattingService.formatValue(value, fieldMeta, valueRanges);
       }
     }
     return result;
-  }
-
-
-  // PRIVATE DETAILS
-  // ===============
-
-  private studyRequester: CacheableBulkRequester<Study>;
-  private sampleRequester: CacheableBulkRequester<Sample>;
-  private sampleIdsRequester: CacheableBulkRequester<string[]>;
-
-
-  constructor(private _url: URLService,
-              private httpGatewayService: HttpGatewayService,
-              private _auth: AuthenticationService,
-              private _unitFormattingService: UnitFormattingService) {
-    this.studyRequester = new CacheableBulkRequester<Study>(
-      'study',
-      this._url.studiesResource(),
-      this.httpGatewayService,
-      CACHE_LIFETIME_MS,
-      REQUEST_BUFFER_MS
-    );
-
-    this.sampleRequester = new CacheableBulkRequester<Sample>(
-      'sample',
-      this._url.samplesResource(),
-      this.httpGatewayService,
-      CACHE_LIFETIME_MS,
-      REQUEST_BUFFER_MS
-    );
-
-    this.sampleIdsRequester = new CacheableBulkRequester<string[]>(
-      'idsOfSamplesInStudy',
-      this._url.metadataSamplesInStudiesResource(),
-      this.httpGatewayService,
-      CACHE_LIFETIME_MS,
-      REQUEST_BUFFER_MS
-    );
   }
 }

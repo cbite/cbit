@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
+
 declare var ga: Function;
 
 @Injectable()
@@ -20,17 +21,30 @@ export class GoogleAnalyticsService {
     });
   }
 
-  /**
-   * Emits a google analytics event
-   * @param {string} eventCategory
-   * @param {string} eventAction
-   * @param {string} eventLabel
-   * @param {number} eventValue
-   */
-  public emitEvent(eventCategory: string,
-                   eventAction: string,
-                   eventLabel: string = null,
-                   eventValue: number = null) {
+  public emitSearchBiomaterialsEvent() {
+    this.emitEvent('Search', 'Biomaterials');
+  }
+
+  public emitSearchTendonsEvent() {
+    this.emitEvent('Search', 'Tendons');
+  }
+
+  public emitExternalLinkEvent(source: string, studyId: string) {
+    this.emitEvent('External link', source, studyId);
+  }
+
+  public emitDownloadStudyEvent(studyId: string) {
+    this.emitEvent('Download', 'Study', studyId);
+  }
+
+  public emitDownloadProtocolsEvent(studyId: string) {
+    this.emitEvent('Download', 'Protocols', studyId);
+  }
+
+  private emitEvent(eventCategory: string,
+                    eventAction: string,
+                    eventLabel: string = null,
+                    eventValue: number = null) {
     if (typeof ga === 'function') {
       ga('send', 'event', {
         eventCategory: eventCategory,

@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Subject} from 'rxjs/Subject';
 import {TendonsStudy} from '../../../../../core/types/Tendons-study';
+import {GoogleAnalyticsService} from '../../../../../services/google-analytics.service';
 
 
 @Component({
@@ -12,7 +13,6 @@ import {TendonsStudy} from '../../../../../core/types/Tendons-study';
       <div class="sidebar-header">
         <div class="searchbox">
           <div class="search-title">SEARCH
-            <div class="shortcut" (click)="onFullPropertiesListClicked()">All Properties</div>
           </div>
           <div class="search-content">
             <input id="searchText"
@@ -38,7 +38,7 @@ export class TendonsBrowserSidebarComponent {
   @Output()
   public updateFiltered = new EventEmitter<TendonsStudy[]>();
 
-  constructor() {
+  constructor(private googleAnalyticsService: GoogleAnalyticsService) {
     this.searchTextInForm.valueChanges
       .debounceTime(200)       // Don't propagate changes until this many ms have elapsed without change
       .distinctUntilChanged()  // Don't emit the same value twice
@@ -47,6 +47,7 @@ export class TendonsBrowserSidebarComponent {
   }
 
   public doFilter(query: string) {
+    this.googleAnalyticsService.emitSearchTendonsEvent();
     this.updateFiltered.emit(this.studies.filter(s => s.name.includes(query)));
   }
 }

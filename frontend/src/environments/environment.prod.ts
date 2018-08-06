@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   api_url: '/api/',
-  googleAnalyticsTrackingId: 'UA-123406383-1'
+  googleAnalyticsTrackingId: 'UA-123406383-3'
 };

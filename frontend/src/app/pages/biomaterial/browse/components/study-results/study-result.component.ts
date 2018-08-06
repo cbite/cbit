@@ -2,10 +2,11 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '
 import {UnifiedMatch} from '../../../../../core/services/study.service';
 import {WindowRef} from '../../../../../shared/util/WindowRef';
 import {
-  getArrayExpressId, getAuthors, getDoisIds, getPublicationDate, getPubmedIds,
+  getArrayExpressId, getAuthors, getDoisIds, getId, getPublicationDate, getPubmedIds,
   getTitle
 } from '../../../../../core/util/study-helper';
 import {Study} from '../../../../../core/types/study.model';
+import {ExternalLinkService} from '../../../../../services/external-link.service';
 
 @Component({
   selector: 'cbit-study-result',
@@ -54,17 +55,17 @@ export class StudyResultComponent implements OnChanges {
   public arrayExpressId: string;
   public pubmedIds = [];
   public doiIds = [];
-  private nativeWindow: any;
 
+  public studyId: string;
   public studyTitle: string;
   public authors: string;
   public publicationDate: string;
 
-  constructor(private winRef: WindowRef) {
-    this.nativeWindow = winRef.getNativeWindow();
+  constructor(private externalLinkService: ExternalLinkService) {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
+    this.studyId = getId(this.match.study);
     this.studyTitle = getTitle(this.match.study);
     this.authors = getAuthors(this.match.study);
     this.publicationDate = getPublicationDate(this.match.study);
@@ -74,16 +75,7 @@ export class StudyResultComponent implements OnChanges {
   }
 
   public onOpenExternal(source: string, id: string) {
-    // TODO register open external link here
-    // this.googleAnalyticsService.emitEvent('Click', 'Scroll to', target);
-
-    if (source === 'DOI') {
-      this.nativeWindow.open(`https://dx.doi.org/${id}`);
-    } else if (source === 'PubMed') {
-      this.nativeWindow.open(`https://www.ncbi.nlm.nih.gov/pubmed/${id}`);
-    } else if (source === 'ArrayExpress') {
-      this.nativeWindow.open(`https://www.ebi.ac.uk/arrayexpress/experiments/${id}`);
-    }
+    this.externalLinkService.navigateTo(source, id, this.studyId);
   }
 
   public onDownloadStudy() {

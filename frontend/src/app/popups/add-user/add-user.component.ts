@@ -39,7 +39,7 @@ import {Observable} from 'rxjs/Observable';
             <input type="button" class="button-standard cancel" (click)="onCloseClick()" value="Cancel">
             <input *ngIf="!loginProgress" type="submit" name="login" class="button-standard" (click)="addUser()"
                    value="Add User">
-            <input *ngIf=" loginProgress" type="submit" name="login" class="button-standard" disabled
+            <input *ngIf="loginProgress" type="submit" name="login" class="button-standard" disabled
                    value="Adding User...">
           </div>
         </form>

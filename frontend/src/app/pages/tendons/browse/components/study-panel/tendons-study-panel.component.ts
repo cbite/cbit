@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TendonsStudy} from '../../../../../core/types/Tendons-study';
 
 @Component({
@@ -37,9 +37,13 @@ export class TendonsStudyPanelComponent {
   @Input()
   public study: TendonsStudy;
 
+  @Output()
+  public openExternal = new EventEmitter<{ studyId: string, source: string, id: string }>();
+
   constructor() {
   }
 
-  onOpenExternal(url: string, id: string) {
+  onOpenExternal(source: string, id: string) {
+    this.openExternal.emit({studyId: this.study.uuid, source: source, id: id});
   }
 }

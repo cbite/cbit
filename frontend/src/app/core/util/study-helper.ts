@@ -1,5 +1,9 @@
 import {RawStudyPublication, Study} from '../types/study.model';
 
+export function getId(study: Study): string {
+  return study._id;
+}
+
 export function getTitle(study: Study): string {
   return study._source.STUDY['Study Title'];
 }

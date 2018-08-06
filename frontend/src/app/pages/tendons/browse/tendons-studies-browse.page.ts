@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {TendonsStudy} from '../../../core/types/Tendons-study';
 import {TendonsStudyService} from '../../../core/services/tendons-study.service';
 import {WindowRef} from '../../../shared/util/WindowRef';
+import {ExternalLinkService} from '../../../services/external-link.service';
+import {GoogleAnalyticsService} from '../../../services/google-analytics.service';
 
 @Component({
   styleUrls: ['./tendons-studies-browse.scss'],
@@ -22,7 +24,9 @@ import {WindowRef} from '../../../shared/util/WindowRef';
               (sortingChange)="onSortingChanged($event)">
             </cbit-tendons-study-results-header>
           </div>
-          <cbit-tendons-study-panel *ngFor="let study of filteredStudies" [study]="study"></cbit-tendons-study-panel>
+          <cbit-tendons-study-panel *ngFor="let study of filteredStudies"
+                                    [study]="study"
+                                    (openExternal)="onOpenExternal($event)"></cbit-tendons-study-panel>
         </div>
       </div>
     </div>
@@ -32,12 +36,11 @@ export class TendonsStudiesBrowsePage implements OnInit {
 
   public studies: TendonsStudy[] = [];
   public filteredStudies: TendonsStudy[] = [];
-  private nativeWindow: any;
+
   public sortFields = ['Name', 'Year', 'Platform'];
   public sortField = 'Name';
 
-  constructor(private tendonsStudyService: TendonsStudyService, private winRef: WindowRef) {
-    this.nativeWindow = winRef.getNativeWindow();
+  constructor(private tendonsStudyService: TendonsStudyService, private externalLinkService: ExternalLinkService) {
   }
 
   ngOnInit(): void {
@@ -51,12 +54,8 @@ export class TendonsStudiesBrowsePage implements OnInit {
     });
   }
 
-  public onOpenExternal(source: string, id: string) {
-    if (source === 'ArrayExpress') {
-      this.nativeWindow.open(`https://www.ebi.ac.uk/arrayexpress/experiments/${id}`);
-    } else if (source === 'PubMed') {
-      this.nativeWindow.open(`https://www.ncbi.nlm.nih.gov/pubmed/${id}`);
-    }
+  public onOpenExternal(info) {
+    this.externalLinkService.navigateTo(info.source, info.id, info.studyId);
   }
 
   public onUpdateFiltered(newStudies: TendonsStudy[]) {

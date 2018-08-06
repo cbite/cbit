@@ -10,6 +10,7 @@ import {
 } from '../../../core/util/study-helper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppUrls} from '../../../router/app-urls';
+import {ExternalLinkService} from '../../../services/external-link.service';
 
 @Component({
   styleUrls: ['./study-details.scss'],
@@ -86,14 +87,12 @@ export class StudyDetailsPage implements OnInit {
   public arrayExpressId: string;
   public pubmedIds = [];
   public doiIds = [];
-  private nativeWindow: any;
   private study: Study;
 
   constructor(private studyService: StudyService,
-              private winRef: WindowRef,
               private route: ActivatedRoute,
-              private router: Router) {
-    this.nativeWindow = winRef.getNativeWindow();
+              private router: Router,
+              private externalLinkService: ExternalLinkService) {
   }
 
   ngOnInit(): void {
@@ -129,13 +128,7 @@ export class StudyDetailsPage implements OnInit {
   }
 
   public onOpenExternal(source: string, id: string) {
-    if (source === 'DOI') {
-      this.nativeWindow.open(`https://dx.doi.org/${id}`);
-    } else if (source === 'PubMed') {
-      this.nativeWindow.open(`https://www.ncbi.nlm.nih.gov/pubmed/${id}`);
-    } else if (source === 'ArrayExpress') {
-      this.nativeWindow.open(`https://www.ebi.ac.uk/arrayexpress/experiments/${id}`);
-    }
+    this.externalLinkService.navigateTo(source, id, this.study._id);
   }
 
   public onBackClicked() {
