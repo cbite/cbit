@@ -74,6 +74,9 @@ export class StudyResultComponent implements OnChanges {
   }
 
   public onOpenExternal(source: string, id: string) {
+    // TODO register open external link here
+    // this.googleAnalyticsService.emitEvent('Click', 'Scroll to', target);
+
     if (source === 'DOI') {
       this.nativeWindow.open(`https://dx.doi.org/${id}`);
     } else if (source === 'PubMed') {

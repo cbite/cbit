@@ -6,4 +6,5 @@
 export const environment = {
   production: false,
   api_url: 'http://localhost:23456/',
+  googleAnalyticsTrackingId: 'UA-123406383-1'
 };

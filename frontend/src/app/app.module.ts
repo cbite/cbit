@@ -77,6 +77,7 @@ import {StudyDetailsPage} from './pages/biomaterial/details/study-details.page';
 import {StudyCategoryComponent} from './pages/biomaterial/details/components/study-category.component';
 import {CommonPropertiesComponent} from './pages/biomaterial/details/components/common-properties.component';
 import {DistinguishingPropertiesComponent} from './pages/biomaterial/details/components/distinguishing-properties.component';
+import {GoogleAnalyticsService} from './services/google-analytics.service';
 
 @NgModule(
   {
@@ -168,7 +169,8 @@ import {DistinguishingPropertiesComponent} from './pages/biomaterial/details/com
       TooltipService,
       PopupService,
       WindowRef,
-      TendonsStudyService
+      TendonsStudyService,
+      GoogleAnalyticsService
     ],
     bootstrap: [AppComponent]
   })
