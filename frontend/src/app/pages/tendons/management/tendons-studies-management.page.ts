@@ -23,7 +23,9 @@ import {AppUrls} from '../../../router/app-urls';
           <div class="row study" *ngFor="let study of studies">
             <div class="col-6 field">{{study.name}}</div>
             <div class="col-2 field">{{study.geneExpressionType}}</div>
-            <div class="col-1 field">{{study.visible}}</div>
+            <div class="col-1 field">
+              <input type="checkbox" [(ngModel)]="study.visible" disabled="disabled">
+            </div>
             <div class="col-3 field" style="text-align: right">
               <button class="button-standard small" (click)="onEdit(study)">Edit</button>
               <button class="button-standard small delete" (click)="onDelete(study)">Delete</button>
@@ -31,7 +33,7 @@ import {AppUrls} from '../../../router/app-urls';
           </div>
           <div class="row" style="margin-top: 30px;">
             <div class="col-12" style="text-align: right;">
-                <button class="button-standard" (click)="onAddNewStudy()">New Study</button>
+              <button class="button-standard" (click)="onAddNewStudy()">New Study</button>
             </div>
           </div>
         </div>

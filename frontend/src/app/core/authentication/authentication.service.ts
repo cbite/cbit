@@ -25,7 +25,6 @@ export class AuthenticationService {
     return this.performLogin(username, authHeader)
       .map(result => {
         if (result.realname) {
-          // todo@Sam replaced by redux
           this.loggedInUser = new LoggedInUser(username, result.realname, authHeader);
           this.store.dispatch(new LoginAction(this.loggedInUser));
           return true;
@@ -36,7 +35,6 @@ export class AuthenticationService {
   }
 
   public logout() {
-    // todo@Sam replaced by redux
     this.loggedInUser = null;
     this.store.dispatch(new LogoutAction());
   }

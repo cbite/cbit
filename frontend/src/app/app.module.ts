@@ -10,8 +10,6 @@ import {SampleFiltersComponent} from './pages/biomaterial/browse/components/filt
 import {FileUploadModule} from 'ng2-file-upload/ng2-file-upload';
 import {CollapseDirective} from './common/collapse.directive';
 import {SpinnerComponent} from './common/spinner.component';
-import {DropdownDirective} from './common/dropdown.directive';
-import {DropdownMenuDirective} from './common/dropdown-menu.directive';
 import {Ng2SliderComponent} from './common/slider/ng2-slider.component';
 import {HorizontallySlidableDirective} from './common/slider/horizontally-slidable.directive';
 import {TooltipContainer} from './common/tooltip-container.component';
@@ -131,8 +129,6 @@ import {MetadataEditorFieldComponent} from './pages/biomaterial/metadata/compone
       StudyResultsComponent,
       StudyResultComponent,
       PersonComponent,
-      DropdownDirective,
-      DropdownMenuDirective,
       TendonsStudyPanelComponent,
       PeoplePage,
       StudyCategoryComponent,

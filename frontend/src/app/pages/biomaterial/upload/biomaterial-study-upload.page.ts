@@ -23,6 +23,7 @@ import {AppUrls} from '../../../router/app-urls';
     <div class="page">
       <div class="page-content">
         <div class="page-header">
+          <div class="page-title">Biomaterials Study</div>
           <div class="back-link" (click)="onBackClicked()"><i class="far fa-angle-left"></i> Back</div>
         </div>
         <div class="container">
