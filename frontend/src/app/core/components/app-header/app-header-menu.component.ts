@@ -25,7 +25,7 @@ import {LoggedInUser} from '../../authentication/loggedInUser';
           <div class="icon"><i class="far fa-edit"></i></div>
           <div class="label">Tendon Studies</div>
         </div>
-        <hr>
+        <hr style="margin-top: 0;margin-bottom: 0">
         <div class="header-menu-link" (click)="onMenuClick('manage_users')">
           <div class="icon"><i class="far fa-users"></i></div>
           <div class="label">Manage Users</div>
