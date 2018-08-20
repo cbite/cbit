@@ -87,7 +87,7 @@ export class StudyDetailsPage implements OnInit {
   public arrayExpressId: string;
   public pubmedIds = [];
   public doiIds = [];
-  private study: Study;
+  public study: Study;
 
   constructor(private studyService: StudyService,
               private route: ActivatedRoute,

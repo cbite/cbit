@@ -14,7 +14,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   EventEmitter
-} from '@angular/core'
+} from '@angular/core';
 
 import {HorizontallySlidableDirective} from './horizontally-slidable.directive';
 
@@ -49,7 +49,7 @@ export enum RangeHandle {Start, End, Both}
              #endInput
       />
     </div>-->
-    
+
     <div class="slider-container">
       <div #ribbon
            id="{{id + '-ribbon'}}"
@@ -137,7 +137,7 @@ export enum RangeHandle {Start, End, Both}
       border: 1px solid #fbcb09;
       background: #fdf5ce 50% 50% repeat-x;
     }
-    
+
     /* Spice things up */
     .range-ribbon {
       left: 0%;
@@ -195,12 +195,12 @@ export class Ng2SliderComponent {
   get stepValue(): number { return this._stepValue; }
 
   get startValueStr(): string {
-    let precision = this.calculatePrecision(this.stepValue)
+    const precision = this.calculatePrecision(this.stepValue);
     return this.startValue.toFixed(precision);
   }
   set startValueStr(value: string) { this.startValue = +value; }
   get endValueStr(): string {
-    let precision = this.calculatePrecision(this.stepValue)
+    const precision = this.calculatePrecision(this.stepValue);
     return this.endValue.toFixed(precision);
   }
   set endValueStr(value: string) { this.endValue = +value; }
@@ -211,15 +211,15 @@ export class Ng2SliderComponent {
 
 
   private range: Range;
-  private id: string;
+  public id: string;
 
-  @ViewChild('ribbon') ribbon:ElementRef;
-  @ViewChild('ribbonInRange') ribbonInRange:ElementRef;
+  @ViewChild('ribbon') ribbon: ElementRef;
+  @ViewChild('ribbonInRange') ribbonInRange: ElementRef;
   @ViewChild('startHandle') private startHandle: HorizontallySlidableDirective;
   @ViewChild('endHandle') private endHandle: HorizontallySlidableDirective;
 
   constructor(
-    private CDR:ChangeDetectorRef,
+    private CDR: ChangeDetectorRef,
     private _elementRef: ElementRef
   ) { }
 
@@ -236,11 +236,11 @@ export class Ng2SliderComponent {
       this.id = Math.random().toString(36).slice(2, 10);
       this._elementRef.nativeElement.id = this.id;
     } else {
-      this.id = this._elementRef.nativeElement.id
+      this.id = this._elementRef.nativeElement.id;
     }
 
-    if (this.startHandle) this.valueChanged({}, RangeHandle.Start);
-    if (this.endHandle) this.valueChanged({}, RangeHandle.End);
+    if (this.startHandle) { this.valueChanged({}, RangeHandle.Start); }
+    if (this.endHandle) { this.valueChanged({}, RangeHandle.End); }
   }
 
   ngOnChanges() {
@@ -249,9 +249,9 @@ export class Ng2SliderComponent {
   }
 
   ensureValidConfig() {
-    if (!this.startValue) this.startValue = this.min;
-    if (!this.endValue) this.endValue = this.max;
-    if (!this.stepValue) this.stepValue = 1;
+    if (!this.startValue) { this.startValue = this.min; }
+    if (!this.endValue) { this.endValue = this.max; }
+    if (!this.stepValue) { this.stepValue = 1; }
     // Ensure that max = min + N * stepValue
     this.max = this.pin(this.max);
   }
@@ -260,8 +260,8 @@ export class Ng2SliderComponent {
     this.CDR.markForCheck();
     this.CDR.detectChanges();
 
-    if (this.startHandle) this.valueChanged({}, RangeHandle.Start);
-    if (this.endHandle) this.valueChanged({}, RangeHandle.End);
+    if (this.startHandle) { this.valueChanged({}, RangeHandle.Start); }
+    if (this.endHandle) { this.valueChanged({}, RangeHandle.End); }
   }
 
   // Pin a value to the nearest multiple of `stepValue` above `min`
@@ -269,8 +269,8 @@ export class Ng2SliderComponent {
     return this.min + Math.round((value - this.min) / this.stepValue) * this.stepValue;
   }
 
-  refreshInputBoxByPercent(percent: any, handle:RangeHandle) {
-    let value = this.pin(this.min + (this.max-this.min)*percent/100);
+  refreshInputBoxByPercent(percent: any, handle: RangeHandle) {
+    const value = this.pin(this.min + (this.max - this.min) * percent / 100);
     switch (handle) {
       case RangeHandle.Start:
         this.startValue = value;
@@ -297,7 +297,7 @@ export class Ng2SliderComponent {
    * Set new handle position when value was changed in input-box
    * @param handle
    */
-  valueChanged(el: any, handle:RangeHandle = RangeHandle.Both) {
+  valueChanged(el: any, handle: RangeHandle = RangeHandle.Both) {
 
     if (handle == RangeHandle.Both || handle == RangeHandle.Start) {
 
@@ -321,13 +321,13 @@ export class Ng2SliderComponent {
 
   leftPx(): number {
     let zeroLeft = this.ribbonInRange.nativeElement.getBoundingClientRect().left - parseInt(getComputedStyle(this.ribbonInRange.nativeElement).left);
-    if (isNaN(zeroLeft)) zeroLeft = 0;
-    let result = this.calculateXFromValue(this.startValue) - zeroLeft;
+    if (isNaN(zeroLeft)) { zeroLeft = 0; }
+    const result = this.calculateXFromValue(this.startValue) - zeroLeft;
     return result;
   }
 
   widthPx(): number {
-    let result = this.calculateXFromValue(this.endValue) - this.calculateXFromValue(this.startValue);
+    const result = this.calculateXFromValue(this.endValue) - this.calculateXFromValue(this.startValue);
     return result;
   }
 
@@ -355,22 +355,22 @@ export class Ng2SliderComponent {
 
   // Handling 'onsliding' event from SlideAbleDirective
   onSliding(relativePercent: number, handleName: string) {
-    var handle = RangeHandle.Both;
-    if (handleName === 'start') handle = RangeHandle.Start;
-    if (handleName === 'end') handle = RangeHandle.End;
+    let handle = RangeHandle.Both;
+    if (handleName === 'start') { handle = RangeHandle.Start; }
+    if (handleName === 'end') { handle = RangeHandle.End; }
     this.refreshInputBoxByPercent(relativePercent, handle);
 
     this.onRangeChanging.emit([this.startValue, this.endValue]);
   }
 
   get stepX(): number {
-    let boundingRect = this.ribbon.nativeElement.getBoundingClientRect();
-    let result = this.stepValue * (boundingRect.right - boundingRect.left) / (this.max - this.min);
+    const boundingRect = this.ribbon.nativeElement.getBoundingClientRect();
+    const result = this.stepValue * (boundingRect.right - boundingRect.left) / (this.max - this.min);
     return result;
   }
 
   calculateXFromValue(value: number): number {
-    let boundingRect = this.ribbon.nativeElement.getBoundingClientRect();
+    const boundingRect = this.ribbon.nativeElement.getBoundingClientRect();
     return boundingRect.left + (boundingRect.right - boundingRect.left) * (value - this.min) / (this.max - this.min);
   }
 }

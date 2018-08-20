@@ -8,7 +8,7 @@ import {AppRoutingModule} from './router/routing.module';
 import {BrowserSidebarComponent} from './pages/biomaterial/browse/components/browser-sidebar/browser-sidebar.component';
 import {MapToIterablePipe} from './common/mapToIterable.pipe';
 import {SampleFiltersComponent} from './pages/biomaterial/browse/components/filters/sample-filters.component';
-import {FileSelectDirective, FileDropDirective} from 'ng2-file-upload/ng2-file-upload';
+import {FileUploadModule} from 'ng2-file-upload/ng2-file-upload';
 import {CollapseDirective} from './common/collapse.directive';
 import {SpinnerComponent} from './common/spinner.component';
 import {DropdownDirective} from './common/dropdown.directive';
@@ -45,7 +45,7 @@ import {HttpGatewayService} from './core/services/http-gateway.service';
 import {StudyResultsComponent} from './pages/biomaterial/browse/components/study-results/study-results.component';
 import {StudyResultComponent} from './pages/biomaterial/browse/components/study-results/study-result.component';
 import {StoreModule} from '@ngrx/store';
-import {reducers} from './core/redux/reducers/index';
+import {reducers} from './core/redux/reducers';
 import {AppHeaderMenuComponent} from './core/components/app-header/app-header-menu.component';
 import {FieldMetadataFormComponent} from './pages/biomaterial/upload/components/FieldMetadataFormComponent';
 import {UserManagementPage} from './pages/user-management/user-management.page';
@@ -79,6 +79,7 @@ import {CommonPropertiesComponent} from './pages/biomaterial/details/components/
 import {DistinguishingPropertiesComponent} from './pages/biomaterial/details/components/distinguishing-properties.component';
 import {GoogleAnalyticsService} from './services/google-analytics.service';
 import {ExternalLinkService} from './services/external-link.service';
+import {MetadataEditorFieldComponent} from './pages/biomaterial/metadata/components/metadata-editor-field.component';
 
 @NgModule(
   {
@@ -90,6 +91,7 @@ import {ExternalLinkService} from './services/external-link.service';
       StoreModule.forRoot(reducers),
       HttpClientModule,
       CommonModule,
+      FileUploadModule,
       NgbModule.forRoot()
     ],
     declarations: [
@@ -126,8 +128,6 @@ import {ExternalLinkService} from './services/external-link.service';
       SampleFiltersComponent,
       StudyComponent,
       MapToIterablePipe,
-      FileSelectDirective,
-      FileDropDirective,
       CollapseDirective,
       SpinnerComponent,
       StudyResultsComponent,
@@ -148,7 +148,8 @@ import {ExternalLinkService} from './services/external-link.service';
       ConfirmationComponent,
       TendonsStudiesManagementPage,
       TendonsStudyEditorPage,
-      TendonsStudiesBrowsePage
+      TendonsStudiesBrowsePage,
+      MetadataEditorFieldComponent
     ],
     entryComponents: [
       LoginPopupComponent,
