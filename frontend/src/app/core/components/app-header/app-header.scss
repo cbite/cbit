@@ -1,0 +1,70 @@
+@import '../../../../variables';
+
+.header {
+  height: 50px;
+  line-height: 50px;
+  width: 100%;
+  background-color: $color-dark-blue;
+  color: $color-light;
+
+  .logo {
+    height: 35px;
+    margin: 0 20px;
+  }
+
+  .header-links {
+    display: inline-block;
+    font-size: 0;
+    vertical-align: top;
+
+    .header-link {
+      position: relative;
+      min-width: 100px;
+      vertical-align: top;
+      display: inline-block;
+      font-size: $font-size-normal;
+      padding: 0 20px;
+      text-align: center;
+      cursor: pointer;
+      outline: 0;
+
+      &.studies {
+        padding: 0;
+        text-align: left;
+
+        .link {
+          padding: 0 20px;
+          outline: 0;
+        }
+      }
+
+      &:hover {
+        background-color: $color-blue;
+        color: white;
+      }
+
+      &.active {
+        background-color: $color-blue;
+        color: white;
+      }
+    }
+  }
+}
+
+.header-submenu {
+  background-color: $color-dark-blue;
+  min-width: 220px;
+  z-index: 1000;
+  position: absolute;
+  left: 0;
+  text-align: left;
+
+  .header-submenu-link {
+    padding: 0 20px;
+    outline: 0;
+
+    &:hover {
+      background-color: $color-blue;
+    }
+  }
+}

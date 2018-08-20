@@ -1,0 +1,24 @@
+@import '../../../../variables';
+
+.container-fluid {
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar {
+  margin-left: 0;
+  padding-left: 0;
+  min-width: 280px;
+  height: calc(100vh - 50px);
+  display: block;
+  background-color: $color-gray;
+  border-right: 1px solid darken($color-gray, 10%);
+}
+
+.main {
+  padding: 20px;
+
+  .title-panel {
+    margin-bottom: 40px;
+  }
+}

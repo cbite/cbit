@@ -1,0 +1,66 @@
+@import '../../../../variables';
+
+.admin-link {
+  float: right;
+  vertical-align: top;
+  display: inline-block;
+  font-size: $font-size-normal;
+  padding: 0 20px;
+  text-align: center;
+  cursor: pointer;
+  outline: 0;
+
+  &:hover {
+    background-color: $color-blue;
+    color: white;
+  }
+
+  &.active {
+    background-color: $color-blue;
+    color: white;
+  }
+
+  &.menu {
+    width: 230px;
+    position: relative;
+    text-align: left;
+  }
+}
+
+.header-menu {
+  z-index: 1000;
+  position: absolute;
+  left: 0;
+  width: 230px;
+  cursor: pointer;
+  background-color: $color-dark-blue;
+  color: white;
+
+  hr {
+    color: $color-gray;
+    background-color: $color-gray;
+  }
+
+  .header-menu-link {
+    text-align: left;
+    height: 50px;
+    line-height: 50px;
+    width: 230px;
+    padding: 0 20px;
+
+    &:hover {
+      color: white;
+      background-color: $color-blue;
+    }
+  }
+}
+
+.icon {
+  text-align: center;
+  width: 40px;
+  display: inline-block;
+}
+
+.label {
+  display: inline-block;
+}

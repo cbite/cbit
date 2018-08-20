@@ -7,18 +7,19 @@ export const NONINPUT = 'nonInput';
 
 import { DropdownDirective } from './dropdown.directive';
 
-/* tslint:disable-next-line */
-const KeyboardEvent = (global as any).KeyboardEvent as KeyboardEvent;
-/* tslint:disable-next-line */
-const MouseEvent = (global as any).MouseEvent as MouseEvent;
+// TODO@Sam Fix this!
+// /* tslint:disable-next-line */
+// const KeyboardEvent = (global as any).KeyboardEvent as KeyboardEvent;
+// /* tslint:disable-next-line */
+// const MouseEvent = (global as any).MouseEvent as MouseEvent;
 
 export class DropdownService {
-  protected openScope:DropdownDirective;
+  protected openScope: DropdownDirective;
 
-  protected closeDropdownBind:EventListener = this.closeDropdown.bind(this);
-  protected keybindFilterBind:EventListener = this.keybindFilter.bind(this);
+  protected closeDropdownBind: EventListener = this.closeDropdown.bind(this);
+  protected keybindFilterBind: EventListener = this.keybindFilter.bind(this);
 
-  public open(dropdownScope:DropdownDirective):void {
+  public open(dropdownScope: DropdownDirective): void {
     if (!this.openScope) {
       window.document.addEventListener('click', this.closeDropdownBind, true);
       window.document.addEventListener('keydown', this.keybindFilterBind);
@@ -31,7 +32,7 @@ export class DropdownService {
     this.openScope = dropdownScope;
   }
 
-  public close(dropdownScope:DropdownDirective):void {
+  public close(dropdownScope: DropdownDirective): void {
     if (this.openScope !== dropdownScope) {
       return;
     }
@@ -41,7 +42,7 @@ export class DropdownService {
     window.document.removeEventListener('keydown', this.keybindFilterBind);
   }
 
-  protected closeDropdown(event:MouseEvent):void {
+  protected closeDropdown(event: MouseEvent): void {
     if (!this.openScope) {
       return;
     }
@@ -71,7 +72,7 @@ export class DropdownService {
     this.openScope.isOpen = false;
   }
 
-  protected keybindFilter(event:KeyboardEvent):void {
+  protected keybindFilter(event: KeyboardEvent): void {
     if (event.which === 27) {
       this.openScope.focusToggleElement();
       this.closeDropdown(void 0);

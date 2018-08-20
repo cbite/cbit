@@ -1,0 +1,52 @@
+@import '../../../../../../variables';
+
+.study-panel {
+  margin: 20px;
+  border: 1px solid darken($color-gray, 10%);
+
+  .header {
+    padding: 10px;
+    background-color: $color-blue;
+    color: white;
+  }
+
+  .body {
+    padding: 15px 10px;
+  }
+
+  .footer {
+    font-size: $font-size-small;
+    padding: 10px;
+    border-top: 1px solid darken($color-gray, 10%);
+    background-color: $color-gray;
+  }
+
+  .link {
+    color: $color-blue;
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+
+    &:hover {
+      color: $color-dark-blue;
+    }
+  }
+
+  .description {
+    padding-bottom: 10px;
+  }
+
+  .detail-row {
+    font-size: 0;
+  }
+  .detail-column {
+    display: inline-block;
+    width: 50%;
+    font-size: $font-size-small;
+
+    .field-label {
+      display: inline-block;
+      font-weight: bolder;
+    }
+  }
+}

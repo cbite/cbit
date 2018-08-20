@@ -1,0 +1,122 @@
+@import "/assets/fonts";
+@import "./variables";
+
+//=======================================//
+//======= BOOTSTRAP OVERWRITES ==========//
+//=======================================//
+
+ngb-modal-window {
+  overflow-x: auto !important;
+
+  &.large-window {
+    .modal-dialog {
+      min-width: 1080px;
+      width: calc(100vw - 300px);
+      max-width: 1200px;
+      margin: 60px auto;
+
+      .modal-content {
+        border-radius: 10px;
+      }
+    }
+  }
+
+  &.medium-window {
+    .modal-dialog {
+      min-width: 600px;
+      width: calc(100vw - 300px);
+      max-width: 600px;
+      margin: 60px auto;
+
+      .modal-content {
+        border-radius: 10px;
+      }
+    }
+  }
+}
+
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+//============================//
+//======== NO SELECT =========//
+//============================//
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                   supported by Chrome and Opera */
+}
+
+//============================//
+//======= BODY HTML ==========//
+//============================//
+
+body {
+  font-family: 'Open Sans', 'serif';
+  font-size: $font-size-normal;
+  padding: 0;
+  margin: 0;
+  min-width: 1365px;
+}
+
+a {
+  color: $color-blue;
+}
+
+//============================//
+//======= ButtonL ==========//
+//============================//
+
+.button-standard {
+  display: inline-block;
+  background-color: $color-blue;
+  color: white;
+  padding: 0 20px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  min-width: 80px;
+  outline: none;
+  margin: 0 5px;
+
+  &:hover {
+    background-color: $color-dark-blue;
+  }
+
+  &:focus {
+    outline:0;
+  }
+
+  &.cancel {
+    border: 1px solid $color-blue;
+    background-color: white;
+    color: $color-blue;
+
+    &:hover {
+      background-color: $color-blue;
+      color: white;
+    }
+  }
+
+  &.small {
+    font-size: $font-size-small;
+    height: 30px;
+    line-height: 30px;
+    min-width: 80px;
+  }
+
+  &.delete {
+    background-color: #d72e3d;
+
+    &:hover {
+      background-color: darken(#d72e3d, 10%);
+    }
+  }
+}

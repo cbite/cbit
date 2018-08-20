@@ -1,6 +1,14 @@
 #! /usr/bin/env gunicorn -c config/gunicorn-config.py -w 4 backend-server:app
 
 import falcon
+
+from biomaterials.resources.metadata import BiomaterialsMetadataAllCountsResource, \
+    BiomaterialsMetadataFilteredCountsResource, BiomaterialsMetadataSamplesInStudies, BiomaterialsMetadataFields, \
+    BiomaterialsMetadataFieldsMulti, BiomaterialsMetadataField, BiomaterialsMetadataSearch, \
+    BiomaterialsMetadataStudiesResource
+from biomaterials.resources.samples import BiomaterialsSamplesResource
+from biomaterials.resources.studies import BiomaterialsStudyResource, BiomaterialsStudiesResource
+from common.resources.user import UsersResource, UserResource
 from config import config as cfg
 from middleware.clean_old_uploads import (
     CleanOldUploadsMiddleware,
@@ -9,32 +17,18 @@ from middleware.clean_old_uploads import (
 from middleware.cors import CORSMiddleware
 from middleware.database_session import DatabaseSessionMiddleware
 from middleware.authentication import AuthenticationMiddleware
-from resources.uploads import (
-    UploadResource,
-    UploadsResource,
-    UploadsIRODSResource,
-)
-from resources.downloads import (
-    DownloadsResource,
-    DownloadResource,
-    DownloadProgressResource,
-)
-from resources.samples import SamplesResource
-from resources.studies import StudiesResource, StudyResource
-from resources.study_archive import StudyArchiveResource
-from resources.metadata import (
-    MetadataAllCountsResource,
-    MetadataFilteredCountsResource,
-    MetadataStudiesResource,
-    MetadataSamplesInStudies,
-    MetadataSearch,
-    MetadataFields,
-    MetadataFieldsMulti,
-    MetadataField
-)
-from resources.user import UserResource, UsersResource
-from resources.irods import IRODSListResource
 
+from biomaterials.resources.uploads import (
+    BiomaterialsUploadResource,
+    BiomaterialsUploadsResource,
+    BiomaterialsUploadsIRODSResource,
+)
+
+from biomaterials.resources.study_archive import BiomaterialsStudyArchiveResource
+from biomaterials.resources.study_protocols import BiomaterialsStudyProtocolsResource
+
+from common.resources.irods import IRODSListResource
+from tendons.resources.studies import TendonsStudyResource, TendonsStudiesResource
 
 ES_TRACE_LOGGING = False
 if ES_TRACE_LOGGING:
@@ -61,30 +55,33 @@ middleware.extend([
 
 app = falcon.API(middleware=middleware)
 
-app.add_route('/uploads', UploadsResource())
-app.add_route('/uploads/_irods/{folder_name}', UploadsIRODSResource())
-app.add_route('/uploads/{upload_uuid}', UploadResource())
+# BIOMATERIALS ROUTES
+app.add_route('/biomaterials/uploads', BiomaterialsUploadsResource())
+app.add_route('/biomaterials/uploads/_irods/{folder_name}', BiomaterialsUploadsIRODSResource())
+app.add_route('/biomaterials/uploads/{upload_uuid}', BiomaterialsUploadResource())
 
-app.add_route('/downloads', DownloadsResource())
-app.add_route('/downloads/{download_uuid}', DownloadResource())
-app.add_route('/downloads/{download_uuid}/_progress', DownloadProgressResource())
+app.add_route('/biomaterials/samples', BiomaterialsSamplesResource())
 
-app.add_route('/samples', SamplesResource())
+app.add_route('/biomaterials/studies', BiomaterialsStudiesResource())
+app.add_route('/biomaterials/studies/{study_uuid}', BiomaterialsStudyResource())
+app.add_route('/biomaterials/studies/{study_uuid}/archive', BiomaterialsStudyArchiveResource())
+app.add_route('/biomaterials/studies/{study_uuid}/protocols', BiomaterialsStudyProtocolsResource())
 
-app.add_route('/studies', StudiesResource())
-app.add_route('/studies/{study_uuid}', StudyResource())
-app.add_route('/studies/{study_uuid}/archive', StudyArchiveResource())
+app.add_route('/biomaterials/metadata/all_counts', BiomaterialsMetadataAllCountsResource())
+app.add_route('/biomaterials/metadata/filtered_counts', BiomaterialsMetadataFilteredCountsResource())
+app.add_route('/biomaterials/metadata/studies', BiomaterialsMetadataStudiesResource())
+app.add_route('/biomaterials/metadata/samples_in_studies', BiomaterialsMetadataSamplesInStudies())
+app.add_route('/biomaterials/metadata/search', BiomaterialsMetadataSearch())
+app.add_route('/biomaterials/metadata/fields', BiomaterialsMetadataFields())
+app.add_route('/biomaterials/metadata/fields/_multi', BiomaterialsMetadataFieldsMulti())
+app.add_route('/biomaterials/metadata/fields/{field_name}', BiomaterialsMetadataField())
 
-app.add_route('/metadata/all_counts', MetadataAllCountsResource())
-app.add_route('/metadata/filtered_counts', MetadataFilteredCountsResource())
-app.add_route('/metadata/studies', MetadataStudiesResource())
-app.add_route('/metadata/samples_in_studies', MetadataSamplesInStudies())
-app.add_route('/metadata/search', MetadataSearch())
-app.add_route('/metadata/fields', MetadataFields())
-app.add_route('/metadata/fields/_multi', MetadataFieldsMulti())
-app.add_route('/metadata/fields/{field_name}', MetadataField())
+# TENDONS ROUTES
+app.add_route('/tendons/studies', TendonsStudiesResource())
+app.add_route('/tendons/studies/{study_uuid}', TendonsStudyResource())
 
+
+# GENERAL ROUTES
+app.add_route('/irods/list', IRODSListResource())
 app.add_route('/users', UsersResource())
 app.add_route('/users/{username}', UserResource())
-
-app.add_route('/irods/list', IRODSListResource())

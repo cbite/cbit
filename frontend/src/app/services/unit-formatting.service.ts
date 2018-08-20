@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
-import {FieldMeta} from "../common/field-meta.model";
 import {DimensionsRegister} from "../common/unit-conversions";
+import {FieldMeta} from '../core/types/field-meta';
 
 @Injectable()
 export class UnitFormattingService {

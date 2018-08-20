@@ -1,0 +1,28 @@
+@import '../../../../../../variables';
+
+ul {
+  padding-left: 20px;
+  list-style: none;
+}
+
+li {
+  padding-top: 5px;
+}
+
+.filter-category-title {
+  cursor: pointer;
+  padding-left: 15px;
+  background-color: lighten($color-blue, 15%);
+  color: white;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid white;
+
+  a {
+    color: white;
+  }
+}
+
+.filter-category-content {
+  padding: 5px 20px 5px 10px;
+}

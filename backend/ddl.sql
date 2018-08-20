@@ -30,6 +30,23 @@ CREATE TABLE studies (
   ,type VARCHAR NOT NULL
 );
 
+-- Metadata for tendons studies
+DROP TABLE IF EXISTS tendons_metadata CASCADE ;
+CREATE TABLE tendons_metadata (
+   uuid UUID PRIMARY KEY
+  ,arrayExpressId VARCHAR NOT NULL
+  ,pubmedId VARCHAR NOT NULL
+  ,name VARCHAR NOT NULL
+  ,description VARCHAR NOT NULL
+  ,geneExpressionType VARCHAR NOT NULL
+  ,platform VARCHAR NOT NULL
+  ,organism VARCHAR NOT NULL
+  ,cellOrigin VARCHAR NOT NULL
+  ,year NUMERIC NOT NULL
+  ,sampleSize NUMERIC NOT NULL
+  ,visible BOOLEAN NOT NULL
+);
+
 -- Metadata for metadata
 DROP TABLE IF EXISTS dim_meta_meta CASCADE ;
 CREATE TABLE dim_meta_meta (

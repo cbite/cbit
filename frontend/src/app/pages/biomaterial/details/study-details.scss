@@ -1,0 +1,61 @@
+@import '../../../../variables';
+
+.page {
+  margin-top: 40px;
+  margin-bottom: 80px;
+
+  .page-content {
+    max-width: 1000px;
+    margin: auto;
+  }
+}
+
+.authors {
+  margin-bottom: 20px;
+}
+
+.links{
+}
+
+.downloads{
+}
+
+.link {
+  color: $color-blue;
+  display: inline-block;
+  margin-right: 10px;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-dark-blue;
+  }
+}
+
+.samples {
+  margin-top: 20px;
+
+  .samples-category {
+    color: $color-blue;
+    cursor: pointer;
+    line-height: 26px;
+
+    &:hover {
+      color: $color-dark-blue;
+    }
+  }
+}
+
+.files {
+  margin-top: 20px;
+
+  .file {
+    color: $color-blue;
+    line-height: 26px;
+  }
+}
+
+.back-button {
+  color: $color-blue;
+  display: inline-block;
+  cursor: pointer;
+}

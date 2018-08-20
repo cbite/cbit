@@ -1,10 +1,13 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import './vendor/rxjs-imports';
 
 import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
 
-if (process.env.ENV === 'production') {
+if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.log(err));
