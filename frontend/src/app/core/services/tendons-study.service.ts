@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpGatewayService} from './http-gateway.service';
-import {Observable} from 'rxjs/Observable';
+import {Observable, ObservableInput} from 'rxjs/Observable';
 import {URLService} from './url.service';
 import {TendonsStudy} from '../types/Tendons-study';
 
@@ -13,12 +13,12 @@ export class TendonsStudyService {
     return this.httpGatewayService.get(this.urls.tendonsStudiesResource());
   }
 
-  public createStudy(study: TendonsStudy): Observable<any> {
-    return this.httpGatewayService.post(this.urls.tendonsStudiesResource(), study);
+  public createStudy(study: TendonsStudy, errorHandler: (err: any, caught: Observable<{}>) => ObservableInput<{}>): Observable<any> {
+    return this.httpGatewayService.post(this.urls.tendonsStudiesResource(), study, errorHandler);
   }
 
-  public updateStudy(study: TendonsStudy): Observable<any> {
-    return this.httpGatewayService.put(this.urls.tendonsStudyResource(study.uuid), study);
+  public updateStudy(study: TendonsStudy, errorHandler: (err: any, caught: Observable<{}>) => ObservableInput<{}>): Observable<any> {
+    return this.httpGatewayService.put(this.urls.tendonsStudyResource(study.uuid), study, errorHandler);
   }
 
   public getStudy(studyId: string): Observable<any> {

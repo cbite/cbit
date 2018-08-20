@@ -17,10 +17,9 @@ import {ExternalLinkService} from '../../../services/external-link.service';
   template: `
     <div class="page">
       <div *ngIf="study" class="page-content">
-        <div style="margin-bottom: 15px">
-          <div class="back-button" (click)="onBackClicked()"><span style="margin-right: 5px;">
-              <i class="far fa-angle-left"></i></span>Back to list
-          </div>
+        <div class="page-header">
+          <div *ngIf="afterUpload" class="page-title">Upload succeeded!</div>
+          <div class="back-link" (click)="onBackClicked()"><i class="far fa-angle-left"></i> Back to list</div>
         </div>
         <h4>{{title}}</h4>
         <div class="authors">by {{authors}}</div>
@@ -88,7 +87,7 @@ export class StudyDetailsPage implements OnInit {
   public pubmedIds = [];
   public doiIds = [];
   public study: Study;
-  public backUrl = AppUrls.browseBioMaterialStudiesUrl;
+  public afterUpload = false;
 
   constructor(private studyService: StudyService,
               private route: ActivatedRoute,
@@ -106,7 +105,7 @@ export class StudyDetailsPage implements OnInit {
 
     this.route.queryParams.subscribe(queryParams => {
       if (queryParams['upload'] === 'true') {
-        this.backUrl = AppUrls.manageBioMaterialStudiesUrl;
+        this.afterUpload = true;
       }
     });
   }
@@ -139,7 +138,8 @@ export class StudyDetailsPage implements OnInit {
   }
 
   public onBackClicked() {
-    this.router.navigateByUrl(this.backUrl);
+    const url = this.afterUpload ? AppUrls.manageBioMaterialStudiesUrl : AppUrls.browseBioMaterialStudiesUrl;
+    this.router.navigateByUrl(url);
   }
 
   public onDownloadStudy() {

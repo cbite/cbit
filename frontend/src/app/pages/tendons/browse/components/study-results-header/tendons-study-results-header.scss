@@ -33,5 +33,9 @@
         color: white;
       }
     }
+
+    div:last-child {
+      border-bottom: none;
+    }
   }
 }

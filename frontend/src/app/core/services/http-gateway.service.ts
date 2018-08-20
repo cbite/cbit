@@ -88,7 +88,6 @@ export class HttpGatewayService {
     return environment.api_url + url;
   }
 
-  // TODO@Sam check what still makes sense here
   private checkResponseBody(body: any): any {
     // throw error when server returned error
     if (body.error) {
@@ -98,11 +97,7 @@ export class HttpGatewayService {
         throw new Error(body.error.message);
       }
     } else {
-      if (body.data) {
-        return body.data;
-      } else {
-        return body;
-      }
+      return body;
     }
   }
 

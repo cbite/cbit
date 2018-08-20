@@ -1,12 +1,12 @@
-import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef} from '@angular/core';
-import {StudyService} from '../../../core/services/study.service';
-import {FormGroup, FormControl, Validators, Form} from '@angular/forms';
+import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import {FormGroup} from '@angular/forms';
 import {URLService} from '../../../core/services/url.service';
 import {HttpGatewayService} from '../../../core/services/http-gateway.service';
 import {FieldMeta} from '../../../core/types/field-meta';
 import {FieldMetaService} from '../../../core/services/field-meta.service';
 import {AppUrls} from '../../../router/app-urls';
 import {Router} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   styleUrls: ['./biomaterial-metadata.scss'],
@@ -84,13 +84,20 @@ export class BioMaterialMetadataPage implements OnInit {
     this.saveDone = false;
     this.saveError = '';
 
-    this.httpGatewayService.post(this._url.metadataFieldsMultiResource(), JSON.stringify(Object.values(this.form.value)))
+    const onError = (err, caught) => {
+      self.savingChanges = false;
+      self.saveDone = true;
+      self.saveError = `Error: ${err.statusText}`;
+      self._changeDetectorRef.detectChanges();
+      return Observable.throw(err);
+    };
+
+    this.httpGatewayService.post(this._url.metadataFieldsMultiResource(), JSON.stringify(Object.values(this.form.value)), onError)
       .subscribe(() => {
         self.savingChanges = false;
         self.saveDone = true;
         self._changeDetectorRef.detectChanges();
         self.fieldMetaService.flushCaches();
-        // TODO@Sam check what happens on error
       });
   }
 }

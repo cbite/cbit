@@ -4,6 +4,7 @@ import {TendonsStudyService} from '../../../core/services/tendons-study.service'
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AppUrls} from '../../../router/app-urls';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   styleUrls: ['./tendons-study-editor.scss'],
@@ -14,7 +15,9 @@ import {AppUrls} from '../../../router/app-urls';
           <div class="page-title">Tendons Study</div>
           <div class="back-link" (click)="onBackClicked()"><i class="far fa-angle-left"></i> Back</div>
         </div>
-
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
         <form *ngIf="loaded" [formGroup]="registerForm" (ngSubmit)="onSave()">
           <div class="form-group">
             <label>Name</label>
@@ -106,7 +109,7 @@ import {AppUrls} from '../../../router/app-urls';
             <input type="checkbox" formControlName="visible" class="form-control" [(ngModel)]="study.visible"/>
           </div>
           <div class="form-group">
-            <button [disabled]="loading" class="button-standard">Save</button>
+            <button class="button-standard">Save</button>
           </div>
         </form>
       </div>
@@ -118,6 +121,7 @@ export class TendonsStudyEditorPage implements OnInit {
   registerForm: FormGroup;
   submitted = false;
   loaded = false;
+  errorMessage = '';
 
   constructor(private formBuilder: FormBuilder, private tendonsStudyService: TendonsStudyService, private route: ActivatedRoute, private router: Router) {
     this.study = TendonsStudy.createNew();
@@ -162,18 +166,24 @@ export class TendonsStudyEditorPage implements OnInit {
 
   onSave() {
     this.submitted = true;
-   // TODO@MT handle errors
+    this.errorMessage = '';
+
+    const onError = (err, caught) => {
+      this.errorMessage = `Error: ${err.statusText}`;
+      return Observable.throw(err);
+    };
+
     if (this.registerForm.invalid) {
       return;
     } else {
       if (this.study.uuid) {
         // Existing study => update
-        this.tendonsStudyService.updateStudy(this.study).subscribe(result => {
+        this.tendonsStudyService.updateStudy(this.study, onError).subscribe(result => {
           this.router.navigateByUrl(AppUrls.manageTendonsStudiesUrl);
         });
       } else {
         // New study => create
-        this.tendonsStudyService.createStudy(this.study).subscribe(result => {
+        this.tendonsStudyService.createStudy(this.study, onError).subscribe(result => {
           this.study.uuid = result.study_uuid;
           this.router.navigateByUrl(AppUrls.manageTendonsStudiesUrl);
         });
