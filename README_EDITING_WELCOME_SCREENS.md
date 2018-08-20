@@ -15,8 +15,8 @@ Steps
 1. Edit the files `cbit/frontend/src/app/welcome.component.ts`
    or `cbit/frontend/src/app/about.component.ts`.
 2. HTML code goes at the top, CSS styling code goes right below
-3. You can place images under `cbit/frontend/public/images`,
-   then refer to them in the HTML with the URL `"/public/images/my_little_pony.jpeg"`
+3. You can place images under `cbit/frontend/assets/images`,
+   then refer to them in the HTML with the URL `"/assets/images/my_little_pony.jpeg"`
 4. Backgrounds for all the pages are defined in `cbit/frontend/src/app/cbit.component.ts`.
    You may especially want to tweak the CSS styles for `#bg1` and `#bg2`.
 4. Save the files and redeploy, e.g., run
