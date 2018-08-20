@@ -32,7 +32,7 @@ import {AppUrls} from '../../../router/app-urls';
             <div style="margin-bottom: 20px">
               <h5>Step 1a: Upload a .zip archive in ISAtab format from RIT (iRODS)</h5>
               <p>Click on an iRODS folder name to start upload:</p>
-              <div class="row">
+              <div class="row irods-files-row">
                 <div class="col-md-8 col-md-offset-2 well irods-list">
                   <div *ngIf="!iRODSListReady">
                     Fetching study list from iRODS...
@@ -51,7 +51,9 @@ import {AppUrls} from '../../../router/app-urls';
               </div>
               <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                  <span class="status" *ngIf="iRODSStatus">Status: {{ iRODSStatus }}</span>
+                  <div *ngIf="iRODSStatus" class="alert alert-danger">
+                    Status: {{ iRODSStatus }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -77,8 +79,8 @@ import {AppUrls} from '../../../router/app-urls';
                 Then click here:
                 <button type="button" (click)="doUpload()" [disabled]="!uploader.getNotUploadedItems().length">Upload
                 </button>
-                <div>
-                  Progress:
+                <div class="progress-container">
+                  <div class="progress-text">Progress:</div>
                   <div class="w3-progress-container">
                     <div class="w3-progressbar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
                   </div>

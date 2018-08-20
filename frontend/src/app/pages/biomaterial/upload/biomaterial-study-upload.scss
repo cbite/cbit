@@ -6,7 +6,7 @@
 
   .page-content {
     max-width: 1000px;
-    margin:auto;
+    margin: auto;
 
     .page-header {
       margin-bottom: 20px;
@@ -47,20 +47,29 @@
   border: dotted 3px red;
 }
 
-/* Default class applied to drop zones on over */
-.w3-progress-container {
-  width: 200px;
-  height: 1.5em;
-  position: relative;
-  background-color: #f1f1f1;
-  display: inline-block
-}
+.progress-container {
+  margin-top: 10px;
 
-.w3-progressbar {
-  background-color: #757575;
-  height: 100%;
-  position: absolute;
-  line-height: inherit
+  .progress-text {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  /* Default class applied to drop zones on over */
+  .w3-progress-container {
+    width: 200px;
+    height: 1.5em;
+    position: relative;
+    background-color: #f1f1f1;
+    display: inline-block
+  }
+
+  .w3-progressbar {
+    background-color: #757575;
+    height: 100%;
+    position: absolute;
+    line-height: inherit
+  }
 }
 
 .disabled {
@@ -75,8 +84,9 @@
   display: none
 }
 
-.status {
-  color: red;
+.irods-files-row {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .irods-list {
