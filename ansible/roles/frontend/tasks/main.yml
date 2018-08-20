@@ -73,17 +73,6 @@
     times: yes
     use_ssh_args: yes
 
-- name: frontend | Copy over frontend public assets
-  synchronize:
-    src: "{{ playbook_dir }}/../frontend/public"
-    dest: /home/cbit/frontend/public
-    owner: no
-    group: no
-    recursive: yes
-    perms: no
-    times: yes
-    use_ssh_args: yes
-
 - name: frontend | Ensure proper ownership for front-end bundle
   file:
     path: /home/cbit/frontend/public
