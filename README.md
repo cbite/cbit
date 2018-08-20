@@ -113,6 +113,12 @@ sudo shutdown -r now
 Extra tips for getting this to work
 -----------------------------------
 - Make sure you have python and pip on your local machine
+
+- Install Ansible
+```
+pip install 'ansible==2.1.2.0'
+```
+
 - Install PostgreSQL
 ```
 brew install postgresql
