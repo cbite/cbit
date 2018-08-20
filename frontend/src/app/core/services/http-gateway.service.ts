@@ -3,12 +3,14 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, ObservableInput} from 'rxjs/Observable';
 import {AuthenticationService} from '../authentication/authentication.service';
 import {environment} from '../../../environments/environment';
+import {BusyIndicatorService} from './busy-indicator.service';
 
 @Injectable()
 export class HttpGatewayService {
   private headers: HttpHeaders;
 
   constructor(private http: HttpClient,
+              private busyIndicatorService: BusyIndicatorService,
               private authenticationService: AuthenticationService) {
   }
 

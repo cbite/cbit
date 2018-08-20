@@ -9,7 +9,6 @@ import {MapToIterablePipe} from './common/mapToIterable.pipe';
 import {SampleFiltersComponent} from './pages/biomaterial/browse/components/filters/sample-filters.component';
 import {FileUploadModule} from 'ng2-file-upload/ng2-file-upload';
 import {CollapseDirective} from './common/collapse.directive';
-import {SpinnerComponent} from './common/spinner.component';
 import {Ng2SliderComponent} from './common/slider/ng2-slider.component';
 import {HorizontallySlidableDirective} from './common/slider/horizontally-slidable.directive';
 import {TooltipContainer} from './common/tooltip-container.component';
@@ -77,6 +76,8 @@ import {DistinguishingPropertiesComponent} from './pages/biomaterial/details/com
 import {GoogleAnalyticsService} from './services/google-analytics.service';
 import {ExternalLinkService} from './services/external-link.service';
 import {MetadataEditorFieldComponent} from './pages/biomaterial/metadata/components/metadata-editor-field.component';
+import {PageSpinnerComponent} from './core/components/page-spinner/page-spinner.component';
+import {SpinnerComponent} from './common/spinner.component';
 
 @NgModule(
   {
@@ -143,7 +144,8 @@ import {MetadataEditorFieldComponent} from './pages/biomaterial/metadata/compone
       TendonsStudiesManagementPage,
       TendonsStudyEditorPage,
       TendonsStudiesBrowsePage,
-      MetadataEditorFieldComponent
+      MetadataEditorFieldComponent,
+      PageSpinnerComponent
     ],
     entryComponents: [
       LoginPopupComponent,

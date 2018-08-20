@@ -2,6 +2,8 @@ import {Component, ViewContainerRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {environment} from '../environments/environment';
 import {GoogleAnalyticsService} from './services/google-analytics.service';
+import {ApplicationState} from './core/redux/reducers';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'cbit-app',
@@ -9,18 +11,22 @@ import {GoogleAnalyticsService} from './services/google-analytics.service';
   template: `
     <tooltip-container></tooltip-container>
     <cbit-app-header></cbit-app-header>
-      <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
     <cbit-app-footer></cbit-app-footer>
+    <div [hidden]="!(showLoader$|async)" class="loader-overlay">
+      <cbit-page-spinner class="loader"></cbit-page-spinner>
+    </div>
   `
 })
 export class AppComponent {
-
+  public showLoader$ = this.store.select(state => state.application.showLoader);
   // HACK FOR NG2-BOOTSTRAP MODALS!
   // See https://valor-software.com/ngx-bootstrap/#/modals
   constructor(
     private viewContainerRef: ViewContainerRef,
     private _router: Router,
-    private googleAnalyticsService: GoogleAnalyticsService
+    private googleAnalyticsService: GoogleAnalyticsService,
+    private store: Store<ApplicationState>
   ) {
     this.appendGaTrackingCode();
   }
