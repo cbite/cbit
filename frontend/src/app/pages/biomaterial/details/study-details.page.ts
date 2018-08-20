@@ -32,6 +32,7 @@ import {ExternalLinkService} from '../../../services/external-link.service';
             <div class="link" (click)="onDownloadProtocol()">
               <i class="far fa-download"></i> Protocol
             </div>
+            <spinner class="spinner" *ngIf="downloadInProgress"></spinner>
           </div>
         </div>
 
@@ -88,6 +89,7 @@ export class StudyDetailsPage implements OnInit {
   public doiIds = [];
   public study: Study;
   public afterUpload = false;
+  public downloadInProgress = false;
 
   constructor(private studyService: StudyService,
               private route: ActivatedRoute,
@@ -147,6 +149,9 @@ export class StudyDetailsPage implements OnInit {
   }
 
   public onDownloadProtocol() {
-    this.studyService.downloadProtocols(this.study, getProtocolFile(this.study));
+    this.downloadInProgress = true;
+    this.studyService.downloadProtocols(this.study, getProtocolFile(this.study), () => {
+      this.downloadInProgress = false;
+    });
   }
 }

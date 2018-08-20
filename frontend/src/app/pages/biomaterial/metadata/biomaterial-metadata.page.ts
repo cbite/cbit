@@ -28,7 +28,7 @@ import {Observable} from 'rxjs/Observable';
           <div class="row">
 
             <div class="col-xs-2">
-              <button type="submit" class="btn btn-primary" (click)="saveChanges()"
+              <button type="submit" class="save button-standard" (click)="saveChanges()"
                       [attr.disabled]="savingChanges || null">
                 <span *ngIf="!savingChanges">Save Changes</span>
                 <span *ngIf=" savingChanges">Saving Changes...</span>

@@ -3,7 +3,7 @@
   so that the states are preserved as users navigate the app
  */
 
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class CollapseStateService {

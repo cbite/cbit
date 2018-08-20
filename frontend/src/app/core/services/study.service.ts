@@ -103,11 +103,12 @@ export class StudyService {
       });
   }
 
-  downloadProtocols(study: Study, filename: String) {
+  downloadProtocols(study: Study, filename: String, done: Function) {
     this.googleAnalyticsService.emitDownloadProtocolsEvent(study._id);
     this.httpGatewayService.getFile(this._url.studyProtocolsResource(study._id), 'application/pdf')
       .subscribe((blob) => {
         FileSaver.saveAs(blob, filename);
+        done();
       });
   }
 
