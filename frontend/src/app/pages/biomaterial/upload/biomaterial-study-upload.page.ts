@@ -23,7 +23,6 @@ import {AppUrls} from '../../../router/app-urls';
     <div class="page">
       <div class="page-content">
         <div class="page-header">
-          <div class="page-title">Biomaterial Study</div>
           <div class="back-link" (click)="onBackClicked()"><i class="far fa-angle-left"></i> Back</div>
         </div>
         <div class="container">
@@ -128,11 +127,6 @@ import {AppUrls} from '../../../router/app-urls';
         </div>
 
         <div *ngIf="step === 3">
-          <h2>Upload succeeded!</h2>
-          <study [studyId]="upload_uuid" [showTitle]="true"></study>
-        </div>
-
-        <div *ngIf="step === 4">
           <h2>Upload failed!</h2>
           <div class="alert alert-danger">
             {{ errorMessage }}
@@ -238,7 +232,7 @@ export class BioMaterialStudyUploadPage implements OnInit {
     this.iRODSStatus = 'Working on it (this can take quite a while!)...';
 
     const onError = (err, caught) => {
-      this.step = 4;
+      this.step = 3;
       this.errorMessage = `iRODS upload failed: ${err.statusText}!`;
       this.iRODSListReady = true;
       this.changeDetectorRef.detectChanges();
@@ -250,24 +244,6 @@ export class BioMaterialStudyUploadPage implements OnInit {
       this.iRODSListReady = true;
       this.changeDetectorRef.detectChanges();
     });
-
-    /* $.ajax({
-       type: 'POST',
-       url: this._url.uploadsIRODSResource(iRODSStudyName),
-       headers: this._auth.headers(),
-       dataType: 'json',
-       success: (uploadsResponse: UploadsResponse) => {
-         this.proceedToUploadsStep2(uploadsResponse);
-       },
-       error: (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) => {
-         this.step = 4;
-         this.errorMessage = `iRODS upload failed: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
-       },
-       complete: () => {
-         this.iRODSListReady = true;
-         this.changeDetectorRef.detectChanges();
-       }
-     });*/
   }
 
   onUploadSuccess(response: string, status: number, headers: ParsedResponseHeaders): void {
@@ -297,7 +273,7 @@ export class BioMaterialStudyUploadPage implements OnInit {
       }
     }
     if (fieldsWithUnrecognizedUnits.length > 0) {
-      this.step = 4;
+      this.step = 3;
       this.errorMessage = `The following fields have unrecognized units: ${JSON.stringify(fieldsWithUnrecognizedUnits)}`;
       return;
     }
@@ -307,7 +283,7 @@ export class BioMaterialStudyUploadPage implements OnInit {
   }
 
   onUploadFailure(response: string, status: number, headers: ParsedResponseHeaders): void {
-    this.step = 4;
+    this.step = 3;
     this.errorMessage = `[Technical details: status=${status}, response='${response}'`;
   }
 
@@ -321,7 +297,7 @@ export class BioMaterialStudyUploadPage implements OnInit {
       metadataInsertionPromise = new Promise((resolve, reject) => {
         const onError = (err, caught) => {
           that.errorMessage = `Failed to create new fields: ${err.statusText}!`;
-          that.step = 4;
+          that.step = 3;
           that.changeDetectorRef.detectChanges();
           reject();
           return Observable.throw(err);
@@ -330,23 +306,6 @@ export class BioMaterialStudyUploadPage implements OnInit {
         this.httpGatewayService.put(that._url.metadataFieldsMultiResource(), JSON.stringify(newFieldMetadata), onError).subscribe(() => {
           resolve();
         });
-
-        /* $.ajax({
-           type: 'PUT',
-           url: that._url.metadataFieldsMultiResource(),
-           headers: that._auth.headers(),
-           data: JSON.stringify(newFieldMetadata),
-           dataType: 'json',
-           success: function (response) {
-             resolve();
-           },
-           error: function (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
-             that.errorMessage = `Failed to create new fields: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}!`;
-             that.step = 4;
-             that.changeDetectorRef.detectChanges();
-             reject();
-           }
-         });*/
       });
     }
 
@@ -359,7 +318,7 @@ export class BioMaterialStudyUploadPage implements OnInit {
 
       const onError = (err, caught) => {
         that.errorMessage = `Details ${err.statusText}`;
-        that.step = 4;
+        that.step = 3;
         that.changeDetectorRef.detectChanges();
         return Observable.throw(err);
       };
@@ -368,30 +327,8 @@ export class BioMaterialStudyUploadPage implements OnInit {
         publicationDate: that.studyPublicationDate,
         visible: that.studyInitiallyVisible
       }), onError, headers).subscribe(() => {
-        that.step = 3;
-        that.changeDetectorRef.detectChanges();
+        this.router.navigateByUrl(AppUrls.replaceStudyId(AppUrls.studyUrl, this.upload_uuid) + '?upload=true');
       });
-
-      /* $.ajax({
-         type: 'PUT',
-         url: this.confirm_upload_url,
-         headers: this._auth.headers(),
-         data: JSON.stringify({
-           publicationDate: that.studyPublicationDate,
-           visible: that.studyInitiallyVisible
-         }),
-         dataType: 'json',
-         contentType: 'text/plain',  // TODO: Use JSON when sending metadata confirmations
-         success: function (data: any, textStatus: string, jqXHR: XMLHttpRequest) {
-           that.step = 3;
-           that.changeDetectorRef.detectChanges();
-         },
-         error: function (jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
-           that.errorMessage = `Details ${JSON.stringify({textStatus, errorThrown})}`;
-           that.step = 4;
-           that.changeDetectorRef.detectChanges();
-         },
-       });*/
     });
 
     this.confirmMetadataButtonName = 'Confirming Upload...';

@@ -3,7 +3,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 
-import {StudyComponent} from './pages/biomaterial/upload/components/study.component';
 import {AppRoutingModule} from './router/routing.module';
 import {BrowserSidebarComponent} from './pages/biomaterial/browse/components/browser-sidebar/browser-sidebar.component';
 import {MapToIterablePipe} from './common/mapToIterable.pipe';
@@ -126,7 +125,6 @@ import {MetadataEditorFieldComponent} from './pages/biomaterial/metadata/compone
       FilterSidebarCategoryComponent,
       FilterSidebarAllULComponent,
       SampleFiltersComponent,
-      StudyComponent,
       MapToIterablePipe,
       CollapseDirective,
       SpinnerComponent,

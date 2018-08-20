@@ -88,6 +88,7 @@ export class StudyDetailsPage implements OnInit {
   public pubmedIds = [];
   public doiIds = [];
   public study: Study;
+  public backUrl = AppUrls.browseBioMaterialStudiesUrl;
 
   constructor(private studyService: StudyService,
               private route: ActivatedRoute,
@@ -101,6 +102,12 @@ export class StudyDetailsPage implements OnInit {
       this.studyService.getStudy(studyId).then((study: Study) => {
         this.setStudy(study);
       });
+    });
+
+    this.route.queryParams.subscribe(queryParams => {
+      if (queryParams['upload'] === 'true') {
+        this.backUrl = AppUrls.manageBioMaterialStudiesUrl;
+      }
     });
   }
 
@@ -132,7 +139,7 @@ export class StudyDetailsPage implements OnInit {
   }
 
   public onBackClicked() {
-    this.router.navigateByUrl(AppUrls.browseBioMaterialStudiesUrl);
+    this.router.navigateByUrl(this.backUrl);
   }
 
   public onDownloadStudy() {

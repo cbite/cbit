@@ -92,28 +92,5 @@ export class BioMaterialMetadataPage implements OnInit {
         self.fieldMetaService.flushCaches();
         // TODO@Sam check what happens on error
       });
-
-    /*    $.ajax({
-          type: 'POST',
-          url: this._url.metadataFieldsMultiResource(),
-          headers: this._auth.headers(),
-          data: JSON.stringify(Object.values(this.form.value)),
-          dataType: 'json',
-          success: function(response) {
-            self.savingChanges = false;
-            self.saveDone = true;
-            self._changeDetectorRef.detectChanges();
-          },
-          error: function(jqXHR: XMLHttpRequest, textStatus: string, errorThrown: string) {
-            self.savingChanges = false;
-            self.saveDone = true;
-            self.saveError = `Error: ${textStatus}, ${errorThrown}, ${jqXHR.responseText}`;
-            self._changeDetectorRef.detectChanges();
-          },
-          complete: function() {
-            // Whatever happened, caches are stale now
-            self._studyService.flushCaches();
-          }
-        })*/
   }
 }

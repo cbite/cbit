@@ -55,7 +55,7 @@ export class BioMaterialStudiesBrowsePage implements OnInit, OnDestroy {
   }
 
   public onShowDetailsClicked(match: UnifiedMatch) {
-    this.router.navigateByUrl(AppUrls.replaceStudyId(AppUrls.studyUrl, match.study._id))
+    this.router.navigateByUrl(AppUrls.replaceStudyId(AppUrls.studyUrl, match.study._id));
   }
 
   public onFullPropertiesListClicked() {
