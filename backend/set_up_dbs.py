@@ -94,7 +94,7 @@ def set_up_elasticsearch():
                         "include_in_all": False
                     },
 
-                    "*Supplementary Files": {BiomaterialsMetadataSearchBiomaterials
+                    "*Supplementary Files": {
                         "type": "string",
                         "index": "not_analyzed",
                         "include_in_all": False
