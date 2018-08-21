@@ -27,6 +27,55 @@ ansible-playbook playbook.yml --tags backend
 ansible-playbook playbook.yml --tags backend,frontend
 ```
 
+Create Local Environment
+------------------------
+
+1. Make sure you have python and pip on your local machine
+
+2. Install Ansible
+```
+pip install 'ansible==2.1.2.0'
+OR
+sudo pip install ansible
+```
+
+3. Install PostgreSQL
+```
+brew install postgresql
+```
+
+4. Install ElasticSearch (only works with version 2.4)
+```
+brew install elasticsearch@2.4
+```
+
+5. Install virtualenv
+```
+sudo pip install virtualenv
+```
+
+6. Install all necessary Python packages by running
+```
+pip install -r requirements.txt
+```
+
+7. Start up a PostgreSQL 9.5 server and run the following initial queries with `psql`:
+```
+CREATE DATABASE cbit;
+CREATE USER cbit PASSWORD '2076a675b6d813b582977189c13a3279cc9cf02a9aeab01389798d9167cf259c8b247aee9a2be149';
+```
+
+8. Initialize the ElasticSearch and PostgreSQL databases by running:
+```
+cd cbit/backend
+./set_up_dbs.py
+```
+
+9. Set up a Python 2.7 `virtualenv` in the `cbit` folder by running
+```
+cd cbit
+virtualenv -p python2.7 venv
+```
 
 Local Development
 -----------------
@@ -36,43 +85,34 @@ Local Development
 cd ~/elasticsearch-2.4.1
 ./bin/elasticsearch
 ```
-
-2. Start up a PostgreSQL 9.5 server and run the following initial queries with `psql`:
+OR
 ```
-CREATE DATABASE cbit;
-CREATE USER cbit PASSWORD '2076a675b6d813b582977189c13a3279cc9cf02a9aeab01389798d9167cf259c8b247aee9a2be149';
-```
-
-3. Set up a Python 2.7 `virtualenv` in the `cbit` folder by running
-```
-cd cbit
-virtualenv -p python2.7 venv
+cd /usr/local/Cellar/elasticsearch\@2.4/2.4.6_1/
+./bin/elasticsearch
 ```
 
-4. Activate the `virtualenv` by running
+2.  Start postgreSQL
+```
+pg_ctl -D /usr/local/var/postgres start
+```
+Tip: Stop postgreSQL
+```
+pg_ctl -D /usr/local/var/postgres stop
+```
+
+3. Activate the `virtualenv` by running
 ```
 source ./venv/bin/activate
 ```
 
-5. Install all necessary Python packages by running
-```
-pip install -r requirements.txt
-```
-
-6. Initialize the ElasticSearch and PostgreSQL databases by running:
-```
-cd cbit/backend
-./set_up_dbs.py
-```
-
-7. For front-end development, first make sure you can run the [Angular 2 Quickstart](https://angular.io/docs/ts/latest/quickstart.html).  Then run:
+4. For front-end development, first make sure you can run the [Angular 2 Quickstart](https://angular.io/docs/ts/latest/quickstart.html).  Then run:
 ```
 cd cbit/frontend
 npm install  # Only run once
 npm start    # Go to http://localhost:8080
 ```
 
-8. To run the backend locally, run following command from your virtual environment
+5. To run the backend locally, run following command from your virtual environment
 ```
 cd cbit/backend
 sh run-backend-server.sh
@@ -112,48 +152,6 @@ sudo shutdown -r now
 
 Extra tips for getting this to work
 -----------------------------------
-- Make sure you have python and pip on your local machine
-
-- Install Ansible
-```
-pip install 'ansible==2.1.2.0'
-```
-
-- Install PostgreSQL
-```
-brew install postgresql
-```
-
-- Install ElasticSearch (only works with version 2.4)
-```
-brew install elasticsearch@2.4
-```
-
-- Install virtualenv
-```
-sudo pip install virtualenv
-```
-
-- Start elasticsearch
-```
-cd /usr/local/Cellar/elasticsearch\@2.4/2.4.6_1/
-./bin/elasticsearch
-```
-
--  Start postgreSQL
-```
-pg_ctl -D /usr/local/var/postgres start
-```
-
--  Stop postgreSQL
-```
-pg_ctl -D /usr/local/var/postgres stop
-```
-
-- Install ansible
-```
-sudo pip install ansible
-```
 
 Debugging Python Backend
 -------------------------

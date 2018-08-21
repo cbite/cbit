@@ -24,20 +24,9 @@ import {ExternalLinkService} from '../../../services/external-link.service';
         <h4>{{title}}</h4>
         <div class="authors">by {{authors}}</div>
 
-        <div style="margin: 20px 0 10px 0">
-          <div class="downloads">
-            <div class="link" (click)="onDownloadStudy()">
-              <i class="far fa-download"></i> Study
-            </div>
-            <div class="link" (click)="onDownloadProtocol()">
-              <i class="far fa-download"></i> Protocol
-            </div>
-            <spinner class="spinner" *ngIf="downloadInProgress"></spinner>
-          </div>
-        </div>
-
-        <div style="margin: 10px 0">
+        <div style="margin: 20px 0 0 0">
           <div class="links">
+            <!--<div style="display: inline-block; width: 120px"><h6><b>Links</b></h6></div>-->
             <div class="link" (click)="onOpenExternal('ArrayExpress', arrayExpressId)">
               <i class="far fa-link"></i> Array Express
             </div>
@@ -47,6 +36,19 @@ import {ExternalLinkService} from '../../../services/external-link.service';
             <div class="link" *ngFor="let doi of doiIds" (click)="onOpenExternal('DOI', doi)">
               <i class="far fa-link"></i> DOI
             </div>
+          </div>
+        </div>
+
+        <div style="margin: 10px 0 20px 0">
+          <div class="downloads">
+            <!--<div style="display: inline-block; width: 120px"><h6><b>Downloads</b></h6></div>-->
+            <div class="link" (click)="onDownloadStudy()">
+              <i class="far fa-download"></i> Study
+            </div>
+            <div class="link" (click)="onDownloadProtocol()">
+              <i class="far fa-download"></i> Protocol
+            </div>
+            <spinner class="spinner" *ngIf="downloadInProgress"></spinner>
           </div>
         </div>
 

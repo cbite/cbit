@@ -39,13 +39,16 @@
 }
 
 .link {
-  color: $color-blue;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 5px;
+  background-color: $color-blue;
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 5px;
   cursor: pointer;
 
   &:hover {
-    color: $color-dark-blue;
+    background-color: darken($color-blue, 10%);
   }
 }
 
