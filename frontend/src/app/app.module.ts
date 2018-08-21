@@ -78,6 +78,7 @@ import {ExternalLinkService} from './services/external-link.service';
 import {MetadataEditorFieldComponent} from './pages/biomaterial/metadata/components/metadata-editor-field.component';
 import {PageSpinnerComponent} from './core/components/page-spinner/page-spinner.component';
 import {SpinnerComponent} from './common/spinner.component';
+import {DashboardPage} from './pages/dashboard/dashboard.page';
 
 @NgModule(
   {
@@ -111,6 +112,7 @@ import {SpinnerComponent} from './common/spinner.component';
       BioMaterialStudiesBrowsePage,
       SplitByTwoPipe,
       BioMaterialStudyUploadPage,
+      DashboardPage,
       FieldMetadataFormComponent,
       BioMaterialMetadataPage,
       FieldMetadataEditorComponent,

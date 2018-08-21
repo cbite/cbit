@@ -1,0 +1,16 @@
+@import '../../../variables';
+
+.page {
+  .page-content {
+    max-width: 1000px;
+    padding: 30px;
+  }
+
+  .dashboard-component {
+    margin-top: 20px;
+    background-color: $color-gray;
+    display: inline-block;
+    padding: 30px;
+    border: 1px solid darken($color-gray, 10%);
+  }
+}

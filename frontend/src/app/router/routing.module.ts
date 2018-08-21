@@ -14,6 +14,7 @@ import {BioMaterialStudiesBrowsePage} from '../pages/biomaterial/browse/biomater
 import {BioMaterialStudyUploadPage} from '../pages/biomaterial/upload/biomaterial-study-upload.page';
 import {BioMaterialMetadataPage} from '../pages/biomaterial/metadata/biomaterial-metadata.page';
 import {StudyDetailsPage} from '../pages/biomaterial/details/study-details.page';
+import {DashboardPage} from '../pages/dashboard/dashboard.page';
 
 const routes: Routes = [
   { path: '',           redirectTo: '/welcome', pathMatch: 'full' },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: AppUrls.browseTendonStudiesUrl, component: TendonsStudiesBrowsePage },
   { path: AppUrls.browseBioMaterialStudiesUrl, component: BioMaterialStudiesBrowsePage },
   { path: AppUrls.newTendonsStudyUrl, component: TendonsStudyEditorPage },
+  { path: AppUrls.dashboardUrl, component: DashboardPage },
   { path: AppUrls.newBioMaterialStudyUrl, component: BioMaterialStudyUploadPage },
   { path: AppUrls.tendonsStudyUrl, component: TendonsStudyEditorPage },
   { path: AppUrls.peopleUrl, component: PeoplePage }

@@ -4,6 +4,7 @@ export class AppUrls {
   public static faqUrl = 'faq';
   public static usersUrl = 'users';
   public static peopleUrl = 'people';
+  public static dashboardUrl = 'dashboard';
 
   public static studyUrl = 'study/:studyId';
 

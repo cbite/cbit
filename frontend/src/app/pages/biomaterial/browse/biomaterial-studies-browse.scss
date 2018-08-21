@@ -9,46 +9,30 @@
   margin-left: 0;
   padding-left: 0;
   min-width: 280px;
-  height: calc(100vh - 50px);
+  min-height: calc(100vh - 50px);
   display: block;
   background-color: $color-gray;
   border-right: 1px solid darken($color-gray, 10%);
 }
 
-.main {
-  padding: 20px;
-}
-
-.submenu {
-  height: 50px;
-  line-height: 50px;
-  width: 100%;
-  background-color: lighten($color-dark-blue, 10%);
-  //background-color: red;
-}
-
-.submenu-menu {
-  height: 50px;
-  line-height: 50px;
-  width: 100%;
-  color: white;
-  font-size: 0;
+.header {
+  color: darken($color-gray, 50%);
+  padding: 0 20px;
+  background-color: $color-gray;
+  height: 40px;
+  line-height: 40px;
+  font-size: $font-size-small;
+  border-bottom: 1px solid darken($color-gray, 10%);
 
   .link {
     cursor: pointer;
-    display: inline-block;
-    width: 50%;
-    font-size: $font-size-normal;
-    text-align: left;
-    padding: 0 20px;
-    background-color: lighten($color-dark-blue, 10%);
-
-    &.active {
-      background-color: $color-blue;
-    }
 
     &:hover {
-      background-color: $color-blue;
+      color: $color-dark-blue;
     }
   }
+}
+
+.results {
+  padding: 20px 20px 70px 20px;
 }
