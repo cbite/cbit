@@ -64,6 +64,7 @@ export class StudyService {
   private studyRequester: CacheableBulkRequester<Study>;
   private sampleRequester: CacheableBulkRequester<Sample>;
   private sampleIdsRequester: CacheableBulkRequester<string[]>;
+  private firstSearchPerformed = false;
 
   constructor(private _url: URLService,
               private httpGatewayService: HttpGatewayService,
@@ -168,7 +169,11 @@ export class StudyService {
     // (i.e., postpone calls to getStudy() and getSample() as long as possible)
     const self = this;
     return new Promise(resolve => {
-      this.googleAnalyticsService.emitSearchBiomaterialsEvent();
+      if (this.firstSearchPerformed) {
+        this.googleAnalyticsService.emitSearchBiomaterialsEvent();
+      } else {
+        this.firstSearchPerformed = true;
+      }
       this.httpGatewayService.post(self._url.metadataSearchResource(), JSON.stringify({
         filters: filters
       })).subscribe(data => {

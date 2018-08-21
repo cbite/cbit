@@ -1,11 +1,11 @@
-import {Injectable} from "@angular/core";
-import {BehaviorSubject, Observable} from "rxjs";
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
 import * as _ from 'lodash';
 
 export const enum FilterMode {
   AllButThese = 0,
-  OnlyThese   = 1,
-  Range       = 2
+  OnlyThese = 1,
+  Range = 2
 }
 
 export interface SampleFilter {
@@ -38,7 +38,7 @@ export const EMPTY_FILTERS: FiltersState = {
   searchText: '',
   includeControls: true,
   sampleFilters: {}
-}
+};
 
 // For inspiration, see: http://blog.angular-university.io/how-to-build-angular2-apps-using-rxjs-observable-data-services-pitfalls-to-avoid/
 @Injectable()
@@ -79,7 +79,7 @@ export class FiltersService {
   setSampleFilters(newSampleFilters: SampleFilters): void {
     this.setFilters(Object.assign({}, this._filters.getValue(), {
       sampleFilters: newSampleFilters
-    }))
+    }));
   }
 
   // Force all components to reprocess filters (e.g., after logging in as an admin)
@@ -90,7 +90,7 @@ export class FiltersService {
   setSampleFilter(category: string, valueName: string, include: boolean): void {
     // Copy out relevant filters section, if any
     let curFilters: SampleFilters = _.cloneDeep(this.getFilters().sampleFilters);
-    let theseFilters = Object.assign({}, curFilters[category] || {mode: FilterMode.AllButThese, detail: {}})
+    let theseFilters = Object.assign({}, curFilters[category] || {mode: FilterMode.AllButThese, detail: {}});
 
     if (theseFilters.mode === FilterMode.AllButThese) {
       if (include) {
@@ -130,7 +130,7 @@ export class FiltersService {
     curFilters[category] = {
       mode: FilterMode.OnlyThese,
       detail: {}
-    }
+    };
     this.setSampleFilters(curFilters);
   }
 
@@ -143,7 +143,7 @@ export class FiltersService {
         endValue: endValue,
         includeUnspecified: includeUnspecified
       }
-    }
+    };
     this.setSampleFilters(curFilters);
   }
 

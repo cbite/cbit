@@ -41,8 +41,6 @@ export class BioMaterialStudiesBrowsePage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.fieldMetaService.getAllFieldMetas().then(fieldMetas => {
-      // this.fieldMetas = fieldMetas;
-
       // Use switchMap to cancel in-flight queries if new filters are applied in the meantime
       this.filtersService.filters.switchMap(filters => {
         return Observable.fromPromise(<Promise<UnifiedMatch[]>>this.studyService.getUnifiedMatchesAsync(filters));
