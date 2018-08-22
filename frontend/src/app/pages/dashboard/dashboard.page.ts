@@ -9,7 +9,7 @@ import {DashboardService} from './services/dashboard.service';
   template: `
     <div class="page">
         <div class="header">
-          <span class="link" (click)="goToDashboard()"><i class="fas fa-chart-bar"></i> Dashboard</span>
+          <span class="link"><i class="fas fa-chart-bar"></i> Dashboard</span>
         </div>
       <div class="page-content">
         <div class="page-title">cBiT Dashboard</div>
