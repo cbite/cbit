@@ -21,6 +21,7 @@ enum GlobalCheckboxState {
 
 @Component({
   selector: 'sample-filters',
+  styleUrls: ['./sample-filters.scss'],
   template: `
     <li class="top-level-li" *ngIf="!isTrivial()">
       <div class="fullLabel">
@@ -108,102 +109,7 @@ enum GlobalCheckboxState {
         </div>
       </div>
     </li>
-  `,
-  styles: [`
-    .top-level-li {
-      padding-top: 5px;
-      padding-bottom: 5px;
-    }
-    .fullLabel {
-      margin-bottom: -10px;
-    }
-    .fullLabel > a {
-      position: static;
-      display: inline;
-      padding: 0px;
-    }
-    .my-label {
-      width: auto;
-      max-width: 80%;
-      vertical-align: top;
-    }
-    .my-label a {
-      padding: 10px 0;
-      text-decoration: none;
-      font-weight: normal;
-    }
-    .my-label a:hover {
-      text-decoration: underline;
-    }
-    .units {
-      font-size: 90%;
-      font-style: oblique;
-      padding-left: 38px;
-      padding-top: 7px;
-    }
-
-    ul li {
-      position: relative;
-      margin-right: 10px;
-      width: 100%;
-    }
-
-    ul li label {
-      margin-right: 40px;
-    }
-
-    .count {
-      display: block;
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      width: 40px;
-      font-style: italic;
-      font-size: 80%;
-      padding-top: 2px;
-      text-align: right;
-    }
-    .disabled {
-      color: #c0c0c0;
-    }
-
-    .slider-box {
-      position: relative;
-      margin-left: 30px;
-      padding-top: 20px;
-    }
-
-    .slider-box > .actualRange {
-      position: absolute;
-      top: 7px;
-      left: 0;
-      width: 100%;
-      overflow: visible;
-      text-align: center;
-    }
-
-    .slider-box > .minValue {
-      position: absolute;
-      left: 0px;
-      top: 50px;
-    }
-
-    .slider-box > .maxValue {
-      position: absolute;
-      right: 0px;
-      top: 50px;
-    }
-
-    .slider-box > ng2-slider {
-      display: block;
-      margin-left: 10px;
-      margin-right: 10px;
-    }
-
-    .slider-box > .checkbox {
-      margin-top: 25px;
-    }
-  `]
+  `
 })
 export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() category: string;
@@ -233,6 +139,7 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
   endValue = 0;
   rangeIncludeUnspecified = true;
   tickSize = 1;
+
   units(): string[] {
     const unitConverter = DimensionsRegister[this.dimensions];
     return (unitConverter ? unitConverter.getPossibleUnits() : []);
@@ -344,12 +251,12 @@ export class SampleFiltersComponent implements OnInit, OnDestroy, AfterViewCheck
     }
 
     // Take advantage that partialResult guaranteed non-empty and is sorted to determine numerical ranges and precision
-    if (this.isNumerical) {
+    if (this.isNumerical && partialResult.length > 0) {
       this.minValue = +(partialResult[0].key);
       this.maxValue = +(partialResult[partialResult.length - 1].key);
 
       let range: number;
-      if (this.minValue == this.maxValue) {
+      if (this.minValue === this.maxValue) {
         range = Math.abs(this.maxValue);
       } else {
         range = this.maxValue - this.minValue;

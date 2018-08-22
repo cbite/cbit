@@ -76,20 +76,16 @@ Tip: Stop postgreSQL
 pg_ctl -D /usr/local/var/postgres stop
 ```
 
-3. Activate the `virtualenv` by running
-```
-source ./venv/bin/activate
-```
-
-4. For front-end development, first make sure you can run the [Angular 2 Quickstart](https://angular.io/docs/ts/latest/quickstart.html).  Then run:
+3. For front-end development, first make sure you can run the [Angular 2 Quickstart](https://angular.io/docs/ts/latest/quickstart.html).  Then run:
 ```
 cd cbit/frontend
 npm install  # Only run once
 npm start    # Go to http://localhost:8080
 ```
 
-5. To run the backend locally, run following command from your virtual environment
+4. To run the backend locally, run following command after activating your virtual environment
 ```
+source ./venv/bin/activate
 cd cbit/backend
 sh run-backend-server.sh
 ```
