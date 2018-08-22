@@ -33,8 +33,11 @@ import {AppUrls} from '../../../router/app-urls';
              [class.active]="browseActive"
              (mouseenter)="onMouseEnterCBiT()"
              (mouseleave)="onMouseLeaveCBiT()">
-            <div class="link" routerLink="biomaterial/browse">Enter cBiT</div>
+            <div class="link" routerLink="dashboard">Enter cBiT</div>
             <div class="header-submenu" *ngIf="isCBITMenuOpen">
+              <div class="header-submenu-link" routerLink="dashboard" (click)="onMouseLeaveCBiT()">
+                <i class="fas fa-caret-right" style="margin-right: 10px"></i> Dashboard
+              </div>
               <div class="header-submenu-link" routerLink="biomaterial/browse" (click)="onMouseLeaveCBiT()">
                 <i class="fas fa-caret-right" style="margin-right: 10px"></i> Bio Material Studies
               </div>

@@ -18,9 +18,14 @@ import {Router} from '@angular/router';
         <div class="col-3 sidebar">
           <cbit-browser-sidebar (fullPropertiesListClick)="onFullPropertiesListClicked()"></cbit-browser-sidebar>
         </div>
-        <div class="col-9 main">
+        <div class="col-9">
+          <div class="header">
+            <span class="link" (click)="goToDashboard()"><i class="fas fa-chart-bar"></i> Dashboard</span>
+            <span style="margin: 0 5px;"><i class="far fa-angle-right"></i></span> Bio Material</div>
+          <div class="results">
           <cbit-study-results [matches]="matches" (showDetails)="onShowDetailsClicked($event)"
                               (download)="onDownload($event)"></cbit-study-results>
+          </div>
         </div>
       </div>
     </div>
@@ -61,6 +66,10 @@ export class BioMaterialStudiesBrowsePage implements OnInit, OnDestroy {
 
   public onDownload(study: Study) {
     this.studyService.downloadStudy(study);
+  }
+
+  public goToDashboard() {
+    this.router.navigateByUrl(AppUrls.dashboardUrl);
   }
 
   public ngOnDestroy() {
