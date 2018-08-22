@@ -13,6 +13,7 @@
   display: block;
   background-color: $color-gray;
   border-right: 1px solid darken($color-gray, 10%);
+  box-shadow: $shadow-subtle;
 }
 
 .header {

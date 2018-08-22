@@ -1,16 +1,56 @@
 @import '../../../variables';
 
 .page {
+  background-color: $color-gray;
+  min-height: calc(100vh - 40px);
+
   .page-content {
-    max-width: 1000px;
+    min-width: 1000px;
     padding: 30px;
+    padding-top: 20px;
+
+    .page-title {
+      font-size: $font-size-huge;
+    }
+    .page-subtitle {
+      margin-bottom: 20px;
+    }
   }
 
   .dashboard-component {
-    margin-top: 20px;
-    background-color: $color-gray;
     display: inline-block;
-    padding: 30px;
     border: 1px solid darken($color-gray, 10%);
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: $shadow-subtle;
+
+    .title {
+      background-color: $color-blue;
+      color: white;
+      text-align: left;
+      font-size: $font-size-normal;
+      height: 40px;
+      line-height: 40px;
+      padding: 0 20px;
+    }
+
+    .content {
+      padding: 30px 50px;
+
+      .material-class-chart {
+        height: 200px;
+        width: 400px;
+      }
+
+      .study-types-chart {
+        height: 160px;
+        width: 400px;
+      }
+
+      .studies-publication-chart {
+        height: 160px;
+        width: 400px;
+      }
+    }
   }
 }

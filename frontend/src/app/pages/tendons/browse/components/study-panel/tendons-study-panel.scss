@@ -3,6 +3,7 @@
 .study-panel {
   margin: 20px;
   border: 1px solid darken($color-gray, 10%);
+  box-shadow: $shadow-subtle;
 
   .header {
     padding: 10px;
