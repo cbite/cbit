@@ -19,7 +19,7 @@ import {LoggedInUser} from '../../authentication/loggedInUser';
       <div class="header-menu" *ngIf="isOpen">
         <div class="header-menu-link" (click)="onMenuClick('manage_biomaterial_studies')">
           <div class="icon"><i class="far fa-edit"></i></div>
-          <div class="label">Bio Material Studies</div>
+          <div class="label">Biomaterial Studies</div>
         </div>
         <div class="header-menu-link" (click)="onMenuClick('manage_tendons_studies')">
           <div class="icon"><i class="far fa-edit"></i></div>

@@ -7,7 +7,7 @@ cBiT is maintained by the [University of Maastricht](https://www.maastrichtunive
 
 Deployment
 ----------
-1. Install the following prerequisites:
+1. Install the following prerequisites (or use the 'cBiT deployment' virtual machine):
  - Ansible (`>=2.1.2.0`)
  - Recent versions of `node` (e.g., `>= 4.6.1`) and `npm` (e.g., `>= 3.10.9`)
 2. Edit `cbit/ansible/hosts` and fill in `ansible_user` with your username on the `cbit` machine (must have passwordless SSH set up)
@@ -149,9 +149,6 @@ sudo shutdown -r now
 ```
 
 
-
-Extra tips for getting this to work
------------------------------------
 
 Debugging Python Backend
 -------------------------
