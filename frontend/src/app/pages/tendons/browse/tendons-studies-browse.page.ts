@@ -23,7 +23,7 @@ import {Router} from '@angular/router';
           </div>
           <div class="results">
             <div class="title-panel">
-              <h3>Results</h3>
+              <div class="title">Results</div>
               <cbit-tendons-study-results-header
                 [studies]="filteredStudies"
                 [sortField]="sortField"

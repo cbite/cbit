@@ -7,7 +7,7 @@ import {Study} from '../../../../../core/types/study.model';
   styleUrls: ['./study-results.scss'],
   template: `
     <div class="title-panel">
-      <h3>Results</h3>
+      <div class="title">Results</div>
       {{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples
     </div>
 

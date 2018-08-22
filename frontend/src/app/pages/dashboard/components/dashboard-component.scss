@@ -1,0 +1,38 @@
+@import '../../../../variables';
+
+.dashboard-component {
+  display: inline-block;
+  border: 1px solid darken($color-gray, 10%);
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: $shadow-subtle;
+
+  .title {
+    background-color: $color-blue;
+    color: white;
+    text-align: left;
+    font-size: $font-size-normal;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 20px;
+  }
+
+  .content {
+    padding: 30px 50px;
+
+    .material-class-chart {
+      height: 200px;
+      width: 400px;
+    }
+
+    .study-types-chart {
+      height: 160px;
+      width: 400px;
+    }
+
+    .studies-publication-chart {
+      height: 160px;
+      width: 400px;
+    }
+  }
+}
