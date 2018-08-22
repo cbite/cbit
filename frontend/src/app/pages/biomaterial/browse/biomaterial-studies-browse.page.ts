@@ -21,7 +21,8 @@ import {Router} from '@angular/router';
         <div class="col-9">
           <div class="header">
             <span class="link" (click)="goToDashboard()"><i class="fas fa-chart-bar"></i> Dashboard</span>
-            <span style="margin: 0 5px;"><i class="far fa-angle-right"></i></span> Biomaterial</div>
+            <span style="margin: 0 5px;"><i class="far fa-angle-right"></i></span> Biomaterial
+          </div>
           <div class="results">
           <cbit-study-results [matches]="matches" (showDetails)="onShowDetailsClicked($event)"
                               (download)="onDownload($event)"></cbit-study-results>

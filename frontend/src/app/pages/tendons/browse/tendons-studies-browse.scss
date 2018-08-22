@@ -13,12 +13,31 @@
   display: block;
   background-color: $color-gray;
   border-right: 1px solid darken($color-gray, 10%);
+  box-shadow: $shadow-subtle;
 }
 
-.main {
+.results {
   padding: 20px;
 
   .title-panel {
     margin-bottom: 40px;
+  }
+}
+
+.header {
+  color: darken($color-gray, 50%);
+  padding: 0 20px;
+  background-color: $color-gray;
+  height: 40px;
+  line-height: 40px;
+  font-size: $font-size-small;
+  border-bottom: 1px solid darken($color-gray, 10%);
+
+  .link {
+    cursor: pointer;
+
+    &:hover {
+      color: $color-dark-blue;
+    }
   }
 }

@@ -4,6 +4,8 @@ import {TendonsStudyService} from '../../../core/services/tendons-study.service'
 import {WindowRef} from '../../../shared/util/WindowRef';
 import {ExternalLinkService} from '../../../services/external-link.service';
 import {GoogleAnalyticsService} from '../../../services/google-analytics.service';
+import {AppUrls} from '../../../router/app-urls';
+import {Router} from '@angular/router';
 
 @Component({
   styleUrls: ['./tendons-studies-browse.scss'],
@@ -14,19 +16,25 @@ import {GoogleAnalyticsService} from '../../../services/google-analytics.service
           <cbit-tendons-browser-sidebar [studies]="studies" (updateFiltered)="onUpdateFiltered($event)">
           </cbit-tendons-browser-sidebar>
         </div>
-        <div class="col-9 main">
-          <div class="title-panel">
-            <h3>Results</h3>
-            <cbit-tendons-study-results-header
-              [studies]="filteredStudies"
-              [sortField]="sortField"
-              [sortFields]="sortFields"
-              (sortingChange)="onSortingChanged($event)">
-            </cbit-tendons-study-results-header>
+        <div class="col-9">
+          <div class="header">
+            <span class="link" (click)="goToDashboard()"><i class="fas fa-chart-bar"></i> Dashboard</span>
+            <span style="margin: 0 5px;"><i class="far fa-angle-right"></i></span> Tendon
           </div>
-          <cbit-tendons-study-panel *ngFor="let study of filteredStudies"
-                                    [study]="study"
-                                    (openExternal)="onOpenExternal($event)"></cbit-tendons-study-panel>
+          <div class="results">
+            <div class="title-panel">
+              <h3>Results</h3>
+              <cbit-tendons-study-results-header
+                [studies]="filteredStudies"
+                [sortField]="sortField"
+                [sortFields]="sortFields"
+                (sortingChange)="onSortingChanged($event)">
+              </cbit-tendons-study-results-header>
+            </div>
+            <cbit-tendons-study-panel *ngFor="let study of filteredStudies"
+                                      [study]="study"
+                                      (openExternal)="onOpenExternal($event)"></cbit-tendons-study-panel>
+          </div>
         </div>
       </div>
     </div>
@@ -40,11 +48,17 @@ export class TendonsStudiesBrowsePage implements OnInit {
   public sortFields = ['Name', 'Year', 'Platform'];
   public sortField = 'Name';
 
-  constructor(private tendonsStudyService: TendonsStudyService, private externalLinkService: ExternalLinkService) {
+  constructor(private tendonsStudyService: TendonsStudyService,
+              private externalLinkService: ExternalLinkService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
     this.loadStudies();
+  }
+
+  public goToDashboard() {
+    this.router.navigateByUrl(AppUrls.dashboardUrl);
   }
 
   private loadStudies() {
