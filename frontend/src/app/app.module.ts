@@ -82,6 +82,7 @@ import {DashboardPage} from './pages/dashboard/dashboard.page';
 import {GeneExpressionChartComponent} from './pages/dashboard/components/gene-expression-chart.component';
 import {MaterialClassChartComponent} from './pages/dashboard/components/material-class-chart.component';
 import {StudiesPublicationChartComponent} from './pages/dashboard/components/studies-publication-chart.component';
+import {DashboardService} from './pages/dashboard/services/dashboard.service';
 
 @NgModule(
   {
@@ -172,6 +173,7 @@ import {StudiesPublicationChartComponent} from './pages/dashboard/components/stu
       FieldMetaService,
       CollapseStateService,
       UnitFormattingService,
+      DashboardService,
       TooltipService,
       PopupService,
       WindowRef,
