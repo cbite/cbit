@@ -9,7 +9,7 @@ export function getTitle(study: Study): string {
 }
 
 export function getPublicationDate(study: Study): string {
-  return study._source['*Publication Date'];
+  return study._source['STUDY']['Study Public Release Date'];
 }
 
 export function getSupplementaryFiles(study: Study): string[] {

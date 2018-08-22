@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {UnifiedMatch} from '../../../../../core/services/study.service';
-import {WindowRef} from '../../../../../shared/util/WindowRef';
 import {
   getArrayExpressId, getAuthors, getDoisIds, getId, getPublicationDate, getPubmedIds,
   getTitle
@@ -35,7 +34,7 @@ import {ExternalLinkService} from '../../../../../services/external-link.service
           <i class="far fa-link"></i> DOI
         </div>
         <div class="link" (click)="onOpenExternal('ArrayExpress', arrayExpressId)">
-          <i class="far fa-link"></i> Array Express
+          <i class="far fa-link"></i> ArrayExpress
         </div>
       </div>
     </div>

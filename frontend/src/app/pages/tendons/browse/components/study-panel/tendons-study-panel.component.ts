@@ -23,7 +23,7 @@ import {TendonsStudy} from '../../../../../core/types/Tendons-study';
       </div>
       <div class="footer">
         <div class="link" (click)="onOpenExternal('ArrayExpress', study.arrayExpressId)">
-          <i class="far fa-link"></i> Array Express
+          <i class="far fa-link"></i> ArrayExpress
         </div>
         <div class="link" (click)="onOpenExternal('PubMed', study.pubMedId)">
           <i class="far fa-link"></i> PubMed

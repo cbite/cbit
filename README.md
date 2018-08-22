@@ -5,31 +5,8 @@ cBiT is a data warehouse for collecting gene expression data for cells grown on 
 cBiT is maintained by the [University of Maastricht](https://www.maastrichtuniversity.nl/)'s [MERLN](http://merln.maastrichtuniversity.nl/) lab.
 
 
-Deployment
-----------
-1. Install the following prerequisites (or use the 'cBiT deployment' virtual machine):
- - Ansible (`>=2.1.2.0`)
- - Recent versions of `node` (e.g., `>= 4.6.1`) and `npm` (e.g., `>= 3.10.9`)
-2. Edit `cbit/ansible/hosts` and fill in `ansible_user` with your username on the `cbit` machine (must have passwordless SSH set up)
-3. To ensure that `cbit` machine's `sudo` is correctly configured, run the following command from the `ansible` directory:
-```
-ANSIBLE_SSH_PIPELINING=0 ansible-playbook playbook-PRERUN.yml
-```
-4. If that fails, manually run `sudo visudo` on the `cbit` machine and follow the manual edit instructions at the top of `playbook-PRERUN.yml`
-5. From the `ansible` directory, run:
-```
-ansible-playbook playbook.yml
-```
-You only need to run the full playbook when starting from an empty machine.  If you just want to publish changes to the backend / frontend, run one of these commands:
-```
-ansible-playbook playbook.yml --tags frontend
-ansible-playbook playbook.yml --tags backend
-ansible-playbook playbook.yml --tags backend,frontend
-```
-
 Create Local Environment
 ------------------------
-
 1. Make sure you have python and pip on your local machine
 
 2. Install Ansible
@@ -79,7 +56,6 @@ virtualenv -p python2.7 venv
 
 Local Development
 -----------------
-
 1. Start up an ElasticSearch 2.4.1 server, e.g.,
 ```
 cd ~/elasticsearch-2.4.1
@@ -118,10 +94,44 @@ cd cbit/backend
 sh run-backend-server.sh
 ```
 
+Deployment
+----------
+1. Install the following prerequisites (or use the 'cBiT deployment' virtual machine that was delivered):
+ - Ansible (`>=2.1.2.0`)
+ - Recent versions of `node` (e.g., `>= 4.6.1`) and `npm` (e.g., `>= 3.10.9`)
+2. Edit `cbit/ansible/hosts` and fill in `ansible_user` with your username on the `cbit` machine (must have passwordless SSH set up)
+3. To ensure that `cbit` machine's `sudo` is correctly configured, run the following command from the `ansible` directory:
+```
+ANSIBLE_SSH_PIPELINING=0 ansible-playbook playbook-PRERUN.yml
+```
+4. If that fails, manually run `sudo visudo` on the `cbit` machine and follow the manual edit instructions at the top of `playbook-PRERUN.yml`
+5. From the `ansible` directory, run:
+```
+ansible-playbook playbook.yml
+```
+You only need to run the full playbook when starting from an empty machine.  If you just want to publish changes to the backend / frontend, run one of these commands:
+```
+ansible-playbook playbook.yml --tags frontend
+ansible-playbook playbook.yml --tags backend
+ansible-playbook playbook.yml --tags backend,frontend
+```
+
+  'cBiT deployment' virtual machine setup
+  ---------------------------------------
+  Ubuntu 18.04.1 LTS
+	  - Installed software
+		  ○ Node v8.11.3
+		  ○ NPM v5.6.0
+		  ○ Python v2.7.15
+		  ○ Pip v9.0.1
+		  ○ Git v2.17.1
+		  ○ Ansible v2.1.2.0
+		  ○ Webstorm v2018.2.1 (trial version)
+	  - Credentials: cbit / cbit!Deploy
+
 
 Troubleshooting
 ---------------
-
 A few hints in case something goes wrong.
 
 1. Log into the cbit machine, e.g.,
@@ -147,7 +157,6 @@ If it is, you may have to delete stale uploads / downloads from `/home/cbit/back
 ```
 sudo shutdown -r now
 ```
-
 
 
 Debugging Python Backend
