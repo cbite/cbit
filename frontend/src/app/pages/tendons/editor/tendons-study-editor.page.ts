@@ -36,11 +36,11 @@ import {Observable} from 'rxjs/Observable';
             </div>
           </div>
           <div class="form-group">
-            <label>Array Exress Id</label>
+            <label>ArrayExress Id</label>
             <input type="text" formControlName="arrayExpressId" class="form-control" [(ngModel)]="study.arrayExpressId"
                    [ngClass]="{ 'is-invalid': submitted && f.arrayExpressId.errors }"/>
             <div *ngIf="submitted && f.arrayExpressId.errors" class="invalid-feedback">
-              <div *ngIf="f.arrayExpressId.errors.required">Array Express Id is required</div>
+              <div *ngIf="f.arrayExpressId.errors.required">ArrayExpress Id is required</div>
             </div>
           </div>
           <div class="form-group">

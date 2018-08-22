@@ -28,7 +28,7 @@ import {ExternalLinkService} from '../../../services/external-link.service';
           <div class="links">
             <!--<div style="display: inline-block; width: 120px"><h6><b>Links</b></h6></div>-->
             <div class="link" (click)="onOpenExternal('ArrayExpress', arrayExpressId)">
-              <i class="far fa-link"></i> Array Express
+              <i class="far fa-link"></i> ArrayExpress
             </div>
             <div class="link" *ngFor="let pubmedId of pubmedIds" (click)="onOpenExternal('PubMed', pubmedId)">
               <i class="far fa-link"></i> PubMed

@@ -27,7 +27,7 @@ import {Component} from '@angular/core';
             <p>
               cBiT is the first repository that offers biomaterial-based transcriptomics data
               together with all <br> relevant biomaterial metadata. Check out the <a routerLink="/about">About</a>
-              section for more information or <br>go directly to <a routerLink="/biomaterial/browse">Browse</a>
+              section for more information or <br>go directly to <a routerLink="/biomaterial/browse">Enter cBiT</a>
               to see what we have to offer!
             </p>
 
