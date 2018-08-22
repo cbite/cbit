@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectorRef, OnDestroy, Input, OnChanges} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, OnDestroy, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {FiltersService, FiltersState} from '../../services/filters.service';
 import {
@@ -74,6 +74,8 @@ export class FilterSidebarCategoryComponent {
 
   constructor(private _collapsedStateService: CollapseStateService) {
   }
+
+
 
   specialPropNames = ['Elements composition', 'Phase composition', 'Wettability'];
 
