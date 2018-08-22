@@ -5,7 +5,7 @@ import {StudyService} from '../../../core/services/study.service';
 import {WindowRef} from '../../../shared/util/WindowRef';
 import {getCommonKeys} from '../../../core/util/samples-helper';
 import {
-  getArrayExpressId, getAuthors, getDoisIds, getProtocolFile, getPubmedIds, getSupplementaryFiles,
+  getArrayExpressId, getAuthors, getDescription, getDoisIds, getProtocolFile, getPubmedIds, getSupplementaryFiles,
   getTitle
 } from '../../../core/util/study-helper';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -52,6 +52,11 @@ import {ExternalLinkService} from '../../../services/external-link.service';
           </div>
         </div>
 
+        <div>
+          <h6><b>Abstract</b></h6>
+          <div class="abstract">{{description}}</div>
+        </div>
+
         <div class="information">
           <h6><b>Information</b></h6>
           <ng-container *ngFor="let category of studyCategories">
@@ -85,6 +90,7 @@ export class StudyDetailsPage implements OnInit {
   public studyCategories: StudyCategory[] = [];
   public samples: Sample[];
   public supplementaryFiles: string[];
+  public description: string;
   public commonKeys: any;
   public arrayExpressId: string;
   public pubmedIds = [];
@@ -118,6 +124,7 @@ export class StudyDetailsPage implements OnInit {
     this.study = study;
     const getCommonKeysFunction = getCommonKeys;
     this.title = getTitle(study);
+    this.description = getDescription(study);
     this.authors = getAuthors(study);
     this.arrayExpressId = getArrayExpressId(study);
     this.pubmedIds = getPubmedIds(study);

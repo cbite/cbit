@@ -153,7 +153,8 @@ def read_archive(archive_filename):
             'Study Identifier',
             'Study Title',
             'Study File Name',
-            'Study Public Release Date'
+            'Study Public Release Date',
+            'Study Description'
         ])
         if not required_STUDY_fields.issubset(investigation['STUDY'].keys()):
             raise ValueError('Missing entries in STUDY section: {0}'.format(
