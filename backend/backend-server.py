@@ -2,6 +2,7 @@
 
 import falcon
 
+from biomaterials.resources.dashboard_samples import DashboardSamplesResource
 from biomaterials.resources.metadata import BiomaterialsMetadataAllCountsResource, \
     BiomaterialsMetadataFilteredCountsResource, BiomaterialsMetadataSamplesInStudies, BiomaterialsMetadataFields, \
     BiomaterialsMetadataFieldsMulti, BiomaterialsMetadataField, BiomaterialsMetadataSearch, \
@@ -82,6 +83,7 @@ app.add_route('/tendons/studies/{study_uuid}', TendonsStudyResource())
 
 
 # GENERAL ROUTES
+app.add_route('/dashboard/samples', DashboardSamplesResource())
 app.add_route('/irods/list', IRODSListResource())
 app.add_route('/users', UsersResource())
 app.add_route('/users/{username}', UserResource())

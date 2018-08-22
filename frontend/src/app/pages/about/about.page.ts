@@ -38,7 +38,7 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
                 Browse, download and analyze data yourself
               </div>
 
-              cBiT can be easily queried under <a routerLink="/browse">Enter cBiT</a> using either free text search or
+              cBiT can be easily queried under <a routerLink="/biomaterial/browse">Enter cBiT</a> using either free text search or
               a material and study property quick selection menu. Studies or samples of interest can be selected
               and subsequently downloaded. For a tutorial on how to use cBiT, please have a look at
               <a href="/assets/pdfs/cBiT-user-manual.pdf">this pdf</a>.

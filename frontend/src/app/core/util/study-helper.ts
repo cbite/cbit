@@ -8,6 +8,10 @@ export function getTitle(study: Study): string {
   return study._source.STUDY['Study Title'];
 }
 
+export function getDescription(study: Study): string {
+  return study._source.STUDY['Study Description'];
+}
+
 export function getPublicationDate(study: Study): string {
   return study._source['STUDY']['Study Public Release Date'];
 }
