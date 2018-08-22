@@ -123,6 +123,14 @@ export class StudyService {
     return this.studyRequester.get(studyId);
   }
 
+  forceGetStudyFromServer(studyId: string): Promise<Study> {
+    return new Promise(resolve => {
+      this.httpGatewayService.get(this._url.studyResource(studyId)).subscribe(data => {
+        resolve(data);
+      });
+    });
+  }
+
   getIdsOfSamplesInStudy(studyId: string): Promise<Array<string>> {
     return this.sampleIdsRequester.get(studyId);
   }

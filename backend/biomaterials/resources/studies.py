@@ -28,9 +28,9 @@ class BiomaterialsStudiesResource(object):
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
         if req.context["isAdmin"]:
-            query_body = { "match_all": {} }
+            query_body = {"match_all": {}}
         else:
-            query_body = { "term": { "*Visible": True } }
+            query_body = {"term": {"*Visible": True}}
 
         rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, _source=None, body={
             "size": 10000,  # TODO: Think about large sizes
@@ -43,7 +43,6 @@ class BiomaterialsStudiesResource(object):
 
         resp.status = falcon.HTTP_OK
         resp.body = json.dumps(result, indent=2, sort_keys=True)
-
 
     def on_post(self, req, resp):
         """
@@ -140,20 +139,19 @@ class BiomaterialsStudyResource(object):
         for hit in rawResults["hits"]["hits"]:
             sampleIds.append(hit["_id"])
 
-
         # Now do a bulk operation to delete the samples, then the study
         bulk_items = []
         for sampleId in sampleIds:
             bulk_items.append({
                 "_op_type": "delete",
-                "_type":    cfg.ES_SAMPLE_DOCTYPE,
-                "_id":      sampleId,
-                "_parent":  study_uuid
+                "_type": cfg.ES_SAMPLE_DOCTYPE,
+                "_id": sampleId,
+                "_parent": study_uuid
             })
         bulk_items.append({
             "_op_type": "delete",
-            "_type":    cfg.ES_STUDY_DOCTYPE,
-            "_id":      study_uuid
+            "_type": cfg.ES_STUDY_DOCTYPE,
+            "_id": study_uuid
         })
 
         num_docs_added, errors = helpers.bulk(es, index=cfg.ES_INDEX,
@@ -173,3 +171,44 @@ class BiomaterialsStudyResource(object):
         resp.body = json.dumps({
             'studyId': study_uuid
         }, indent=2, sort_keys=True)
+
+    def on_get(self, req, resp, study_uuid):
+        """
+        Fetches metadata for the requested study
+        DOES NOT TAKE INTO ACCOUNT *Visible FLAG
+        => everyone can request every study, even if *Visible=false
+
+        Request data
+        ============
+          "StudyID123"
+
+
+        Response
+        ========
+        { ...study metadata... }
+        """
+
+        es = elasticsearch.Elasticsearch(
+            hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
+
+        mustClauses = [
+            {
+                "ids": {
+                    "values": [study_uuid]
+                }
+            }
+        ]
+
+        rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, body={
+            "size": 1,
+            "query": {
+                "bool": {
+                    "must": mustClauses
+                }
+            }
+        })
+
+        result = rawResults["hits"]["hits"][0]
+
+        resp.status = falcon.HTTP_OK
+        resp.body = json.dumps(result, indent=2, sort_keys=True)

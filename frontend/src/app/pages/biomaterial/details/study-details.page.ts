@@ -102,7 +102,7 @@ export class StudyDetailsPage implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const studyId = params ['studyId'];
-      this.studyService.getStudy(studyId).then((study: Study) => {
+      this.studyService.forceGetStudyFromServer(studyId).then((study: Study) => {
         this.setStudy(study);
       });
     });
