@@ -41,7 +41,7 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
               cBiT can be easily queried under <a routerLink="/biomaterial/browse">Enter cBiT</a> using either free text search or
               a material and study property quick selection menu. Studies or samples of interest can be selected
               and subsequently downloaded. For a tutorial on how to use cBiT, please have a look at
-              <a href="/assets/pdfs/cBiT-user-manual.pdf">this pdf</a>.
+              <a href="/assets/pdfs/cBiT user manual.pdf">this pdf</a>.
             </li>
 
             <li>
@@ -52,7 +52,7 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
               cBiT can be easily queried under Browse using either free text search or a material and study property
               quick selection menu. Studies or samples of interest can be selected and subsequently downloaded. For a
               tutorial on how to use cBiT, please have a look at
-              <a href="/assets/pdfs/cBiT-user-manual.pdf">this pdf</a>.
+              <a href="/assets/pdfs/cBiT user manual.pdf">this pdf</a>.
             </li>
 
             <li>
@@ -82,7 +82,7 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
               </div>
 
               Researchers who are interested in depositing their own data in cBiT can follow the detailed
-              instructions in <a href="/assets/pdfs/Archive preparation instructions.zip">this zip file</a> on how to prepare
+              instructions in <a href="/assets/pdfs/cBiT data archive preparation instructions.zip">this zip file</a> on how to prepare
               the data into archives.
             </li>
           </ol>
