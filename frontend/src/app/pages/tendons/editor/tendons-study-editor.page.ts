@@ -57,8 +57,8 @@ import {Observable} from 'rxjs/Observable';
                     class="form-control"
                     [(ngModel)]="study.geneExpressionType"
                     [ngClass]="{ 'is-invalid': submitted && f.geneExpressionType.errors }">
-              <option value="Microarray">Microarray</option>
-              <option value="RNASequencing">RNA Sequencing</option>
+              <option value="Microarray">DNA Microarray</option>
+              <option value="RNA sequencing">RNA Sequencing</option>
             </select>
             <div *ngIf="submitted && f.geneExpressionType.errors" class="invalid-feedback">
               <div *ngIf="f.geneExpressionType.errors.required">Gene Expression Type is required</div>

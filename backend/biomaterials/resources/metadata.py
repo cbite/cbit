@@ -49,7 +49,7 @@ class BiomaterialsMetadataAllCountsResource(object):
         properties = sample_mapping[cfg.ES_INDEX]['mappings'][cfg.ES_SAMPLE_DOCTYPE].get('properties', {})
 
         # Don't include hidden studies unless logged in as admin
-        invisibleStudyIds = fetchInvisibleStudyIds(es, req.context["isAdmin"])
+        invisibleStudyIds = fetchInvisibleBiomaterialStudyIds(es, req.context["isAdmin"])
 
         aggs_to_query = {
             propName: {
@@ -153,7 +153,7 @@ class BiomaterialsMetadataFilteredCountsResource(object):
         controlIds = fetchControlsMatchingFilters(es, filters)
 
         # Don't include hidden studies unless logged in as admin
-        invisibleStudyIds = fetchInvisibleStudyIds(es, req.context["isAdmin"])
+        invisibleStudyIds = fetchInvisibleBiomaterialStudyIds(es, req.context["isAdmin"])
 
         q = buildESQueryPieces(filters, controlIds, invisibleStudyIds)  # type: ESQueryPieces
         aggs = {}
@@ -329,7 +329,7 @@ class BiomaterialsMetadataSamplesInStudies(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
-        invisibleStudyIds = fetchInvisibleStudyIds(es, req.context["isAdmin"])
+        invisibleStudyIds = fetchInvisibleBiomaterialStudyIds(es, req.context["isAdmin"])
 
         rawResults = es.search(
             index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, _source=["_id"], body={
@@ -406,7 +406,7 @@ class BiomaterialsMetadataSearch(object):
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
         controlIds = fetchControlsMatchingFilters(es, filters)
-        invisibleStudyIds = fetchInvisibleStudyIds(es, req.context["isAdmin"])
+        invisibleStudyIds = fetchInvisibleBiomaterialStudyIds(es, req.context["isAdmin"])
 
         q = buildESQueryPieces(filters, controlIds, invisibleStudyIds)  # type: ESQueryPieces
         rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, _source=False, body={
@@ -1098,7 +1098,7 @@ def fetchControlsMatchingFilters(es, filters):
         return []
 
 
-def fetchInvisibleStudyIds(es, isAdmin):        # Don't include hidden studies unless logged in as admin
+def fetchInvisibleBiomaterialStudyIds(es, isAdmin):        # Don't include hidden studies unless logged in as admin
     if isAdmin:
         return []
     else:

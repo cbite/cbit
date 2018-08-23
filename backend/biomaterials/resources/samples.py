@@ -7,7 +7,7 @@ import falcon
 import elasticsearch
 import json
 
-from biomaterials.resources.metadata import fetchInvisibleStudyIds
+from biomaterials.resources.metadata import fetchInvisibleBiomaterialStudyIds
 
 
 class BiomaterialsSamplesResource(object):
@@ -37,7 +37,7 @@ class BiomaterialsSamplesResource(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
-        invisibleStudyIds = fetchInvisibleStudyIds(es, req.context["isAdmin"])
+        invisibleStudyIds = fetchInvisibleBiomaterialStudyIds(es, req.context["isAdmin"])
 
         rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, body={
             "size": len(sampleIds),
@@ -96,7 +96,7 @@ class BiomaterialsSamplesResource(object):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
-        invisibleStudyIds = fetchInvisibleStudyIds(es, req.context["isAdmin"])
+        invisibleStudyIds = fetchInvisibleBiomaterialStudyIds(es, req.context["isAdmin"])
 
         rawSampleResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_SAMPLE_DOCTYPE, body={
             "size": 100000,
