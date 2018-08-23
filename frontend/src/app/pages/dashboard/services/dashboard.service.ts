@@ -13,6 +13,6 @@ export class DashboardService {
   }
 
   public getDashboardStudiesData(): Observable<any> {
-    return this.httpGatewayService.get(this.urls.dashboardSamplesResource());
+    return this.httpGatewayService.get(this.urls.dashboardStudiesResource());
   }
 }
