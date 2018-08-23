@@ -27,7 +27,7 @@ URL_BASE = 'http://localhost:23456'  # TODO: In production, should be https://cb
 
 UPLOADS_PATH = 'uploads'
 FILES_PATH = 'files'
-COMMON_FILES_PATH = 'common/files'
+COMMON_ASSETS_PATH = 'common/assets'
 
 IRODS_BASE_URL = "http://frontend.prod.rit.unimaas.nl/rest/"
 IRODS_BASE_DIR = "/nlmumc/projects/P000000009"

@@ -78,7 +78,7 @@ def createDownloadArchive(zip_file_path):
     os.remove(temp_zip_file_path)
 
     # Add the extra file
-    detail_overview_file_path = os.path.join(cfg.COMMON_FILES_PATH,'Study detail and property overview_v9.xlsx')
+    detail_overview_file_path = os.path.join(cfg.COMMON_ASSETS_PATH,'Study detail and property overview_v9.xlsx')
     shutil.copy(detail_overview_file_path, temp_zip_content_dir)
 
     # Create new archive
