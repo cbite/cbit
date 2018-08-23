@@ -60,11 +60,9 @@ class DashboardSamplesResource(object):
             sample_lookup[sample_id] = sample_name
             study_ids.add(study_id)
 
-            if sample_id not in sample_list:
-                sample_list[sample_id] = []
-            sample_list[sample_id].append({'sampleId': sample_id, 'studyId': study_id, 'materialClass': material_class,
+            sample_list[sample_id]={'sampleId': sample_id, 'studyId': study_id, 'materialClass': material_class,
                                            'materialName': material_name, 'organism': organism,
-                                           'cellStrainAbbreviation': cell_strain_abbreviation})
+                                           'cellStrainAbbreviation': cell_strain_abbreviation}
 
         rawStudyResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, body={
             "size": len(list(study_ids)),

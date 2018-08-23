@@ -33,7 +33,14 @@ export class StudiesPublicationChartComponent implements AfterViewInit {
             backgroundColor: this.chartColors[0],
             borderColor: this.borderColors[0],
             borderWidth: 1,
-            label: '# studies',
+            label: 'Bio Material',
+            data: [7, 10, 14]
+          },
+          {
+            backgroundColor: this.chartColors[1],
+            borderColor: this.borderColors[1],
+            borderWidth: 1,
+            label: 'Tendons',
             data: [7, 10, 14]
           }
         ]
@@ -42,17 +49,20 @@ export class StudiesPublicationChartComponent implements AfterViewInit {
         scales: {
           xAxes: [{
             type: 'category',
+            stacked: true,
           },
           ],
           yAxes: [{
             type: 'linear',
+            stacked: true,
             ticks: {
               min: 0
             }
           }]
         },
         legend: {
-          display: false
+          display: true,
+          position: 'right'
         }
       }
     });

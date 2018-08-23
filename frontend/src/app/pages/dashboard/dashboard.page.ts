@@ -3,6 +3,8 @@ import * as Chart from 'chart.js';
 import {Router} from '@angular/router';
 import {AppUrls} from '../../router/app-urls';
 import {DashboardService} from './services/dashboard.service';
+import {prepareMaterialClassChartData} from './components/material-class-chart/material-class-chart-helper';
+import {MaterialClassChartData} from './components/material-class-chart/material-class-chart.data';
 
 @Component({
   styleUrls: ['./dashboard.scss'],
@@ -19,10 +21,10 @@ import {DashboardService} from './services/dashboard.service';
         </div>
         <div>
           <cbit-gene-expression-chart></cbit-gene-expression-chart>
-          <cbit-material-class-chart></cbit-material-class-chart>
+          <cbit-studies-publication-chart style="margin-left: 30px;"></cbit-studies-publication-chart>
         </div>
         <div style="margin-top: 30px">
-          <cbit-studies-publication-chart></cbit-studies-publication-chart>
+          <cbit-material-class-chart [chartData]="materialClassData"></cbit-material-class-chart>
         </div>
       </div>
     </div>
@@ -30,11 +32,14 @@ import {DashboardService} from './services/dashboard.service';
 })
 export class DashboardPage implements OnInit {
 
-  constructor(private router: Router, private dashboardService: DashboardService) {}
+  public materialClassData: MaterialClassChartData;
+
+  constructor(private router: Router,
+              private dashboardService: DashboardService) {}
 
   public ngOnInit(): void {
-    this.dashboardService.getDashboardSamples().subscribe((samples) => {
-      console.log(samples);
+    this.dashboardService.getDashboardSamples().subscribe((data) => {
+      this.materialClassData = prepareMaterialClassChartData(data);
     });
   }
 
