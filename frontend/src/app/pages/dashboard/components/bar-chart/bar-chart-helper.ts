@@ -22,7 +22,6 @@ export function prepareBarChartData(data: any, propertyName: string): BarChartDa
   const uniqueLabels = new Set(Object.getOwnPropertyNames(bioMaterialStudiesByGeneExpression)
     .concat(Object.getOwnPropertyNames(tendonsStudiesByGeneExpression)));
   const labels = Array.from(uniqueLabels);
-  console.log(labels);
   const studiesCounts = [];
   studiesCounts[0] = labels.map(l => bioMaterialStudiesByGeneExpression[l] ? bioMaterialStudiesByGeneExpression[l].length : 0);
   studiesCounts[1] = labels.map(l => tendonsStudiesByGeneExpression[l] ? tendonsStudiesByGeneExpression[l].length : 0);
