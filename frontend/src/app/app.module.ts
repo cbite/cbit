@@ -79,10 +79,9 @@ import {MetadataEditorFieldComponent} from './pages/biomaterial/metadata/compone
 import {PageSpinnerComponent} from './core/components/page-spinner/page-spinner.component';
 import {SpinnerComponent} from './common/spinner.component';
 import {DashboardPage} from './pages/dashboard/dashboard.page';
-import {GeneExpressionChartComponent} from './pages/dashboard/components/gene-expression-chart.component';
-import {StudiesPublicationChartComponent} from './pages/dashboard/components/studies-publication-chart.component';
 import {DashboardService} from './pages/dashboard/services/dashboard.service';
 import {PieChartComponent} from './pages/dashboard/components/pie-chart/pie-chart.component';
+import {BarChartComponent} from './pages/dashboard/components/bar-chart/bar-chart.component';
 
 @NgModule(
   {
@@ -107,9 +106,8 @@ import {PieChartComponent} from './pages/dashboard/components/pie-chart/pie-char
       UserManagementPage,
       UserEditorComponent,
       AddUserComponent,
-      GeneExpressionChartComponent,
+      BarChartComponent,
       PieChartComponent,
-      StudiesPublicationChartComponent,
       WelcomePage,
       AboutPage,
       FAQPage,

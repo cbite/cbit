@@ -4,6 +4,8 @@ import {AppUrls} from '../../router/app-urls';
 import {DashboardService} from './services/dashboard.service';
 import {PieChartData} from './components/pie-chart/pie-chart.data';
 import {preparePieChartData} from './components/pie-chart/pie-chart-helper';
+import {BarChartData} from './components/bar-chart/bar-chart.data';
+import {prepareBarChartData} from './components/bar-chart/bar-chart-helper';
 
 @Component({
   styleUrls: ['./dashboard.scss'],
@@ -19,8 +21,13 @@ import {preparePieChartData} from './components/pie-chart/pie-chart-helper';
           <span class="link" (click)="onTendonClicked()">Tendon Studies</span>
         </div>
         <div>
-          <cbit-gene-expression-chart></cbit-gene-expression-chart>
-          <cbit-studies-publication-chart style="margin-left: 30px;"></cbit-studies-publication-chart>
+          <cbit-bar-chart [title]="'Studies by Gene Expression Type'"
+                          [chartId]="'geneExpressionChart'"
+                          [chartData]="geneExpressionData"></cbit-bar-chart>
+          <cbit-bar-chart [title]="'Studies by PublicationYear'"
+                          [chartId]="'publicationYearChart'"
+                          [stacked]="true"
+                          [chartData]="publicationYearData" style="margin-left: 30px;"></cbit-bar-chart>
         </div>
         <div style="margin-top: 30px">
           <cbit-pie-chart [chartId]="'materialClassChart'"
@@ -44,6 +51,9 @@ import {preparePieChartData} from './components/pie-chart/pie-chart-helper';
 })
 export class DashboardPage implements OnInit {
 
+  public geneExpressionData: BarChartData;
+  public publicationYearData: BarChartData;
+
   public materialClassData: PieChartData;
   public organismData: PieChartData;
   public cellStrainData: PieChartData;
@@ -61,6 +71,8 @@ export class DashboardPage implements OnInit {
     });
 
     this.dashboardService.getDashboardStudiesData().subscribe((data) => {
+      this.geneExpressionData = prepareBarChartData(data, 'geneExpressionType');
+      this.publicationYearData = prepareBarChartData(data, 'year');
     });
   }
 
