@@ -10,7 +10,7 @@ import {borderColors, chartColors} from '../../util/chart.colors';
     <div class="dashboard-component">
       <div class="title">{{title}}</div>
       <div class="content">
-        <canvas id="{{chartId}}" class="material-class-chart"></canvas>
+        <canvas id="{{chartId}}" class="pie-chart"></canvas>
       </div>
     </div>
   `
@@ -41,7 +41,6 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
         data: {
           labels: this.chartData.labels,
           datasets: [{
-            label: 'Material Class',
             data: this.chartData.studiesCounts,
             backgroundColor: chartColors,
             borderColor: borderColors,
@@ -49,9 +48,27 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
           }]
         },
         options: {
+          onClick: function (e) {
+            const point = this.getElementAtEvent(e);
+          },
+          onHover: function (e: any) {
+            const point = <any>this.getElementAtEvent(e);
+            if (point.length) {
+              e.target.style.cursor = 'pointer';
+            } else {
+              e.target.style.cursor = 'default';
+            }
+          },
           responsive: false,
           legend: {
             position: 'right'
+          },
+          tooltips: {
+            callbacks: {
+              label: function (tooltipItem, data) {
+                return this.chartData.labels[tooltipItem.index] + ': ' + this.chartData.studiesCounts[tooltipItem.index];
+              }.bind(this)
+            }
           }
         }
       });

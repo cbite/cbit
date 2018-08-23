@@ -8,7 +8,11 @@ export class DashboardService {
   constructor(private urls: URLService, private httpGatewayService: HttpGatewayService) {
   }
 
-  public getDashboardSamples(): Observable<any> {
+  public getDashboardSamplesData(): Observable<any> {
+    return this.httpGatewayService.get(this.urls.dashboardSamplesResource());
+  }
+
+  public getDashboardStudiesData(): Observable<any> {
     return this.httpGatewayService.get(this.urls.dashboardSamplesResource());
   }
 }

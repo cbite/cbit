@@ -26,14 +26,14 @@ import {preparePieChartData} from './components/pie-chart/pie-chart-helper';
           <cbit-pie-chart [chartId]="'materialClassChart'"
                           [title]="'Biomaterial Studies by Material Class'"
                           [chartData]="materialClassData"></cbit-pie-chart>
-          <cbit-pie-chart [chartId]="'organismChart'"
-                          [title]="'Biomaterial Studies by Organism'"
-                          [chartData]="organismData" style="margin-left: 30px;"></cbit-pie-chart>
-        </div>
-        <div style="margin-top: 30px; margin-bottom: 70px">
           <cbit-pie-chart [chartId]="'materialChart'"
                           [title]="'Biomaterial Studies by Material'"
-                          [chartData]="materialData"></cbit-pie-chart>
+                          [chartData]="materialData" style="margin-left: 30px;"></cbit-pie-chart>
+        </div>
+        <div style="margin-top: 30px; margin-bottom: 70px">
+          <cbit-pie-chart [chartId]="'organismChart'"
+                          [title]="'Biomaterial Studies by Organism'"
+                          [chartData]="organismData"></cbit-pie-chart>
           <cbit-pie-chart [chartId]="'cellStrainChart'"
                           [title]="'Biomaterial Studies by Cellstrain'"
                           [chartData]="cellStrainData" style="margin-left: 30px;"></cbit-pie-chart>
@@ -53,12 +53,14 @@ export class DashboardPage implements OnInit {
               private dashboardService: DashboardService) {}
 
   public ngOnInit(): void {
-    this.dashboardService.getDashboardSamples().subscribe((data) => {
-      console.log(data);
+    this.dashboardService.getDashboardSamplesData().subscribe((data) => {
       this.materialClassData = preparePieChartData(data, 'materialClass');
       this.organismData = preparePieChartData(data, 'organism');
       this.cellStrainData = preparePieChartData(data, 'cellStrainAbbreviation');
       this.materialData = preparePieChartData(data, 'materialName');
+    });
+
+    this.dashboardService.getDashboardStudiesData().subscribe((data) => {
     });
   }
 

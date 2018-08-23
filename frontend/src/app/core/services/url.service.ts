@@ -85,4 +85,8 @@ export class URLService {
   dashboardSamplesResource(): string {
     return `dashboard/samples`;
   }
+
+  dashboardStudiesResource(): string {
+    return `dashboard/studies`;
+  }
 }
