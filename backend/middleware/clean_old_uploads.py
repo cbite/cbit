@@ -91,12 +91,3 @@ class CleanOldUploadsMiddleware(CleanOldStuffMiddleware):
             tableName='uploads',
             staleInterval=cfg.UPLOAD_STALE_INTERVAL
         )
-
-
-class CleanOldDownloadsMiddleware(CleanOldStuffMiddleware):
-    def __init__(self):
-        super(CleanOldDownloadsMiddleware, self).__init__(
-            filesPath=cfg.DOWNLOADS_PATH,
-            tableName='downloads',
-            staleInterval=cfg.DOWNLOAD_STALE_INTERVAL
-        )
