@@ -1,10 +1,9 @@
 import {Component, Input, AfterViewInit, OnInit} from '@angular/core';
-import * as Chart from 'chart.js';
 import {Router} from '@angular/router';
 import {AppUrls} from '../../router/app-urls';
 import {DashboardService} from './services/dashboard.service';
-import {prepareMaterialClassChartData} from './components/material-class-chart/material-class-chart-helper';
-import {MaterialClassChartData} from './components/material-class-chart/material-class-chart.data';
+import {PieChartData} from './components/pie-chart/pie-chart.data';
+import {preparePieChartData} from './components/pie-chart/pie-chart-helper';
 
 @Component({
   styleUrls: ['./dashboard.scss'],
@@ -24,7 +23,20 @@ import {MaterialClassChartData} from './components/material-class-chart/material
           <cbit-studies-publication-chart style="margin-left: 30px;"></cbit-studies-publication-chart>
         </div>
         <div style="margin-top: 30px">
-          <cbit-material-class-chart [chartData]="materialClassData"></cbit-material-class-chart>
+          <cbit-pie-chart [chartId]="'materialClassChart'"
+                          [title]="'Biomaterial Studies by Material Class'"
+                          [chartData]="materialClassData"></cbit-pie-chart>
+          <cbit-pie-chart [chartId]="'organismChart'"
+                          [title]="'Biomaterial Studies by Organism'"
+                          [chartData]="organismData" style="margin-left: 30px;"></cbit-pie-chart>
+        </div>
+        <div style="margin-top: 30px; margin-bottom: 70px">
+          <cbit-pie-chart [chartId]="'materialChart'"
+                          [title]="'Biomaterial Studies by Material'"
+                          [chartData]="materialData"></cbit-pie-chart>
+          <cbit-pie-chart [chartId]="'cellStrainChart'"
+                          [title]="'Biomaterial Studies by Cellstrain'"
+                          [chartData]="cellStrainData" style="margin-left: 30px;"></cbit-pie-chart>
         </div>
       </div>
     </div>
@@ -32,14 +44,21 @@ import {MaterialClassChartData} from './components/material-class-chart/material
 })
 export class DashboardPage implements OnInit {
 
-  public materialClassData: MaterialClassChartData;
+  public materialClassData: PieChartData;
+  public organismData: PieChartData;
+  public cellStrainData: PieChartData;
+  public materialData: PieChartData;
 
   constructor(private router: Router,
               private dashboardService: DashboardService) {}
 
   public ngOnInit(): void {
     this.dashboardService.getDashboardSamples().subscribe((data) => {
-      this.materialClassData = prepareMaterialClassChartData(data);
+      console.log(data);
+      this.materialClassData = preparePieChartData(data, 'materialClass');
+      this.organismData = preparePieChartData(data, 'organism');
+      this.cellStrainData = preparePieChartData(data, 'cellStrainAbbreviation');
+      this.materialData = preparePieChartData(data, 'materialName');
     });
   }
 

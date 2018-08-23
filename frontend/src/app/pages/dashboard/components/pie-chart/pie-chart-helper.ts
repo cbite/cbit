@@ -1,14 +1,12 @@
-import {MaterialClassChartData} from './material-class-chart.data';
+import {PieChartData} from './pie-chart.data';
 
-export function prepareMaterialClassChartData(data: any): MaterialClassChartData {
-  console.log(data);
-
+export function preparePieChartData(data: any, propertyName: string): PieChartData {
   const samplesIds = Object.getOwnPropertyNames(data.samplesData);
   const samplesByMaterialClass = samplesIds.map(id => data.samplesData[id]).reduce((result, sample) => {
-    if (result[sample.materialClass]) {
-      result[sample.materialClass].push(sample);
+    if (result[sample[propertyName]]) {
+      result[sample[propertyName]].push(sample);
     } else {
-      result[sample.materialClass] = [sample];
+      result[sample[propertyName]] = [sample];
     }
     return result;
   }, {});
@@ -23,5 +21,5 @@ export function prepareMaterialClassChartData(data: any): MaterialClassChartData
   const studiesCounts = Object.getOwnPropertyNames(studiesByMaterialClass).map(dp => studiesByMaterialClass[dp].length);
   const samplesCounts = Object.getOwnPropertyNames(samplesByMaterialClass).map(dp => samplesByMaterialClass[dp].length);
 
-  return new MaterialClassChartData(materialClassLabels, samplesCounts, studiesCounts, samplesByMaterialClass);
+  return new PieChartData(materialClassLabels, samplesCounts, studiesCounts, samplesByMaterialClass);
 }
