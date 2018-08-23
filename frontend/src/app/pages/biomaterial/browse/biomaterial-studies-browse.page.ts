@@ -8,7 +8,8 @@ import {Study} from '../../../core/types/study.model';
 import {PopupService} from '../../../core/services/popup.service';
 import {getPublicationDate, getTitle} from '../../../core/util/study-helper';
 import {AppUrls} from '../../../router/app-urls';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {CollapseStateService} from '../../../core/services/collapse-state.service';
 
 @Component({
   styleUrls: ['./biomaterial-studies-browse.scss'],
@@ -24,8 +25,8 @@ import {Router} from '@angular/router';
             <span style="margin: 0 5px;"><i class="far fa-angle-right"></i></span> Biomaterial
           </div>
           <div class="results">
-          <cbit-study-results [matches]="matches" (showDetails)="onShowDetailsClicked($event)"
-                              (download)="onDownload($event)"></cbit-study-results>
+            <cbit-study-results [matches]="matches" (showDetails)="onShowDetailsClicked($event)"
+                                (download)="onDownload($event)"></cbit-study-results>
           </div>
         </div>
       </div>
@@ -41,8 +42,10 @@ export class BioMaterialStudiesBrowsePage implements OnInit, OnDestroy {
   constructor(private fieldMetaService: FieldMetaService,
               private studyService: StudyService,
               private filtersService: FiltersService,
+              private collapsedStateService: CollapseStateService,
               private popupService: PopupService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -54,6 +57,19 @@ export class BioMaterialStudiesBrowsePage implements OnInit, OnDestroy {
         .subscribe(rawMatches => {
           this.updateMatches(rawMatches);
         });
+    });
+
+    this.route.queryParams.subscribe(queryParams => {
+      if (queryParams['category'] && queryParams['value']) {
+        this.filtersService.clearFilters();
+        this.filtersService.setSampleFilterNone(queryParams['category']);
+        this.filtersService.setSampleFilter(queryParams['category'], queryParams['value'], true);
+
+       /* this.collapsedStateService.setCollapsed(`fsall-material-main`, true);
+        this.collapsedStateService.setCollapsed(`fsall-technical-main`, true);
+        this.collapsedStateService.setCollapsed(`fsall-biological-main`, true);
+        this.collapsedStateService.setCollapsed(`sample-filters-${queryParams['category']}`, false);*/
+      }
     });
   }
 

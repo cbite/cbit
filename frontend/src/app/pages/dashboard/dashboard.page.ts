@@ -9,9 +9,9 @@ import {preparePieChartData} from './components/pie-chart/pie-chart-helper';
   styleUrls: ['./dashboard.scss'],
   template: `
     <div class="page">
-        <div class="header">
-          <span class="link"><i class="fas fa-chart-bar"></i> Dashboard</span>
-        </div>
+      <div class="header">
+        <span class="link"><i class="fas fa-chart-bar"></i> Dashboard</span>
+      </div>
       <div class="page-content">
         <div class="page-title">cBiT Dashboard</div>
         <div class="page-subtitle">
@@ -25,18 +25,24 @@ import {preparePieChartData} from './components/pie-chart/pie-chart-helper';
         <div style="margin-top: 30px">
           <cbit-pie-chart [chartId]="'materialClassChart'"
                           [title]="'Biomaterial Studies by Material Class'"
-                          [chartData]="materialClassData"></cbit-pie-chart>
+                          [chartData]="materialClassData"
+                          (sliceClick)="onSliceClick('Material Class',$event)"></cbit-pie-chart>
           <cbit-pie-chart [chartId]="'materialChart'"
                           [title]="'Biomaterial Studies by Material'"
-                          [chartData]="materialData" style="margin-left: 30px;"></cbit-pie-chart>
+                          [chartData]="materialData"
+                          (sliceClick)="onMaterialSliceClick($event)"
+                          style="margin-left: 30px;"></cbit-pie-chart>
         </div>
         <div style="margin-top: 30px; margin-bottom: 70px">
           <cbit-pie-chart [chartId]="'organismChart'"
                           [title]="'Biomaterial Studies by Organism'"
-                          [chartData]="organismData"></cbit-pie-chart>
+                          [chartData]="organismData"
+                          (sliceClick)="onSliceClick('Organism',$event)"></cbit-pie-chart>
           <cbit-pie-chart [chartId]="'cellStrainChart'"
                           [title]="'Biomaterial Studies by Cellstrain'"
-                          [chartData]="cellStrainData" style="margin-left: 30px;"></cbit-pie-chart>
+                          [chartData]="cellStrainData"
+                          (sliceClick)="onCellStrainAbbreviationSliceClick($event)"
+                          style="margin-left: 30px;"></cbit-pie-chart>
         </div>
       </div>
     </div>
@@ -48,9 +54,12 @@ export class DashboardPage implements OnInit {
   public organismData: PieChartData;
   public cellStrainData: PieChartData;
   public materialData: PieChartData;
+  public materialFullNameLookup: any;
+  public cellStrainFullNameLookup: any;
 
   constructor(private router: Router,
-              private dashboardService: DashboardService) {}
+              private dashboardService: DashboardService) {
+  }
 
   public ngOnInit(): void {
     this.dashboardService.getDashboardSamplesData().subscribe((data) => {
@@ -58,6 +67,8 @@ export class DashboardPage implements OnInit {
       this.organismData = preparePieChartData(data, 'organism');
       this.cellStrainData = preparePieChartData(data, 'cellStrainAbbreviation');
       this.materialData = preparePieChartData(data, 'materialName');
+      this.materialFullNameLookup = data.materialFullNameLookup;
+      this.cellStrainFullNameLookup = data.cellStrainFullNameLookup;
     });
 
     this.dashboardService.getDashboardStudiesData().subscribe((data) => {
@@ -70,5 +81,32 @@ export class DashboardPage implements OnInit {
 
   public onTendonClicked() {
     this.router.navigateByUrl(AppUrls.browseTendonStudiesUrl);
+  }
+
+  public onSliceClick(category: string, value: string) {
+    this.router.navigate([AppUrls.browseBioMaterialStudiesUrl], {
+      queryParams: {
+        category: category,
+        value: value,
+      }
+    });
+  }
+
+  public onMaterialSliceClick(value: string) {
+    this.router.navigate([AppUrls.browseBioMaterialStudiesUrl], {
+      queryParams: {
+        category: '*Material',
+        value: this.materialFullNameLookup[value][0],
+      }
+    });
+  }
+
+  public onCellStrainAbbreviationSliceClick(value: string) {
+    this.router.navigate([AppUrls.browseBioMaterialStudiesUrl], {
+      queryParams: {
+        category: '*Cell strain',
+        value: this.cellStrainFullNameLookup[value][0],
+      }
+    });
   }
 }

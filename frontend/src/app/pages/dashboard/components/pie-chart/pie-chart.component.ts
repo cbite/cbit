@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import * as Chart from 'chart.js';
 import {PieChartData} from './pie-chart.data';
 import {borderColors, chartColors} from '../../util/chart.colors';
@@ -29,12 +29,16 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
   @Input()
   public chartData: PieChartData;
 
+  @Output()
+  public sliceClick = new EventEmitter<string>();
+
   public ngAfterViewInit(): void {
     this.canvas = document.getElementById(this.chartId);
     this.ctx = this.canvas.getContext('2d');
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
+    const self = this;
     if (this.chartData && this.ctx) {
       const materialClassChart = new Chart(this.ctx, {
         type: 'pie',
@@ -49,7 +53,9 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
         },
         options: {
           onClick: function (e) {
-            const point = this.getElementAtEvent(e);
+            const point = this.getElementAtEvent(e)[0];
+            const pointValue = point._model.label;
+            self.sliceClick.emit(pointValue);
           },
           onHover: function (e: any) {
             const point = <any>this.getElementAtEvent(e);
