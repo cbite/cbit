@@ -10,13 +10,11 @@ FILE_ENCODING = "cp1252"  # All files are coming from Windows and ISAcreator use
 
 # Delete temporary uploads and downloads after this much time.
 # This interval only applies to stale partial uploads/downloads.  In the common case:
-# - completed uploads are deleted as soon as ingested into the database,
-# - completed downloads are deleted immediately after download
+# - completed uploads are deleted as soon as ingested into the database
 
 # NOTE: Should be compatible with Postgres INTERVAL syntax:
 # https://www.postgresql.org/docs/9.5/static/functions-datetime.html
 UPLOAD_STALE_INTERVAL = '24 hour'
-DOWNLOAD_STALE_INTERVAL = '24 hour'
 
 ES_HOST = "localhost"
 ES_PORT = 9200
@@ -28,8 +26,8 @@ CORS_ENABLED = True                  # TODO: Disabled in production, where nginx
 URL_BASE = 'http://localhost:23456'  # TODO: In production, should be https://cbit.maastrichtuniversity.nl/api
 
 UPLOADS_PATH = 'uploads'
-DOWNLOADS_PATH = 'downloads'
 FILES_PATH = 'files'
+COMMON_FILES_PATH = 'common/files'
 
 IRODS_BASE_URL = "http://frontend.prod.rit.unimaas.nl/rest/"
 IRODS_BASE_DIR = "/nlmumc/projects/P000000009"

@@ -12,8 +12,7 @@ from biomaterials.resources.studies import BiomaterialsStudyResource, Biomateria
 from common.resources.user import UsersResource, UserResource
 from config import config as cfg
 from middleware.clean_old_uploads import (
-    CleanOldUploadsMiddleware,
-    CleanOldDownloadsMiddleware
+    CleanOldUploadsMiddleware
 )
 from middleware.cors import CORSMiddleware
 from middleware.database_session import DatabaseSessionMiddleware
@@ -50,7 +49,6 @@ if cfg.CORS_ENABLED:
 middleware.extend([
     DatabaseSessionMiddleware(),
     CleanOldUploadsMiddleware(),
-    CleanOldDownloadsMiddleware(),
     AuthenticationMiddleware()
 ])
 
