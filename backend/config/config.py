@@ -8,8 +8,8 @@ DB_NAME = "cbit"
 
 FILE_ENCODING = "cp1252"  # All files are coming from Windows and ISAcreator uses this encoding for output (!)
 
-# Delete temporary uploads and downloads after this much time.
-# This interval only applies to stale partial uploads/downloads.  In the common case:
+# Delete temporary uploads after this much time.
+# This interval only applies to stale partial uploads.  In the common case:
 # - completed uploads are deleted as soon as ingested into the database
 
 # NOTE: Should be compatible with Postgres INTERVAL syntax:
