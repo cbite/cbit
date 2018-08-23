@@ -1,5 +1,6 @@
 import {AfterViewInit, Component} from '@angular/core';
 import * as Chart from 'chart.js';
+import {borderColors, chartColors} from '../util/chart.colors';
 
 @Component({
   selector: 'cbit-studies-publication-chart',
@@ -15,9 +16,6 @@ import * as Chart from 'chart.js';
 })
 export class StudiesPublicationChartComponent implements AfterViewInit {
 
-  public chartColors = ['rgba(138, 178, 219, 0.5)', 'rgba(89, 197, 162, 0.5)', 'rgba(255, 163, 116, 0.5)', '#726BCA', '#F16D8C'];
-  public borderColors = ['rgba(138, 178, 219, 1)', 'rgba(89, 197, 162, 1)', 'rgba(255, 163, 116, 1)'];
-
   public canvas: any;
   public ctx: any;
 
@@ -30,15 +28,15 @@ export class StudiesPublicationChartComponent implements AfterViewInit {
         labels: ['2016', '2017', '2018'],
         datasets: [
           {
-            backgroundColor: this.chartColors[0],
-            borderColor: this.borderColors[0],
+            backgroundColor: chartColors[0],
+            borderColor: borderColors[0],
             borderWidth: 1,
             label: 'Bio Material',
             data: [7, 10, 14]
           },
           {
-            backgroundColor: this.chartColors[1],
-            borderColor: this.borderColors[1],
+            backgroundColor: chartColors[1],
+            borderColor: borderColors[1],
             borderWidth: 1,
             label: 'Tendons',
             data: [7, 10, 14]
