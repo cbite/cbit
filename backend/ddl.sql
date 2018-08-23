@@ -13,16 +13,6 @@ CREATE TABLE uploads (
   ,status VARCHAR NOT NULL  -- Possible values: 'uploading', 'uploaded', 'ingesting', 'ingested'
 );
 
-DROP TABLE IF EXISTS downloads CASCADE ;
-CREATE TABLE downloads (
-   uuid UUID PRIMARY KEY
-  ,createdOn TIMESTAMP DEFAULT(CURRENT_TIMESTAMP)
-  ,status VARCHAR NOT NULL  -- Possible values: 'preparing', 'ready', 'error'
-  ,progress REAL NOT NULL   -- Progress in completing download bundle (percentage in [0, 100])
-  ,pid INTEGER NOT NULL DEFAULT(-1)
-  ,errorString VARCHAR NOT NULL DEFAULT('')
-);
-
 DROP TABLE IF EXISTS studies CASCADE ;
 CREATE TABLE studies (
    uuid UUID PRIMARY KEY
