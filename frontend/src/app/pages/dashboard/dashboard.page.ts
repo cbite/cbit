@@ -17,7 +17,7 @@ import {prepareBarChartData} from './components/bar-chart/bar-chart-helper';
       <div class="page-content">
         <div class="page-title with-subtitle">All Studies</div>
         <div class="page-subtitle">
-        <span class="link" (click)="onBioMaterialClicked()">BioMaterial Studies</span> |
+        <span class="link" (click)="onBioMaterialClicked()">Biomaterial Studies</span> |
         <span class="link" (click)="onTendonClicked()">Tendon Studies</span>
         </div>
         <div>
