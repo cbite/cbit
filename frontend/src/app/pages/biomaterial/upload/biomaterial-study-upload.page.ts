@@ -95,14 +95,7 @@ import {AppUrls} from '../../../router/app-urls';
           <h2>Step 2: Enter metadata</h2>
 
           <h3>Study Metadata</h3>
-          <div class="form-inline">
-            <div class="row">
-              <div class="form-group col-sm-5 col-sm-offset-1">
-                <label for="studyPublicationDate">Publication Date</label>
-                <input type="text" id="studyPublicationDate" [(ngModel)]="studyPublicationDate" class="form-control">
-              </div>
-            </div>
-
+          <div>
             <div class="row">
               <div class="checkbox col-sm-5 col-sm-offset-1">
                 <label for="studyInitiallyVisible">
@@ -115,7 +108,7 @@ import {AppUrls} from '../../../router/app-urls';
 
           <h3>New Fields</h3>
 
-          <div *ngIf="!unknownFields">
+          <div *ngIf="!unknownFields || unknownFields.length===0">
             No new fields in this study
           </div>
 
@@ -124,7 +117,7 @@ import {AppUrls} from '../../../router/app-urls';
                                       (form)="fieldMetadataForm = $event"></cbit-field-metadata-form>
           </div>
 
-          <button type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">
+          <button style="margin-top: 10px" type="button" [disabled]='uploadConfirmationSent' (click)="doConfirmMetadata()">
             {{ confirmMetadataButtonName }}
           </button>
         </div>
@@ -163,7 +156,6 @@ export class BioMaterialStudyUploadPage implements OnInit {
   iRODSStudyNames: string[] = [];
   iRODSStatus = '';
 
-  studyPublicationDate: string = (new Date()).toISOString().substring(0, 10);  // YYYY-MM-DD
   studyInitiallyVisible = true;
 
   constructor(private _url: URLService,
@@ -327,7 +319,6 @@ export class BioMaterialStudyUploadPage implements OnInit {
       };
 
       this.httpGatewayService.put(this.confirm_upload_url, JSON.stringify({
-        publicationDate: that.studyPublicationDate,
         visible: that.studyInitiallyVisible
       }), onError, headers).subscribe(() => {
         this.router.navigateByUrl(AppUrls.replaceStudyId(AppUrls.studyUrl, this.upload_uuid) + '?upload=true');

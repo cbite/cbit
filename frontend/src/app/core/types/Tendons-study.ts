@@ -10,10 +10,11 @@ export class TendonsStudy {
               public cellOrigin: string,
               public year: number,
               public sampleSize: number,
+              public createdOn: Date,
               public visible: boolean) {
   }
 
   public static createNew() {
-    return new TendonsStudy(undefined, '', '', '', '', 'Microarray', '', '', '', new Date().getFullYear(), 0, true);
+    return new TendonsStudy(undefined, '', '', '', '', 'Microarray', '', '', '', new Date().getFullYear(), 0, new Date(), true);
   }
 }

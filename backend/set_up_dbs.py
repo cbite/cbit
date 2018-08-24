@@ -76,12 +76,6 @@ def set_up_elasticsearch():
                         "include_in_all": False
                     },
 
-                    "*Publication Date": {
-                        "type": "date",
-                        "index": "not_analyzed",
-                        "include_in_all": False
-                    },
-
                     "*Visible": {
                         "type": "boolean",
                         "index": "not_analyzed",

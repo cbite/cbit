@@ -12,8 +12,9 @@ class TendonsStudiesResource(object):
         try:
             db_conn = req.context["db"]
             with db_conn.cursor() as cur:
-                query = "SELECT uuid, name, arrayExpressId, pubMedId, description, geneExpressionType, platform,organism, " \
-                        "cellOrigin, year, sampleSize, visible FROM tendons_metadata "
+                query = "SELECT t.uuid, t.name, t.arrayExpressId, t.pubMedId, t.description, t.geneExpressionType, t.platform, t.organism, " \
+                        "t.cellOrigin, t.year, t.sampleSize, t.visible, s.createdon FROM tendons_metadata t " \
+                        "JOIN studies s ON t.uuid = s.uuid "
                 if is_admin:
                     cur.execute(query)
                 else:
@@ -35,12 +36,14 @@ class TendonsStudiesResource(object):
                     "cellOrigin": cellOrigin,
                     "year": int(year),
                     "sampleSize": int(sampleSize),
-                    "visible": visible
+                    "visible": visible,
+                    "createdOn": str(createdOn)
                 }
                 for (
-                    uuid, name, arrayExpressId, pubMedId, description, geneExpressionType, platform, organism, cellOrigin,
+                    uuid, name, arrayExpressId, pubMedId, description, geneExpressionType, platform, organism,
+                    cellOrigin,
                     year,
-                    sampleSize, visible) in results
+                    sampleSize, visible, createdOn) in results
             ]
 
             resp.status = falcon.HTTP_OK

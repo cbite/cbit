@@ -6,6 +6,7 @@ from elasticsearch import helpers
 import json
 import shutil
 
+
 class BiomaterialsStudiesResource(object):
     def on_get(self, req, resp):
         """
@@ -67,6 +68,25 @@ class BiomaterialsStudiesResource(object):
 
         studyIds = json.load(req.stream)
 
+        # Query createdon timestamps
+        db_conn = req.context["db"]
+        with db_conn.cursor() as cur:
+            in_placeholder = ', '.join(list(map(lambda x: '%s', studyIds)))
+            query = "SELECT uuid, createdon FROM studies "
+            if len(studyIds) == 0:
+                cur.execute(query)
+            else:
+                newQuery = (query + "WHERE uuid IN (%s)") % in_placeholder
+                cur.execute(newQuery, studyIds)
+
+            results = cur.fetchall()
+        db_conn.commit()
+
+        createdon_lookup = {}
+        for result in results:
+            createdon_lookup[result[0]] = str(result[1])
+
+        # Query study metadata
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
@@ -96,6 +116,7 @@ class BiomaterialsStudiesResource(object):
 
         result = {}
         for hit in rawResults["hits"]["hits"]:
+            hit['_createdOn'] = createdon_lookup[hit["_id"]]
             result[hit["_id"]] = hit
 
         resp.status = falcon.HTTP_OK
@@ -188,6 +209,15 @@ class BiomaterialsStudyResource(object):
         { ...study metadata... }
         """
 
+        # Query createdon timestamps
+        db_conn = req.context["db"]
+        with db_conn.cursor() as cur:
+            query = "SELECT uuid, createdon FROM studies "
+            cur.execute(query)
+            results = cur.fetchall()
+        db_conn.commit()
+        createdon = str(results[0][1])
+
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
@@ -209,6 +239,7 @@ class BiomaterialsStudyResource(object):
         })
 
         result = rawResults["hits"]["hits"][0]
+        result['_createdOn'] = createdon
 
         resp.status = falcon.HTTP_OK
         resp.body = json.dumps(result, indent=2, sort_keys=True)

@@ -13,7 +13,7 @@ def connect_to_postgres():
                             database=cfg.DB_NAME)
 
 
-def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, visible):
+def import_archive(db_conn, es, archive_filename, study_uuid, visible):
     a = read_archive(archive_filename)
 
     # Import metadata into ElasticSearch
@@ -33,7 +33,6 @@ def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, v
     # Add extra metadata
     study_result['*Study Type'] = study_type
     study_result['*Array Express Id'] = arrayExpressId
-    study_result['*Publication Date'] = publicationDate
     study_result['*Visible'] = visible
 
     # 4. Load all sample metadata
