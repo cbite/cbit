@@ -299,7 +299,6 @@ class BiomaterialsUploadResource(object):
         Request data
         ============
         {
-          "publicationDate": "2016-12-01",
           "visible": true
         }
         """
@@ -313,7 +312,6 @@ class BiomaterialsUploadResource(object):
         if not isinstance(data, dict):
             raise falcon.HTTPBadRequest(description="Expected JSON object as payload")
 
-        publicationDate = data['publicationDate']
         visible = data['visible']
 
         # 1. Check that upload exists and it's status is 'uploaded'
@@ -348,7 +346,7 @@ class BiomaterialsUploadResource(object):
         # 3. Ingest archive into DBs
         uploaded_archive_path = os.path.join(cfg.UPLOADS_PATH, upload_uuid, 'archive.zip')
         try:
-            self._ingest_archive(uploaded_archive_path, db_conn, upload_uuid, publicationDate, visible)
+            self._ingest_archive(uploaded_archive_path, db_conn, upload_uuid, visible)
         except ValueError as e:
             import traceback
             tb = traceback.format_exc()
@@ -389,7 +387,7 @@ class BiomaterialsUploadResource(object):
             }
         resp.body = json.dumps(resp_json, indent=2, sort_keys=True)
 
-    def _ingest_archive(self, filename, db_conn, study_uuid, publicationDate, visible):
+    def _ingest_archive(self, filename, db_conn, study_uuid, visible):
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
 
@@ -397,4 +395,4 @@ class BiomaterialsUploadResource(object):
             raise falcon.HTTPInternalServerError(
                 description='ElasticSearch database not ready.  Have you run set_up_dbs.py?')
 
-        importer.import_archive(db_conn, es, filename, study_uuid, publicationDate, visible)
+        importer.import_archive(db_conn, es, filename, study_uuid, visible)

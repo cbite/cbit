@@ -16,7 +16,7 @@ export enum StudyState {
 
       <div class="row header">
         <div class="col-7 field">Name</div>
-        <div class="col-2 field">Publication</div>
+        <div class="col-2 field">Created On</div>
         <div class="col-1 field centered">Visible</div>
         <div class="col-2 field"></div>
       </div>
@@ -29,8 +29,7 @@ export enum StudyState {
             </div>
           </div>
           <div class="col-2 field">
-            <input type="text" class="text-input" formControlName="publicationDate"
-                   [class.deletedStudyPublicationDate]="isDeleted(kv.key)">
+            {{kv.val._createdOn | date:'dd-MM-yyyy HH:mm'}}
           </div>
           <div class="col-1 field centered" style="padding-left: 35px">
             <input type="checkbox" formControlName="visible">

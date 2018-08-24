@@ -258,7 +258,6 @@ class BiomaterialsMetadataStudiesResource(object):
         [
           {
             "studyId": "20823668-8773-42e9-b005-6c51f9eb357b",
-            "publicationDate": "2016-12-07",
             "visible": false
           },
           ...
@@ -284,7 +283,6 @@ class BiomaterialsMetadataStudiesResource(object):
                 "_op_type": "update",
                 "_id": studyChangeDesc['studyId'],
                 "doc": {
-                    "*Publication Date": studyChangeDesc['publicationDate'],
                     "*Visible": studyChangeDesc['visible']
                 }
             })

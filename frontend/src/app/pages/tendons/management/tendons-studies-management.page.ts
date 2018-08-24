@@ -16,13 +16,13 @@ import {AppUrls} from '../../../router/app-urls';
         <div class="container">
           <div class="row header">
             <div class="col-6 field">Name</div>
-            <div class="col-2 field">Gene Expr Type</div>
+            <div class="col-2 field">Created On</div>
             <div class="col-1 field">Visible</div>
             <div class="col-3 field"></div>
           </div>
           <div class="row study" *ngFor="let study of studies">
             <div class="col-6 field">{{study.name}}</div>
-            <div class="col-2 field">{{study.geneExpressionType}}</div>
+            <div class="col-2 field">{{study.createdOn | date:'dd-MM-yyyy HH:mm'}}</div>
             <div class="col-1 field">
               <input type="checkbox" [(ngModel)]="study.visible" disabled="disabled">
             </div>
