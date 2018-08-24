@@ -1,4 +1,5 @@
 #!/usr/bin/python2.7
+import datetime
 import sys
 import psycopg2
 import config.config as cfg
@@ -104,14 +105,15 @@ def import_archive(db_conn, es, archive_filename, study_uuid, publicationDate, v
         # Study
         cur.execute(
             """
-            INSERT INTO studies (uuid, name, type)
-            VALUES (%s, %s, %s)
+            INSERT INTO studies (uuid, name, type, createdOn)
+            VALUES (%s, %s, %s, %s)
             RETURNING uuid
             """,
             [
                 study_uuid,
                 a.investigation['STUDY']['Study Title'],
-                study_type
+                study_type,
+                datetime.datetime.now()
             ]
         )
         (study_id,) = cur.fetchone()

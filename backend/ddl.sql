@@ -18,6 +18,7 @@ CREATE TABLE studies (
    uuid UUID PRIMARY KEY
   ,name VARCHAR NOT NULL
   ,type VARCHAR NOT NULL
+  ,createdon TIMESTAMP NOT NULL
 );
 
 -- Metadata for tendons studies

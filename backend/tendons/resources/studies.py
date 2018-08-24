@@ -1,3 +1,4 @@
+import datetime
 import uuid
 import falcon
 import json
@@ -80,13 +81,14 @@ class TendonsStudiesResource(object):
             with db_conn.cursor() as cur:
                 cur.execute(
                     """
-                    INSERT INTO studies (uuid, name, type)
-                    VALUES (%s, %s, %s)
+                    INSERT INTO studies (uuid, name, type, createdOn)
+                    VALUES (%s, %s, %s, %s)
                     """,
                     [
                         study_uuid,
                         study['name'],
-                        study_type
+                        study_type,
+                        datetime.datetime.now()
                     ]
                 )
                 cur.execute(
