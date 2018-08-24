@@ -35,6 +35,20 @@ ngb-modal-window {
   }
 }
 
+ngb-typeahead-window {
+  font-size: $font-size-small !important;
+  width: 440px !important;
+  border-radius: 0!important;
+
+  .dropdown-item {
+    cursor: pointer !important;
+
+    &.active {
+      background-color: lighten($color-blue, 15%) !important;
+    }
+  }
+}
+
 @import '../node_modules/bootstrap/scss/bootstrap';
 
 //============================//
@@ -91,7 +105,7 @@ a {
   }
 
   &:focus {
-    outline:0;
+    outline: 0;
   }
 
   &.cancel {
