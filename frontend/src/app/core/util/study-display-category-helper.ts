@@ -3,6 +3,7 @@ import {Study} from '../types/study.model';
 export function getCategoriesToDisplay(study: Study): StudyCategory[] {
   const categoryMap = Object.assign({}, study._source);
   delete categoryMap['*Archive URL'];
+  delete categoryMap['*Publication Date']; // TODO @MT remove
   delete categoryMap['*Study Type'];
   delete categoryMap['*Array Express Id'];
   delete categoryMap['*Supplementary Files'];
