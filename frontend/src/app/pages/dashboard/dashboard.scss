@@ -7,10 +7,16 @@
   .page-content {
     min-width: 1000px;
     padding: 30px;
-    padding-top: 15px;
+    padding-top: 0px;
 
     .page-title {
       font-size: $font-size-enormous;
+      margin-top: 20px;
+      margin-bottom: 20px;
+
+      &.with-subtitle {
+        margin-bottom: 0;
+      }
     }
     .page-subtitle {
       margin-bottom: 20px;

@@ -15,38 +15,39 @@ import {prepareBarChartData} from './components/bar-chart/bar-chart-helper';
         <span class="link"><i class="fas fa-chart-bar"></i> Dashboard</span>
       </div>
       <div class="page-content">
-        <div class="page-title">cBiT Dashboard</div>
+        <div class="page-title with-subtitle">All Studies</div>
         <div class="page-subtitle">
-          <span class="link" (click)="onBioMaterialClicked()">BioMaterial Studies</span> |
-          <span class="link" (click)="onTendonClicked()">Tendon Studies</span>
+        <span class="link" (click)="onBioMaterialClicked()">BioMaterial Studies</span> |
+        <span class="link" (click)="onTendonClicked()">Tendon Studies</span>
         </div>
         <div>
           <cbit-bar-chart [title]="'Studies by Gene Expression Type'"
                           [chartId]="'geneExpressionChart'"
                           [chartData]="geneExpressionData"></cbit-bar-chart>
-          <cbit-bar-chart [title]="'Studies by PublicationYear'"
+          <cbit-bar-chart [title]="'Studies by Publication Year'"
                           [chartId]="'publicationYearChart'"
                           [stacked]="true"
                           [chartData]="publicationYearData" style="margin-left: 30px;"></cbit-bar-chart>
         </div>
-        <div style="margin-top: 30px">
+        <div class="page-title">Biomaterial Studies</div>
+        <div>
           <cbit-pie-chart [chartId]="'materialClassChart'"
-                          [title]="'Biomaterial Studies by Material Class'"
+                          [comparisonText]="'by Material Class'"
                           [chartData]="materialClassData"
                           (sliceClick)="onSliceClick('Material Class',$event)"></cbit-pie-chart>
           <cbit-pie-chart [chartId]="'materialChart'"
-                          [title]="'Biomaterial Studies by Material'"
+                          [comparisonText]="'by Material'"
                           [chartData]="materialData"
                           (sliceClick)="onMaterialSliceClick($event)"
                           style="margin-left: 30px;"></cbit-pie-chart>
         </div>
-        <div style="margin-top: 30px; margin-bottom: 70px">
+        <div style="margin-top: 30px; margin-bottom: 70px;">
           <cbit-pie-chart [chartId]="'organismChart'"
-                          [title]="'Biomaterial Studies by Organism'"
+                          [comparisonText]="'by Organism'"
                           [chartData]="organismData"
                           (sliceClick)="onSliceClick('Organism',$event)"></cbit-pie-chart>
           <cbit-pie-chart [chartId]="'cellStrainChart'"
-                          [title]="'Biomaterial Studies by Cellstrain'"
+                          [comparisonText]="'by Cell Strain'"
                           [chartData]="cellStrainData"
                           (sliceClick)="onCellStrainAbbreviationSliceClick($event)"
                           style="margin-left: 30px;"></cbit-pie-chart>

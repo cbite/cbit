@@ -1,0 +1,43 @@
+@import '../../../../../variables';
+
+.options {
+  padding-right: 0;
+  display: inline-block;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  float: right;
+
+  &:hover {
+    color: white;
+  }
+
+  .options-panel {
+    min-width: 160px;
+    z-index: 1000;
+    position: absolute;
+    right: -20px;
+    color: black;
+    text-align: left;
+    border: 1px solid darken($color-gray, 10%);
+    background-color: white;
+
+    .option {
+      background-color: $color-gray;
+      height: 30px;
+      line-height: 30px;
+      padding: 0 20px;
+      outline: 0;
+      border-bottom: 1px solid darken($color-gray, 10%);
+
+      &:hover {
+        background-color: $color-blue;
+        color: white;
+      }
+    }
+
+    div:last-child {
+      border-bottom: none;
+    }
+  }
+}

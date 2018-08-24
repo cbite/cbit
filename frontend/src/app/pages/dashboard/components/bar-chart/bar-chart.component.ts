@@ -2,6 +2,7 @@ import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angula
 import * as Chart from 'chart.js';
 import {borderColors, chartColors} from '../../util/chart.colors';
 import {BarChartData} from './bar-chart.data';
+import {LinearTickOptions} from 'chart.js';
 
 @Component({
   selector: 'cbit-bar-chart',
@@ -40,18 +41,24 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (this.chartData && this.ctx) {
+      const max = Math.max(...this.chartData.studiesCounts[0].concat(this.chartData.studiesCounts[1]));
+      const tickOptions = <LinearTickOptions> {beginAtZero: true};
+      // prevents decimal y-axis on small numbers
+      if (max < 5) {
+        tickOptions.stepSize = 1;
+      }
       const studyTypesChart = new Chart(this.ctx, {
           type: 'bar',
           data: {
             labels: this.chartData.labels,
             datasets: [{
-              label: 'Bio Material',
+              label: 'Biomaterial',
               data: this.chartData.studiesCounts[0],
               borderWidth: 1,
               backgroundColor: chartColors[0],
               borderColor: borderColors[0]
             }, {
-              label: 'Tendons',
+              label: 'Tendon',
               data: this.chartData.studiesCounts[1],
               borderWidth: 1,
               backgroundColor: chartColors[1],
@@ -72,9 +79,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
               yAxes: [{
                 type: 'linear',
                 stacked: this.stacked,
-                ticks: {
-                  min: 0,
-                }
+                ticks: tickOptions
               }]
             }
           }

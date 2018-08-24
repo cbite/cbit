@@ -82,6 +82,7 @@ import {DashboardPage} from './pages/dashboard/dashboard.page';
 import {DashboardService} from './pages/dashboard/services/dashboard.service';
 import {PieChartComponent} from './pages/dashboard/components/pie-chart/pie-chart.component';
 import {BarChartComponent} from './pages/dashboard/components/bar-chart/bar-chart.component';
+import {PieChartOptionsComponent} from './pages/dashboard/components/pie-chart/pie-chart-options.component';
 
 @NgModule(
   {
@@ -108,6 +109,7 @@ import {BarChartComponent} from './pages/dashboard/components/bar-chart/bar-char
       AddUserComponent,
       BarChartComponent,
       PieChartComponent,
+      PieChartOptionsComponent,
       WelcomePage,
       AboutPage,
       FAQPage,
