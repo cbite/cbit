@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import * as Chart from 'chart.js';
 import {borderColors, chartColors} from '../../util/chart.colors';
 import {BarChartData} from './bar-chart.data';
@@ -31,6 +31,9 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
   @Input()
   public stacked = false;
 
+  @Output()
+  public barClick = new EventEmitter<string>();
+
   public canvas: any;
   public ctx: any;
 
@@ -47,6 +50,8 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
       if (max < 5) {
         tickOptions.stepSize = 1;
       }
+      const self = this;
+
       const studyTypesChart = new Chart(this.ctx, {
           type: 'bar',
           data: {
@@ -66,6 +71,19 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
             }]
           },
           options: {
+            onClick: function (e) {
+              const point = this.getElementAtEvent(e)[0];
+              const pointValue = point._model.datasetLabel + '.' + point._model.label;
+              self.barClick.emit(pointValue);
+            },
+            onHover: function (e: any) {
+              const point = <any>this.getElementAtEvent(e);
+              if (point.length) {
+                e.target.style.cursor = 'pointer';
+              } else {
+                e.target.style.cursor = 'default';
+              }
+            },
             responsive: false,
             legend: {
               position: 'right'

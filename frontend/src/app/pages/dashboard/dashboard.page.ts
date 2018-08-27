@@ -17,13 +17,14 @@ import {prepareBarChartData} from './components/bar-chart/bar-chart-helper';
       <div class="page-content">
         <div class="page-title with-subtitle">All Studies</div>
         <div class="page-subtitle">
-        <span class="link" (click)="onBioMaterialClicked()">Biomaterial Studies</span> |
-        <span class="link" (click)="onTendonClicked()">Tendon Studies</span>
+          <span class="link" (click)="onBioMaterialClicked()">Biomaterial Studies</span> |
+          <span class="link" (click)="onTendonClicked()">Tendon Studies</span>
         </div>
         <div>
           <cbit-bar-chart [title]="'Studies by Gene Expression Type'"
                           [chartId]="'geneExpressionChart'"
-                          [chartData]="geneExpressionData"></cbit-bar-chart>
+                          [chartData]="geneExpressionData"
+                          (barClick)="onGeneExpressionBarClick($event)"></cbit-bar-chart>
           <cbit-bar-chart [title]="'Studies by Publication Year'"
                           [chartId]="'publicationYearChart'"
                           [stacked]="true"
@@ -121,5 +122,22 @@ export class DashboardPage implements OnInit {
         value: this.cellStrainFullNameLookup[value][0],
       }
     });
+  }
+
+  public onGeneExpressionBarClick(value: string) {
+    const split = value.split('.');
+    const type = split[0];
+    const geneExpressionType = split[1];
+
+    if (type === 'Tendon') {
+      this.router.navigate([AppUrls.browseTendonStudiesUrl]);
+    } else if (type === 'Biomaterial') {
+      this.router.navigate([AppUrls.browseBioMaterialStudiesUrl], {
+        queryParams: {
+          category: 'Gene expression type',
+          value: geneExpressionType,
+        }
+      });
+    }
   }
 }
