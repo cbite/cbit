@@ -11,7 +11,9 @@ import {Store} from '@ngrx/store';
   template: `
     <tooltip-container></tooltip-container>
     <cbit-app-header></cbit-app-header>
-    <router-outlet></router-outlet>
+    <div class="content">
+        <router-outlet></router-outlet>
+    </div>
     <cbit-app-footer></cbit-app-footer>
     <div [hidden]="!(showLoader$|async)" class="loader-overlay">
       <cbit-page-spinner class="loader"></cbit-page-spinner>

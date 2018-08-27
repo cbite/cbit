@@ -3,6 +3,7 @@
 .page {
   background-color: $color-gray;
   min-height: calc(100vh - 40px);
+  padding-bottom: 40px;
 
   .page-content {
     min-width: 1000px;

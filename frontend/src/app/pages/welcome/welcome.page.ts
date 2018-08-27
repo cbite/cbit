@@ -12,7 +12,7 @@ import {Component} from '@angular/core';
                 allowfullscreen>
         </iframe>
       </div>
-      
+
       <div class="text-panel">
         <div class="left-panel">
           <img src="../../../assets/images/logos_welcome_screen_vertical.png" class="university_logo"/>
