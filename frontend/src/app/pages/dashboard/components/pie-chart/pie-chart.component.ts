@@ -2,6 +2,7 @@ import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output
 import * as Chart from 'chart.js';
 import {PieChartData} from './pie-chart.data';
 import {borderColors, chartColors} from '../../util/chart.colors';
+import {reduceToItems} from './pie-chart-helper';
 
 @Component({
   selector: 'cbit-pie-chart',
@@ -33,6 +34,9 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
   public groupingOptions = [this.groupByStudyOption, this.groupBySamplesOption];
   public selectedGrouping = this.groupingOptions[0];
 
+  public countsData = [];
+  public labelData = [];
+
   @Input()
   public chartId: string;
 
@@ -62,25 +66,34 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
   }
 
   public updateChart() {
-    const countsData = this.selectedGrouping === this.groupByStudyOption ?
-      this.chartData.studiesCounts : this.chartData.samplesCounts;
-    this.chart.data.datasets[0].data = countsData;
+    this.prepData();
+    this.chart.data.labels = this.labelData;
+    this.chart.data.datasets[0].data = this.countsData;
     this.chart.update();
+  }
+
+  public prepData() {
+    if (this.selectedGrouping === this.groupByStudyOption) {
+      const reduced = reduceToItems(this.chartData, 10, this.chartData.studiesCounts);
+      this.countsData = reduced.counts;
+      this.labelData = reduced.labels;
+    } else {
+      const reduced = reduceToItems(this.chartData, 10, this.chartData.samplesCounts);
+      this.countsData = reduced.counts;
+      this.labelData = reduced.labels;
+    }
   }
 
   public refreshChart() {
     const self = this;
-    const countsData = this.selectedGrouping === this.groupByStudyOption ?
-      this.chartData.studiesCounts : this.chartData.samplesCounts;
-
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.prepData();
 
     this.chart = new Chart(this.ctx, {
       type: 'pie',
       data: {
-        labels: this.chartData.labels,
+        labels: this.labelData,
         datasets: [{
-          data: countsData,
+          data: this.countsData,
           backgroundColor: chartColors,
           borderColor: borderColors,
           borderWidth: 1
