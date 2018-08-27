@@ -41,7 +41,7 @@ import {prepareBarChartData} from './components/bar-chart/bar-chart-helper';
                           (sliceClick)="onMaterialSliceClick($event)"
                           style="margin-left: 30px;"></cbit-pie-chart>
         </div>
-        <div style="margin-top: 30px; margin-bottom: 70px;">
+        <div style="margin-top: 30px;">
           <cbit-pie-chart [chartId]="'organismChart'"
                           [comparisonText]="'by Organism'"
                           [chartData]="organismData"
