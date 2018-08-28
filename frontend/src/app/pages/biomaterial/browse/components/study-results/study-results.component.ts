@@ -9,7 +9,7 @@ import {FiltersState} from '../../services/filters.service';
   template: `
     <div class="title-panel">
       <div class="title">Results</div>
-      <div>{{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples</div>
+      <div class="match-count">{{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples</div>
       <ng-container *ngIf="activeFilters && activeFilters.length>0">
       <div class="filter-header">Active filters:</div>
       <div class="filter" *ngFor="let activeFilter of activeFilters">

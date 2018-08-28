@@ -5,12 +5,16 @@
     font-size: $font-size-enormous;
   }
 
-  .filter-header{
+  .match-count {
+    margin: 5px 0;
+  }
+
+  .filter-header {
     display: inline-block;
     margin-right: 5px;
   }
 
-  .filter{
+  .filter {
     display: inline-block;
 
     .filter-item {
@@ -47,12 +51,12 @@
   }
 }
 
-.results{
+.results {
   div:first-child {
     margin-top: 0;
   }
 
-  .row{
+  .row {
     margin-top: 20px;
   }
 }
