@@ -43,7 +43,6 @@ export function reduceToItems(data: PieChartData, max: number, countsArray: numb
     result.counts.push(otherCount);
     return result;
   } else {
-    console.log('check2');
     return {labels: data.labels, counts: countsArray};
   }
 }

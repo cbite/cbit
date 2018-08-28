@@ -17,7 +17,6 @@ Changing content
    -  You can place images under `cbit/frontend/assets/images`,
       then refer to them in the HTML with the URL `"/assets/images/my_little_pony.jpeg"`
    - Backgrounds for all the pages are defined in `cbit/frontend/src/app/cbit.component.ts`.
-     You may especially want to tweak the CSS styles for `#bg1` and `#bg2`.
 2. Save the files
 3. Commit and push the changes to the git repository
 

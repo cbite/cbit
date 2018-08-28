@@ -4,4 +4,55 @@
   .title {
     font-size: $font-size-enormous;
   }
+
+  .filter-header{
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  .filter{
+    display: inline-block;
+
+    .filter-item {
+      display: inline-block;
+      min-width: 60px;
+      margin-right: 10px;
+      margin-top: 3px;
+      margin-bottom: 3px;
+      line-height: 25px;
+      padding: 0 10px;
+      height: 26px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: $font-size-smaller;
+      background-color: lighten($color-blue, 10%);
+      color: white;
+
+      .remove {
+        margin-left: 5px;
+        opacity: 0;
+        float: right;
+      }
+
+      &:hover {
+        .remove {
+          opacity: 1;
+        }
+      }
+
+      &.not-focused {
+        opacity: 0.3;
+      }
+    }
+  }
+}
+
+.results{
+  div:first-child {
+    margin-top: 0;
+  }
+
+  .row{
+    margin-top: 20px;
+  }
 }
