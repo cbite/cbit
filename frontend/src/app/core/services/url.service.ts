@@ -54,6 +54,10 @@ export class URLService {
     return `biomaterials/studies/${studyId}`;
   }
 
+  studyEpicPidResource(ePicPid: string): string {
+    return `biomaterials/studies/pid/${ePicPid}`;
+  }
+
   studyArchiveResource(studyId: string): string {
     return `biomaterials/studies/${studyId}/archive`;
   }

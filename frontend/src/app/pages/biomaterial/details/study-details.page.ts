@@ -5,7 +5,14 @@ import {StudyService} from '../../../core/services/study.service';
 import {WindowRef} from '../../../shared/util/WindowRef';
 import {getCommonKeys} from '../../../core/util/samples-helper';
 import {
-  getArrayExpressId, getAuthors, getDescription, getDoisIds, getProtocolFile, getPubmedIds, getSupplementaryFiles,
+  getArrayExpressId,
+  getAuthors,
+  getDescription,
+  getDoisIds,
+  getEpicPid,
+  getProtocolFile,
+  getPubmedIds,
+  getSupplementaryFiles,
   getTitle
 } from '../../../core/util/study-helper';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -57,6 +64,11 @@ import {ExternalLinkService} from '../../../services/external-link.service';
           <div class="abstract">{{description}}</div>
         </div>
 
+        <div *ngIf="ePicPid">
+          <h6><b>ePIC PID</b></h6>
+          <div class="ePicPid">{{ePicPid}}</div>
+        </div>
+
         <div class="information">
           <h6><b>Information</b></h6>
           <ng-container *ngFor="let category of studyCategories">
@@ -80,6 +92,7 @@ import {ExternalLinkService} from '../../../services/external-link.service';
           </div>
         </div>
       </div>
+      <div *ngIf="errorMessage" class="error-message alert alert-danger" role="alert">{{ errorMessage }}</div>
     </div>
   `
 })
@@ -93,11 +106,13 @@ export class StudyDetailsPage implements OnInit {
   public description: string;
   public commonKeys: any;
   public arrayExpressId: string;
+  public ePicPid: string;
   public pubmedIds = [];
   public doiIds = [];
   public study: Study;
   public afterUpload = false;
   public downloadInProgress = false;
+  public errorMessage: string;
 
   constructor(private studyService: StudyService,
               private route: ActivatedRoute,
@@ -108,9 +123,32 @@ export class StudyDetailsPage implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const studyId = params ['studyId'];
-      this.studyService.forceGetStudyFromServer(studyId).then((study: Study) => {
-        this.setStudy(study);
-      });
+      const ePicPid = params['ePicPid'];
+      if (studyId) {
+        this.studyService.getStudyFromServerByStudyId(studyId)
+          .then((study: Study) => {
+            if (study) {
+              this.setStudy(study);
+            } else {
+              this.errorMessage = `No study found with id ${studyId}`;
+            }
+          })
+          .catch(() => {
+            this.errorMessage = `Something went wrong while getting study with id ${studyId}`;
+          });
+      } else if (ePicPid) {
+        this.studyService.getStudyFromServerByEpicPid(ePicPid)
+          .then((study: Study) => {
+            if (study) {
+              this.setStudy(study);
+            } else {
+              this.errorMessage = `No study found with ePIC PID ${ePicPid}`;
+            }
+          })
+          .catch(() => {
+            this.errorMessage = `Something went wrong while getting study with ePIC PID ${ePicPid}`;
+          });
+      }
     });
 
     this.route.queryParams.subscribe(queryParams => {
@@ -127,6 +165,7 @@ export class StudyDetailsPage implements OnInit {
     this.description = getDescription(study);
     this.authors = getAuthors(study);
     this.arrayExpressId = getArrayExpressId(study);
+    this.ePicPid = getEpicPid(study);
     this.pubmedIds = getPubmedIds(study);
     this.doiIds = getDoisIds(study);
     this.supplementaryFiles = getSupplementaryFiles(study);

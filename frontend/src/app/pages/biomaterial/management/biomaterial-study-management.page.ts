@@ -110,6 +110,7 @@ export class BioMaterialStudyManagementPage implements OnInit {
       const study = this.studies[studyId];
       group[studyId] = new FormGroup({
         studyId: new FormControl(studyId),
+        ePicPid: new FormControl(study._source['*ePIC PID']),
         visible: new FormControl(study._source['*Visible'])
       });
     }
@@ -120,6 +121,7 @@ export class BioMaterialStudyManagementPage implements OnInit {
     this.popupService.showConfirmationPoupup(`Are you sure you want to delete study ${studyId}?`, () => {
       const onError = (err, caught) => {
         this.studyState[studyId] = StudyState.Present;
+        (<FormGroup>this.form.controls[studyId]).controls['ePicPid'].enable();
         (<FormGroup>this.form.controls[studyId]).controls['visible'].enable();
         this.studySpecificErrorMessage[studyId] = `Error: ${err.statusText}`;
         this._changeDetectorRef.detectChanges();
@@ -130,6 +132,7 @@ export class BioMaterialStudyManagementPage implements OnInit {
         .subscribe(() => {
           this.studyState[studyId] = StudyState.Deleted;
           delete this.studySpecificErrorMessage[studyId];
+          (<FormGroup>this.form.controls[studyId]).controls['ePicPid'].disable();
           (<FormGroup>this.form.controls[studyId]).controls['visible'].disable();
           this._changeDetectorRef.detectChanges();
         });

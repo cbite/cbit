@@ -195,7 +195,7 @@ class BiomaterialsStudyResource(object):
 
     def on_get(self, req, resp, study_uuid):
         """
-        Fetches metadata for the requested study
+        Fetches metadata for the requested study by study Id
         DOES NOT TAKE INTO ACCOUNT *Visible FLAG
         => everyone can request every study, even if *Visible=false
 
@@ -208,15 +208,6 @@ class BiomaterialsStudyResource(object):
         ========
         { ...study metadata... }
         """
-
-        # Query createdon timestamps
-        db_conn = req.context["db"]
-        with db_conn.cursor() as cur:
-            query = "SELECT uuid, createdon FROM studies "
-            cur.execute(query)
-            results = cur.fetchall()
-        db_conn.commit()
-        createdon = str(results[0][1])
 
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
@@ -238,8 +229,65 @@ class BiomaterialsStudyResource(object):
             }
         })
 
-        result = rawResults["hits"]["hits"][0]
-        result['_createdOn'] = createdon
+        if len(rawResults["hits"]["hits"]) > 0:
+            result = rawResults["hits"]["hits"][0]
 
-        resp.status = falcon.HTTP_OK
-        resp.body = json.dumps(result, indent=2, sort_keys=True)
+            # Query createdon timestamp
+            db_conn = req.context["db"]
+            with db_conn.cursor() as cur:
+                query = "SELECT uuid, createdon FROM studies WHERE uuid = %s"
+                cur.execute(query, (study_uuid,))
+                results = cur.fetchall()
+            db_conn.commit()
+            result['_createdOn'] = str(results[0][1])
+
+            resp.status = falcon.HTTP_OK
+            resp.body = json.dumps(result, indent=2, sort_keys=True)
+        else:
+            resp.status = falcon.HTTP_OK
+            resp.body = json.dumps(None, indent=2, sort_keys=True)
+
+
+class BiomaterialsEpicPidStudyResource(object):
+    def on_get(self, req, resp, epic_pid):
+        """
+        Fetches metadata for the requested study by ePIC PID
+        DOES NOT TAKE INTO ACCOUNT *Visible FLAG
+        => everyone can request every study, even if *Visible=false
+
+        Request data
+        ============
+          "ePicPid123456"
+
+
+        Response
+        ========
+        { ...study metadata... }
+        """
+
+        es = elasticsearch.Elasticsearch(
+            hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])
+
+        rawResults = es.search(index=cfg.ES_INDEX, doc_type=cfg.ES_STUDY_DOCTYPE, body={
+            "size": 1,
+            "query": {"term": {"*ePIC PID": epic_pid}}
+        })
+
+        if len(rawResults["hits"]["hits"]) > 0:
+            result = rawResults["hits"]["hits"][0]
+            study_uuid = result['_id']
+
+            # Query createdon timestamp
+            db_conn = req.context["db"]
+            with db_conn.cursor() as cur:
+                query = "SELECT uuid, createdon FROM studies WHERE uuid = %s"
+                cur.execute(query, (study_uuid,))
+                results = cur.fetchall()
+            db_conn.commit()
+            result['_createdOn'] = str(results[0][1])
+
+            resp.status = falcon.HTTP_OK
+            resp.body = json.dumps(result, indent=2, sort_keys=True)
+        else:
+            resp.status = falcon.HTTP_OK
+            resp.body = json.dumps(None, indent=2, sort_keys=True)

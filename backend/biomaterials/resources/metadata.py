@@ -258,6 +258,7 @@ class BiomaterialsMetadataStudiesResource(object):
         [
           {
             "studyId": "20823668-8773-42e9-b005-6c51f9eb357b",
+            "ePicPid": "aHR0cHM6Ly93d3cuZ3JuZXQuZ3IvZW4vbm9kZS82NA==",
             "visible": false
           },
           ...
@@ -283,7 +284,8 @@ class BiomaterialsMetadataStudiesResource(object):
                 "_op_type": "update",
                 "_id": studyChangeDesc['studyId'],
                 "doc": {
-                    "*Visible": studyChangeDesc['visible']
+                    "*Visible": studyChangeDesc['visible'],
+                    "*ePIC PID": studyChangeDesc['ePicPid']
                 }
             })
 

@@ -16,6 +16,7 @@ import {FieldMeta} from '../types/field-meta';
 import * as FileSaver from 'file-saver';
 import {getTitle} from '../util/study-helper';
 import {GoogleAnalyticsService} from '../../services/google-analytics.service';
+import {Observable} from 'rxjs/Observable';
 
 // Should be a parseable number to play nicely with numeric fields
 // and it should survive a round-trip conversion in ES from string to double to string
@@ -123,9 +124,24 @@ export class StudyService {
     return this.studyRequester.get(studyId);
   }
 
-  forceGetStudyFromServer(studyId: string): Promise<Study> {
-    return new Promise(resolve => {
-      this.httpGatewayService.get(this._url.studyResource(studyId)).subscribe(data => {
+  getStudyFromServerByStudyId(studyId: string): Promise<Study> {
+    return new Promise((resolve, reject) => {
+      this.httpGatewayService.get(this._url.studyResource(studyId), (err) => {
+        console.log(err);
+        reject(err);
+        return Observable.throw(err);
+      }).subscribe(data => {
+        resolve(data);
+      });
+    });
+  }
+
+  getStudyFromServerByEpicPid(ePicPid: string): Promise<Study> {
+    return new Promise((resolve, reject) => {
+      this.httpGatewayService.get(this._url.studyEpicPidResource(ePicPid), (err) => {
+        reject(err);
+        return Observable.throw(err);
+      }).subscribe(data => {
         resolve(data);
       });
     });

@@ -9,7 +9,8 @@ from biomaterials.resources.metadata import BiomaterialsMetadataAllCountsResourc
     BiomaterialsMetadataFieldsMulti, BiomaterialsMetadataField, BiomaterialsMetadataSearch, \
     BiomaterialsMetadataStudiesResource
 from biomaterials.resources.samples import BiomaterialsSamplesResource
-from biomaterials.resources.studies import BiomaterialsStudyResource, BiomaterialsStudiesResource
+from biomaterials.resources.studies import BiomaterialsStudyResource, BiomaterialsStudiesResource, \
+    BiomaterialsEpicPidStudyResource
 from common.resources.user import UsersResource, UserResource
 from config import config as cfg
 from middleware.clean_old_uploads import (
@@ -64,6 +65,7 @@ app.add_route('/biomaterials/samples', BiomaterialsSamplesResource())
 
 app.add_route('/biomaterials/studies', BiomaterialsStudiesResource())
 app.add_route('/biomaterials/studies/{study_uuid}', BiomaterialsStudyResource())
+app.add_route('/biomaterials/studies/pid/{epic_pid}', BiomaterialsEpicPidStudyResource())
 app.add_route('/biomaterials/studies/{study_uuid}/archive', BiomaterialsStudyArchiveResource())
 app.add_route('/biomaterials/studies/{study_uuid}/protocols', BiomaterialsStudyProtocolsResource())
 

@@ -92,11 +92,15 @@ export class HttpGatewayService {
 
   private checkResponseBody(body: any): any {
     // throw error when server returned error
-    if (body.error) {
-      if (body.error.status === 401) {
-        this.handleUnauthorized();
+    if (body) {
+      if (body.error) {
+        if (body.error.status === 401) {
+          this.handleUnauthorized();
+        } else {
+          throw new Error(body.error.message);
+        }
       } else {
-        throw new Error(body.error.message);
+        return body;
       }
     } else {
       return body;

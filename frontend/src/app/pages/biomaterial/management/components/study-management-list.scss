@@ -4,6 +4,12 @@
   text-decoration: line-through;
 }
 
+.deletedStudyEpicPid {
+  text-decoration: line-through;
+  background-color: #eee;
+  color: #888;
+}
+
 .header {
   height: 40px;
   line-height: 40px;
@@ -42,9 +48,9 @@
   }
 
   .text-input {
-    width: 140px;
+    width: 220px;
     text-align: left;
-    padding-left: 20px;
+    padding-left: 10px;
     height: 40px;
     line-height: 40px;
 

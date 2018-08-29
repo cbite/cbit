@@ -7,6 +7,7 @@ export class AppUrls {
   public static dashboardUrl = 'dashboard';
 
   public static studyUrl = 'study/:studyId';
+  public static studyPidUrl = 'study/pid/:ePicPid';
 
   // bio material study
   public static manageBioMaterialStudiesUrl = 'biomaterial/manage';

@@ -32,6 +32,10 @@ export function getArrayExpressId(study: Study): string {
   return study._source['*Array Express Id'];
 }
 
+export function getEpicPid(study: Study): string {
+  return study._source['*ePIC PID'];
+}
+
 export function getPubmedIds(study: Study): string[] {
   return (((study && study._source && study._source['STUDY PUBLICATIONS']) || [])
       .filter((p: RawStudyPublication) => p['Study PubMed ID'])

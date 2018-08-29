@@ -24,6 +24,7 @@ const routes: Routes = [
   { path: AppUrls.bioMaterialMetadataUrl, component: BioMaterialMetadataPage },
   { path: AppUrls.usersUrl, component: UserManagementPage },
   { path: AppUrls.studyUrl, component: StudyDetailsPage },
+  { path: AppUrls.studyPidUrl, component: StudyDetailsPage },
   { path: AppUrls.manageBioMaterialStudiesUrl, component: BioMaterialStudyManagementPage },
   { path: AppUrls.manageTendonsStudiesUrl, component: TendonsStudiesManagementPage },
   { path: AppUrls.browseTendonStudiesUrl, component: TendonsStudiesBrowsePage },

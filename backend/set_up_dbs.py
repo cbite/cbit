@@ -76,6 +76,12 @@ def set_up_elasticsearch():
                         "include_in_all": False
                     },
 
+                    "*ePIC PID": {
+                        "type": "string",
+                        "index": "not_analyzed",
+                        "include_in_all": False
+                    },
+
                     "*Visible": {
                         "type": "boolean",
                         "index": "not_analyzed",
