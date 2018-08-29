@@ -1,8 +1,7 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, Inject} from '@angular/core';
 import {getCategoriesToDisplay, StudyCategory} from '../../../core/util/study-display-category-helper';
 import {Sample, Study} from '../../../core/types/study.model';
 import {StudyService} from '../../../core/services/study.service';
-import {WindowRef} from '../../../shared/util/WindowRef';
 import {getCommonKeys} from '../../../core/util/samples-helper';
 import {
   getArrayExpressId,
@@ -18,6 +17,7 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppUrls} from '../../../router/app-urls';
 import {ExternalLinkService} from '../../../services/external-link.service';
+import {DOCUMENT} from '@angular/common';
 
 @Component({
   styleUrls: ['./study-details.scss'],
@@ -27,13 +27,25 @@ import {ExternalLinkService} from '../../../services/external-link.service';
         <div class="page-header">
           <div *ngIf="afterUpload" class="page-title">Upload succeeded!</div>
           <div class="back-link" (click)="onBackClicked()"><i class="far fa-angle-left"></i> Back to list</div>
+          <div class="share-link"
+               placement="bottom"
+               triggers="manual"
+               #p1="ngbPopover"
+               (click)="toggleSharePopover(p1)"
+               [ngbPopover]="shareTooltipTemplate"><i class="share-icon fal fa-share"></i> Share
+          </div>
+          <ng-template #shareTooltipTemplate>
+            <div>
+              <input class="popover-input" (focus)="onFocusSharePopover(userinput)" cbitFocusOnInit #userinput/>
+              <span class="popover-copy" (click)="onCopySharePopoverUrl(userinput)"><i class="fal fa-copy"></i></span>
+            </div>
+          </ng-template>
         </div>
         <h4>{{title}}</h4>
         <div class="authors">by {{authors}}</div>
 
         <div style="margin: 20px 0 0 0">
           <div class="links">
-            <!--<div style="display: inline-block; width: 120px"><h6><b>Links</b></h6></div>-->
             <div class="link" (click)="onOpenExternal('ArrayExpress', arrayExpressId)">
               <i class="far fa-link"></i> ArrayExpress
             </div>
@@ -48,7 +60,6 @@ import {ExternalLinkService} from '../../../services/external-link.service';
 
         <div style="margin: 10px 0 20px 0">
           <div class="downloads">
-            <!--<div style="display: inline-block; width: 120px"><h6><b>Downloads</b></h6></div>-->
             <div class="link" (click)="onDownloadStudy()">
               <i class="far fa-download"></i> Study
             </div>
@@ -114,7 +125,8 @@ export class StudyDetailsPage implements OnInit {
   public downloadInProgress = false;
   public errorMessage: string;
 
-  constructor(private studyService: StudyService,
+  constructor(@Inject(DOCUMENT) private document: any,
+              private studyService: StudyService,
               private route: ActivatedRoute,
               private router: Router,
               private externalLinkService: ExternalLinkService) {
@@ -156,6 +168,30 @@ export class StudyDetailsPage implements OnInit {
         this.afterUpload = true;
       }
     });
+  }
+
+  public toggleSharePopover(popover) {
+    if (popover.isOpen()) {
+      popover.close();
+    } else {
+      popover.open();
+    }
+  }
+
+  public onFocusSharePopover(inputElement) {
+    let url = this.document.location.origin + '/';
+    if (this.ePicPid) {
+      url += AppUrls.replaceEpicPid(AppUrls.studyPidUrl, this.ePicPid);
+    } else {
+      url += AppUrls.replaceStudyId(AppUrls.studyUrl, this.study._id);
+    }
+    inputElement.value = url;
+    inputElement.select();
+  }
+
+  public onCopySharePopoverUrl(inputElement) {
+    inputElement.select();
+    document.execCommand('copy');
   }
 
   public setStudy(study: Study) {

@@ -27,13 +27,8 @@ import {Component} from '@angular/core';
             <p>
               cBiT is the first repository that offers biomaterial-based transcriptomics data
               together with all <br> relevant biomaterial metadata. Check out the <a routerLink="/about">About</a>
-              section for more information or <br>go directly to <a routerLink="/biomaterial/browse">Enter cBiT</a>
+              section for more information or <br>enter cBiT directly by going to the <a routerLink="/dashboard">Dashboard</a>
               to see what we have to offer!
-            </p>
-
-            <p>
-              cBiT was developed at the department of Cell Biology-Inspired Tissue Engineering (cBITE),<br>
-              part of the MERLN Institute at Maastricht University.
             </p>
           </div>
         </div>

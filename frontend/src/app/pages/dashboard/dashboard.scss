@@ -16,18 +16,24 @@
       margin-bottom: 20px;
 
       &.with-subtitle {
-        margin-bottom: 0;
+        margin-bottom: 5px;
       }
     }
+
     .page-subtitle {
       margin-bottom: 20px;
 
       .link {
         cursor: pointer;
+        color: $color-blue;
 
         &:hover {
-          color: $color-blue;
+          color: $color-dark-blue;
         }
+      }
+
+      .divider{
+        margin: 5px;
       }
     }
   }

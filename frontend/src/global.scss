@@ -38,7 +38,7 @@ ngb-modal-window {
 ngb-typeahead-window {
   font-size: $font-size-small !important;
   width: 440px !important;
-  border-radius: 0!important;
+  border-radius: 0 !important;
 
   .dropdown-item {
     cursor: pointer !important;
@@ -47,6 +47,10 @@ ngb-typeahead-window {
       background-color: lighten($color-blue, 15%) !important;
     }
   }
+}
+
+ngb-popover-window {
+  max-width: 500px !important;
 }
 
 @import '../node_modules/bootstrap/scss/bootstrap';
@@ -83,7 +87,7 @@ a {
 }
 
 //============================//
-//======= ButtonL ==========//
+//========= Buttons ==========//
 //============================//
 
 .button-standard {
@@ -101,7 +105,9 @@ a {
   margin: 0 5px;
 
   &:hover {
+    color: white;
     background-color: $color-dark-blue;
+    text-decoration: none;
   }
 
   &:focus {

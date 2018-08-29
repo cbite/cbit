@@ -8,7 +8,9 @@ import {FiltersState} from '../../services/filters.service';
   styleUrls: ['./study-results.scss'],
   template: `
     <div class="title-panel">
-      <div class="title">Results</div>
+      <div class="title">Results
+        <a class="instructions button-standard" href="/assets/pdfs/cBiT user manual.pdf" target="_blank">cBiT user manual</a>
+      </div>
       <div class="match-count">{{ numMatchingStudies }} studies, {{ numMatchingSamples }} samples</div>
       <ng-container *ngIf="activeFilters && activeFilters.length>0">
       <div class="filter-header">Active filters:</div>

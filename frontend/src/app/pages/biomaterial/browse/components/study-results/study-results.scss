@@ -3,6 +3,14 @@
 .title-panel {
   .title {
     font-size: $font-size-enormous;
+
+    .instructions {
+      font-size: $font-size-small;
+      height: 35px;
+      line-height: 35px;
+      float: right;
+      margin-right: 15px;
+    }
   }
 
   .match-count {

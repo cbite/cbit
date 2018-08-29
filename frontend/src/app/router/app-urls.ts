@@ -24,4 +24,8 @@ export class AppUrls {
   public static replaceStudyId(url: string, studyId: string) {
     return url.replace(':studyId', studyId);
   }
+
+  public static replaceEpicPid(url: string, ePicPid: string) {
+    return url.replace(':ePicPid', ePicPid);
+  }
 }

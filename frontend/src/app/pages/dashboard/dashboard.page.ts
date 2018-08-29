@@ -17,8 +17,11 @@ import {prepareBarChartData} from './components/bar-chart/bar-chart-helper';
       <div class="page-content">
         <div class="page-title with-subtitle">All Studies</div>
         <div class="page-subtitle">
-          <span class="link" (click)="onBioMaterialClicked()">Biomaterial Studies</span> |
-          <span class="link" (click)="onTendonClicked()">Tendon Studies</span>
+          <span class="link" (click)="onBioMaterialClicked()">
+            <i class="fas fa-list-alt" style="margin-right: 3px"></i> Biomaterial Studies</span>
+          <span class="divider"> | </span>
+          <span class="link" (click)="onTendonClicked()">
+            <i class="fas fa-list-alt" style="margin-right: 3px"></i> Tendon Studies</span>
         </div>
         <div>
           <cbit-bar-chart [title]="'Studies by Gene Expression Type'"

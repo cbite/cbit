@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {FactoryProvider, InjectionToken, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -83,6 +83,7 @@ import {DashboardService} from './pages/dashboard/services/dashboard.service';
 import {PieChartComponent} from './pages/dashboard/components/pie-chart/pie-chart.component';
 import {BarChartComponent} from './pages/dashboard/components/bar-chart/bar-chart.component';
 import {PieChartOptionsComponent} from './pages/dashboard/components/pie-chart/pie-chart-options.component';
+import {FocusOnInitDirective} from 'app/shared/directives/focus-input.directive';
 
 @NgModule(
   {
@@ -154,7 +155,8 @@ import {PieChartOptionsComponent} from './pages/dashboard/components/pie-chart/p
       TendonsStudyEditorPage,
       TendonsStudiesBrowsePage,
       MetadataEditorFieldComponent,
-      PageSpinnerComponent
+      PageSpinnerComponent,
+      FocusOnInitDirective
     ],
     entryComponents: [
       LoginPopupComponent,

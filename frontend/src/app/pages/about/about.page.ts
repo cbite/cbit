@@ -12,16 +12,17 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
             cBiT is the first repository that offers biomaterial-based transcriptomics
             data together with all relevant biomaterial metadata.
 
-            cBiT was developed at the department of <a href="http://www.jandeboerlab.com">Cell Biology-Inspired Tissue
-            Engineering (cBITE)</a>, part of the <a href="http://merln.maastrichtuniversity.nl/">MERLN Institute at
+            cBiT was developed at the department of <a href="http://www.jandeboerlab.com" target="_blank">Cell Biology-Inspired Tissue
+            Engineering (cBITE)</a>, part of the <a href="http://merln.maastrichtuniversity.nl/" target="_blank">MERLN Institute at
             Maastricht University</a>.
           </p>
 
           <h4>Why cBiT?</h4>
           <ul>
-            <li>cBiT makes materiomics studies publically available for download and further analysis</li>
-            <li>cBiT is an important step towards standardization in the field of cell-biomaterial interaction</li>
-            <li>in depth (meta)analysis of cBiT’s big data will accelerate biomaterial development</li>
+            <li>cBiT aims to provide a comprehensive overview of materiomics studies and make them publically available for download and further analysis</li>
+            <li>cBiT is an important step towards standardization in the field of cell-biomaterial interactions</li>
+            <li>cBiT wants to stimulate data sharing in the biomaterial community</li>
+            <li>In depth (meta)analysis of cBiT’s big data will accelerate biomaterial development</li>
           </ul>
 
           <img src="../../../assets/images/cbit-overview-final.png" class="img-overview">
@@ -39,8 +40,8 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
               </div>
 
               cBiT can be easily queried under <a routerLink="/biomaterial/browse">Enter cBiT</a> using either free text search or
-              a material and study property quick selection menu. Studies or samples of interest can be selected
-              and subsequently downloaded. For a tutorial on how to use cBiT, please have a look at
+              a material and study property quick selection menu. Studies of interest can subsequently be downloaded for further analysis. 
+              For a manual on how to use cBiT, please have a look at
               <a href="/assets/pdfs/cBiT user manual.pdf">this pdf</a>.
             </li>
 
@@ -49,9 +50,9 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
                 Browse, download and find an external party to analyze the data
               </div>
 
-              cBiT can be easily queried under Browse using either free text search or a material and study property
-              quick selection menu. Studies or samples of interest can be selected and subsequently downloaded. For a
-              tutorial on how to use cBiT, please have a look at
+              cBiT can be easily queried under <a routerLink="/biomaterial/browse">Enter cBiT</a> using either free text search or
+              a material and study property quick selection menu. Studies of interest can subsequently be downloaded for further analysis.
+              For a manual on how to use cBiT, please have a look at
               <a href="/assets/pdfs/cBiT user manual.pdf">this pdf</a>.
             </li>
 
@@ -96,17 +97,18 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
           <ul>
             <li>
               Hebels et al., cBiT: A Transcriptomics Database for Innovative Biomaterial Engineering.
-              [Submitted]
+              <a href="https://www.ncbi.nlm.nih.gov/pubmed/29020642" target="_blank">Biomaterials, 149: 88-97 (2017)</a>
             </li>
 
             <li>
               Cranford SW, et al., Materiomics: An -omics Approach to Biomaterials Research.
-              Adv Mater, 25: 802–824 (2013).
+              <a href="https://www.ncbi.nlm.nih.gov/pubmed/23297023" target="_blank">Adv Mater, 25: 802–824 (2013)</a>
             </li>
 
             <li>
               de Boer J and van Blitterswijk CA (eds.), Materiomics – High throughput screening of
-              biomaterial properties. Cambridge University Press 2013.
+              biomaterial properties.
+              <a href="http://www.cambridge.org/gb/academic/subjects/engineering/materials-science/materiomics-high-throughput-screening-biomaterial-properties?format=HB&isbn=9781107016774" target="_blank">Cambridge University Press (2013)</a>
             </li>
           </ul>
 

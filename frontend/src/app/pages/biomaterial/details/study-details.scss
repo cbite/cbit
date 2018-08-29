@@ -13,8 +13,24 @@
     }
 
     .back-link {
+      display: inline-block;
       cursor: pointer;
       color: $color-blue;
+
+      &:hover {
+        color: $color-dark-blue;
+      }
+    }
+
+    .share-link {
+      display: inline-block;
+      float: right;
+      cursor: pointer;
+      color: $color-blue;
+
+      .share-icon{
+        font-size: $font-size-small;
+      }
 
       &:hover {
         color: $color-dark-blue;
@@ -25,6 +41,26 @@
   .page-content {
     max-width: 1000px;
     margin: auto;
+  }
+}
+
+.popover-input {
+  display: inline-block;
+  border: $border-light;
+  height: 30px;
+  outline: none;
+  font-size: $font-size-small;
+  width: 250px;
+}
+
+.popover-copy {
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 5px;
+  color: $color-blue;
+
+  &:hover {
+    color: $color-dark-blue;
   }
 }
 
