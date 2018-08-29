@@ -9,6 +9,8 @@ export class AppUrls {
   public static studyUrl = 'study/:studyId';
   public static studyPidUrl = 'study/pid/:ePicPid';
 
+  public static oldBrowseUrl = 'browse';
+
   // bio material study
   public static manageBioMaterialStudiesUrl = 'biomaterial/manage';
   public static newBioMaterialStudyUrl = 'biomaterial/new';

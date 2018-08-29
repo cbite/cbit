@@ -1,4 +1,5 @@
 import {Study} from '../types/study.model';
+import * as uniqBy from 'lodash.uniqby';
 
 export function getCategoriesToDisplay(study: Study): StudyCategory[] {
   const categoryMap = Object.assign({}, study._source);
@@ -21,9 +22,18 @@ export function getCategoriesToDisplay(study: Study): StudyCategory[] {
 }
 
 export class StudyCategory {
-  constructor (public label: string, public value: any) {}
+  constructor(public label: string, public value: any) {
+  }
 
   isIsMultiValued(): boolean {
     return Array.isArray(this.value);
+  }
+
+  getUniqueValue(): any {
+    if (this.isIsMultiValued()) {
+      return uniqBy(this.value, x => JSON.stringify(x));
+    } else {
+      return this.value;
+    }
   }
 }

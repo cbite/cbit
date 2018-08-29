@@ -27,6 +27,7 @@ const routes: Routes = [
   { path: AppUrls.studyPidUrl, component: StudyDetailsPage },
   { path: AppUrls.manageBioMaterialStudiesUrl, component: BioMaterialStudyManagementPage },
   { path: AppUrls.manageTendonsStudiesUrl, component: TendonsStudiesManagementPage },
+  { path: AppUrls.oldBrowseUrl, redirectTo: AppUrls.browseBioMaterialStudiesUrl, pathMatch: 'full'}, // To keep supporting web links made in the past
   { path: AppUrls.browseTendonStudiesUrl, component: TendonsStudiesBrowsePage },
   { path: AppUrls.browseBioMaterialStudiesUrl, component: BioMaterialStudiesBrowsePage },
   { path: AppUrls.newTendonsStudyUrl, component: TendonsStudyEditorPage },

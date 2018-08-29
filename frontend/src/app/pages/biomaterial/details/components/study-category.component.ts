@@ -15,7 +15,7 @@ import {StudyCategory} from '../../../../core/util/study-display-category-helper
         <ng-container *ngIf="isOpen">
           <div *ngIf="category.isIsMultiValued()">
             <ol>
-              <li *ngFor="let multiValue of category.value">
+              <li *ngFor="let multiValue of category.getUniqueValue()">
                 <ul>
                   <li *ngFor="let itemValue of multiValue | mapToIterable">
                     <i>{{ itemValue.key }}</i>: {{ itemValue.val }}

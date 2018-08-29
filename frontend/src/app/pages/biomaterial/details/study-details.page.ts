@@ -77,7 +77,7 @@ import {DOCUMENT} from '@angular/common';
 
         <div *ngIf="ePicPid">
           <h6><b>ePIC PID</b></h6>
-          <div class="ePicPid">{{ePicPid}}</div>
+          <div class="ePicPid">https://hdl.handle.net/{{ePicPid}}</div>
         </div>
 
         <div class="information">
@@ -179,13 +179,9 @@ export class StudyDetailsPage implements OnInit {
   }
 
   public onFocusSharePopover(inputElement) {
-    let url = this.document.location.origin + '/';
-    if (this.ePicPid) {
-      url += AppUrls.replaceEpicPid(AppUrls.studyPidUrl, this.ePicPid);
-    } else {
-      url += AppUrls.replaceStudyId(AppUrls.studyUrl, this.study._id);
-    }
-    inputElement.value = url;
+    inputElement.value = this.ePicPid
+      ? 'https://hdl.handle.net/' + this.ePicPid
+      : this.document.location.origin + '/' + AppUrls.replaceStudyId(AppUrls.studyUrl, this.study._id);
     inputElement.select();
   }
 
