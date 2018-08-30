@@ -135,7 +135,8 @@ export class StudyDetailsPage implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const studyId = params ['studyId'];
-      const ePicPid = params['ePicPid'];
+      const ePicPidCode = params['ePicPidCode'];
+      const ePicPidStudy = params['ePicPidStudy'];
       if (studyId) {
         this.studyService.getStudyFromServerByStudyId(studyId)
           .then((study: Study) => {
@@ -148,17 +149,18 @@ export class StudyDetailsPage implements OnInit {
           .catch(() => {
             this.errorMessage = `Something went wrong while getting study with id ${studyId}`;
           });
-      } else if (ePicPid) {
-        this.studyService.getStudyFromServerByEpicPid(ePicPid)
+      } else if (ePicPidCode && ePicPidCode) {
+        const fullEpicPID = ePicPidCode + '/' + ePicPidStudy;
+        this.studyService.getStudyFromServerByEpicPid(fullEpicPID)
           .then((study: Study) => {
             if (study) {
               this.setStudy(study);
             } else {
-              this.errorMessage = `No study found with ePIC PID ${ePicPid}`;
+              this.errorMessage = `No study found with ePIC PID ${fullEpicPID}`;
             }
           })
           .catch(() => {
-            this.errorMessage = `Something went wrong while getting study with ePIC PID ${ePicPid}`;
+            this.errorMessage = `Something went wrong while getting study with ePIC PID ${fullEpicPID}`;
           });
       }
     });

@@ -249,7 +249,7 @@ class BiomaterialsStudyResource(object):
 
 
 class BiomaterialsEpicPidStudyResource(object):
-    def on_get(self, req, resp, epic_pid):
+    def on_post(self, req, resp):
         """
         Fetches metadata for the requested study by ePIC PID
         DOES NOT TAKE INTO ACCOUNT *Visible FLAG
@@ -264,6 +264,8 @@ class BiomaterialsEpicPidStudyResource(object):
         ========
         { ...study metadata... }
         """
+        data = json.load(req.stream)
+        epic_pid = data['ePicPid']
 
         es = elasticsearch.Elasticsearch(
             hosts=[{'host': cfg.ES_HOST, 'port': cfg.ES_PORT}])

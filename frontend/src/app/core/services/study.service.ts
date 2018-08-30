@@ -138,7 +138,7 @@ export class StudyService {
 
   getStudyFromServerByEpicPid(ePicPid: string): Promise<Study> {
     return new Promise((resolve, reject) => {
-      this.httpGatewayService.get(this._url.studyEpicPidResource(ePicPid), (err) => {
+      this.httpGatewayService.post(this._url.studyEpicPidResource(), {ePicPid: ePicPid}, (err) => {
         reject(err);
         return Observable.throw(err);
       }).subscribe(data => {

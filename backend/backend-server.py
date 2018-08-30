@@ -65,7 +65,7 @@ app.add_route('/biomaterials/samples', BiomaterialsSamplesResource())
 
 app.add_route('/biomaterials/studies', BiomaterialsStudiesResource())
 app.add_route('/biomaterials/studies/{study_uuid}', BiomaterialsStudyResource())
-app.add_route('/biomaterials/studies/pid/{epic_pid}', BiomaterialsEpicPidStudyResource())
+app.add_route('/biomaterials/studies/pid', BiomaterialsEpicPidStudyResource())
 app.add_route('/biomaterials/studies/{study_uuid}/archive', BiomaterialsStudyArchiveResource())
 app.add_route('/biomaterials/studies/{study_uuid}/protocols', BiomaterialsStudyProtocolsResource())
 

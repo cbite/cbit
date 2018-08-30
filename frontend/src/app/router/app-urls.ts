@@ -7,7 +7,7 @@ export class AppUrls {
   public static dashboardUrl = 'dashboard';
 
   public static studyUrl = 'study/:studyId';
-  public static studyPidUrl = 'study/pid/:ePicPid';
+  public static studyPidUrl = 'study/pid/:ePicPidCode/:ePicPidStudy';
 
   public static oldBrowseUrl = 'browse';
 
