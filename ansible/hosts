@@ -1,1 +1,1 @@
-cbit elasticsearch_node_name=cbit ansible_user=pat
+cbit elasticsearch_node_name=cbit ansible_user=deploy_cbit
