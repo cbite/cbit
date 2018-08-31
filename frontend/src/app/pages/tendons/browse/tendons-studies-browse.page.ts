@@ -31,9 +31,11 @@ import {Router} from '@angular/router';
                 (sortingChange)="onSortingChanged($event)">
               </cbit-tendons-study-results-header>
             </div>
+            <div class="studies">
             <cbit-tendons-study-panel *ngFor="let study of filteredStudies"
                                       [study]="study"
                                       (openExternal)="onOpenExternal($event)"></cbit-tendons-study-panel>
+            </div>
           </div>
         </div>
       </div>
