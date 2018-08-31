@@ -9,7 +9,7 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
           <h4>What is cBiT?</h4>
 
           <p>
-            cBiT is the first repository that offers biomaterial-based transcriptomics
+            CBIT is the first repository that offers biomaterial-based transcriptomics
             data together with all relevant biomaterial metadata.
 
             cBiT was developed at the department of <a href="http://www.jandeboerlab.com" target="_blank">Cell Biology-Inspired Tissue
