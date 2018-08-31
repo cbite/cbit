@@ -101,9 +101,12 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       },
       options: {
         onClick: function (e) {
-          const point = this.getElementAtEvent(e)[0];
-          const pointValue = point._model.label;
-          self.sliceClick.emit(pointValue);
+          const pointElement = this.getElementAtEvent(e);
+          if (pointElement.length>0) {
+            const point = pointElement[0];
+            const pointValue = point._model.label;
+            self.sliceClick.emit(pointValue);
+          }
         },
         onHover: function (e: any) {
           const point = <any>this.getElementAtEvent(e);
