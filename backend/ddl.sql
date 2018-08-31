@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS tendons_metadata CASCADE ;
 CREATE TABLE tendons_metadata (
    uuid UUID PRIMARY KEY
   ,arrayExpressId VARCHAR NOT NULL
-  ,pubmedId VARCHAR NOT NULL
+  ,pubmedId VARCHAR
   ,name VARCHAR NOT NULL
   ,description VARCHAR NOT NULL
   ,geneExpressionType VARCHAR NOT NULL
