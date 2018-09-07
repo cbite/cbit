@@ -13,6 +13,52 @@
       margin-bottom: 20px;
     }
 
+    .sort-title {
+      display: inline-block;
+      font-size: $font-size-normal;
+      margin-bottom: 20px;
+    }
+
+    .sorting {
+      padding-right: 30px;
+      display: inline-block;
+      color: $color-blue;
+      cursor: pointer;
+      position: relative;
+
+      &:hover {
+        color: $color-dark-blue;
+      }
+
+      .sorting-options {
+        min-width: 160px;
+        z-index: 1000;
+        position: absolute;
+        left: 0;
+        text-align: left;
+        border: 1px solid darken($color-gray, 10%);
+        background-color: white;
+
+        .sorting-option {
+          background-color: $color-gray;
+          height: 30px;
+          line-height: 30px;
+          padding: 0 20px;
+          outline: 0;
+          border-bottom: 1px solid darken($color-gray, 10%);
+
+          &:hover {
+            background-color: $color-blue;
+            color: white;
+          }
+        }
+
+        div:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+
     .header {
       height: 40px;
       line-height: 40px;

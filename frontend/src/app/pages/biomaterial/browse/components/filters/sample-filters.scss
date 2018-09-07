@@ -47,12 +47,12 @@ ul li label {
 .count {
   display: block;
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: 0;
+  right: 0;
   width: 40px;
   font-style: italic;
   font-size: 80%;
-  padding-top: 2px;
+  padding-top: 3px;
   text-align: right;
 }
 .disabled {

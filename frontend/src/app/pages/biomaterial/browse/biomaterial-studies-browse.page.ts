@@ -6,7 +6,7 @@ import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {Study} from '../../../core/types/study.model';
 import {PopupService} from '../../../core/services/popup.service';
-import {getPublicationDate, getTitle} from '../../../core/util/study-helper';
+import {getAuthors, getPublicationDate, getTitle} from '../../../core/util/study-helper';
 import {AppUrls} from '../../../router/app-urls';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CollapseStateService} from '../../../core/services/collapse-state.service';
@@ -25,7 +25,11 @@ import {CollapseStateService} from '../../../core/services/collapse-state.servic
             <span style="margin: 0 5px;"><i class="far fa-angle-right"></i></span> Biomaterial
           </div>
           <div class="results">
-            <cbit-study-results [matches]="matches" [filters]="filters"
+            <cbit-study-results [matches]="matches"
+                                [filters]="filters"
+                                [sortField]="sortField"
+                                [sortFields]="sortFields"
+                                (sortingChange)="onSortingChanged($event)"
                                 (showDetails)="onShowDetailsClicked($event)"
                                 (removeFilter)="onRemoveFilter($event)"
                                 (download)="onDownload($event)"></cbit-study-results>
@@ -37,9 +41,13 @@ import {CollapseStateService} from '../../../core/services/collapse-state.servic
 })
 export class BioMaterialStudiesBrowsePage implements OnInit, OnDestroy {
 
+  public rawMatches: UnifiedMatch[] = [];
   public matches: UnifiedMatch[] = [];
 
   private stopStream = new Subject<string>();
+
+  public sortFields = ['Publication Date', 'Name', 'Author'];
+  public sortField = 'Author';
 
   public filters: FiltersState;
 
@@ -60,7 +68,8 @@ export class BioMaterialStudiesBrowsePage implements OnInit, OnDestroy {
         return Observable.fromPromise(<Promise<UnifiedMatch[]>>this.studyService.getUnifiedMatchesAsync(filters));
       }).takeUntil(this.stopStream)
         .subscribe(rawMatches => {
-          this.updateMatches(rawMatches);
+          this.rawMatches = rawMatches;
+          this.updateMatches();
         });
     });
 
@@ -97,13 +106,42 @@ export class BioMaterialStudiesBrowsePage implements OnInit, OnDestroy {
     this.stopStream.next('stop');
   }
 
-  private updateMatches(rawMatches: UnifiedMatch[]): void {
-    // Sort descending by Publication Date then ascending by Study Title
-    this.matches = rawMatches.sort((a, b) =>
-      (
-        -(getPublicationDate(a.study).localeCompare(getPublicationDate(b.study)))
-        || (getTitle(a.study).localeCompare(getTitle(b.study)))
-      )
-    );
+  public onSortingChanged(sortField: string) {
+    this.sortField = sortField;
+    this.updateMatches();
+  }
+
+  private updateMatches(): void {
+    if (this.rawMatches) {
+      switch (this.sortField) {
+        case 'Publication Date':
+          // Sort descending by Publication Date then ascending by Study Title
+          this.matches = this.rawMatches.sort((a, b) =>
+            (
+              -(getPublicationDate(a.study).localeCompare(getPublicationDate(b.study)))
+              || (getTitle(a.study).localeCompare(getTitle(b.study)))
+            )
+          ).slice(0);
+          break;
+        case 'Name':
+          // Sort ascending by Study Title then descending by Publication Date
+          this.matches = this.rawMatches.sort((a, b) =>
+            (
+              (getTitle(a.study).localeCompare(getTitle(b.study)))
+              || -(getPublicationDate(a.study).localeCompare(getPublicationDate(b.study)))
+            )
+          ).slice(0);
+          break;
+        case 'Author':
+          // Sort ascending by Authors then descending by Publication Date
+          this.matches = this.rawMatches.sort((a, b) =>
+            (
+              (getAuthors(a.study).localeCompare(getAuthors(b.study)))
+              || -(getPublicationDate(a.study).localeCompare(getPublicationDate(b.study)))
+            )
+          ).slice(0);
+          break;
+      }
+    }
   }
 }
