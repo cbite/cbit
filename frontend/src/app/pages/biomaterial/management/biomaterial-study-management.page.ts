@@ -1,5 +1,5 @@
 import {Component, OnInit, ChangeDetectorRef, OnChanges, Input, Output, EventEmitter} from '@angular/core';
-import {StudyService} from '../../../core/services/study.service';
+import {StudyService, UnifiedMatch} from '../../../core/services/study.service';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {Study} from '../../../core/types/study.model';
 import {URLService} from '../../../core/services/url.service';
@@ -9,6 +9,7 @@ import {PopupService} from '../../../core/services/popup.service';
 import {Router} from '@angular/router';
 import {AppUrls} from '../../../router/app-urls';
 import {StudyState} from './components/study-management-list.component';
+import {getAuthors, getPublicationDate, getTitle} from '../../../core/util/study-helper';
 
 @Component({
   styleUrls: ['./biomaterial-study-management.scss'],
@@ -17,6 +18,17 @@ import {StudyState} from './components/study-management-list.component';
       <div class="page-content">
         <div class="page-title">
           Biomaterial Studies
+        </div>
+        <div class="sort-title">Sorted by</div>
+        <div class="sorting"
+             (mouseleave)="onMouseLeaveSorting()"
+             (mouseenter)="onMouseEnterSorting()">
+          {{sortField}} <i class="far fa-angle-down"></i>
+          <div class="sorting-options" *ngIf="isSortingOpen">
+            <div class="sorting-option"
+                 *ngFor="let field of sortFields" (click)="onSortFieldClicked(field)">{{field}}
+            </div>
+          </div>
         </div>
 
         <div *ngIf="!ready">
@@ -60,14 +72,19 @@ import {StudyState} from './components/study-management-list.component';
 })
 export class BioMaterialStudyManagementPage implements OnInit {
   ready = false;
-  studies: { [studyId: string]: Study } = {};
+  studies: Study[];
   studyState: { [studyId: string]: StudyState } = {};
   studySpecificErrorMessage: { [studyId: string]: string } = {};
   form: FormGroup;
+  studyList: Study[];
 
   savingChanges = false;
   saveDone = false;
   saveError = '';
+
+  public sortFields = ['Publication Date', 'Name', 'Author'];
+  public sortField = 'Publication Date';
+  public isSortingOpen = false;
 
   constructor(private _url: URLService,
               private _studyService: StudyService,
@@ -85,8 +102,10 @@ export class BioMaterialStudyManagementPage implements OnInit {
         return Promise.all(studyIds.map(studyId => this._studyService.getStudy(studyId)));
       })
       .then(studyList => {
+        this.studyList = studyList;
+        self.studies = self.sortStudies(studyList);
+
         for (const study of studyList) {
-          self.studies[study._id] = study;
           self.studyState[study._id] = StudyState.Present;
         }
         self.form = self.makeFormGroup();
@@ -105,16 +124,50 @@ export class BioMaterialStudyManagementPage implements OnInit {
 
   public makeFormGroup(): FormGroup {
     const group: any = {};
-
-    for (const studyId in this.studies) {
-      const study = this.studies[studyId];
-      group[studyId] = new FormGroup({
-        studyId: new FormControl(studyId),
+    this.studies.forEach(study => {
+      group[study._id] = new FormGroup({
+        studyId: new FormControl(study._id),
         ePicPid: new FormControl(study._source['*ePIC PID']),
         visible: new FormControl(study._source['*Visible'])
       });
-    }
+    });
     return new FormGroup(group);
+  }
+
+  private sortStudies(studyList: Study[]) {
+    let sortedList = [];
+
+    switch (this.sortField) {
+      case 'Publication Date':
+        // Sort descending by Publication Date then ascending by Study Title
+        sortedList = studyList.sort((a, b) =>
+          (
+            -(getPublicationDate(a).localeCompare(getPublicationDate(b)))
+            || (getTitle(a).localeCompare(getTitle(b)))
+          )
+        ).slice(0);
+        break;
+      case 'Name':
+        // Sort ascending by Study Title then descending by Publication Date
+        sortedList = studyList.sort((a, b) =>
+          (
+            (getTitle(a).localeCompare(getTitle(b))) ||
+            -(getPublicationDate(a).localeCompare(getPublicationDate(b)))
+          )
+        ).slice(0);
+        break;
+      case 'Author':
+        // Sort ascending by Authors then descending by Publication Date
+        sortedList = studyList.sort((a, b) =>
+          (
+            (getAuthors(a).localeCompare(getAuthors(b)))
+            || (getTitle(a).localeCompare(getTitle(b)))
+          )
+        ).slice(0);
+        break;
+    }
+
+    return sortedList;
   }
 
   deleteStudy(studyId: string) {
@@ -164,5 +217,20 @@ export class BioMaterialStudyManagementPage implements OnInit {
         self._changeDetectorRef.detectChanges();
         self._studyService.flushCaches();
       });
+  }
+
+  public onSortFieldClicked(sortField: string) {
+    this.isSortingOpen = false;
+    this.sortField = sortField;
+    this.studies = this.sortStudies(this.studyList);
+    this._changeDetectorRef.detectChanges();
+  }
+
+  public onMouseLeaveSorting() {
+    this.isSortingOpen = false;
+  }
+
+  public onMouseEnterSorting() {
+    this.isSortingOpen = true;
   }
 }

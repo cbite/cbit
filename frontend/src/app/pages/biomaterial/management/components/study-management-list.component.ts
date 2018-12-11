@@ -22,31 +22,31 @@ export enum StudyState {
         <div class="col-2 field"></div>
       </div>
 
-      <div class="row study" *ngFor="let kv of studies | mapToIterable" [formGroupName]="kv.key">
-        <div class="col-4 field" [class.deletedStudyLabel]="isDeleted(kv.key)">
-          {{ kv.val._source['STUDY']['Study Title'] }}
-          <div *ngIf="studySpecificErrorMessage[kv.key]" class="alert alert-danger">
-            {{ studySpecificErrorMessage[kv.key] }}
+      <div class="row study" *ngFor="let study of studies" [formGroupName]="study._id">
+        <div class="col-4 field" [class.deletedStudyLabel]="isDeleted(study._id)">
+          {{ study._source['STUDY']['Study Title'] }}
+          <div *ngIf="studySpecificErrorMessage[study._id]" class="alert alert-danger">
+            {{ studySpecificErrorMessage[study._id] }}
           </div>
         </div>
         <div class="col-2 field">
-          {{kv.val._createdOn | date:'dd-MM-yyyy HH:mm'}}
+          {{study._createdOn | date:'dd-MM-yyyy HH:mm'}}
         </div>
         <div class="col-3 field">
           <input type="text" class="text-input" formControlName="ePicPid"
-                 [class.deletedStudyEpicPid]="isDeleted(kv.key)">
+                 [class.deletedStudyEpicPid]="isDeleted(study._id)">
         </div>
         <div class="col-1 field centered" style="padding-left: 35px">
           <input type="checkbox" formControlName="visible">
         </div>
         <div class="col-2 field" style="text-align: right;">
-          <div *ngIf="!isDeletingStudy(kv.key)">
-            <button *ngIf="!isDeleted(kv.key)" class="button-standard small delete" (click)="doDeleteStudy(kv.key)">
+          <div *ngIf="!isDeletingStudy(study._id)">
+            <button *ngIf="!isDeleted(study._id)" class="button-standard small delete" (click)="doDeleteStudy(study._id)">
               Delete
             </button>
-            <button *ngIf=" isDeleted(kv.key)" class="button-standard small delete" disabled="true">Deleted</button>
+            <button *ngIf=" isDeleted(study._id)" class="button-standard small delete" disabled="true">Deleted</button>
           </div>
-          <div *ngIf=" isDeletingStudy(kv.key)">
+          <div *ngIf=" isDeletingStudy(study._id)">
             <button class="btn btn-danger" disabled>Deleting...</button>
           </div>
         </div>
@@ -55,7 +55,7 @@ export enum StudyState {
   `
 })
 export class StudyManagementListComponent {
-  @Input() studies: { [studyId: string]: Study } = {};
+  @Input() studies: any[];
   @Input() form: FormGroup;
   @Input() studyState: { [studyId: string]: StudyState } = {};
   @Input() studySpecificErrorMessage: { [studyId: string]: string } = {};

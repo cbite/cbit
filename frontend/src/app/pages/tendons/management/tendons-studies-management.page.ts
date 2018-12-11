@@ -13,6 +13,17 @@ import {AppUrls} from '../../../router/app-urls';
         <div class="page-title">
           Tendons Studies
         </div>
+        <div class="sort-title">Sorted by</div>
+        <div class="sorting"
+             (mouseleave)="onMouseLeaveSorting()"
+             (mouseenter)="onMouseEnterSorting()">
+          {{sortField}} <i class="far fa-angle-down"></i>
+          <div class="sorting-options" *ngIf="isSortingOpen">
+            <div class="sorting-option"
+                 *ngFor="let field of sortFields" (click)="onSortFieldClicked(field)">{{field}}
+            </div>
+          </div>
+        </div>
         <div class="container">
           <div class="row header">
             <div class="col-6 field">Name</div>
@@ -20,7 +31,7 @@ import {AppUrls} from '../../../router/app-urls';
             <div class="col-1 field">Visible</div>
             <div class="col-3 field"></div>
           </div>
-          <div class="row study" *ngFor="let study of studies">
+          <div class="row study" *ngFor="let study of sortedStudies">
             <div class="col-6 field">{{study.name}}</div>
             <div class="col-2 field">{{study.createdOn | date:'dd-MM-yyyy HH:mm'}}</div>
             <div class="col-1 field">
@@ -43,7 +54,12 @@ import {AppUrls} from '../../../router/app-urls';
 })
 export class TendonsStudiesManagementPage implements OnInit {
 
+  public sortedStudies: TendonsStudy[];
   public studies: TendonsStudy[];
+
+  public sortFields = ['Name', 'Year', 'Platform'];
+  public sortField = 'Name';
+  public isSortingOpen = false;
 
   constructor(private tendonsStudyService: TendonsStudyService, private popupService: PopupService, private router: Router) {
   }
@@ -68,7 +84,36 @@ export class TendonsStudiesManagementPage implements OnInit {
     this.router.navigateByUrl(AppUrls.tendonsStudyUrl.replace(':id', study.uuid));
   }
 
+  public sortStudies(newStudies: TendonsStudy[]) {
+    const field = this.sortField.toLowerCase();
+
+    if (newStudies && newStudies.length > 0) {
+      this.sortedStudies = newStudies.sort((a, b) =>
+        (-('' + a[field]).localeCompare('' + b[field])));
+    } else {
+      this.sortedStudies = [];
+    }
+  }
+
+  public onSortFieldClicked(sortField: string) {
+    this.isSortingOpen = false;
+    this.sortField = sortField;
+    this.sortStudies(this.studies);
+  }
+
+  public onMouseLeaveSorting() {
+    this.isSortingOpen = false;
+  }
+
+  public onMouseEnterSorting() {
+    this.isSortingOpen = true;
+  }
+
   private loadStudies() {
-    this.tendonsStudyService.getStudies().subscribe(studies => this.studies = studies);
+    this.tendonsStudyService.getStudies().subscribe(studies => {
+        this.studies = studies;
+        this.sortStudies(studies);
+      }
+    );
   }
 }
