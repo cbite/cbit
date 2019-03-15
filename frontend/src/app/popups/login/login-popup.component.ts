@@ -70,7 +70,7 @@ export class LoginPopupComponent implements AfterViewInit {
       this.loginProgress = false;
 
         if (success) {
-          this.activeModal.close();
+          this.onCloseClick();
         } else {
           this.errorMessage = 'Login failed - please try again';
         }
@@ -79,5 +79,6 @@ export class LoginPopupComponent implements AfterViewInit {
 
   public onCloseClick() {
     this.activeModal.close();
+    document.documentElement.scrollTop = 0;
   }
 }

@@ -30,7 +30,6 @@ import {prepareBarChartData} from './components/bar-chart/bar-chart-helper';
                           (barClick)="onGeneExpressionBarClick($event)"></cbit-bar-chart>
           <cbit-bar-chart [title]="'Studies by Publication Year'"
                           [chartId]="'publicationYearChart'"
-                          [stacked]="true"
                           [chartData]="publicationYearData" style="margin-left: 30px;"></cbit-bar-chart>
         </div>
         <div class="page-title">Biomaterial Studies</div>

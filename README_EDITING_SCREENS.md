@@ -7,9 +7,21 @@ just edit HTML / CSS files for the welcome, about, faq
 screens on the server.  Instead, you have to edit the
 cBiT sources and redeploy the app.
 
+Starting the Virtual Machine + Webstorm
+---------------------------------------
+1. Start VirtualBox
+2. Start the cBiT deployment machine
+3. Login using cbit / cbit!Deploy
+4. Open Webstorm (via 'Show Applications' in the bottom left corner
+
+
 Changing content
 ----------------
-1. Edit one or more of the following files
+1. Get latest changes from GIT
+- In the menubar -> VCS -> Git -> Pull...
+- Click 'Pull' in the popup
+
+2. Edit one or more of the following files
    * `cbit/frontend/src/app/pages/welcome/welcome.page.ts`
    * `cbit/frontend/src/app/pages/about/about.page.ts`
    * `cbit/frontend/src/app/pages/faq/faq.page.ts`
@@ -17,29 +29,23 @@ Changing content
    -  You can place images under `cbit/frontend/assets/images`,
       then refer to them in the HTML with the URL `"/assets/images/my_little_pony.jpeg"`
    - Backgrounds for all the pages are defined in `cbit/frontend/src/app/cbit.component.ts`.
-2. Save the files
-3. Commit and push the changes to the git repository
 
+3. Save the files
 
-Redeploy app
-------------
-1. Start VirtualBox
-2. Start the cBiT deployment machine
-3. Login using cbit / cbit!Deploy
-4. Open a terminal window
-   - Go to the cbit code
-   ```
-   cd Code/cbit
-   ```
-   - Get latest changes from GIT
-   ```
-   git pull
-   ```
-   - Go to the ansible directory
+4. Commit and push the changes to the git repository
+- In the menubar -> VCS -> Commit...
+- Enter a description
+- Click the arrow next to 'Commit' and select 'Commit and push'
+- If a warning/review popup is shown, click 'Commit and push'
+- Click 'Push'
+
+5. Redeploy app
+- Open the terminal window at the bottom
+- Go to the ansible directory
    ```
    cd ansible
    ```
-   - Run the deployment command
+- Run the deployment command
    ```
    ansible-playbook playbook.yml --tags frontend
    ```

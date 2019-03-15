@@ -47,9 +47,6 @@ import {Observable} from 'rxjs/Observable';
             <label>PubMed Id</label>
             <input type="text" formControlName="pubMedId" class="form-control" [(ngModel)]="study.pubMedId"
                    [ngClass]="{ 'is-invalid': submitted && f.pubMedId.errors }"/>
-            <div *ngIf="submitted && f.pubMedId.errors" class="invalid-feedback">
-              <div *ngIf="f.pubMedId.errors.required">PubMed Id is required</div>
-            </div>
           </div>
           <div class="form-group">
             <label>Gene Expression Type</label>
@@ -144,7 +141,7 @@ export class TendonsStudyEditorPage implements OnInit {
       name: [this.study.name, Validators.required],
       description: [this.study.description, Validators.required],
       arrayExpressId: [this.study.arrayExpressId, Validators.required],
-      pubMedId: [this.study.pubMedId, Validators.required],
+      pubMedId: [this.study.pubMedId],
       geneExpressionType: [this.study.geneExpressionType, Validators.required],
       platform: [this.study.platform, Validators.required],
       organism: [this.study.organism, Validators.required],

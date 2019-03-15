@@ -20,7 +20,7 @@ import {ExternalLinkService} from '../../../../../services/external-link.service
         </div>
         <div class="samples" (click)="onShowStudyDetails()">
           <span style="margin-right: 5px;"><i class="far fa-ellipsis-v"></i></span> {{ match.sampleMatches.length }}
-          matching samples
+          samples
         </div>
       </div>
       <div class="links">

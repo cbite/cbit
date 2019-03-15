@@ -73,8 +73,10 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
           options: {
             onClick: function (e) {
               const point = this.getElementAtEvent(e)[0];
-              const pointValue = point._model.datasetLabel + '.' + point._model.label;
-              self.barClick.emit(pointValue);
+              if(point) {
+                const pointValue = point._model.datasetLabel + '.' + point._model.label;
+                self.barClick.emit(pointValue);
+              }
             },
             onHover: function (e: any) {
               const point = <any>this.getElementAtEvent(e);
