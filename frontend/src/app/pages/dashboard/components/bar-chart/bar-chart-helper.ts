@@ -1,6 +1,6 @@
 import {BarChartData} from './bar-chart.data';
 
-export function prepareBarChartData(data: any, propertyName: string): BarChartData {
+export function prepareBarChartData(data: any, propertyName: string, sort:boolean=false): BarChartData {
   const bioMaterialStudiesByGeneExpression = data.filter(st => st.type === 'Biomaterial').reduce((result, study) => {
     if (result[study[propertyName]]) {
       result[study[propertyName]].push(study);
@@ -21,7 +21,7 @@ export function prepareBarChartData(data: any, propertyName: string): BarChartDa
 
   const uniqueLabels = new Set(Object.getOwnPropertyNames(bioMaterialStudiesByGeneExpression)
     .concat(Object.getOwnPropertyNames(tendonsStudiesByGeneExpression)));
-  const labels = Array.from(uniqueLabels);
+  const labels = sort?Array.from(uniqueLabels).sort():Array.from(uniqueLabels);
   const studiesCounts = [];
   studiesCounts[0] = labels.map(l => bioMaterialStudiesByGeneExpression[l] ? bioMaterialStudiesByGeneExpression[l].length : 0);
   studiesCounts[1] = labels.map(l => tendonsStudiesByGeneExpression[l] ? tendonsStudiesByGeneExpression[l].length : 0);

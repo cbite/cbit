@@ -88,7 +88,7 @@ export class DashboardPage implements OnInit {
 
     this.dashboardService.getDashboardStudiesData().subscribe((data) => {
       this.geneExpressionData = prepareBarChartData(data, 'geneExpressionType');
-      this.publicationYearData = prepareBarChartData(data, 'year');
+      this.publicationYearData = prepareBarChartData(data, 'year',true);
     });
   }
 
