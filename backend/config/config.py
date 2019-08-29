@@ -28,9 +28,3 @@ URL_BASE = 'http://localhost:23456'  # TODO: In production, should be https://cb
 UPLOADS_PATH = 'uploads'
 FILES_PATH = 'files'
 COMMON_ASSETS_PATH = 'common/assets'
-
-IRODS_BASE_URL = "http://frontend.prod.rit.unimaas.nl/rest/"
-IRODS_BASE_DIR = "/nlmumc/projects/P000000009"
-# IRODS_USERNAME = "dataminded-service@maastrichtuniversity.nl";
-IRODS_USERNAME = "service-cbit"
-IRODS_PASSWORD = "6n014c9mE12d91Sfj0T1fdkKNO77KBuk"

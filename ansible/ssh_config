@@ -1,33 +1,6 @@
-# SSH configuration file for UMaastricht cBiT project
-# Written by Patrick Varilly, 19 Oct - 16 Dec 2016
-
-
-# On-site VMWare machine, accessible only inside UMaastricht VPN
-# CentOS Linux release 7.2.1511 (Core)
-#
-# Possibly useful SSH tunnels:
-# - 80: nginx, serving HTTP traffic
-# - 443: nginx, serving HTTPS traffic
-# - 5432: postgres
-# - 9200: elasticsearch
-# - 8080: iRODS REST endpoint
-# - 1247: iRODS Jargon endpoint
-# - 8889: remote IPython Notebook
-#
-Host cbit
-  HostName 137.120.31.87
-  #LocalForward 80 localhost:80
-  #LocalForward 443 localhost:443
-  #LocalForward 5432 localhost:5432
-  #LocalForward 9200 localhost:9200
-  #LocalForward 8080 frontend.acc.rit.unimaas.nl:80
-  #LocalForward 1247 frontend.acc.rit.unimaas.nl:1247
-  #LocalForward 8889 localhost:8888
-
-
-# t2.micro instance in eu-central-1 AWS region, mimics real on-site machine as closely as possible.
-# Running CentOS 7.2 release 1602 (x86_64) - with Updates HVM - ami-9bf712f4
-# (full details: CentOS Linux 7 x86_64 HVM EBS 1602-b7ee8a69-ee97-4a49-9e68-afaee216db2e-ami-d7e1d2bd.3)
+# EC2 instance in eu-west-1 AWS region
+# Running CentOS 7.4 release 1708 (x86_64)
+# (full details: CentOS-7-x86_64-EBS-HVM-20180318_121109-877e76fd-a132-410c-9982-c70ca8e41d88-ami-f5cb0388.4 (ami-8dd683f4))
 # Rebuild from scratch using Ansible playbook
 #
 # Possibly useful SSH tunnels:
@@ -35,20 +8,14 @@ Host cbit
 # - 443: nginx, serving HTTPS traffic
 # - 5432: postgres
 # - 9200: elasticsearch
-# - 8080: iRODS REST endpoint
-# - 1247: iRODS Jargon endpoint
 # - 8889: remote IPython Notebook
 #
 Host awscbit
-  HostName 35.156.223.86
+  HostName 99.81.21.33
   User centos
-  IdentityFile /Users/pat/Work/VarillySciences/2016_UMaastricht/umaastricht-cbit.pem
+  IdentityFile /Users/maartenthoelen/_aws/keys/cbit-prd.pem
   #LocalForward 80 localhost:80
   #LocalForward 443 localhost:443
   #LocalForward 5432 localhost:5432
   #LocalForward 9200 localhost:9200
-  ## frontend.acc.rit.unimaas.nl can only be resolved inside the UMasstricht network, resolve it here directly,
-  ## and then have a local alias in /etc/hosts from frontend.acc.rit.unimaas.nl to 127.0.0.1
-  #LocalForward 8080 137.120.31.79:80
-  #LocalForward 1247 137.120.31.79:1247
   #LocalForward 8889 localhost:8888

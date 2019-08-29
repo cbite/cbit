@@ -22,70 +22,6 @@ UPLOAD_STATUS_UPLOADED = 'uploaded'
 UPLOAD_STATUS_INGESTING = 'ingesting'
 UPLOAD_STATUS_INGESTED = 'ingested'
 
-
-class BiomaterialsUploadsIRODSResource(object):
-    def on_post(self, req, resp, folder_name):
-        """
-        Kick off an upload from iRODS
-        """
-
-        if not req.context["isAdmin"]:
-            raise falcon.HTTPForbidden(
-                description="Only admins can perform this action")
-
-        upload_uuid = '{upload_uuid}'.format(upload_uuid=uuid.uuid4())
-        upload_dir = os.path.join(cfg.UPLOADS_PATH, upload_uuid)
-
-        # Check for existence out of paranoia
-        if os.path.exists(upload_dir):
-            raise falcon.HTTPInternalServerError(description="UUID conflict, try again")
-
-        # First note upload in database
-        db_conn = req.context['db']
-        with db_conn.cursor() as cur:
-            cur.execute("INSERT INTO uploads (uuid, status) VALUES (%s, %s)",
-                        (upload_uuid, UPLOAD_STATUS_UPLOADING))
-        db_conn.commit()
-
-        # List directory contents
-        url = cfg.IRODS_BASE_URL + 'collection' + cfg.IRODS_BASE_DIR + "/" + folder_name + "?listing=true"
-        headers = {
-            'Content-type': 'application/json',
-            'Accept': 'application/json'
-        }
-
-        ret = requests.get(url, headers=headers,
-                           auth=requests.auth.HTTPBasicAuth(cfg.IRODS_USERNAME,
-                                                            cfg.IRODS_PASSWORD))
-
-        parsed = ret.json()
-
-        fileFullPaths = [
-            (item['parentPath'] + "/" + item['pathOrName'])
-            for item in parsed['children']
-            if (item['objectType'] == 'DATA_OBJECT' and item['pathOrName'] != 'metadata.xml')
-        ]
-
-        # Fetch each file in turn and plunk it into a temporary zip file
-        os.makedirs(upload_dir)
-        filepath = os.path.join(upload_dir, 'archive.zip')
-        with zipfile.ZipFile(filepath, "w", zipfile.ZIP_DEFLATED) as zf:
-            for fileFullPath in fileFullPaths:
-                print(fileFullPath)
-                url = cfg.IRODS_BASE_URL + 'fileContents' + fileFullPath
-                headers = {
-                    'Content-type': 'application/json',
-                }
-
-                ret = requests.get(url, headers=headers,
-                                   auth=requests.auth.HTTPBasicAuth(cfg.IRODS_USERNAME,
-                                                                    cfg.IRODS_PASSWORD))
-
-                zf.writestr(os.path.basename(fileFullPath), ret.content)
-
-        complete_upload(upload_uuid, db_conn, filepath, resp)
-
-
 class BiomaterialsUploadsResource(object):
     """
     Upload should work like this:
@@ -141,7 +77,7 @@ class BiomaterialsUploadsResource(object):
 
 def complete_upload(upload_uuid, db_conn, filepath, resp):
     """
-    Common ending of upload first step for iRODS and file uploads
+    Common ending of upload first step file uploads
     """
 
     # Mark upload as completed in database

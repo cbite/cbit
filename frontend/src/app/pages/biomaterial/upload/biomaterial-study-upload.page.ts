@@ -29,37 +29,8 @@ import {AppUrls} from '../../../router/app-urls';
         <div class="container">
 
           <div [class.hidden]="step !== 1">
-            <div style="margin-bottom: 20px">
-              <h5>Step 1a: Upload a .zip archive in ISAtab format from RIT (iRODS)</h5>
-              <p>Click on an iRODS folder name to start upload:</p>
-              <div class="row irods-files-row">
-                <div class="col-md-8 col-md-offset-2 well irods-list">
-                  <div *ngIf="!iRODSListReady">
-                    Fetching study list from iRODS...
-                    <spinner></spinner>
-                  </div>
-                  <div *ngIf="iRODSListReady">
-                    <ul>
-                      <li *ngFor="let iRODSStudyName of iRODSStudyNames">
-                        <a href="#" (click)="$event.preventDefault(); kickOffIRODSUpload(iRODSStudyName)">
-                          {{ iRODSStudyName }}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                  <div *ngIf="iRODSStatus" class="alert alert-danger">
-                    Status: {{ iRODSStatus }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <h4>OR...</h4>
             <div style="margin-top: 20px">
-              <h5>Step 1b: Upload a .zip archive in ISAtab format from this computer</h5>
+              <h5>Step 1: Upload a .zip archive in ISAtab format from this computer</h5>
               <div [class.disabled]="uploadFileChooserDisabled">
                 <div ng2FileDrop
                      [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
@@ -152,10 +123,6 @@ export class BioMaterialStudyUploadPage implements OnInit {
   fieldMetadataForm: FormGroup;
   errorMessage = '';
 
-  iRODSListReady = false;
-  iRODSStudyNames: string[] = [];
-  iRODSStatus = '';
-
   studyInitiallyVisible = true;
 
   constructor(private _url: URLService,
@@ -173,18 +140,6 @@ export class BioMaterialStudyUploadPage implements OnInit {
   }
 
   public ngOnInit() {
-    const onError = (err, caught) => {
-      this.iRODSStatus = `Failed to get list of studies from iRODS: ${err.statusText}!`;
-      this.iRODSListReady = true;
-      this.changeDetectorRef.detectChanges();
-      return Observable.throw(err);
-    };
-
-    this.httpGatewayService.get(this._url.iRODSListResource(), onError).subscribe((iRODSList: string[]) => {
-      this.iRODSStudyNames = iRODSList;
-      this.iRODSListReady = true;
-      this.changeDetectorRef.detectChanges();
-    });
   }
 
   public onBackClicked(): void {
@@ -221,24 +176,6 @@ export class BioMaterialStudyUploadPage implements OnInit {
     } else {
       return s;
     }
-  }
-
-  kickOffIRODSUpload(iRODSStudyName: string) {
-    this.iRODSStatus = 'Working on it (this can take quite a while!)...';
-
-    const onError = (err, caught) => {
-      this.step = 3;
-      this.errorMessage = `iRODS upload failed: ${err.statusText}!`;
-      this.iRODSListReady = true;
-      this.changeDetectorRef.detectChanges();
-      return Observable.throw(err);
-    };
-
-    this.httpGatewayService.post(this._url.uploadsIRODSResource(iRODSStudyName), {}, onError).subscribe((uploadsResponse: UploadsResponse) => {
-      this.proceedToUploadsStep2(uploadsResponse);
-      this.iRODSListReady = true;
-      this.changeDetectorRef.detectChanges();
-    });
   }
 
   onUploadSuccess(response: string, status: number, headers: ParsedResponseHeaders): void {

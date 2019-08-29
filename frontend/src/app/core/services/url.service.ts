@@ -14,10 +14,6 @@ export class URLService {
     return `users/${username}`;
   }
 
-  iRODSListResource(): string {
-    return `irods/list`;
-  }
-
   metadataAllCountsResource(): string {
     return `biomaterials/metadata/all_counts`;
   }
@@ -72,10 +68,6 @@ export class URLService {
 
   uploadsResource(): string {
     return environment.api_url + 'biomaterials/uploads';
-  }
-
-  uploadsIRODSResource(iRODSStudyName: string): string {
-    return `biomaterials/uploads/_irods/${iRODSStudyName}`;
   }
 
   tendonsStudiesResource(): string {

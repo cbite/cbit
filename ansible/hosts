@@ -1,1 +1,1 @@
-cbit elasticsearch_node_name=cbit ansible_user=deploy_cbit
+awscbit elasticsearch_node_name=awscbit ansible_user=centos
