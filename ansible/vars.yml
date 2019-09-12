@@ -29,12 +29,12 @@ elasticsearch_cluster_name: cbit.elasticsearch.cluster
 request_timeout_s: 600
 
 # For fake certs
-gen_self_signed_ssl_cert: yes
-ssl_cert_path: /home/cbit/frontend/server.crt
-ssl_key_path: /home/cbit/frontend/server.key
+#gen_self_signed_ssl_cert: yes
+#ssl_cert_path: /home/cbit/frontend/server.crt
+#ssl_key_path: /home/cbit/frontend/server.key
 
 
-# For real certs TODO @MT
-#gen_self_signed_ssl_cert: no
-#ssl_cert_path: /etc/ssl/cbit_maastrichtuniversity_nl.pem
-#ssl_key_path: /etc/ssl/cbit.maastrichtuniversity.nl.key
+# For real certs
+gen_self_signed_ssl_cert: no
+ssl_cert_path: /etc/ssl/cbit_bmt_tue_nl.crt
+ssl_key_path: /etc/ssl/cbit_bmt_tue_nl.key
