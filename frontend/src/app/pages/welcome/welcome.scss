@@ -17,11 +17,17 @@
     .left-panel {
       display: inline-block;
       vertical-align: top;
-      padding-top: 60px;
+      padding-top: 20px;
 
       .university_logo {
         width: 240px;
         vertical-align: top;
+        display: block;
+        cursor: pointer;
+
+        &:nth-child(2) {
+          margin: 20px 0;
+        }
       }
     }
 
