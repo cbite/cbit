@@ -54,13 +54,12 @@ pycparser==2.16
 pycrypto==2.6.1
 Pygments==2.1.3
 python-dateutil==2.5.3
-python-irodsclient==0.4.0
 python-mimeparse==1.6.0
 pytz==2016.7
-PyYAML==3.12
+PyYAML==3.10
 pyzmq==16.0.0
 qtconsole==4.2.1
-requests==2.11.1
+requests==2.6.0
 simplegeneric==0.8.1
 singledispatch==3.4.0.3
 six==1.10.0

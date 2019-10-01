@@ -22,14 +22,12 @@ from middleware.authentication import AuthenticationMiddleware
 
 from biomaterials.resources.uploads import (
     BiomaterialsUploadResource,
-    BiomaterialsUploadsResource,
-    BiomaterialsUploadsIRODSResource,
+    BiomaterialsUploadsResource
 )
 
 from biomaterials.resources.study_archive import BiomaterialsStudyArchiveResource
 from biomaterials.resources.study_protocols import BiomaterialsStudyProtocolsResource
 
-from common.resources.irods import IRODSListResource
 from tendons.resources.studies import TendonsStudyResource, TendonsStudiesResource
 
 ES_TRACE_LOGGING = False
@@ -58,7 +56,6 @@ app = falcon.API(middleware=middleware)
 
 # BIOMATERIALS ROUTES
 app.add_route('/biomaterials/uploads', BiomaterialsUploadsResource())
-app.add_route('/biomaterials/uploads/_irods/{folder_name}', BiomaterialsUploadsIRODSResource())
 app.add_route('/biomaterials/uploads/{upload_uuid}', BiomaterialsUploadResource())
 
 app.add_route('/biomaterials/samples', BiomaterialsSamplesResource())
@@ -87,6 +84,5 @@ app.add_route('/dashboard/samples', DashboardSamplesResource())
 app.add_route('/dashboard/studies', DashboardStudiesResource())
 
 # GENERAL ROUTES
-app.add_route('/irods/list', IRODSListResource())
 app.add_route('/users', UsersResource())
 app.add_route('/users/{username}', UserResource())

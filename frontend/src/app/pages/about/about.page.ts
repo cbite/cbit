@@ -7,14 +7,14 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
     <div class="page">
       <div class="page-content">
           <h4>What is cBiT?</h4>
-
+          
           <p>
-            cBiT is the first repository that offers biomaterial-based transcriptomics
-            data together with all relevant biomaterial metadata.
-
-            cBiT was developed at the department of <a href="http://www.jandeboerlab.com" target="_blank">Cell Biology-Inspired Tissue
-            Engineering (cBITE)</a>, part of the <a href="http://merln.maastrichtuniversity.nl/" target="_blank">MERLN Institute at
-            Maastricht University</a>.
+              cBiT is the first repository that offers biomaterial-based transcriptomics
+              data together with all relevant biomaterial metadata.
+              
+              cBiT was an initiative of the <a href="https://www.jandeboerlab.com" target="_blank">de Boer lab</a> when still at the Merln Institute in Maastricht, and now at the department
+              of BME at TU/e. cBiT is continuing to expand as part of Platform for Therapeutic Biomaterial
+              Discovery at TU/e.
           </p>
 
           <h4>Why cBiT?</h4>
@@ -62,8 +62,8 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
               </div>
 
               We have ample experience with materiomics-data analysis and are happy to help out! Researchers who are
-              interested in analyzing cBiT data can contact us for support, please send an email to Dennie Hebels
-              (<code>d.hebels [at] maastrichtuniversity.nl</code>).
+              interested in analyzing cBiT data can contact us for support, please send an email to Alex Vasilevich
+              (<code>a.vasilevich [at] tue.nl</code>).
             </li>
 
             <li>
@@ -73,8 +73,8 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
 
               We have a lot of experience with biomaterial-transcriptomics studies and are happy to help out!
               Researchers who are interested in analyzing the effect of their biomaterial on the cell transcriptome
-              can contact us for support, please send an email to Dennie Hebels
-              (<code>d.hebels [at] maastrichtuniversity.nl</code>).
+              can contact us for support, please send an email to Alex Vasilevich
+              (<code>a.vasilevich [at] tue.nl</code>).
             </li>
 
             <li>
@@ -114,17 +114,17 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
 
           <h4>Contact</h4>
           <div class="contact-details">
-            Maastricht University<br/>
-            MERLN Institute<br/>
-            Department of Cell-Biology Inspired Tissue Engineering (cBITE)<br/>
-            Universiteitssingel 40<br/>
-            6229 ER Maastricht<br/>
-            The Netherlands
+              BiS, Biointerface Science in Regenerative Medicine<br>
+              Department of Biomedical Engineering<br>
+              Eindhoven University of Technology (TU/e)<br>
+              PO Box 513, 5600 MB, Eindhoven<br>
+              The Netherlands<br>
+              Internal address: Building 15, Gemini-Zuid, Office 3.116
           </div>
 
           <p>
             Questions regarding the use of cBiT or other details on how cBiT is set up, can be
-            directed to Dennie Hebels (<code>d.hebels [at] maastrichtuniversity.nl</code>).
+            directed to Alex Vasilevich (<code>a.vasilevich [at] tue.nl</code>).
           </p>
 
           <div class="disclaimers">
@@ -135,7 +135,7 @@ import {CollapseStateService} from '../../core/services/collapse-state.service';
 
             <p>
               If you would like written approval for a specific use that is otherwise prohibited,
-              please contact Dr. Dennie Hebels (<code>d.hebels [at] maastrichtuniversity.nl</code>).
+              please contact Dr. Alex Vasilevich (<code>a.vasilevich [at] tue.nl</code>).
             </p>
 
             <h5>Disclaimer</h5>

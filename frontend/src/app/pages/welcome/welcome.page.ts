@@ -7,7 +7,7 @@ import {Component} from '@angular/core';
       <div class="video-panel">
         <iframe width="560"
                 height="315"
-                src="https://www.youtube.com/embed/O12dPthanrM"
+                src="https://www.youtube.com/embed/hY8oABfbWVg"
                 frameborder="0"
                 allowfullscreen>
         </iframe>
@@ -15,7 +15,9 @@ import {Component} from '@angular/core';
 
       <div class="text-panel">
         <div class="left-panel">
-          <img src="../../../assets/images/logos_welcome_screen_vertical.png" class="university_logo"/>
+          <img src="../../../assets/images/TUE_logo.png" class="university_logo" (click)="onNavigate('https://www.tue.nl')"/>
+          <img src="../../../assets/images/TUeBis2_logo.png" class="university_logo" (click)="onNavigate('https://jandeboerlab.com/')"/>
+          <img src="../../../assets/images/MDR_logo.png" class="university_logo" (click)="onNavigate('https://mdrresearch.nl/')"/>
         </div>
         <div class="right-panel">
           <div class="title-panel">
@@ -37,4 +39,7 @@ import {Component} from '@angular/core';
   `,
 })
 export class WelcomePage {
+  public onNavigate(target: string) {
+    window.location.href = target;
+  }
 }

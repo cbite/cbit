@@ -2,7 +2,7 @@ cBiT
 ====
 
 cBiT is a data warehouse for collecting gene expression data for cells grown on different materials. 
-cBiT is maintained by the [University of Maastricht](https://www.maastrichtuniversity.nl/)'s [MERLN](http://merln.maastrichtuniversity.nl/) lab.
+cBiT is maintained by the [Eindhoven University of Technology](https://www.tue.nl/)'s [BiS](https://jandeboerlab.com/) lab.
 
 
 Create Local Environment
@@ -95,8 +95,7 @@ Deployment
 1. Install the following prerequisites (or use the 'cBiT deployment' virtual machine that was delivered):
  - Ansible (`>=2.1.2.0`)
  - Recent versions of `node` (e.g., `>= 4.6.1`) and `npm` (e.g., `>= 3.10.9`)
-2. Edit `cbit/ansible/hosts` and fill in `ansible_user` with your username on the `cbit` machine (must have passwordless SSH set up)
-3. To ensure that `cbit` machine's `sudo` is correctly configured, run the following command from the `ansible` directory:
+2. To ensure that `cbit` machine's `sudo` is correctly configured, run the following command from the `ansible` directory:
 ```
 ANSIBLE_SSH_PIPELINING=0 ansible-playbook playbook-PRERUN.yml
 ```
@@ -130,19 +129,12 @@ Troubleshooting
 ---------------
 A few hints in case something goes wrong.
 
-1. Log into the cbit machine, e.g.,
-```
-ssh ${USER}@cbit.maastrichtuniversity.nl
-```
-If you can't log into the machine, contact the FHML service desk at `servicedesk-fhml@maastrichtuniversity.nl`.
+1. Log into the cbit machine,
 
 2. Look at the cBiT backend logs, e.g.,
 ```
 sudo tail -F /var/log/cbit-backend/{access,error}.log
 ```
-It may help to interact with the website while your terminal is open and showing the last few lines of these log files.
-If you see any Python stack trace, send it to `patrick.varilly@dataminded.be` with a description of what you were doing.  I'll get back to you as soon as I can.
-
 3. Is the disk full?  Look at the output of
 ```
 df -h

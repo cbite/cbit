@@ -25,7 +25,7 @@ postgresql_user_privileges:
 
 elasticsearch_cluster_name: cbit.elasticsearch.cluster
 
-# Set up long timeouts to handle uploads of large files (direct or via iRODS)
+# Set up long timeouts to handle uploads of large files
 request_timeout_s: 600
 
 # For fake certs
@@ -36,5 +36,5 @@ request_timeout_s: 600
 
 # For real certs
 gen_self_signed_ssl_cert: no
-ssl_cert_path: /etc/ssl/cbit_maastrichtuniversity_nl.pem
-ssl_key_path: /etc/ssl/cbit.maastrichtuniversity.nl.key
+ssl_cert_path: /etc/ssl/cbit_bmt_tue_nl.crt
+ssl_key_path: /etc/ssl/cbit_bmt_tue_nl.key
