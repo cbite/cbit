@@ -59,7 +59,7 @@ pytz==2016.7
 PyYAML==3.10
 pyzmq==16.0.0
 qtconsole==4.2.1
-requests==2.6.0
+requests==2.20.0
 simplegeneric==0.8.1
 singledispatch==3.4.0.3
 six==1.10.0
