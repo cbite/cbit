@@ -2,7 +2,7 @@ cBiT
 ====
 
 cBiT is a data warehouse for collecting gene expression data for cells grown on different materials. 
-cBiT is maintained by the [University of Maastricht](https://www.maastrichtuniversity.nl/)'s [MERLN](http://merln.maastrichtuniversity.nl/) lab.
+cBiT is maintained by the [Eindhoven University of Technology](https://www.tue.nl/)'s [BiS](https://jandeboerlab.com/) lab.
 
 
 Create Local Environment

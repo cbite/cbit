@@ -14,6 +14,7 @@ Host awscbit
   HostName 99.81.21.33
   User centos
   IdentityFile /home/osboxes/.ssh/cbit-prd.pem
+  #IdentityFile /Users/maartenthoelen/_aws/keys/cbit-prd.pem
   #LocalForward 80 localhost:80
   #LocalForward 443 localhost:443
   #LocalForward 5432 localhost:5432
